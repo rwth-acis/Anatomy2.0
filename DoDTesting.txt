@@ -1,0 +1,39 @@
+Testing Process
+
+1. Derive test cases
+If the tester is not the same person as the programmer of the code to test, the tester first checks the commit message of the code. There it should be stated, which task (of the sprint backlock) should be fulfilled by the code (otherwise the tester may ask the developer directly). The tester accesses the task description in the sprint backlog in the gitlab repository.
+If the programmer does the testing, he/she may derive test cases during or before the programming activities.
+After acquiring the task description, the tester specifies one or several test cases checking that the intended functionality is fulfilled. The tester uses his/her experience to add additional test cases for defects that are likely to exist (error guessing). For important parts of the software, equivalence partitioning and boundary value analysis can be used to derive further test cases.
+Test cases are written in a format described below. If tests have to be executed in a certain order, the order is noted down as well.
+2. Execute test
+For each test case, the tester prepares the testing environment accordingly. Afterwards the tester executes the steps listed in the test case description and evaluates the result(s). If the result differs from the one specified in the test case description, a programmer may directly start debugging. If code has been changed during debugging, all tests are repeated. It may be efficient to go on with tests that have not been executed yet before repeating tests (as its more likely to find errors there and all tests would have to be repeated again).
+3. Test logging
+The tester notes in the test log, which tests passed and which did not. For each test, that did not pass, he/she creates an issue using gitlab. Programmers do not create issues, if they already debugged the failure.
+
+Issue Schema
+The title of the issue should be test case id and date of test execution
+The description should contain who did the test and what was the difference found in comparison to the expected result
+The issue is assigned to the programmer of the code that had been tested
+
+Test Case Schema
+Each test case should at least contain the following:
+Some unique name/id, such that it can be referenced in the test log
+The input data to be used by the tester
+The steps to be done by the tester
+The expected output/result to be compared to the actual result the tester sees during execution
+OPTIONAL: Some precondition, that has to be fulfilled before executing the test
+
+Test Log Schema
+Each test log entry contains:
+The date, when the tests have been executed
+The name of the tester
+The ids/names of the tests that have been executed
+The result of the testing (OK/NOK). If some tests failed, the tester creates two test log entries (one for successfull tests and the other one for failed tests)
+
+Debugging / performance measurement tools
+Firefox: 			built-in (Firebug)
+Google Chrome: 		built-in
+Internet Explorer:	built-in (F12)
+Safari (Mobile):		Remote debugging
+Android browser:		Remote debugging (with Chrome)
+Opera:			built-in (Dragonfly)
