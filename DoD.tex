@@ -296,11 +296,14 @@ The stashes are organized as a stack. Without a parameter, all stash commands op
 \label{sub:test_case_schema}
 
 Each test case should at least contain the following:
-Some unique name/id, such that it can be referenced in the test log
-The input data to be used by the tester
-The steps to be done by the tester
-The expected output/result to be compared to the actual result the tester sees during execution
-OPTIONAL: Some precondition, that has to be fulfilled before executing the test
+\begin{itemize}
+  \item Some unique name/id, such that it can be referenced in the test log
+  \item The input data to be used by the tester
+  \item The steps to be done by the tester
+  \item The expected output/result to be compared to the actual result the tester sees during execution
+  \item OPTIONAL: Some precondition, that has to be fulfilled before executing 
+the test
+\end{itemize}
 % subsection test_case_schema (end)
 
 
@@ -308,10 +311,12 @@ OPTIONAL: Some precondition, that has to be fulfilled before executing the test
 \label{sub:test_log_schema}
 
 Each test log entry contains:
-The date, when the tests have been executed
-The name of the tester
-The ids/names of the tests that have been executed
-The result of the testing (OK/NOK). If some tests failed, the tester creates two test log entries (one for successfull tests and the other one for failed tests)
+\begin{itemize}
+  \item The date, when the tests have been executed
+  \item The name of the tester
+  \item The ids/names of the tests that have been executed
+  \item The result of the testing (OK/NOK). If some tests failed, the tester creates two test log entries (one for successfull tests and the other one for failed tests)
+\end{itemize}
 % subsection test_log_schema (end)
 
 
