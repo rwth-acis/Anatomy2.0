@@ -153,16 +153,15 @@ Once you have achieved reasonable progress, you might want to commit the changes
 \label{ssub:describing_commits}
 
 To make is easier to use git tools we have a specific format we expect from commit messages. It is:
-Component: Very short description of change
 
-Longer text describing the change.
+\emph{Component: Very short description of change \\
+Longer text describing the change.} \\
 
-The subject is a brief explanation of the change and may not exceed 60 characters in length. It should start with a component name, e.g. the name of a plugin the code belongs to. The subject line has a specific relevance. Many git tools (e.g. gitk) show only the first line in the default view and therefore this line should be short and concise. Then follows an empty line and then a longer text describing the change in more detail. If you think you cannot fit the change in your subject chance is that you should break up the commits in more smaller commits. The longer text can be omitted if the subject line is already sufficiently clear. In the longer message think that you need to explain the change to someone else. An example:
+The subject is a brief explanation of the change and may not exceed 60 characters in length. It should start with a component name, e.g. the name of a plugin the code belongs to. The subject line has a specific relevance. Many git tools (e.g. gitk) show only the first line in the default view and therefore this line should be short and concise. Then follows an empty line and then a longer text describing the change in more detail. If you think you cannot fit the change in your subject chance is that you should break up the commits in more smaller commits. The longer text can be omitted if the subject line is already sufficiently clear. In the longer message think that you need to explain the change to someone else. \\
+An example: 
 
-
-overview: added thumbnails of models
-
-Added table with model thumbnail and links to the models. Implemented access to database to get the thumbnail-url.
+\emph{overview: added thumbnails of models \\
+Added table with model thumbnail and links to the models. Implemented access to database to get the thumbnail-url.}
 % subsubsection describing_commits (end)
 
 % subsection commit (end)
@@ -280,13 +279,16 @@ The stashes are organized as a stack. Without a parameter, all stash commands op
 \end{enumerate}
 % subsection general_workflow (end)
 
+\newpage
 
 \subsection{Issue Schema} % (fold)
 \label{sub:issue_schema}
 
-The title of the issue should be test case id and date of test execution
-The description should contain who did the test and what was the difference found in comparison to the expected result
-The issue is assigned to the programmer of the code that had been tested
+\begin{itemize}
+  \item The title of the issue should be test case id and date of test execution
+  \item The description should contain who did the test and what was the difference found in comparison to the expected result
+  \item The issue is assigned to the programmer of the code that had been tested
+\end{itemize}
 % subsection issue_schema (end)
 
 
