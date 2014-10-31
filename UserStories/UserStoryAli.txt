@@ -1,0 +1,15 @@
+User Story - Game Development
+
+Sarah is a freelance graphics artist who models 3-D meshes and animations for a game company called Cloudburst Studios. Jan is the lead programmer of the most recent title of Cloudburst Studios; The Artifact. 
+
+As game development requires tight cooperation of artists and programmers, Sarah and Jan need to communicate as Jan's programming team integrates Sarah's artwork into the game. Very often, Sarah's art needs to be refined  multiple times in order to fit nicely into the game. However, as Sarah works remotely, pin-pointing the refinements is often difficult.
+
+Jan complains about the latest humanoid model Sarah has uploaded and wants a few specific changes. In order to discuss the refinements, Sarah uploads the model in question. The model is automatically converted into the web-compatible format (X3D) and registered to the database. Upon completion, a link which points to the model is issued to Sarah.
+
+Sarah clicks the link and then shares it with Jan through instant messaging. They both view the model, and Jan zooms into the sections which need refinements as they keep messaging. This way, Jan can easily express the requested changes on the model and Sarah can see it.
+
+Vision beyond: 
+- Mesh editing can be done in the browser, and Jan can download the modified model instantly.
+- Any major format (obj, fbx, dae, 3ds, blend) is accepted for conversion to X3D on cloud.
+- The viewed /edited X3D can be exported into any major format (vice versa).
+- Support for viewing & editing animations.
