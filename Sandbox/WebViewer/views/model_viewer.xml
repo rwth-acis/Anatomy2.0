@@ -1,3 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+    <ModulePrefs title="Model Viewer" description="HENM Web Viewer" author="Demiralp" author_email="demiralpali@gmail.com" height="500">
+        <Require feature="opensocial-0.8"/>
+    </ModulePrefs>
+    <Content type="xml">
+        <![CDATA[
 <html>
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -40,3 +47,7 @@
 </x3d>
 </body>
 </html> 
+
+        ]]>
+    </Content>
+</Module>
