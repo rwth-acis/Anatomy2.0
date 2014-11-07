@@ -1,0 +1,10 @@
+1. Create a new database called "3dmodelsdb". This may be done using phpMyAdmin. 
+(Open "localhost" in your web browser and click "phpMyAdmin" in the menu bar at the left side of the webpage)
+
+2. Execute the following SQL commands (Can also be done in phpMyAdmin)
+
+CREATE TABLE model (id int NOT NULL,
+  url varchar(150),
+  urlname varchar(150));
+
+INSERT INTO model VALUES (1, 'Deer.x3d', 'Deer 3D Model');

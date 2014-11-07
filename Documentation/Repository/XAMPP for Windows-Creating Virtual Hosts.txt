@@ -1,0 +1,26 @@
+See also http://www.php.de/tutorials/42725-virtual-hosts-vhosts-einrichten-unter-windows.html
+
+1. Open "$XAMPP_ROOT/apache/conf/httpd.conf"
+2. Make sure "Include conf/extra/httpd-vhosts.conf" is not commented out
+3. Open "$XAMPP_ROOT/apache/conf/extra/httpd-vhosts.conf
+4. Insert
+########################
+<Directory C:/Homepage>
+ Require all granted 
+</Directory>
+
+<VirtualHost *:80>
+ DocumentRoot c:/XAMPP/htdocs
+ ServerName localhost 
+</VirtualHost>
+
+<VirtualHost *:80>
+ DocumentRoot c:/Homepage
+ ServerName 3dmodels.local
+</VirtualHost>
+#########################
+
+5. Uncomment "NameVirtualHost *:80"
+6. Open "C:\WINDOWS\system32\drivers\etc\hosts" in a text editor
+7. Add "127.0.0.1   someName" after "127.0.0.1   localhost" (make sure lines are not commented out)
+
