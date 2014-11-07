@@ -22,5 +22,7 @@ See also http://www.php.de/tutorials/42725-virtual-hosts-vhosts-einrichten-unter
 
 5. Uncomment "NameVirtualHost *:80"
 6. Open "C:\WINDOWS\system32\drivers\etc\hosts" in a text editor
-7. Add "127.0.0.1   someName" after "127.0.0.1   localhost" (make sure lines are not commented out)
+7. Add "127.0.0.1   3dmodels.local" after "127.0.0.1   localhost" (make sure lines are not commented out)
+ (You may not be allowed to save the file to this directory. You may then just save anywhere else and copy the file back with administrator rights)
+ (You have to restart Apache for changes in config files to take effect)
 
