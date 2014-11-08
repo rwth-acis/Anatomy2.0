@@ -388,4 +388,37 @@ Afterwards, create the chart by writing down the tasks in the previously defined
 
 % section gantt_chart (end)
 
+
+\newpage
+
+\section{Mesh Processing} % (fold)
+\label{sec:Mesh processing}
+
+The 3D Model used for collaborative viewing on the web is captured using 3D scanning using Breukmann scanSCAN and stitched together using Optocat software. The mesh obtained contains millions of triangles and have to be cleaned and down sampled before it could be used directly for the web.
+
+
+\subsection{Downsampling} % (fold)
+\label{sub:downsampling}
+For down sampling of the mesh, we use Meshlab which is an open source software.\\
+The software is available at:
+\begin{lstlisting} 	 
+meshlab.sourceforge.net
+\end{lstlisting}
+Optocat exports the 3D mesh as an STL/PLY file which can be easily imported by Meshlab for processing. In Meshlab we use filter \textit{“Quadratic Edge Collapse Decimation”} for reducing the polygon count. It is also used for general cleaning of the 3D mesh.
+
+% subsection downsampling (end)
+
+\subsection{Format conversion} % (fold)
+\label{sub:Format Conversion}
+Meshlab exports the down sampled and cleaned mesh as \textit{.WRL}  format which is a file extension for a \textit{Virtual Reality Modeling Language (VRML).} We have to convert it into \textit{X3D} file extension that is used in X3DOM which is an open-source framework and runtime for 3D graphics on the Web. We use InstantReality for this.\\
+The online conversion tool is available at: 
+\begin{lstlisting} 	 
+doc.instantreality.org/tools/x3d_encoding_converter
+\end{lstlisting}
+InstantReality is an online translator between \textit{Classic VRML or XML (.WRL)} encoding and can convert into X3DOM outputs (HTML5 or XHTML5).   We just paste the \textit{.WRL or .X3D} file in it and it creates a HTML output. \\
+It could also be used offline in the similar way as Instant Reality installations include \textit{aopt}, a local command-line converter.
+
+% subsection fromat conversion (end)
+% section mesh processing (end)
+
 \end{document}
