@@ -1,0 +1,122 @@
+3-D Rendering Technology Tech Survey
+
+	Introduction
+		As one of the core functional specifications of the system is to display 3-D scene data in the browser, we surveyed the available web technologies with such capabilities. There are quite many libraries and specifications dealing with representations and rendering of 3-D contexts on the web, and many of these utilize different levels of abstraction and complexity. In order to find the one that suits our usage best, we decided to define a set of criteria to compare these technologies.
+
+	Criteria
+		- Common 3-D scene data formats should be supported natively (or through a trivial conversion process).
+		- The data formats must be compact; stored and transmitted with ease.
+		- Allow the user to apply affine transformations (translation, rotation, scale) to the scene.
+		- Expose its transform states to the browser, in order to support multi-user collab environments.
+		- The final product must not depend on an add-on.
+
+	Background Info
+		Modern browsers now support the usage of graphics hardware through WebGL, without depending on any add-ons. Libraries based on this technology allow us to  display 3-D scenes in the browser natively.  
+
+	Candidates
+		1- Three.js 
+			Three.js allows the creation of GPU-accelerated 3D animations using the JavaScript language as part of a website without relying on proprietary browser plugins. This is possible thanks to the advent of WebGL. It uses MIT license; which allows free usage for non-commercial and commercial purposes.
+
+			It is a high-level wrapper for WebGL. It provides high level constructs, a scene graph, and convenient access to low-level configurations such as shaders. However, even basic scenes require quite a bit of code:
+
+			<script>
+    			var scene, camera, renderer;
+    			var geometry, material, mesh;
+
+    			init();
+    			animate();
+
+    			function init() {
+        			scene = new THREE.Scene();
+
+        			camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+        			camera.position.z = 1000;
+
+        			geometry = new THREE.BoxGeometry( 200, 200, 200 );
+        			material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
+
+        			mesh = new THREE.Mesh( geometry, material );
+        			scene.add( mesh );
+
+        			renderer = new THREE.WebGLRenderer();
+        			renderer.setSize( window.innerWidth, window.innerHeight );
+
+        			document.body.appendChild( renderer.domElement );
+    			}
+
+    			function animate() {
+        			requestAnimationFrame( animate );
+
+        			mesh.rotation.x += 0.01;
+        			mesh.rotation.y += 0.02;
+
+        			renderer.render( scene, camera );
+
+    			}
+
+			</script>
+
+		2- O3D.js (Google) 
+			O3D is an open source JavaScript API created by Google for creating interactive 3D graphics applications that run in a web browser window. It uses the BSD license. O3D is currently in Google's incubation lab, and originally built as a web browser plugin, the new implementation of O3D is a JavaScript library implemented on top of WebGL.
+
+			The main advantage O3D has over alternative desktop or console based 3D rendering engines is that O3D may load, render, and transform models and their respective textures dynamically, using AJAX and/or COMET in real-time. Traditional compilation of source code, application resources, and object libraries is no longer necessary, since all of these aspects are loaded in real-time.
+1
+			While this sounds promising at first, creation of simple scenes take even more code than Three.js. It is oriented more towards scientific visualization and games. Rendering is done in a similar manner to C++'s good-old GLUT for OpenGL, via a predefined update loop.
+
+			Code is omitted, since even a basic scene with a textured cube takes 350 lines to initialize and render.
+
+			O3D is much more than what we are seeking, in terms of both capabilities and complexity.
+
+		3- X3Dom (HTML)
+			X3DOM (pronounced X-Freedom) is an open-source framework and runtime for 3D graphics on the Web. It can be freely used for non-commercial and commercial purposes, and is dual-licensed under MIT and GPL license.
+
+			X3DOM tries to support the ongoing discussion in the Web3D and W3C communities how an integration of HTML5 and declarative 3D content could look like. It aims to fulfill the current HTML5 specification for declarative 3D content and allows including X3D elements as part of any HTML5 DOM tree.
+
+			Works on WebGL supporting browsers without any plugins. 
+			Also has fallbacks (with plugins) for old browsers.
+
+			- X3Dom is DECLARATIVE. 
+			- It is essentially a scene graph; a hierarchical tree of scene nodes: models, lights, cameras.
+			- It is part of the HTML-document, defined by a set of XML tags
+			- It has DOM integration. Allows manipulation of content by adding, removing or changing dom elements.
+			- Its file format, X3D scene files, are simply XML documents, identical to the code used with HTML documents. X3D is a royalty-free open standards file format and run-time architecture to represent and communicate 3D scenes and objects using XML.
+			- It supports CSS / events. It can publish events to the browser, exposing its internal state.
+
+			It is worth noting that X3Dom is extremely simple to use. A sample HTML looks like this:
+
+			<head>
+        		<link rel="stylesheet" type="text/css" href="x3dom.css" />
+				<script type="text/javascript" src="x3dom.js"></script>
+			</head>
+			<body>
+				<Scene>
+            		<Viewpoint position='0 0 10' />
+             		<Shape>
+               			<Appearance>
+                   			<Material diffuseColor='0.603 0.894 0.909' />	
+               			</Appearance>
+               			<Box DEF='box'/>
+             		</Shape>
+          		</Scene>
+          	</body>
+
+	Decision
+		Upon comparing properties of the candidate libraries, we decided that X3Dom fits our criteria perfectly. We justify our decision via following reasons:
+
+		- Creation of simple scenes composed of a few models, a camera and basic lighting is trivial. Perfect for creating model viewers.
+		- Model format is optimized for web, and conversion is widely supported.
+		- Allow interaction through HTML-document easily.
+		- Provide feedback via HTML events.
+
+############################
+
+Short Version:
+
+As one of the core functional specifications of the system is to display 3-D scene data in the browser, we surveyed the available web technologies with such capabilities. There are many libraries and specifications dealing with representations and rendering of 3-D contexts on the web, and most of these utilize different levels of abstraction and complexity. 
+
+Upon surveying available technologies, we found three major candidates; Three.js, O3D and X3Dom. Among these, we decided upon X3Dom for the following reasons:
+
+- The data formats is very compact and optimized for web.
+- It allows the user to apply affine transformations (translation, rotation, scale) to the scene trivially.
+- It exposes its internal scene graph to the browser, allowing support for multi-user collab environments.
+- It is based on WebGL and runs on any modern browser without depending on an add-on.
