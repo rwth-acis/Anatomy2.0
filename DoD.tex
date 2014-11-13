@@ -276,6 +276,9 @@ The guide is available at:
 google-styleguide.googlecode.com/svn/trunk/htmlcssguide
 \end{lstlisting}
 
+\subsection{Development Environment}
+Because we mainly use HTML, JavaScript and CSS, we agreed that everyone uses his favorite IDE. There shouldn't be IDE specific differences and this way everybody can work with the tools he performs best with.
+
 \newpage
 
 \section{Testing Process} % (fold)
@@ -391,10 +394,20 @@ Afterwards, create the chart by writing down the tasks in the previously defined
 
 \newpage
 
-\section{Mesh Processing} % (fold)
+\section{Technologies}
+\subsection{Mesh Processing} % (fold)
 \label{sec:Mesh processing}
 
 The 3D Model used for collaborative viewing on the web is captured using 3D scanning using Breukmann scanSCAN and stitched together using Optocat software. The mesh obtained contains millions of triangles and have to be cleaned and down sampled before it could be used directly for the web.
+
+\subsection{RoleSDK}
+\label{sub:RoleSDK}
+ROLE (http://www.role-project.eu/) provides a learning environment in the browser which can be personalized with widgets and shared with others. We use the RoleSDK to embedd our product into the already existing learning ecosystem. It provides us possibilities for inter-device and inter-widget communication.
+
+\subsection{XAMPP}
+\label{sub:XAMPP}
+XAMPP is a open, cross-platform web server solution stack. We mainly use it to test our project in small scale because it is easy to setup and provides many features we might need. We use the Appache HTTP server and MySQL as database.
+
 
 
 \subsection{Downsampling} % (fold)
