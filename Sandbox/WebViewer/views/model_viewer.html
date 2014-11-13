@@ -11,6 +11,9 @@
     <!-- X3Dom includes -->
     <script type='text/javascript' src='../public/js/x3dom.js'> </script>
 
+    <!-- Additional tool functions -->
+    <script type='text/javascript' src='../public/js/tools.js'> </script>
+
     <script type="text/javascript">
         var pos;
         var rot;
@@ -101,7 +104,21 @@
 <x3d id="viewer_object">
     <scene>
         <transform translation='0 -1 0'>
-            <inline url="https://dl.dropboxusercontent.com/u/34834628/WebViewer/public/3d/knight/knight.x3d" > </inline>
+          <inline id="model_inline"> </inline>
+	  <!-- Insert Model URL from page argument -->
+	  <script>
+	    modelURL = QueryString.m;
+	    if(!modelURL){
+	      //Use default test model
+	      modelURL = "https://dl.dropboxusercontent.com/u/34834628/WebViewer/public/3d/knight/knight.x3d";
+	      console.log("No model specified. Using the default model instead:", modelURL);
+	    }
+	    else{
+	      modelURL = "../../../Repository/models/" + modelURL;
+	      console.log("Using the model:", modelURL);
+	    }
+	    document.getElementById("model_inline").setAttribute("url", modelURL);
+	  </script>
         </transform>
 
         <navigationInfo headlight="true"></navigationInfo>
