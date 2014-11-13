@@ -55,34 +55,123 @@
 \section{Technology survey}
 
 \begin{frame}
-  \frametitle{Tech Survey: 3D Model Acquisition}
-    \begin{description}[]
-      \item[Where do the models come from?] \hfill \\
-      \begin{itemize}
-        \item White Light Scanning \hfill \\
-          \includegraphics[height=70pt]{images/scanner}
-          \hspace{10pt}
-          \includegraphics[height=70pt]{images/light_scan}
-        \item Structure From Motion \hfill \\
-          \includegraphics[height=100pt]{images/structureFromMotion}
-      \end{itemize}
-    \end{description}
+  \frametitle{Technology Survey - Digitization of Physical Objects}
+  \begin{columns}
+    \begin{column}{0.7\textwidth}
+      \begin{description}[]
+        \item[White Light Scanner] \hfill \\
+        \begin{itemize}
+          \item Allows digitization of small objects
+          \item Scanning process requires user interaction
+          \item As accurate as a laser scanner
+        \end{itemize}
+       	\item[Structure From Motion] \hfill \\
+       	\begin{itemize}
+       	  \item Creates 3-D models from videos!
+       	  \item Utilizes modern computer vision techniques
+       	  \item No user interaction necessary
+       	  \item Output is not nearly accurate as WLS
+       	\end{itemize}
+      \end{description}
+   	\end{column} 	
+   	\begin{column}{0.3\textwidth}
+   	  \includegraphics[width=1\textwidth]{images/scanner}\\
+   	  \bigskip
+   	  \includegraphics[width=1\textwidth]{images/light_scan}\\
+   	  \bigskip
+   	  \includegraphics[width=1\textwidth]{images/sfm}\\
+   	\end{column}
+  \end{columns}	
 \end{frame}
 
 \begin{frame}
-  \frametitle{Tech Survey: ROLE}
+  \frametitle{Technology Survey - Image and Model Data Storage}
+  \begin{columns}
+    \begin{column}{0.8\textwidth}
       \begin{description}[]
-        \item[ROLE (Responsive Open Learning Environments)] \hfill \\
+        \item[Database - To Embrace or Avoid?] \hfill \\
         \begin{itemize}
-          \item Learning environment in the web
-          \item Personalized with widgets\\ $\Rightarrow$ synergies
-          \item Collaborative learning\\ $\Rightarrow$ inter-device-communication
+          \item Model files are generally massive
+          \item Indexing them is not trivial
+          \item ACID (Atomicity, Consistency, Isolation, Durability)
+          \item Authorization
         \end{itemize}
-        \item[Some other Tech] \hfill \\
+        \item[Candidates] \hfill \\
         \begin{itemize}
-          \item With items
+          \item MongoDB
+          \item PostgreSQL
+          \item MySQL
         \end{itemize}
-      \end{description}
+      \end{description}  
+    \end{column} 	
+    \begin{column}{0.2\textwidth}
+      \includegraphics[width=.9\textwidth]{images/mongo}\\
+      \bigskip
+      \includegraphics[width=.9\textwidth]{images/postgresql}\\
+      \bigskip
+      \includegraphics[width=.9\textwidth]{images/mysql}\\
+    \end{column}
+  \end{columns}	
+\end{frame}
+
+\begin{frame}
+  \frametitle{Technology Survey - 3D Data Presentation}
+  \begin{columns}
+    \begin{column}{0.7\textwidth}
+      \begin{description}[]
+        \item[Criteria] \hfill \\
+        \begin{itemize}
+          \item Supports common 3-D data formats
+          \item Allows user to apply affine transformations
+          \item Exposes internal state to the browser
+          \item Final product is not dependent on an add-on.
+        \end{itemize}
+        \item[Candidates] \hfill \\
+        \begin{itemize}
+          \item Three.js
+          \item O3D
+          \item X3Dom
+        \end{itemize}
+      \end{description}  
+    \end{column} 	
+    \begin{column}{0.3\textwidth}
+      \includegraphics[width=1\textwidth]{images/scene}\\
+      \bigskip
+      \bigskip
+      \bigskip
+      \includegraphics[width=1\textwidth]{images/model}\\
+    \end{column}
+  \end{columns}	
+\end{frame}
+
+\begin{frame}
+  \frametitle{Technology Survey - Cross-Browser Communication}
+  \begin{columns}
+    \begin{column}{0.7\textwidth}
+      \begin{description}[]
+        \item[Role SDK] \hfill \\
+        \begin{itemize}
+          \item Open source e-learning environment 
+          \item Personalized with widgets
+          \item Any web-application is convertible to a widget with some preamble
+          \item Provides multi-user interaction
+        \end{itemize}
+        \item[Inter-Widget Communication System] \hfill \\
+        \begin{itemize}
+          \item Defined as part of the preamble
+          \item Communicates with other add-ons in the same space
+          \item Publishes events to all active users in the same learning space
+        \end{itemize}
+      \end{description}  
+    \end{column} 	
+    \begin{column}{0.3\textwidth}
+      \includegraphics[width=1\textwidth]{images/role}\\
+      \bigskip
+      \bigskip
+      \bigskip
+      \includegraphics[width=1\textwidth]{images/iwc}\\
+    \end{column}
+  \end{columns}	
 \end{frame}
 
 \section{Market analysis}
