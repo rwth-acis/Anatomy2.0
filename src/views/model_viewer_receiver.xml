@@ -1,3 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+    <ModulePrefs title="Model Viewer Receiver" description="HENM Web Viewer Receiver" author="Demiralp" author_email="demiralpali@gmail.com" height="500">
+        <Require feature="opensocial-0.8"/>
+    </ModulePrefs>
+    <Content type="xml">
+        <![CDATA[
 <html>
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -9,7 +16,7 @@
     <script src ="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 
     <!-- X3Dom includes -->
-    <script type='text/javascript' src='../public/js/x3dom.js'> </script>
+    <script type='text/javascript' src='../js/x3dom.js'> </script>
 
     <script type="text/javascript">
         // IWC initialize section.
@@ -40,8 +47,8 @@
         }
     </script>
 
-    <link rel='stylesheet' type='text/css' href='../public/css/x3dom.css'></link>
-    <link rel='stylesheet' type='text/css' href='../public/css/model_viewer.css'></link>
+    <link rel='stylesheet' type='text/css' href='../css/x3dom.css'></link>
+    <link rel='stylesheet' type='text/css' href='../css/model_viewer.css'></link>
 </head>
 <body>
 <p id="debugText"> &nbsp </p>
@@ -77,4 +84,10 @@
     </scene>
 </x3d>
 </body>
-</html> 
+</html>
+
+
+
+        ]]>
+    </Content>
+</Module>

@@ -1,10 +1,3 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<Module>
-    <ModulePrefs title="Model Viewer" description="HENM Web Viewer" author="Demiralp" author_email="demiralpali@gmail.com" height="500">
-        <Require feature="opensocial-0.8"/>
-    </ModulePrefs>
-    <Content type="xml">
-        <![CDATA[
 <html>
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -16,7 +9,7 @@
     <script src ="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 
     <!-- X3Dom includes -->
-    <script type='text/javascript' src='../public/js/x3dom.js'> </script>
+    <script type='text/javascript' src='../js/x3dom.js'> </script>
 
     <script type="text/javascript">
         var pos;
@@ -28,25 +21,6 @@
         function init () {
             iwcClient = new iwc.Client();
             iwcClient.connect(iwcCallback);
-        }
-        function iwcCallback(intent) {
-            var extras      = intent.extras;
-            var extrasPos   = extras["position"];
-            var extrasRot   = extras["orientation"];
-
-            var camPos = extrasPos.x.toFixed(4) + ' ' +
-                    extrasPos.y.toFixed(4) + ' ' +
-                    extrasPos.z.toFixed(4);
-            var camRot = extrasRot[0].x.toFixed(4) + ' ' +
-                    extrasRot[0].y.toFixed(4) + ' ' +
-                    extrasRot[0].z.toFixed(4) + ' ' +
-                    extrasRot[1].toFixed(4);
-
-            document.getElementById('viewport').setAttribute("position", camPos);
-            document.getElementById('viewport').setAttribute("orientation", camRot);
-
-            document.getElementById("debugText").innerHTML = "Received viewpoint position = " +
-                    camPos + " orientation = " + camRot;
         }
 
         // Viewport section.
@@ -100,8 +74,8 @@
         }
     </script>
 
-    <link rel='stylesheet' type='text/css' href='../public/css/x3dom.css'></link>
-    <link rel='stylesheet' type='text/css' href='../public/css/model_viewer.css'></link>
+    <link rel='stylesheet' type='text/css' href='../css/x3dom.css'></link>
+    <link rel='stylesheet' type='text/css' href='../css/model_viewer.css'></link>
 </head>
 <body>
 <p id="debugText"> &nbsp </p>
@@ -137,8 +111,4 @@
     </scene>
 </x3d>
 </body>
-</html>
-
-        ]]>
-    </Content>
-</Module>
+</html> 

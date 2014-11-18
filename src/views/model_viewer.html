@@ -1,10 +1,3 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<Module>
-    <ModulePrefs title="Model Viewer Publisher" description="HENM Web Viewer Publisher" author="Demiralp" author_email="demiralpali@gmail.com" height="500">
-        <Require feature="opensocial-0.8"/>
-    </ModulePrefs>
-    <Content type="xml">
-        <![CDATA[
 <html>
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -16,7 +9,10 @@
     <script src ="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 
     <!-- X3Dom includes -->
-    <script type='text/javascript' src='../public/js/x3dom.js'> </script>
+    <script type='text/javascript' src='../js/x3dom.js'> </script>
+
+    <!-- Additional tool functions -->
+    <script type='text/javascript' src='../js/tools.js'> </script>
 
     <script type="text/javascript">
         var pos;
@@ -28,6 +24,25 @@
         function init () {
             iwcClient = new iwc.Client();
             iwcClient.connect(iwcCallback);
+        }
+        function iwcCallback(intent) {
+            var extras      = intent.extras;
+            var extrasPos   = extras["position"];
+            var extrasRot   = extras["orientation"];
+
+            document.getElementById('viewport').setAttribute("position", extrasPos);
+            document.getElementById('viewport').setAttribute("orientation", extrasRot);
+
+            var camPos = extrasPos.x.toFixed(4) + ' ' +
+                    extrasPos.y.toFixed(4) + ' ' +
+                    extrasPos.z.toFixed(4);
+            var camRot = extrasRot[0].x.toFixed(4) + ' ' +
+                    extrasRot[0].y.toFixed(4) + ' ' +
+                    extrasRot[0].z.toFixed(4) + ' ' +
+                    extrasRot[1].toFixed(4);
+
+            document.getElementById("debugText").innerHTML = "Received viewpoint position = " +
+                    camPos + " orientation = " + camRot;
         }
 
         // Viewport section.
@@ -81,15 +96,29 @@
         }
     </script>
 
-    <link rel='stylesheet' type='text/css' href='../public/css/x3dom.css'></link>
-    <link rel='stylesheet' type='text/css' href='../public/css/model_viewer.css'></link>
+    <link rel='stylesheet' type='text/css' href='../css/x3dom.css'></link>
+    <link rel='stylesheet' type='text/css' href='../css/model_viewer.css'></link>
 </head>
 <body>
 <p id="debugText"> &nbsp </p>
 <x3d id="viewer_object">
     <scene>
         <transform translation='0 -1 0'>
-            <inline url="https://dl.dropboxusercontent.com/u/34834628/WebViewer/public/3d/knight/knight.x3d" > </inline>
+          <inline id="model_inline"> </inline>
+	  <!-- Insert Model URL from page argument -->
+	  <script>
+	    modelURL = QueryString.m;
+	    if(!modelURL){
+	      //Use default test model
+	      modelURL = "https://dl.dropboxusercontent.com/u/34834628/WebViewer/public/3d/knight/knight.x3d";
+	      console.log("No model specified. Using the default model instead:", modelURL);
+	    }
+	    else{
+	      modelURL = "../../model-data/" + modelURL;
+	      console.log("Using the model:", modelURL);
+	    }
+	    document.getElementById("model_inline").setAttribute("url", modelURL);
+	  </script>
         </transform>
 
         <navigationInfo headlight="true"></navigationInfo>
@@ -118,8 +147,4 @@
     </scene>
 </x3d>
 </body>
-</html>
-
-        ]]>
-    </Content>
-</Module>
+</html> 
