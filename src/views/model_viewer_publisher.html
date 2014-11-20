@@ -1,114 +1,48 @@
+<!DOCTYPE html>
 <html>
-<head>
+  <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta charset="utf8">
     <title>RWTH Model Viewer</title>
-
     <!-- Interwidget communication includes -->
-    <script src ="http://open-app.googlecode.com/files/openapp.js" > </script>
-    <script src ="http://dbis.rwth-aachen.de/gadgets/iwc/lib/iwc.js" > </script>
-    <script src ="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-
+    <script src ="//open-app.googlecode.com/files/openapp.js"></script>
+    <script src ="//dbis.rwth-aachen.de/gadgets/iwc/lib/iwc.js"></script>
+    <script src ="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <!-- X3Dom includes -->
-    <script type='text/javascript' src='../js/x3dom.js'> </script>
-
-    <script type="text/javascript">
-        var pos;
-        var rot;
-
-        // IWC initialize section.
-        var iwcClient;
-        gadgets.util.registerOnLoadHandler(init);
-        function init () {
-            iwcClient = new iwc.Client();
-            iwcClient.connect(iwcCallback);
-        }
-
-        // Viewport section.
-        document.onload = function()
-        {
-            document.getElementById('viewport').addEventListener('viewpointChanged', viewpointChanged, false);
-        }
-        document.body.onmouseup = function() {
-            // Send through IWC!
-            var intent = {
-                "component" :"",                            // recipient, empty for broadcast
-                "data"      :"http://data.org/some/data",   // data as URI
-                "dataType"  :"text/xml",                    // data mime type
-                "action"    :"ACTION_UPDATE",               // action to be performed by receivers
-                "flags"     :["PUBLISH_GLOBAL"],            // control flags
-                "extras"    :{"position": pos, "orientation": rot} // optional auxiliary data
-            }
-            if(iwc.util.validateIntent(intent)) {
-                iwcClient.publish(intent);
-
-                var camPos = pos.x.toFixed(4) + ' ' +
-                        pos.y.toFixed(4) + ' ' +
-                        pos.z.toFixed(4);
-                var camRot = rot[0].x.toFixed(4) + ' ' +
-                        rot[0].y.toFixed(4) + ' ' +
-                        rot[0].z.toFixed(4) + ' ' +
-                        rot[1].toFixed(4);
-                document.getElementById("debugText").innerHTML = "Sent viewpoint position = " +
-                        camPos + " orientation = " + camRot;
-            }
-            else {
-                alert("Intent not valid! ");
-            }
-        }
-        function viewpointChanged(evt)
-        {
-            if (evt) {
-                pos = evt.position;
-                rot = evt.orientation;
-
-                var camPos = pos.x.toFixed(4) + ' ' +
-                        pos.y.toFixed(4) + ' ' +
-                        pos.z.toFixed(4);
-                var camRot = rot[0].x.toFixed(4) + ' ' +
-                        rot[0].y.toFixed(4) + ' ' +
-                        rot[0].z.toFixed(4) + ' ' +
-                        rot[1].toFixed(4);
-                document.getElementById("debugText").innerHTML = "Updated viewpoint position = " +
-                        camPos + " orientation = " + camRot;
-            }
-        }
-    </script>
-
+    <script type='text/javascript' src='../js/x3dom.js'></script>
+    <script type="text/javascript" src='../js/viewpoint.js'></script>
     <link rel='stylesheet' type='text/css' href='../css/x3dom.css'></link>
     <link rel='stylesheet' type='text/css' href='../css/model_viewer.css'></link>
-</head>
-<body>
-<p id="debugText"> &nbsp </p>
-<x3d id="viewer_object">
-    <scene>
+  </head>
+  <body>
+    <p id="debugText"> &nbsp</p>
+    <x3d id="viewer_object">
+      <scene>
         <transform translation='0 -1 0'>
-            <inline url="https://dl.dropboxusercontent.com/u/34834628/WebViewer/public/3d/knight/knight.x3d" > </inline>
+          <inline url="https://dl.dropboxusercontent.com/u/34834628/WebViewer/public/3d/knight/knight.x3d" ></inline>
         </transform>
-
         <navigationInfo headlight="true"></navigationInfo>
-        <background skyColor='0.0 0.0 0.0'> </Background>
-
+        <background skyColor='0.0 0.0 0.0'></Background>
         <transform DEF='spheres'>
-            <transform translation='0 0 1.5'>
-                <shape> <appearance> <material diffuseColor="1 0 0"/> </appearance> <sphere radius="0.3"/> </shape>
-            </transform>
-            <transform translation='-1.5 0 0'>
-                <shape> <appearance> <material diffuseColor="0 1 0"/> </appearance> <sphere radius="0.3"/> </shape>
-            </transform>
-            <transform translation='1.5 0 0'>
-                <shape> <appearance> <material diffuseColor="0 0 1"/> </appearance> <sphere radius="0.3"/> </shape>
-            </transform>
-            <transform translation='0 0 -1.5'>
-                <shape> <appearance> <material diffuseColor="1 1 0"/> </appearance> <sphere radius="0.3"/> </shape>
-            </transform>
+          <transform translation='0 0 1.5'>
+            <shape> <appearance> <material diffuseColor="1 0 0"/> </appearance> <sphere radius="0.3"/></shape>
+          </transform>
+          <transform translation='-1.5 0 0'>
+            <shape> <appearance> <material diffuseColor="0 1 0"/> </appearance> <sphere radius="0.3"/></shape>
+          </transform>
+          <transform translation='1.5 0 0'>
+            <shape> <appearance> <material diffuseColor="0 0 1"/> </appearance> <sphere radius="0.3"/></shape>
+          </transform>
+          <transform translation='0 0 -1.5'>
+            <shape> <appearance> <material diffuseColor="1 1 0"/> </appearance> <sphere radius="0.3"/></shape>
+          </transform>
         </transform>
-        <viewpoint id="viewport" DEF="viewport" centerOfRotation="0 0 0" position="0.00 0.00 5.00" orientation="-0.92 0.35 0.17 0.00" fieldOfView="0.858"> </viewpoint>
-
+        <viewpoint id="viewport" DEF="viewport" centerOfRotation="0 0 0" position="0.00 0.00 5.00" orientation="-0.92 0.35 0.17 0.00" fieldOfView="0.858"></viewpoint>
         <timeSensor DEF='clock' cycleInterval='3' loop='true'></timeSensor>
         <orientationInterpolator DEF='rotation_anim' key='0 0.25 0.5 0.75 1' keyValue='0 1 0 0  0 1 0 1.57079  0 1 0 3.14159  0 1 0 4.71239  0 1 0 6.28317'></orientationInterpolator>
         <ROUTE fromNode='clock' fromField='fraction_changed' toNode='rotation_anim' toField='set_fraction'></ROUTE>
         <ROUTE fromNode='rotation_anim' fromField='value_changed' toNode='spheres' toField='set_rotation'></ROUTE>
-    </scene>
-</x3d>
-</body>
+      </scene>
+    </x3d>
+  </body>
 </html> 
