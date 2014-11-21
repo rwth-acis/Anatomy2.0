@@ -17,15 +17,9 @@
 
     <!-- X3Dom includes -->
     <script type='text/javascript' src='../js/x3dom.js'> </script>
+    <script type="text/javascript" src='../js/viewpoint.js'></script>
 
     <script type="text/javascript">
-        // IWC initialize section.
-        var iwcClient;
-        gadgets.util.registerOnLoadHandler(init);
-        function init () {
-            iwcClient = new iwc.Client();
-            iwcClient.connect(iwcCallback);
-        }
         function iwcCallback(intent) {
             var extras      = intent.extras;
             var extrasPos   = extras["position"];
@@ -45,6 +39,13 @@
             document.getElementById("debugText").innerHTML = "Received viewpoint position = " +
                     camPos + " orientation = " + camRot;
         }
+
+        // Call initialization method with callback
+        function initWithIwcCallback() {
+            init(iwcCallback);
+        }
+        
+        gadgets.util.registerOnLoadHandler(initWithIwcCallback);
     </script>
 
     <link rel='stylesheet' type='text/css' href='../css/x3dom.css'></link>

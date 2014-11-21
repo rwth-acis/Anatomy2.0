@@ -12,8 +12,35 @@
 
     <!-- X3Dom includes -->
     <script type='text/javascript' src='../js/x3dom.js'> </script>
-
     <script type="text/javascript" src='../js/viewpoint.js'></script>
+
+    <script type="text/javascript">
+        function iwcCallback(intent) {
+            var extras      = intent.extras;
+            var extrasPos   = extras["position"];
+            var extrasRot   = extras["orientation"];
+
+            var camPos = extrasPos.x.toFixed(4) + ' ' +
+                    extrasPos.y.toFixed(4) + ' ' +
+                    extrasPos.z.toFixed(4);
+            var camRot = extrasRot[0].x.toFixed(4) + ' ' +
+                    extrasRot[0].y.toFixed(4) + ' ' +
+                    extrasRot[0].z.toFixed(4) + ' ' +
+                    extrasRot[1].toFixed(4);
+
+            document.getElementById('viewport').setAttribute("position", camPos);
+            document.getElementById('viewport').setAttribute("orientation", camRot);
+
+            document.getElementById("debugText").innerHTML = "Received viewpoint position = " +
+                    camPos + " orientation = " + camRot;
+        }
+        // Call initialization method with callback
+        function initWithIwcCallback() {
+            init(iwcCallback);
+        }
+        
+        gadgets.util.registerOnLoadHandler(initWithIwcCallback);
+    </script>
 
     <link rel='stylesheet' type='text/css' href='../css/x3dom.css'></link>
     <link rel='stylesheet' type='text/css' href='../css/model_viewer.css'></link>
