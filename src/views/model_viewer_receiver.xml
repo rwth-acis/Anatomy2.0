@@ -56,59 +56,6 @@
         <x3d id="viewer_object">
           <scene>
             <transform translation='0 -1 0'>
-=======
-<html>
-<head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title>RWTH Model Viewer</title>
-
-    <!-- Interwidget communication includes -->
-    <script src ="http://open-app.googlecode.com/files/openapp.js" > </script>
-    <script src ="http://dbis.rwth-aachen.de/gadgets/iwc/lib/iwc.js" > </script>
-    <script src ="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-
-    <!-- X3Dom includes -->
-    <script type='text/javascript' src='../js/x3dom.js'> </script>
-    <script type="text/javascript" src='../js/viewpoint.js'></script>
-
-    <script type="text/javascript">
-        function iwcCallback(intent) {
-            var extras      = intent.extras;
-            var extrasPos   = extras["position"];
-            var extrasRot   = extras["orientation"];
-
-            var camPos = extrasPos.x.toFixed(4) + ' ' +
-                    extrasPos.y.toFixed(4) + ' ' +
-                    extrasPos.z.toFixed(4);
-            var camRot = extrasRot[0].x.toFixed(4) + ' ' +
-                    extrasRot[0].y.toFixed(4) + ' ' +
-                    extrasRot[0].z.toFixed(4) + ' ' +
-                    extrasRot[1].toFixed(4);
-
-            document.getElementById('viewport').setAttribute("position", camPos);
-            document.getElementById('viewport').setAttribute("orientation", camRot);
-
-            document.getElementById("debugText").innerHTML = "Received viewpoint position = " +
-                    camPos + " orientation = " + camRot;
-        }
-
-        // Call initialization method with callback
-        function initWithIwcCallback() {
-            init(iwcCallback);
-        }
-        
-        gadgets.util.registerOnLoadHandler(initWithIwcCallback);
-    </script>
-
-    <link rel='stylesheet' type='text/css' href='../css/x3dom.css'></link>
-    <link rel='stylesheet' type='text/css' href='../css/model_viewer.css'></link>
-</head>
-<body>
-<p id="debugText"> &nbsp </p>
-<x3d id="viewer_object">
-    <scene>
-        <transform translation='0 -1 0'>
->>>>>>> 4b0ab96b832bfdb4d5688fe585e5e34fcd757f04
             <inline url="https://dl.dropboxusercontent.com/u/34834628/WebViewer/public/3d/knight/knight.x3d" > </inline>
             </transform>
             <navigationInfo headlight="true"></navigationInfo>
