@@ -5,9 +5,9 @@
     </ModulePrefs>
     <Content type="xml">
         <![CDATA[
-<<<<<<< HEAD
-    <html>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" charset="utf8"/>
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" charset="utf8"/>
     <title>RWTH Model Viewer</title>
     <!-- Interwidget communication includes -->
     <script src ="http://open-app.googlecode.com/files/openapp.js" > </script>
@@ -20,9 +20,9 @@
     <link rel="stylesheet" type="text/css" href="../css/style.css">
     <link rel='stylesheet' type='text/css' href='../css/x3dom.css'></link>
     <link rel='stylesheet' type='text/css' href='../css/model_viewer.css'></link>
-        </head>
-        <body>
-            <div class="container">
+  </head>
+  <body>
+    <div class="container">
       <header>
         <div class="row">
           <div class="col-md-12"> 
@@ -56,7 +56,7 @@
         <x3d id="viewer_object">
           <scene>
             <transform translation='0 -1 0'>
-            <inline url="https://dl.dropboxusercontent.com/u/34834628/WebViewer/public/3d/knight/knight.x3d" > </inline>
+              <inline url="https://dl.dropboxusercontent.com/u/34834628/WebViewer/public/3d/knight/knight.x3d" > </inline>
             </transform>
             <navigationInfo headlight="true"></navigationInfo>
             <background skyColor='1.0 1.0 1.0'> </Background>
@@ -74,8 +74,7 @@
                 <shape> <appearance> <material diffuseColor="1 1 0"/> </appearance> <sphere radius="0.3"/> </shape>
               </transform>
             </transform>
-            <viewpoint id="viewport" DEF="viewport" centerOfRotation="0 0 0" position="0.00 0.00 5.00" orientation="-0.92 0.35 0.17 0.00" fieldOfView="0.858"> 
-            </viewpoint>
+            <viewpoint id="viewport" DEF="viewport" centerOfRotation="0 0 0" position="0.00 0.00 5.00" orientation="-0.92 0.35 0.17 0.00" fieldOfView="0.858"> </viewpoint>
             <timeSensor DEF='clock' cycleInterval='3' loop='true'></timeSensor>
             <orientationInterpolator DEF='rotation_anim' key='0 0.25 0.5 0.75 1' keyValue='0 1 0 0  0 1 0 1.57079  0 1 0 3.14159  0 1 0 4.71239  0 1 0 6.28317'></orientationInterpolator>
             <ROUTE fromNode='clock' fromField='fraction_changed' toNode='rotation_anim' toField='set_fraction'></ROUTE>
@@ -87,9 +86,9 @@
         <p class="text-center">HENM LAB 2014/15: 3D Models</p>
         <p class="text-center">Reach us at: <a href="mailto:henm1415g2@dbis.rwth-aachen.de">henm1415g2@dbis.rwth-aachen.de</a></p>
       </footer>
-            </div>  
-        </body>
-    </html>     
+    </div>  
+  </body>
+</html> 
 
 
         ]]>

@@ -50,7 +50,7 @@
         <x3d id="viewer_object">
           <scene>
             <transform translation='0 -1 0'>
-            <inline url="https://dl.dropboxusercontent.com/u/34834628/WebViewer/public/3d/knight/knight.x3d" > </inline>
+              <inline url="https://dl.dropboxusercontent.com/u/34834628/WebViewer/public/3d/knight/knight.x3d" > </inline>
             </transform>
             <navigationInfo headlight="true"></navigationInfo>
             <background skyColor='1.0 1.0 1.0'> </Background>
@@ -68,8 +68,7 @@
                 <shape> <appearance> <material diffuseColor="1 1 0"/> </appearance> <sphere radius="0.3"/> </shape>
               </transform>
             </transform>
-            <viewpoint id="viewport" DEF="viewport" centerOfRotation="0 0 0" position="0.00 0.00 5.00" orientation="-0.92 0.35 0.17 0.00" fieldOfView="0.858"> 
-            </viewpoint>
+            <viewpoint id="viewport" DEF="viewport" centerOfRotation="0 0 0" position="0.00 0.00 5.00" orientation="-0.92 0.35 0.17 0.00" fieldOfView="0.858"> </viewpoint>
             <timeSensor DEF='clock' cycleInterval='3' loop='true'></timeSensor>
             <orientationInterpolator DEF='rotation_anim' key='0 0.25 0.5 0.75 1' keyValue='0 1 0 0  0 1 0 1.57079  0 1 0 3.14159  0 1 0 4.71239  0 1 0 6.28317'></orientationInterpolator>
             <ROUTE fromNode='clock' fromField='fraction_changed' toNode='rotation_anim' toField='set_fraction'></ROUTE>

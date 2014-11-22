@@ -9,6 +9,11 @@ h1 {
     text-align: center;
     color: #0000ff;
 }
+
+p {
+    color: black;
+}
+
 /* Header */
 #color{
   height:3px;

@@ -1,0 +1,14 @@
+body {
+    background-color: white;
+    color: white;
+    font-family: Helvetica, sans-serif;
+    font-size: 12px;
+}
+
+#viewer_object {
+    width: 90%;
+    height: 90%;
+    vertical-align: middle;
+    border: 2px;
+    border-color: white;
+}
