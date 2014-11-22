@@ -56,6 +56,6 @@ function viewpointChanged(evt)
         document.getElementById("debugText").innerHTML = "Updated viewpoint position = " +
                 camPos + " orientation = " + camRot;
 
-        sendPositionAndOrientation
+        sendPositionAndOrientation();
     }
 }
