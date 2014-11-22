@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!-- This is just a wrapper for the role environment. We embedd your normal html page in a role widget -->
 <Module>
     <ModulePrefs title="Collaborative 3D Model Viewer" description="HENM Web Viewer" author="Group2" author_email="henm1415@dbis.rwth-aachen.de" height="600" width="600">
         <Require feature="opensocial-0.8"/>
@@ -12,6 +13,7 @@
  <meta name='description' content='TODO'/>
 </head>
 <body>
+  <!-- container for the actual site: -->
   <object data=http://137.226.108.14:81 width="100%" height="100%">
     <embed src=http://137.226.108.14:81 width="100%" height="100%"></embed>
       Error: Embedded data could not be displayed.

@@ -30,13 +30,15 @@
 	 $ergebnis = mysql_query($abfrage);
 	 while($row = mysql_fetch_object($ergebnis))
 	 {
-	 echo "<tr><td><a href=\"model_viewer.html?m=$row->url\">$row->urlname </a></td>";
-	 echo "<td><x3d width='100px' height='100px'>
+	   //link to model_viewer with model url as parameter
+	   echo "<tr><td><a href=\"model_viewer.html?m=$row->url\">$row->urlname </a></td>";
+           //preview of model
+	   echo "<td><x3d width='100px' height='100px'>
 	       <scene>
 		 <inline url=\"../../model-data/$row->url\" > </inline>
 	       </scene> 
                </x3d></td></tr>";
-      }
+         }
       ?>
     </table>
 
