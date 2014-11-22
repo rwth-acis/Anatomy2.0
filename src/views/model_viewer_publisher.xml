@@ -5,21 +5,31 @@
   </ModulePrefs>
   <Content type="xml">
         <![CDATA[
+<<<<<<< HEAD
   <html>
     <head>
       <meta http-equiv="X-UA-Compatible" content="IE=edge" charset="utf8"/>
-      <title>RWTH Model Viewer</title>
-      <!-- Interwidget communication includes -->
-      <script src ="http://open-app.googlecode.com/files/openapp.js"></script>
-      <script src ="http://dbis.rwth-aachen.de/gadgets/iwc/lib/iwc.js"></script>
-      <script src ="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-      <!-- X3Dom includes -->
-      <script type='text/javascript' src='../js/x3dom.js'></script>
-      <script type="text/javascript" src='../js/viewpoint.js'></script>
-      <link rel='stylesheet' type='text/css' href='../css/x3dom.css'></link>
-      <script type="text/javascript" src='../js/publisher.js'></script>
-      <link rel="stylesheet" type="text/css" href="../css/style.css">
-      <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <title>RWTH Model Viewer</title>
+    <!-- Interwidget communication includes -->
+    <script src ="http://open-app.googlecode.com/files/openapp.js"></script>
+    <script src ="http://dbis.rwth-aachen.de/gadgets/iwc/lib/iwc.js"></script>
+    <script src ="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <!-- X3Dom includes -->
+    <script type='text/javascript' src='../js/x3dom.js'></script>
+    <script type="text/javascript" src='../js/publisher.js'></script>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <script>
+        // Viewport section.
+        document.onload = function() 
+        {
+          document.getElementById('viewport').addEventListener('viewpointChanged', viewpointChanged, false);
+        }
+
+        gadgets.util.registerOnLoadHandler(init);
+    </script>
+    <link rel='stylesheet' type='text/css' href='../css/x3dom.css'></link>
+    <link rel='stylesheet' type='text/css' href='../css/model_viewer.css'></link>
     </head>
     <body>
       <div class="container">
@@ -57,6 +67,50 @@
           <scene>
             <transform translation='0 -1 0'>
               <inline url="https://dl.dropboxusercontent.com/u/34834628/WebViewer/public/3d/knight/knight.x3d" ></inline>
+=======
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>RWTH Model Viewer</title>
+
+    <!-- Interwidget communication includes -->
+    <script src ="http://open-app.googlecode.com/files/openapp.js" > </script>
+    <script src ="http://dbis.rwth-aachen.de/gadgets/iwc/lib/iwc.js" > </script>
+    <script src ="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+    <!-- X3Dom includes -->
+    <script type='text/javascript' src='../js/x3dom.js'> </script>
+    <script type="text/javascript" src='../js/viewpoint.js'></script>
+
+    <script>
+        // Viewport section.
+        document.onload = function() 
+        {
+          document.getElementById('viewport').addEventListener('viewpointChanged', viewpointChanged, false);
+  
+        }
+
+        gadgets.util.registerOnLoadHandler(init);
+    </script>
+
+    <link rel='stylesheet' type='text/css' href='../css/x3dom.css'></link>
+    <link rel='stylesheet' type='text/css' href='../css/model_viewer.css'></link>
+</head>
+<body>
+<p id="debugText"> &nbsp </p>
+<x3d id="viewer_object">
+    <scene>
+        <transform translation='0 -1 0'>
+            <inline url="https://dl.dropboxusercontent.com/u/34834628/WebViewer/public/3d/knight/knight.x3d" > </inline>
+        </transform>
+
+        <navigationInfo headlight="true"></navigationInfo>
+        <background skyColor='0.0 0.0 0.0'> </Background>
+
+        <transform DEF='spheres'>
+            <transform translation='0 0 1.5'>
+                <shape> <appearance> <material diffuseColor="1 0 0"/> </appearance> <sphere radius="0.3"/> </shape>
+>>>>>>> 4b0ab96b832bfdb4d5688fe585e5e34fcd757f04
             </transform>
             <navigationInfo headlight="true"></navigationInfo>
             <background skyColor='1.0 1.0 1.0'></Background>

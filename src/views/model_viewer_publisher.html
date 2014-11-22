@@ -12,6 +12,15 @@
     <script type="text/javascript" src='../js/publisher.js'></script>
     <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <script>
+        // Viewport section.
+        document.onload = function() 
+        {
+          document.getElementById('viewport').addEventListener('viewpointChanged', viewpointChanged, false);
+        }
+
+        gadgets.util.registerOnLoadHandler(init);
+    </script>
     <link rel='stylesheet' type='text/css' href='../css/x3dom.css'></link>
     <link rel='stylesheet' type='text/css' href='../css/model_viewer.css'></link>
   </head>
