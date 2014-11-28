@@ -1,8 +1,17 @@
-var QueryString = function () {
+/**
+ * Wrapper for getting the location url (necessary to test with given input data, see spyon in Jasmine)
+ */
+get_location = {
+    search: function(){
+	return window.location.search;
+    }
+}
+
+function getQueryString() {
   // This function is anonymous, is executed immediately and 
   // the return value is assigned to QueryString!
   var query_string = {};
-  var query = window.location.search.substring(1);
+  var query = get_location.search().substring(1);
   var vars = query.split("&");
   for (var i=0;i<vars.length;i++) {
     var pair = vars[i].split("=");
@@ -19,4 +28,7 @@ var QueryString = function () {
     }
   } 
     return query_string;
-} ();
+}
+
+//init QueryString
+var QueryString = getQueryString();
