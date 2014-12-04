@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="HENM Viewer" description="Collaborative 3D Model Viewer" author="G2" width="640" height="480">
+    <Require feature="opensocial-0.8"/>
+  </ModulePrefs>
+  <Content type="xml">
+        <![CDATA[
+<html>
+  <embed src=http://eiche.informatik.rwth-aachen.de/henm1415g2/views/repository.php width="100%" height="100%">
+</html>
+        ]]>
+  </Content>
+</Module>
