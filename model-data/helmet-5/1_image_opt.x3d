@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE X3D PUBLIC "ISO//Web3D//DTD X3D 3.0//EN" "http://www.web3d.org/specifications/x3d-3.0.dtd">
+<X3D xmlns:xsd='http://www.w3.org/2001/XMLSchema-instance' profile='Full' version='3.0' xsd:noNamespaceSchemaLocation='http://www.web3d.org/specifications/x3d-3.0.xsd'>
+  <Scene DEF='scene'>
+    <NavigationInfo type='"EXAMINE" "ANY"'/>
+    <Transform>
+      <Shape>
+        <Appearance>
+          <Material diffuseColor='0.9 0.9 0.9' shininess='0.5' specularColor='0.1 0.1 0.1'/>
+        </Appearance>
+        <ImageGeometry DEF='IG_0' vertexCount='77951 9285' primType='"TRIANGLESTRIP" "TRIANGLES"' position='-17.6138000488 -26.5924987793 -110.855857849' size='154.639404297 268.881011963 213.536270142' implicitMeshSize='512 256'>
+          <ImageTexture containerField='coord' url='"image_opt/IG_0_coordImage0.png"'/>
+          <ImageTexture containerField='coord' url='"image_opt/IG_0_coordImage1.png"'/>
+          <ImageTexture containerField='normal' url='"image_opt/IG_0_normalImage.png"'/>
+          <ImageTexture containerField='color' url='"image_opt/IG_0_colorImage.png"'/>
+        </ImageGeometry>
+      </Shape>
+    </Transform>
+  </Scene>
+</X3D>
