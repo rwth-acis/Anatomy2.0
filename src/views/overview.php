@@ -30,7 +30,7 @@
 	 $ergebnis = mysql_query($abfrage);
 	 while($row = mysql_fetch_object($ergebnis))
 	 {
-	 echo "<tr><td><a href=\"model_viewer.html?m=$row->url\">$row->urlname </a></td>";
+	 echo "<tr><td><a href=\"model_viewer_publisher.html?m=$row->url\">$row->urlname </a></td>";
 	 echo "<td><x3d width='100px' height='100px'>
 	       <scene>
 		 <inline url=\"../../model-data/$row->url\" > </inline>
