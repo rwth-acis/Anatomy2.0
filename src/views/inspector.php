@@ -13,7 +13,7 @@
     <script type='text/javascript' src='http://www.x3dom.org/download/x3dom.js'> </script>
     <script type='text/javascript' src='../js/viewer.js'> </script>
     <link type='text/css' rel='stylesheet' href='http://www.x3dom.org/download/x3dom.css'> </link> 
-    <!--<link rel='stylesheet' type='text/css' href='../css/x3dom.css'></link>-->
+    <link rel='stylesheet' type='text/css' href='../css/model_viewer.css'></link>
 
     <!-- Additional styles -->
     <link rel='stylesheet' type='text/css' href='../css/bootstrap.min.css'>
