@@ -167,48 +167,48 @@ x3d:hover,
 
 .x3dom-touch-marker {
 	display: inline;
-    padding: 5px;
+  padding: 5px;
 	border-radius: 10px;
-    position: absolute;
-    font-family: Helvetica, sans-serif;
-    line-height:10px;
-    font-size: 10px;
-    color: darkorange;
-    background: cornsilk;
-    opacity: 0.6;
-    border: 2px solid orange;
+  position: absolute;
+  font-family: Helvetica, sans-serif;
+  line-height:10px;
+  font-size: 10px;
+  color: white;
+  background: white;
+  opacity: 0.6;
+  border: 2px solid orange;
 	z-index: 200;
 }
 
 .x3dom-logContainer {
-    border: 2px solid olivedrab;
-    height: 200px;
-    padding: 4px;
-    overflow: auto;
-    white-space: pre-wrap;
-    font-family: sans-serif;
-    font-size: x-small;
-    color: #00ff00;
-    background-color: black;
-    margin-right: 10px;
+  border: 2px solid white;
+  height: 200px;
+  padding: 4px;
+  overflow: auto;
+  white-space: pre-wrap;
+  font-family: sans-serif;
+  font-size: x-small;
+  color: #00ff00;
+  background-color: white;
+  margin-right: 10px;
 }
 
 .x3dom-nox3d {
-    font-family: Helvetica, sans-serif;
-    font-size: 14px;
-    background-color: #eb7a7a;
-    padding: 1em;
-    opacity: 0.75;
+  font-family: Helvetica, sans-serif;
+  font-size: 14px;
+  background-color: #eb7a7a;
+  padding: 1em;
+  opacity: 0.75;
 }
 
 .x3dom-nox3d p { 
-    color: #fff;
-    font-size: 14px;
+  color: #fff;
+  font-size: 14px;
 }
 
 .x3dom-nox3d a { 
-    color: #fff;
-    font-size: 14px;
+  color: #fff;
+  font-size: 14px;
 }
 
 

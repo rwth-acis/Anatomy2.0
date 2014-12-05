@@ -1,13 +1,8 @@
 body {
-    background-color: #333333;
-    color: #FFFFFF;
+    background-color: white;
+    color: white;
     font-family: Helvetica, sans-serif;
     font-size: 12px;
-}
-
-h1 {
-    text-align: center;
-    color: #0000FF;
 }
 
 #viewer_object {
