@@ -28,10 +28,10 @@
         }
         $html .= 
         "<div class='col-md-6'>
-          <a href='inspector.php?id=$entry->id'>
+          <a href='model_viewer.php?id=$entry->id'>
             <img src='../../$entry->preview_url' alt=$entry->name class='img-responsive img-fit'>
           </a>
-          <h3><a href='inspector.php?id=$entry->id'>$entry->name</a></h3>
+          <h3><a href='model_viewer.php?id=$entry->id'>$entry->name</a></h3>
         </div>";
 
         $i++;
