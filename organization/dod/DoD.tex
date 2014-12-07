@@ -15,6 +15,7 @@
 \usepackage[tableposition=top]{caption}
 \usepackage{listings}
 \usepackage{framed}
+\usepackage{hyperref}
 \usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 
 \textwidth 14cm
@@ -284,7 +285,8 @@ Because we mainly use HTML, JavaScript and CSS, we agreed that everyone uses his
 \section{Testing Process} % (fold)
 \label{sec:testing_process}
 
-\subsection{General Workflow} % (fold)
+\subsection{System Tests}
+\subsubsection{General Workflow} % (fold)
 \label{sub:general_workflow}
 
 \begin{enumerate}
@@ -301,11 +303,11 @@ Because we mainly use HTML, JavaScript and CSS, we agreed that everyone uses his
  	The tester notes in the test log, which tests passed and which did not. For each test, that did not pass, he/she creates an issue using gitlab. Programmers do not create issues, if they already debugged the failure.
 
 \end{enumerate}
-% subsection general_workflow (end)
+% subsubsection general_workflow (end)
 
 \newpage
 
-\subsection{Issue Schema} % (fold)
+\subsubsection{Issue Schema} % (fold)
 \label{sub:issue_schema}
 
 \begin{itemize}
@@ -313,10 +315,10 @@ Because we mainly use HTML, JavaScript and CSS, we agreed that everyone uses his
   \item The description should contain who did the test and what was the difference found in comparison to the expected result
   \item The issue is assigned to the programmer of the code that had been tested
 \end{itemize}
-% subsection issue_schema (end)
+% subsubsection issue_schema (end)
 
 
-\subsection{Test Case Schema} % (fold)
+\subsubsection{Test Case Schema} % (fold)
 \label{sub:test_case_schema}
 
 Each test case should at least contain the following:
@@ -328,10 +330,10 @@ Each test case should at least contain the following:
   \item OPTIONAL: Some precondition, that has to be fulfilled before executing 
 the test
 \end{itemize}
-% subsection test_case_schema (end)
+% subsubsection test_case_schema (end)
 
 
-\subsection{Test Log Schema} % (fold)
+\subsubsection{Test Log Schema} % (fold)
 \label{sub:test_log_schema}
 
 Each test log entry contains:
@@ -341,10 +343,10 @@ Each test log entry contains:
   \item The ids/names of the tests that have been executed
   \item The result of the testing (OK/NOK). If some tests failed, the tester creates two test log entries (one for successfull tests and the other one for failed tests)
 \end{itemize}
-% subsection test_log_schema (end)
+% subsubsection test_log_schema (end)
 
 
-\subsection{Debugging / performance measurement tools} % (fold)
+\subsubsection{Debugging / performance measurement tools} % (fold)
 \label{sub:debugging_tools}
 
 \begin{tabular}{ll}
@@ -355,11 +357,20 @@ Safari (Mobile):	& Remote debugging \\
 Android browser:	& Remote debugging (with Chrome) \\
 Opera:				& built-in (Dragonfly) \\
 \end{tabular}
-% subsection debugging_tools (end)
+% subsubsection debugging_tools (end)
 
 % section general (end)
 
+\subsection{Automated Tests}
+We use automated tests to ensure correct behavior of functional components. We separate the automated tests into Back-end-tests with Jasmine and Front-end-tests with Selenium.
 
+\subsubsection{Back-end}
+To test Java Script code in the Back-end, we use Jasmine. The Jasmine Website and a tutorial with many examples can be found \href{http://jasmine.github.io/2.1/introduction.html}{here}.\\
+The tests are located in $src/tests/jasmine/spec$ and are written as Java Script files. The tests and the Java Script files containing the code which should be tested have to be included in $src/tests/jasmine/SpecRunner.html$. You can run tests by just opening $src/tests/jasmine/SpecRunner.html$ in the browser. This also allows us to test different devices and browsers very simply.\\
+If you want to test Java Script code that interacts with Website elements that are missing in the test scenario, you can use the spyOn() function from Jasmine which allows you to replace the output or register calls of any JavaScript function.
+
+\subsubsection{Front-end}
+To test the Front-end and user-interaction automatically, we use the tool Selenium. The website where you can download it can be found \href{http://www.seleniumhq.org/}{here}. If you finish a user-interaction feature, you can add tests by recording your user interaction in the browser. Selenium can then replay your actions and check if it is able to redo everything. You can also add additional assertion steps to check for some condition at any point in the sequence of recorded actions. The test-cases and the test-suite are saved in $src/tests/selenium$. Please also update the test-suite to include your test-case.
 
 \newpage
 
