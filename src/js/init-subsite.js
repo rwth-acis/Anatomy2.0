@@ -12,15 +12,22 @@ function receiveMessage(event)
     //TODO: check that message really comes from role
     // if (event.origin !== "http://example.org:8080")
     // 	return;
+
     //Debug output for message
     //console.info("Subsite: We got a message: ", event.data);
 
     //choose reaction
-    switch(event.data){
-	default: console.info("Subsite: received unknown message", event.data); break;
+    var msgTopic = event.data.split(" ")[0];
+    var msgContent = event.data.slice(msgTopic.length);
+    switch(msgTopic){
+        case "ViewpointUpdate": receiveViewpointMsg(JSON.parse(msgContent)); break;
+        default: console.info("Subsite: received unknown message", event.data); break;
     }
 }
 window.addEventListener("message", receiveMessage, false);
 
+//variable for accessing the wrapper:
+roleWrapper = window.parent;
+
 //Inform wrapper, that we are loaded and ready to receive the data we need
-window.parent.postMessage("Subsite Loaded", "*");
+roleWrapper.postMessage("SubsiteLoaded", "*");

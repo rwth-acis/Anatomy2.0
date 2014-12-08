@@ -1,40 +1,47 @@
-// IWC initialize section.
-var iwcClient;
-var id = Math.random().toString(36).substr(2, 9);
-var widget = 'http://zxmma58.bplaced.net/henm/src/views/model_viewer%20-%20Copy.xml?id=' + id;
-var sender = '';
+function receiveViewpointMsg(extras){
+    //disable listening for changes in the viewport
+    processingMessage = true;
+    
+    var cam = printPositionAndOrientation('Received', extras.position, extras.orientation);
 
-function init () {
-  iwcClient = new iwc.Client();
-  iwcClient.connect(iwcCallback);
-}
-gadgets.util.registerOnLoadHandler(init);
+    //apply new viewpoint
+    document.getElementById('viewport').setAttribute('position', cam.pos);
+    document.getElementById('viewport').setAttribute('orientation', cam.rot);
 
 
-// Receiver functionality
-function iwcCallback(intent) {
-  if(intent.sender === widget) { return; }
-
-  sender     = intent.sender;
-  var extras = intent.extras;
-  var cam    = printPositionAndOrientation('Received', extras.position, extras.orientation);
-  
-  document.getElementById('viewport').setAttribute('position', cam.pos);
-  document.getElementById('viewport').setAttribute('orientation', cam.rot);
-
+    //enable listening for changes in the viewport again
+    processingMessage = false;
 }
 
-
-// Publisher functionality
 document.onload = function() 
 {
   document.getElementById('viewport').addEventListener('viewpointChanged', viewpointChanged);
+  processingMessage = false;
 }
 
 
 // Viewport section.
 function sendPositionAndOrientation(pos, rot) {
+
   // Send through IWC!
+  var viewpointMsg = {'position': pos, 'orientation': rot}
+
+  //send to wrapper
+  roleWrapper.postMessage("ViewpointUpdate " + JSON.stringify(viewpointMsg), "*");
+}
+
+// Update position and rotation of the camera
+function viewpointChanged(evt) {    
+
+  // Prevent widgets from sending updates again and again
+  // If we set the position because we received a message we do not want to send it back
+  if(!evt || processingMessage) {
+    return;
+  }
+    
+  printPositionAndOrientation('Updated', evt.position, evt.orientation);
+  sendPositionAndOrientation(evt.position, evt.orientation);
+
   var intent = {
     'component' :'',                            // recipient, empty for broadcast
     'data'      :'http://data.org/some/data',   // data as URI
@@ -42,27 +49,9 @@ function sendPositionAndOrientation(pos, rot) {
     'action'    :'ACTION_UPDATE',               // action to be performed by receivers
     'flags'     :['PUBLISH_GLOBAL'],            // control flags
     'extras'    :{'position': pos, 'orientation': rot}, // optional auxiliary data
-    'sender'    :widget
   }
-  
-  if(iwc.util.validateIntent(intent)) {
-    printPositionAndOrientation('Sent', pos, rot);
-    iwcClient.publish(intent);
-  } else {
-    alert('Intent not valid! ');
-  }
-}
 
-// Update position and rotation of the camera
-function viewpointChanged(evt) {
-  
-  // Prevent widgets from sending updates again and again
-  // If sender is set this means that the update comes from another widget and not from manipulation
-  if(evt && sender === '') {
-    printPositionAndOrientation('Updated', evt.position, evt.orientation);
-    sendPositionAndOrientation(evt.position, evt.orientation);
-  }
-  sender = '';
+  console.info("subsite: intent: ", intent);
 }
 
 // Converts the position and orientation into a string and updates the view to display it.
