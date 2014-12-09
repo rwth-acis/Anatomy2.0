@@ -15,6 +15,7 @@
 \usepackage[tableposition=top]{caption}
 \usepackage{listings}
 \usepackage{framed}
+\usepackage[hidelinks,colorlinks=true,urlcolor=blue,linkcolor=black]{hyperref}
 \usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 
 \textwidth 14cm
@@ -108,7 +109,7 @@
 \section{General} % (fold)
 \label{sec:general}
 To declare a feature as "done", it has to be fully implemented and working. All related subtasks as well as the user story/stories chosen for the feature have to be covered. The code has to be pushed, reviewed and merged with the develop(ment)-branch of the project. \\
-The following sections describe was has to be done or provided in terms of codestyle, testing and documentation. 
+The following sections describe was has to be done or provided in terms of code style, testing and documentation. 
 % section general (end)
 
 
@@ -221,7 +222,7 @@ Delete old local branches from remote with:
 \end{lstlisting} 
 \vspace*{0.5cm}
 
-You can put changes on hold for later, for example to cleanup the tree or to switch to a different topic branch to work on a different subject. To stash them away do
+You can put changes on hold for later, for example to clean up the tree or to switch to a different topic branch to work on a different subject. To stash them away do
 
 \begin{lstlisting}
 	git stash
@@ -259,37 +260,28 @@ The stashes are organized as a stack. Without a parameter, all stash commands op
 \subsection{JavaScript} %fold
 \label{sub:javascript}
 
-There are many coding and style guidelines for JavaScript available on the internet. Upon comparatively surveying these guides, we decided to follow \textit{Google JavaScript Style Guide}. This guide has great coverage, including language and documentation rules, and provides justifications for each rule it contains.  \\
-\\
-The guide is available at:
-\begin{lstlisting} 	 
-google-styleguide.googlecode.com/svn/trunk/javascriptguide
-\end{lstlisting}
+There are many coding and style guidelines for JavaScript available on the internet. Upon comparatively surveying these guides, we decided to follow \textit{Google JavaScript Style Guide}. This guide has great coverage, including language and documentation rules, and provides justifications for each rule it contains. The guide is available \href{https://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml}{here}.
 
 \subsection{HTML / CSS} %fold
 \label{sub:htmlcss}
 
-All front-end code will be written in HTML5 and CSS3. Upon surveying online guidelines for modern HTML, we decided to closely follow \textit{Google HTML / CSS Style Guide}. \\
-\\
-The guide is available at:
-\begin{lstlisting} 	 
-google-styleguide.googlecode.com/svn/trunk/htmlcssguide
-\end{lstlisting}
+All front-end code will be written in HTML5 and CSS3. Upon surveying online guidelines for modern HTML, we decided to closely follow \textit{Google HTML / CSS Style Guide}. The guide is available \href{https://google-styleguide.googlecode.com/svn/trunk/htmlcssguide.xml}{here}.
 
 \subsection{Development Environment}
-Because we mainly use HTML, JavaScript and CSS, we agreed that everyone uses his favorite IDE. There shouldn't be IDE specific differences and this way everybody can work with the tools he performs best with.
+Because we mainly use HTML, JavaScript and CSS, we agreed that everyone uses his favourite IDE. There shouldn't be IDE specific differences and this way everybody can work with the tools he performs best with.
 
 \newpage
 
 \section{Testing Process} % (fold)
 \label{sec:testing_process}
 
-\subsection{General Workflow} % (fold)
+\subsection{System Tests}
+\subsubsection{General Workflow} % (fold)
 \label{sub:general_workflow}
 
 \begin{enumerate}
  	\item Derive test cases \\
- 	If the tester is not the same person as the programmer of the code to test, the tester first checks the commit message of the code. There it should be stated, which task (of the sprint backlock) should be fulfilled by the code (otherwise the tester may ask the developer directly). The tester accesses the task description in the sprint backlog in the gitlab repository. \\
+ 	If the tester is not the same person as the programmer of the code to test, the tester first checks the commit message of the code. There it should be stated, which task (of the sprint backlog) should be fulfilled by the code (otherwise the tester may ask the developer directly). The tester accesses the task description in the sprint backlog in the gitlab repository. \\
  	If the programmer does the testing, he/she may derive test cases during or before the programming activities. \\
  	After acquiring the task description, the tester specifies one or several test cases checking that the intended functionality is fulfilled. The tester uses his/her experience to add additional test cases for defects that are likely to exist (error guessing). For important parts of the software, equivalence partitioning and boundary value analysis can be used to derive further test cases. \\
  	Test cases are written in a format described below. If tests have to be executed in a certain order, the order is noted down as well.
@@ -301,11 +293,11 @@ Because we mainly use HTML, JavaScript and CSS, we agreed that everyone uses his
  	The tester notes in the test log, which tests passed and which did not. For each test, that did not pass, he/she creates an issue using gitlab. Programmers do not create issues, if they already debugged the failure.
 
 \end{enumerate}
-% subsection general_workflow (end)
+% subsubsection general_workflow (end)
 
 \newpage
 
-\subsection{Issue Schema} % (fold)
+\subsubsection{Issue Schema} % (fold)
 \label{sub:issue_schema}
 
 \begin{itemize}
@@ -313,10 +305,10 @@ Because we mainly use HTML, JavaScript and CSS, we agreed that everyone uses his
   \item The description should contain who did the test and what was the difference found in comparison to the expected result
   \item The issue is assigned to the programmer of the code that had been tested
 \end{itemize}
-% subsection issue_schema (end)
+% subsubsection issue_schema (end)
 
 
-\subsection{Test Case Schema} % (fold)
+\subsubsection{Test Case Schema} % (fold)
 \label{sub:test_case_schema}
 
 Each test case should at least contain the following:
@@ -328,10 +320,10 @@ Each test case should at least contain the following:
   \item OPTIONAL: Some precondition, that has to be fulfilled before executing 
 the test
 \end{itemize}
-% subsection test_case_schema (end)
+% subsubsection test_case_schema (end)
 
 
-\subsection{Test Log Schema} % (fold)
+\subsubsection{Test Log Schema} % (fold)
 \label{sub:test_log_schema}
 
 Each test log entry contains:
@@ -339,12 +331,12 @@ Each test log entry contains:
   \item The date, when the tests have been executed
   \item The name of the tester
   \item The ids/names of the tests that have been executed
-  \item The result of the testing (OK/NOK). If some tests failed, the tester creates two test log entries (one for successfull tests and the other one for failed tests)
+  \item The result of the testing (OK/NOK). If some tests failed, the tester creates two test log entries (one for successful tests and the other one for failed tests)
 \end{itemize}
-% subsection test_log_schema (end)
+% subsubsection test_log_schema (end)
 
 
-\subsection{Debugging / performance measurement tools} % (fold)
+\subsubsection{Debugging / performance measurement tools} % (fold)
 \label{sub:debugging_tools}
 
 \begin{tabular}{ll}
@@ -355,11 +347,20 @@ Safari (Mobile):	& Remote debugging \\
 Android browser:	& Remote debugging (with Chrome) \\
 Opera:				& built-in (Dragonfly) \\
 \end{tabular}
-% subsection debugging_tools (end)
+% subsubsection debugging_tools (end)
 
 % section general (end)
 
+\subsection{Automated Tests}
+We use automated tests to ensure correct behaviour of functional components. We separate the automated tests into Back-end-tests with Jasmine and Front-end-tests with Selenium.
 
+\subsubsection{Back-end}
+To test JavaScript code in the Back-end, we use Jasmine. The Jasmine Website and a tutorial with many examples can be found \href{http://jasmine.github.io/2.1/introduction.html}{here}.\\
+The tests are located in $src/tests/jasmine/spec$ and are written as JavaScript files. The tests and the JavaScript files containing the code which should be tested have to be included in $src/tests/jasmine/SpecRunner.html$. You can run tests by just opening $src/tests/jasmine/SpecRunner.html$ in the browser. This also allows us to test different devices and browsers very simply.\\
+If you want to test JavaScript code that interacts with website elements that are missing in the test scenario, you can use the spyOn() function from Jasmine which allows you to replace the output or register calls of any JavaScript function.
+
+\subsubsection{Front-end}
+To test the Front-end and user interaction automatically, we use the tool Selenium. The website where you can download it can be found \href{http://www.seleniumhq.org/}{here}. If you finished a feature of user interaction, you can add tests by recording your user interaction in the browser. Selenium can then replay your actions and check if it is able to redo everything. You can also add additional assertion steps to check for some condition at any point in the sequence of recorded actions. The test cases and the test suite are saved in $src/tests/selenium$. Please also update the test suite to include your test case.
 
 \newpage
 
@@ -383,7 +384,7 @@ Afterwards, create the chart by writing down the tasks in the previously defined
 \begin{itemize}
 	\item Try to keep it simple, i.e. choose not more task than fit onto one page.
 	\item Highlight milestones/reviews
-	\item Assign different colors to team members or a group working in the same area, respectively
+	\item Assign different colours to team members or a group working in the same area, respectively
 	\item Indicate the (temporal) dependency of one task from another with arrows
 \end{itemize}
 
@@ -402,11 +403,11 @@ The 3D Model used for collaborative viewing on the web is captured using 3D scan
 
 \subsection{RoleSDK}
 \label{sub:RoleSDK}
-ROLE (http://www.role-project.eu/) provides a learning environment in the browser which can be personalized with widgets and shared with others. We use the RoleSDK to embedd our product into the already existing learning ecosystem. It provides us possibilities for inter-device and inter-widget communication.
+ROLE (\href{http://www.role-project.eu/}{http://www.role-project.eu/}) provides a learning environment in the browser which can be personalized with widgets and shared with others. We use the RoleSDK to embed our product into the already existing learning ecosystem. It provides us possibilities for inter-device and inter-widget communication.
 
 \subsection{XAMPP}
 \label{sub:XAMPP}
-XAMPP is a open, cross-platform web server solution stack. We mainly use it to test our project in small scale because it is easy to setup and provides many features we might need. We use the Appache HTTP server and MySQL as database.
+XAMPP is a open, cross-platform web server solution stack. We mainly use it to test our project in small scale because it is easy to set up and provides many features we might need. We use the Apache HTTP server and MySQL as database.
 
 \subsection{X3DOM}
 \label{sub:X3Dom}
@@ -415,21 +416,16 @@ X3DOM is an open-source framework and runtime for 3D graphics on the Web via Web
 \subsection{Downsampling} % (fold)
 \label{sub:downsampling}
 For down sampling of the mesh, we use Meshlab which is an open source software.\\
-The software is available at:
-\begin{lstlisting} 	 
-meshlab.sourceforge.net
-\end{lstlisting}
+The software is available \href{http://meshlab.sourceforge.net}{here}.
+
 Optocat exports the 3D mesh as an STL/PLY file which can be easily imported by Meshlab for processing. In Meshlab we use filter \textit{“Quadratic Edge Collapse Decimation”} for reducing the polygon count. It is also used for general cleaning of the 3D mesh.
 
 % subsection downsampling (end)
 
 \subsection{Format conversion} % (fold)
 \label{sub:Format Conversion}
-Meshlab exports the down sampled and cleaned mesh as \textit{.WRL}  format which is a file extension for a \textit{Virtual Reality Modeling Language (VRML).} We have to convert it into \textit{X3D} file extension that is used in X3DOM which is an open-source framework and runtime for 3D graphics on the Web. We use InstantReality for this.\\
-The online conversion tool is available at: 
-\begin{lstlisting} 	 
-doc.instantreality.org/tools/x3d_encoding_converter
-\end{lstlisting}
+Meshlab exports the down sampled and cleaned mesh as \textit{.WRL}  format which is a file extension for a \textit{Virtual Reality Modeling Language (VRML).} We have to convert it into \textit{X3D} file extension that is used in X3DOM which is an open-source framework and runtime for 3D graphics on the Web. We use InstantReality for this. The online conversion tool is available \href{http://doc.instantreality.org/tools/x3d_encoding_converter/}{here}.
+
 InstantReality is an online translator between \textit{Classic VRML or XML (.WRL)} encoding and can convert into X3DOM outputs (HTML5 or XHTML5).   We just paste the \textit{.WRL or .X3D} file in it and it creates a HTML output. \\
 It could also be used offline in the similar way as Instant Reality installations include \textit{aopt}, a local command-line converter.
 
