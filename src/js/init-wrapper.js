@@ -94,6 +94,9 @@ window.addEventListener("message", receiveSubsiteMessage, false);
 function onSubsiteLoaded(){
     //variable for accessing the subsite:
     contentWindow = document.getElementById("content-frame").contentWindow;
+
+    //inform subsite that it is embedded into a role environment
+    contentWindow.postMessage("EmbeddedInRole ", "*");
 }
 
 /**

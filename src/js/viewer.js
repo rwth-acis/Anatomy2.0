@@ -22,6 +22,10 @@ document.onload = function()
 
 // Viewport section.
 function sendPositionAndOrientation(pos, rot) {
+  //only send if there is a role environment the viewer is embedded in
+  if(!isEmbeddedInRole){
+    return;
+  }
 
   // Send through IWC!
   var viewpointMsg = {'position': pos, 'orientation': rot}

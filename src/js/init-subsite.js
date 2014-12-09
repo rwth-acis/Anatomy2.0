@@ -21,10 +21,14 @@ function receiveMessage(event)
     var msgContent = event.data.slice(msgTopic.length);
     switch(msgTopic){
         case "ViewpointUpdate": receiveViewpointMsg(JSON.parse(msgContent)); break;
+        case "EmbeddedInRole": isEmbeddedInRole = true; break;
         default: console.info("Subsite: received unknown message", event.data); break;
     }
 }
 window.addEventListener("message", receiveMessage, false);
+
+//is this site embedded in a role sandbox?
+isEmbeddedInRole = false;
 
 //variable for accessing the wrapper:
 roleWrapper = window.parent;
