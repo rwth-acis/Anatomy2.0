@@ -8,9 +8,12 @@ function receiveViewpointMsg(extras){
     document.getElementById('viewport').setAttribute('position', cam.pos);
     document.getElementById('viewport').setAttribute('orientation', cam.rot);
 
-
-    //enable listening for changes in the viewport again
-    processingMessage = false;
+    //clear any previous timeout
+    if(typeof reenableViewpointListeningTimeout != 'undefined'){
+	clearTimeout(reenableViewpointListeningTimeout);
+    }
+    //enable listening for changes in the viewport again some milliseconds after the last received msg
+    reenableViewpointListeningTimeout = setTimeout(function(){processingMessage = false;} , 1000);
 }
 
 document.onload = function() 
