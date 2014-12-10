@@ -4,11 +4,6 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge' charset='utf8'/>
     <title>Collaborative 3D Model Viewer</title>
 
-     <!-- Interwidget communication includes -->
-    <script src ='http://open-app.googlecode.com/files/openapp.js' > </script>
-    <script src ='http://dbis.rwth-aachen.de/gadgets/iwc/lib/iwc.js' > </script>
-    <script src ='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>
-
     <!-- X3Dom includes -->
     <script type='text/javascript' src='http://www.x3dom.org/download/x3dom.js'> </script>
     <script type='text/javascript' src='../js/viewer.js'> </script>
@@ -18,6 +13,9 @@
     <!-- Additional styles -->
     <link rel='stylesheet' type='text/css' href='../css/bootstrap.min.css'>
     <link rel='stylesheet' type='text/css' href='../css/style.css'>
+
+    <!-- Init communication with wrapper -->
+    <script type='text/javascript' src='../js/init-subsite.js'> </script>
 
     <script>
       var init = function (evt) {
