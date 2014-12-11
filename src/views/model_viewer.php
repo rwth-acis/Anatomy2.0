@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta http-equiv='X-UA-Compatible' content='IE=edge' charset='utf8'/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Collaborative 3D Model Viewer</title>
 
     <!-- X3Dom includes -->
@@ -16,7 +17,7 @@
 
     <!-- Init communication with wrapper -->
     <script type='text/javascript' src='../js/init-subsite.js'> </script>
-
+    
     <script>
       var init = function (evt) {
         document.getElementById('viewer_object').runtime.showAll();
@@ -67,8 +68,6 @@
       </div><!-- /.container-fluid -->
     </nav>
 
-    <!-- <h1>Model Inspector</h1> -->
-
     <div class="row" style="position:relative; left:60px">
       <p id='debugText'></p>
       <x3d id='viewer_object' showStat="true">
@@ -110,7 +109,9 @@
     <?php include("footer.html"); ?>
     
     <!-- Functionality of menu toolbar -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script type="text/javascript" src="../js/menuToolbar.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
     </div>
   </body>
 </html>
