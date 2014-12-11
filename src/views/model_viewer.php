@@ -28,6 +28,44 @@
     
     <?php include("menu.html"); ?>
 
+    <!-- Toolbar -->
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">3D Models</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li role="presentation" class="dropdown navbar-li">
+              <select id="viewModeSelect" onChange="x3dChangeView()" class="form-control navbar-select">
+                <option>Walk</option>
+                <option id="optionExamine">Examine</option>
+                <option>Fly</option>
+                <option>Helicopter</option>
+                <option>LookAt</option>
+                <option>Turntable</option>
+                <option>Game</option>
+              </select> 
+            </li>
+            <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn" onclick="reset()">Reset view</button></li>          
+            <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn" onclick="showAll()">Show all</button></li>
+            <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn" onclick="upright()">Upright</button></li>
+            <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn" onclick="x3dSynchronize()" id="btnSynchronize">Synchronize</button></li>
+            <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn">Lecturer Mode</button></li>
+            <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn">Copy Link</button></li>
+            <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn">Screenshot</button></li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
 
     <!-- <h1>Model Inspector</h1> -->
 
@@ -35,7 +73,7 @@
       <p id='debugText'></p>
       <x3d id='viewer_object' showStat="true">
         <scene>
-          <navigationInfo headlight="true"></navigationInfo>
+          <navigationInfo headlight="true" type="examine" id="navType"></navigationInfo>
           <background skyColor='0.0 0.0 0.0'> </background>
       <?php
         include '../php/db_connect.php';
@@ -70,7 +108,9 @@
     </div>
 
     <?php include("footer.html"); ?>
-
+    
+    <!-- Functionality of menu toolbar -->
+    <script type="text/javascript" src="../js/menuToolbar.js"></script>
     </div>
   </body>
 </html>
