@@ -41,3 +41,41 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Latexstuff
+*.aux
+*.glo
+*.idx
+*.log
+*.toc
+*.ist
+*.acn
+*.acr
+*.alg
+*.bbl
+*.blg
+*.dvi
+*.glg
+*.gls
+*.ilg
+*.ind
+*.lof
+*.lot
+*.maf
+*.mtc
+*.mtc1
+*.out
+*.nav
+*.snm
+*.synctex.gz
+
+# ignore temporary files of emacs
+*~
+*#
+
+#ignore models exept for the four example models
+model-data/*
+!model-data/deer
+!model-data/raptor
+!model-data/helmet-5
+!model-data/knight

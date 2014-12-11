@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://eiche.informatik.rwth-aachen.de/henm1415g2/src/views/" />
+<title>Test failure: Model name wrong</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Test failure: Model name wrong</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/henm1415g2/src/views/overview.php</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Knight</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>Collaborative 3D Model Viewer</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>id=viewer_object</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>viewpoint position =</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=x3dom-viewer_object-canvas</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=#metadata_overlay &gt; div.x3dom-states-item-value</td>
+	<td>Helmet down to 5%</td>
+</tr>
+<tr>
+	<td>goBack</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>Collaborative 3D Model Viewer</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

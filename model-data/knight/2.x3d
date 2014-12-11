@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE X3D PUBLIC "ISO//Web3D//DTD X3D 3.0//EN" "http://www.web3d.org/specifications/x3d-3.0.dtd">
+<X3D xmlns:xsd='http://www.w3.org/2001/XMLSchema-instance' profile='Full' version='3.0' xsd:noNamespaceSchemaLocation='http://www.web3d.org/specifications/x3d-3.0.xsd'>
+  <Scene>
+    <NavigationInfo avatarSize='0.25 1.75 0.75' type='"EXAMINE" "ANY"'/>
+    <Background DEF='WO_World' groundColor='0.051 0.051 0.051' skyColor='0.051 0.051 0.051'/>
+    <Transform DEF='Bip01_TRANSFORM' scale='0.01 0.01 0.01'>
+      <Transform DEF='SwordC_TRANSFORM'>
+        <Transform DEF='SwordC_ifs_TRANSFORM'>
+          <Group DEF='group_ME_SwordC_001'>
+            <Shape DEF='SP_2'>
+              <Appearance>
+                <Material DEF='MA_SwordC' ambientIntensity='0.333' diffuseColor='1 0 0' shininess='0.012'/>
+                <ImageTexture DEF='IM_texmap4' url='"textures/SwordC.jpg"'/>
+                <TextureTransform/>
+              </Appearance>
+              <BinaryGeometry DEF='BG_2' vertexCount='2030' primType='"TRIANGLESTRIP"' position='-65.3455123901 109.106819153 34.2308959961' size='19.6158905029 24.7428283691 125.026397705' index='binary_opt/BG_2_indexBinary.bin' coord='binary_opt/BG_2_coordBinary.bin' normal='binary_opt/BG_2_normalBinary.bin' texCoord='binary_opt/BG_2_texCoordBinary.bin'/>
+            </Shape>
+          </Group>
+        </Transform>
+      </Transform>
+      <Transform DEF='TemplarCLothing_TRANSFORM'>
+        <Transform DEF='TemplarCLothing_ifs_TRANSFORM'>
+          <Group DEF='group_ME_TemplarCLothing_001'>
+            <Shape DEF='SP_1'>
+              <Appearance>
+                <Material DEF='MA_TemplarCLothing' ambientIntensity='0.333' diffuseColor='0 0 0' shininess='0.012'/>
+                <ImageTexture DEF='IM_texmap6' url='"textures/TemplarClothing.jpg"'/>
+                <TextureTransform/>
+              </Appearance>
+              <BinaryGeometry DEF='BG_1' vertexCount='6517 159' primType='"TRIANGLESTRIP" "TRIANGLES"' position='-0.597099304199 88.7867965698 -1.92379570007' size='151.567352295 176.388671875 42.0179100037' index='binary_opt/BG_1_indexBinary.bin' coord='binary_opt/BG_1_coordBinary.bin' normal='binary_opt/BG_1_normalBinary.bin' texCoord='binary_opt/BG_1_texCoordBinary.bin'/>
+            </Shape>
+          </Group>
+        </Transform>
+      </Transform>
+      <Transform DEF='TemplarHead_TRANSFORM'>
+        <Transform DEF='TemplarHead_ifs_TRANSFORM'>
+          <Group DEF='group_ME_TemplarHead_001'>
+            <Shape DEF='SP_0'>
+              <Appearance>
+                <Material DEF='MA_TemplarHead' ambientIntensity='0.333' diffuseColor='1 1 1' shininess='0.012'/>
+                <ImageTexture DEF='IM_texmap0' url='"textures/TemplarHead_verB.jpg"'/>
+                <TextureTransform/>
+              </Appearance>
+              <BinaryGeometry DEF='BG_0' vertexCount='2273 99' primType='"TRIANGLESTRIP" "TRIANGLES"' position='-0.484813690186 182.550857544 3.04857254028' size='21.449213028 34.2842407227 24.1638374329' index='binary_opt/BG_0_indexBinary.bin' coord='binary_opt/BG_0_coordBinary.bin' normal='binary_opt/BG_0_normalBinary.bin' texCoord='binary_opt/BG_0_texCoordBinary.bin'/>
+            </Shape>
+          </Group>
+        </Transform>
+      </Transform>
+      <Transform DEF='TemplarCape_TRANSFORM'>
+        <Transform DEF='TemplarCape_ifs_TRANSFORM'>
+          <Group DEF='group_ME_TemplarCape_001'>
+            <Shape DEF='SP_3'>
+              <Appearance>
+                <Material DEF='MA_TemplarCape' ambientIntensity='0.333' diffuseColor='1 1 1' shininess='0.012'/>
+                <ImageTexture DEF='IM_texmap5' url='"textures/TemplarCape.jpg"'/>
+                <TextureTransform/>
+              </Appearance>
+              <BinaryGeometry DEF='BG_3' vertexCount='954 21' primType='"TRIANGLESTRIP" "TRIANGLES"' position='-0.820915222168 97.7891616821 -30.1007843018' size='93.5994567871 164.457229614 65.6576919556' index='binary_opt/BG_3_indexBinary.bin' coord='binary_opt/BG_3_coordBinary.bin' normal='binary_opt/BG_3_normalBinary.bin' texCoord='binary_opt/BG_3_texCoordBinary.bin'/>
+            </Shape>
+          </Group>
+        </Transform>
+      </Transform>
+    </Transform>
+    <Transform DEF='Lowerteeth_TRANSFORM' scale='0.01 0.01 0.01'>
+      <Transform DEF='Lowerteeth_ifs_TRANSFORM'>
+        <Group DEF='group_ME_Lowerteeth'>
+          <Shape DEF='SP_5'>
+            <Appearance>
+              <Material DEF='MA_Lowerteeth' ambientIntensity='0.333' diffuseColor='1 1 1' shininess='0.012'/>
+              <ImageTexture DEF='IM_texmap2' url='"textures/Lowerteeth.jpg"'/>
+              <TextureTransform/>
+            </Appearance>
+            <BinaryGeometry DEF='BG_5' vertexCount='1250 54' primType='"TRIANGLESTRIP" "TRIANGLES"' position='-0.527017116547 180.058456421 9.64878940582' size='7.79218769073 3.22500610352 6.31773233414' index='binary_opt/BG_5_indexBinary.bin' coord='binary_opt/BG_5_coordBinary.bin' normal='binary_opt/BG_5_normalBinary.bin' texCoord='binary_opt/BG_5_texCoordBinary.bin'/>
+          </Shape>
+        </Group>
+      </Transform>
+    </Transform>
+    <Transform DEF='TemplarHood_TRANSFORM' scale='0.01 0.01 0.01'>
+      <Transform DEF='TemplarHood_ifs_TRANSFORM'>
+        <Group DEF='group_ME_TemplarHood'>
+          <Shape DEF='SP_4'>
+            <Appearance>
+              <Material DEF='MA_TemplarHood' ambientIntensity='0.333' diffuseColor='1 1 1' shininess='0.012'/>
+              <ImageTexture DEF='IM_texmap8' url='"textures/TemplarHood.jpg"'/>
+              <TextureTransform/>
+            </Appearance>
+            <BinaryGeometry DEF='BG_4' vertexCount='2918 162' primType='"TRIANGLESTRIP" "TRIANGLES"' position='0.694350242615 186.883331299 2.62175750732' size='29.0975608826 40.1413116455 30.5627365112' index='binary_opt/BG_4_indexBinary.bin' coord='binary_opt/BG_4_coordBinary.bin' normal='binary_opt/BG_4_normalBinary.bin' texCoord='binary_opt/BG_4_texCoordBinary.bin'/>
+          </Shape>
+        </Group>
+      </Transform>
+    </Transform>
+    <Transform DEF='Eyes_TRANSFORM' scale='0.01 0.01 0.01'>
+      <Transform DEF='Eyes_ifs_TRANSFORM'>
+        <Group DEF='group_ME_Eyes'>
+          <Shape DEF='SP_6'>
+            <Appearance>
+              <Material DEF='MA_Eyes' ambientIntensity='0.333' diffuseColor='1 1 1' shininess='0.012'/>
+              <ImageTexture DEF='IM_texmap1' url='"textures/EyesBlueLIGHT.jpg"'/>
+              <TextureTransform/>
+            </Appearance>
+            <BinaryGeometry DEF='BG_6' vertexCount='257 9' primType='"TRIANGLESTRIP" "TRIANGLES"' position='-0.502405166626 186.735443115 9.95635795593' size='10.0840959549 3.13499450684 2.49611282349' index='binary_opt/BG_6_indexBinary.bin' coord='binary_opt/BG_6_coordBinary.bin' normal='binary_opt/BG_6_normalBinary.bin' texCoord='binary_opt/BG_6_texCoordBinary.bin'/>
+          </Shape>
+        </Group>
+      </Transform>
+    </Transform>
+    <Transform DEF='TemplarHelmet_TRANSFORM' scale='0.01 0.01 0.01'>
+      <Transform DEF='TemplarHelmet_ifs_TRANSFORM'>
+        <Group DEF='group_ME_TemplarHelmet'>
+          <Shape DEF='SP_7'>
+            <Appearance>
+              <Material DEF='MA_TemplarHelmet' ambientIntensity='0.333' diffuseColor='1 1 1' shininess='0.012'/>
+              <ImageTexture DEF='IM_texmap7' url='"textures/TemplarHelmet.jpg"'/>
+              <TextureTransform/>
+            </Appearance>
+            <BinaryGeometry DEF='BG_7' vertexCount='429 6' primType='"TRIANGLESTRIP" "TRIANGLES"' position='0.607563972473 184.329498291 3.7946805954' size='24.080291748 38.099029541 30.3834934235' index='binary_opt/BG_7_indexBinary.bin' coord='binary_opt/BG_7_coordBinary.bin' normal='binary_opt/BG_7_normalBinary.bin' texCoord='binary_opt/BG_7_texCoordBinary.bin'/>
+          </Shape>
+        </Group>
+      </Transform>
+    </Transform>
+    <Transform DEF='Teeth_TRANSFORM' scale='0.01 0.01 0.01'>
+      <Transform DEF='Teeth_ifs_TRANSFORM'>
+        <Group DEF='group_ME_Teeth'>
+          <Shape DEF='SP_9'>
+            <Appearance>
+              <Material DEF='MA_Teeth' ambientIntensity='0.333' diffuseColor='1 1 1' shininess='0.012'/>
+              <ImageTexture DEF='IM_texmap3' url='"textures/Teeth.jpg"'/>
+              <TextureTransform/>
+            </Appearance>
+            <BinaryGeometry DEF='BG_9' vertexCount='1215 69' primType='"TRIANGLESTRIP" "TRIANGLES"' position='-0.316228866577 178.070953369 9.25499820709' size='7.93704795837 3.76599121094 6.55674886703' index='binary_opt/BG_9_indexBinary.bin' coord='binary_opt/BG_9_coordBinary.bin' normal='binary_opt/BG_9_normalBinary.bin' texCoord='binary_opt/BG_9_texCoordBinary.bin'/>
+          </Shape>
+        </Group>
+      </Transform>
+    </Transform>
+    <Transform DEF='TemplarLegsTRS_TRANSFORM' scale='0.01 0.01 0.01'>
+      <Transform DEF='TemplarLegsTRS_ifs_TRANSFORM'>
+        <Group DEF='group_ME_TemplarLegsTRS'>
+          <Shape DEF='SP_8'>
+            <Appearance>
+              <Material DEF='MA_TemplarLegsTRS' ambientIntensity='0.333' diffuseColor='1 1 1' shininess='0.012' transparency='1'/>
+              <ImageTexture DEF='IM_texmap10' url='"textures/TemplarLegsTRS.png"'/>
+              <TextureTransform/>
+            </Appearance>
+            <BinaryGeometry DEF='BG_8' vertexCount='39' primType='"TRIANGLESTRIP"' position='0.005615234375 50.2799110413 9.40775680542' size='63.8091888428 72.887046814 14.3867149353' index='binary_opt/BG_8_indexBinary.bin' coord='binary_opt/BG_8_coordBinary.bin' normal='binary_opt/BG_8_normalBinary.bin' texCoord='binary_opt/BG_8_texCoordBinary.bin'/>
+          </Shape>
+        </Group>
+      </Transform>
+    </Transform>
+    <Transform DEF='TemplarWristArmour_TRANSFORM' scale='0.01 0.01 0.01'>
+      <Transform DEF='TemplarWristArmour_ifs_TRANSFORM'>
+        <Group DEF='group_ME_TemplarWristArmour'>
+          <Shape DEF='SP_10'>
+            <Appearance>
+              <Material DEF='MA_TemplarWristArmour' ambientIntensity='0.333' diffuseColor='1 1 1' shininess='0.012'/>
+              <ImageTexture DEF='IM_texmap11' url='"textures/TemplarWristArmour.jpg"'/>
+              <TextureTransform/>
+            </Appearance>
+            <BinaryGeometry DEF='BG_10' vertexCount='375 9' primType='"TRIANGLESTRIP" "TRIANGLES"' position='-0.182960510254 127.747436523 -5.0627784729' size='134.035995483 25.5724868774 16.5683784485' index='binary_opt/BG_10_indexBinary.bin' coord='binary_opt/BG_10_coordBinary.bin' normal='binary_opt/BG_10_normalBinary.bin' texCoord='binary_opt/BG_10_texCoordBinary.bin'/>
+          </Shape>
+        </Group>
+      </Transform>
+    </Transform>
+  </Scene>
+</X3D>

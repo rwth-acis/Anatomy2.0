@@ -1,0 +1,440 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% general settings
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[twoside,12pt,a4paper]{article}
+%\usepackage{reportpage}
+\usepackage{epsf}
+\usepackage{graphics, graphicx}
+\usepackage{latexsym}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage[margin=10pt,font=small,labelfont=bf]{caption}
+\usepackage[utf8]{inputenc}
+\usepackage[english,ngerman]{babel}
+\usepackage[tableposition=top]{caption}
+\usepackage{listings}
+\usepackage{framed}
+\usepackage[hidelinks,colorlinks=true,urlcolor=blue,linkcolor=black]{hyperref}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+
+\textwidth 14cm
+\textheight 22cm
+\topmargin 0.0cm
+\evensidemargin 1cm
+\oddsidemargin 1cm
+%\footskip 2cm
+\parskip0.5explus0.1exminus0.1ex
+\parindent 0pt
+
+\pagestyle{headings}
+
+\sloppy
+
+\begin{document}
+\definecolor{grau}{gray}{.90}
+\colorlet{shadecolor}{grau}
+\lstset{backgroundcolor = \color{grau},
+                                                    % basicstyle = \ttfamily,
+                                                    basicstyle = \small,
+                                                    numbers = none,
+                                                    breaklines = true,
+                                                    breakatwhitespace = true,
+                                                    escapeinside = {@}{@},
+                                                    frame = single,
+                                                    rulecolor = \color{gray!70},
+                                                    tabsize = 2
+} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Layout Title page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\selectlanguage{english}
+
+\begin{titlepage}
+ \begin{center}
+  {\LARGE RWTH Aachen University}\\
+  %{\large Mathematisch-Naturwissenschaftliche Fakultät \\
+  %		   Wilhelm-Schickard-Institut f\"ur Informatik \\
+  [4cm]
+  %}
+  {\Large Hightech Entrepreneurship and New Media \\[2cm]}
+  {\huge\bf  Definition of Done \\[1.5cm]}
+  {\large Alexandra Wörner \qquad
+  		  Dominik Studer \qquad
+  		  Frederik Zwilling \\ [0.15cm]
+  		  Dev Sharma \qquad
+  		  Ali Can Demiralp
+  } \\[0.5cm]
+  \today \\[2cm]
+\bigskip
+
+% {\small\bf Supervisors}\\
+%   \parbox{7cm}{\begin{center}{\large Georgios Toubekis}\\
+%   {\footnotesize Faculty of Architecture  \\
+%   RWTH Aachen University}\end{center}}\hfill\parbox{7cm}{\begin{center}
+%   {\large Dr. Andreas Herrler}\\
+%   {\footnotesize Anatomie & Embryologie \\
+%   FHML Maastricht University}\end{center}
+%  }
+
+
+\end{center}
+
+\end{titlepage}
+
+\newpage
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Table of Contents
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\renewcommand{\baselinestretch}{1.3}
+\small\normalsize
+
+\tableofcontents
+
+\renewcommand{\baselinestretch}{1}
+\small\normalsize
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Content
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{General} % (fold)
+\label{sec:general}
+To declare a feature as "done", it has to be fully implemented and working. All related subtasks as well as the user story/stories chosen for the feature have to be covered. The code has to be pushed, reviewed and merged with the develop(ment)-branch of the project. \\
+The following sections describe was has to be done or provided in terms of code style, testing and documentation. 
+% section general (end)
+
+
+
+\section{Git Usage} % (fold)
+\label{sec:git_usage}
+
+\subsection{Branching} %fold
+\label{sub:branching}
+
+Proper git-based development advices to develop each (independent) feature in a separate topic branch. This enables to switch between different working contexts very easily. \\
+To create such a branch and to check it out to start working you do:
+
+\begin{lstlisting}
+	git checkout -b your-branch-name
+\end{lstlisting}
+
+where \emph{your-branch-name} needs to be replaced appropriately. This creates a new branch based on the one currently checked out in your working copy. \\
+To start from a different start point, e.g. from the development branch, to start a new feature do
+
+\begin{lstlisting}
+	git checkout -b your-branch-name development
+\end{lstlisting}
+% subsection branching (end)
+
+
+\subsection{Commit} %fold
+\label{sub:Commit}
+
+\subsubsection{Commit early and often} %fold
+\label{ssub:commit_early}
+
+Once you have achieved reasonable progress, you might want to commit the changes. To do so, you need to tell git what files should be included in the commit by adding them to a staging area. This area is meant to give you a chance to properly compose your commit, possibly even taking only a few changes but not all of a single file, e.g. if it makes sense to separate them. Add files like the following
+
+\begin{lstlisting}
+	git add a-modified-file.h a-newly-created-file.cpp
+\end{lstlisting}
+% subsubsection commit_early (end)
+
+
+\subsubsection{Describing Commits}
+\label{ssub:describing_commits}
+
+To make is easier to use git tools we have a specific format we expect from commit messages. It is:
+
+\emph{Component: Very short description of change \\
+Longer text describing the change.} \\
+
+The subject is a brief explanation of the change and may not exceed 60 characters in length. It should start with a component name, e.g. the name of a plugin the code belongs to. The subject line has a specific relevance. Many git tools (e.g. gitk) show only the first line in the default view and therefore this line should be short and concise. Then follows an empty line and then a longer text describing the change in more detail. If you think you cannot fit the change in your subject chance is that you should break up the commits in more smaller commits. The longer text can be omitted if the subject line is already sufficiently clear. In the longer message think that you need to explain the change to someone else. \\
+An example: 
+
+\emph{overview: added thumbnails of models \\
+Added table with model thumbnail and links to the models. Implemented access to database to get the thumbnail-url.}
+% subsubsection describing_commits (end)
+
+% subsection commit (end)
+
+
+\subsection{Push}
+\label{sub:push}
+
+So far, you have only committed to your own branch in your own (local) clone of the repository. To share your development with others, you should push your branch to another repository. We have central repositories at \emph{http://eiche.informatik.rwth-aachen.de:4080/henm1415g2} that we use to share code with each other. The process of copying your changes to another repository is called pushing. To push your local branch do:
+
+\begin{lstlisting}
+	git push origin name-of-local-branch:name-of-remote-branch
+\end{lstlisting}
+
+If you push with the option \emph{--set-upstream}, you can just use
+
+\begin{lstlisting}
+	git push
+\end{lstlisting}
+
+for future purposes.
+% subsection push (end)
+
+
+\subsection{Merging/Pull-Requests}
+\label{sub:merging/pull-requests}
+
+Merging is the process of integrating a branch into another one. There are two main scenarios where a merge is required: merging a topic branch into the development branch, or merging many topic branches into a temporary merge branch (often called “current”). \\
+If you want to merge your branch into the development branch, create a pull-request. Another developer then merges and reviews the branch. After checking if everything still works, the reviewer can push the updated development branch. \\
+You can merge changes with:
+
+\begin{lstlisting}
+	git merge topic-branch
+\end{lstlisting}
+
+This assumes that the branch in which to merge the topic branch is currently checked out, i.e. the branch named "development", is checked out. \\
+%
+If we have a stable development version (e.g. after a sprint), we can merge the development branch into the master branch.
+% subsection merging/pull-requests (end)
+
+
+\subsection{Tips and Tricks}
+\label{sub:tips_and_tricks}
+
+To add specific parts that you changed but not all use the -p parameter like so:
+
+\begin{lstlisting}
+	git add -p a-modified-file.h a-newly-created-file.cpp
+\end{lstlisting}
+
+This will bring up an interactive mode to stage only specific changes. \\
+
+Delete old local branches from remote with:
+
+\begin{lstlisting}
+	git fetch --prune
+\end{lstlisting} 
+\vspace*{0.5cm}
+
+You can put changes on hold for later, for example to clean up the tree or to switch to a different topic branch to work on a different subject. To stash them away do
+
+\begin{lstlisting}
+	git stash
+	\# Or alternatively with a useful description:
+	git stash save "unfinished code for ..."
+\end{lstlisting}
+\vspace*{0.25cm}
+
+You can list and view those stashes with
+
+\begin{lstlisting}
+	git stash list
+	git stash show
+\end{lstlisting}
+\vspace*{0.25cm}
+
+To retrieve a stash you have two options. The apply sub-command will retrieve the stash contents and apply them to the current state of the working copy. The pop sub-command will additionally drop the stash if it was successful in applying it. The drop command drops the stash without applying it.
+
+\begin{lstlisting}
+	git stash apply
+	git stash drop
+	git stash pop
+\end{lstlisting}
+\vspace*{0.25cm}
+
+The stashes are organized as a stack. Without a parameter, all stash commands operate on the most recent stash.
+
+
+\begin{flushright} \emph{Source: trac.fawkesrobotics.org/wiki/GitNotes} \end{flushright}
+% section git_usage (end)
+
+\section{Programming Conventions} % (fold)
+\label{sec:programming_guidelines}
+
+\subsection{JavaScript} %fold
+\label{sub:javascript}
+
+There are many coding and style guidelines for JavaScript available on the internet. Upon comparatively surveying these guides, we decided to follow \textit{Google JavaScript Style Guide}. This guide has great coverage, including language and documentation rules, and provides justifications for each rule it contains. The guide is available \href{https://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml}{here}.
+
+\subsection{HTML / CSS} %fold
+\label{sub:htmlcss}
+
+All front-end code will be written in HTML5 and CSS3. Upon surveying online guidelines for modern HTML, we decided to closely follow \textit{Google HTML / CSS Style Guide}. The guide is available \href{https://google-styleguide.googlecode.com/svn/trunk/htmlcssguide.xml}{here}.
+
+\subsection{PHP / MySQL} %fold
+\label{sub:phpmysql}
+
+The back-end is written mainly in PHP and MySQL. After taking different style guidelines into consideration, we decided to follow \href{http://www.php-fig.org/psr/psr-1/}{this coding standard} or PHP and the guidelines specified \href{http://www.php-fig.org/psr/psr-2/}{here}. The coding conventions used for MySQL can be found \href{https://www.drupal.org/node/2497}{here}.
+
+\subsection{Development Environment}
+Because we mainly use HTML, JavaScript and CSS, we agreed that everyone uses his favourite IDE. There shouldn't be IDE specific differences and this way everybody can work with the tools he performs best with.
+
+\newpage
+
+\section{Testing Process} % (fold)
+\label{sec:testing_process}
+
+\subsection{System Tests}
+\subsubsection{General Workflow} % (fold)
+\label{sub:general_workflow}
+
+\begin{enumerate}
+ 	\item Derive test cases \\
+ 	If the tester is not the same person as the programmer of the code to test, the tester first checks the commit message of the code. There it should be stated, which task (of the sprint backlog) should be fulfilled by the code (otherwise the tester may ask the developer directly). The tester accesses the task description in the sprint backlog in the gitlab repository. \\
+ 	If the programmer does the testing, he/she may derive test cases during or before the programming activities. \\
+ 	After acquiring the task description, the tester specifies one or several test cases checking that the intended functionality is fulfilled. The tester uses his/her experience to add additional test cases for defects that are likely to exist (error guessing). For important parts of the software, equivalence partitioning and boundary value analysis can be used to derive further test cases. \\
+ 	Test cases are written in a format described below. If tests have to be executed in a certain order, the order is noted down as well.
+
+ 	\item Execute test \\
+ 	For each test case, the tester prepares the testing environment accordingly. Afterwards the tester executes the steps listed in the test case description and evaluates the result(s). If the result differs from the one specified in the test case description, a programmer may directly start debugging. If code has been changed during debugging, all tests are repeated. It may be efficient to go on with tests that have not been executed yet before repeating tests (as its more likely to find errors there and all tests would have to be repeated again).
+
+ 	\item Test logging \\
+ 	The tester notes in the test log, which tests passed and which did not. For each test, that did not pass, he/she creates an issue using gitlab. Programmers do not create issues, if they already debugged the failure.
+
+\end{enumerate}
+% subsubsection general_workflow (end)
+
+\newpage
+
+\subsubsection{Issue Schema} % (fold)
+\label{sub:issue_schema}
+
+\begin{itemize}
+  \item The title of the issue should be test case id and date of test execution
+  \item The description should contain who did the test and what was the difference found in comparison to the expected result
+  \item The issue is assigned to the programmer of the code that had been tested
+\end{itemize}
+% subsubsection issue_schema (end)
+
+
+\subsubsection{Test Case Schema} % (fold)
+\label{sub:test_case_schema}
+
+Each test case should at least contain the following:
+\begin{itemize}
+  \item Some unique name/id, such that it can be referenced in the test log
+  \item The input data to be used by the tester
+  \item The steps to be done by the tester
+  \item The expected output/result to be compared to the actual result the tester sees during execution
+  \item OPTIONAL: Some precondition, that has to be fulfilled before executing 
+the test
+\end{itemize}
+% subsubsection test_case_schema (end)
+
+
+\subsubsection{Test Log Schema} % (fold)
+\label{sub:test_log_schema}
+
+Each test log entry contains:
+\begin{itemize}
+  \item The date, when the tests have been executed
+  \item The name of the tester
+  \item The ids/names of the tests that have been executed
+  \item The result of the testing (OK/NOK). If some tests failed, the tester creates two test log entries (one for successful tests and the other one for failed tests)
+\end{itemize}
+% subsubsection test_log_schema (end)
+
+
+\subsubsection{Debugging / performance measurement tools} % (fold)
+\label{sub:debugging_tools}
+
+\begin{tabular}{ll}
+Firefox:				& built-in (Firebug) \\
+Google Chrome: 		& built-in \\
+Internet Explorer:	& built-in (F12) \\
+Safari (Mobile):	& Remote debugging \\
+Android browser:	& Remote debugging (with Chrome) \\
+Opera:				& built-in (Dragonfly) \\
+\end{tabular}
+% subsubsection debugging_tools (end)
+
+% section general (end)
+
+\subsection{Automated Tests}
+We use automated tests to ensure correct behaviour of functional components. We separate the automated tests into Back-end-tests with Jasmine and Front-end-tests with Selenium.
+
+\subsubsection{Back-end}
+To test JavaScript code in the Back-end, we use Jasmine. The Jasmine Website and a tutorial with many examples can be found \href{http://jasmine.github.io/2.1/introduction.html}{here}.\\
+The tests are located in $src/tests/jasmine/spec$ and are written as JavaScript files. The tests and the JavaScript files containing the code which should be tested have to be included in $src/tests/jasmine/SpecRunner.html$. You can run tests by just opening $src/tests/jasmine/SpecRunner.html$ in the browser. This also allows us to test different devices and browsers very simply.\\
+If you want to test JavaScript code that interacts with website elements that are missing in the test scenario, you can use the spyOn() function from Jasmine which allows you to replace the output or register calls of any JavaScript function.
+
+\subsubsection{Front-end}
+To test the Front-end and user interaction automatically, we use the tool Selenium. The website where you can download it can be found \href{http://www.seleniumhq.org/}{here}. If you finished a feature of user interaction, you can add tests by recording your user interaction in the browser. Selenium can then replay your actions and check if it is able to redo everything. You can also add additional assertion steps to check for some condition at any point in the sequence of recorded actions. The test cases and the test suite are saved in $src/tests/selenium$. Please also update the test suite to include your test case.
+
+\newpage
+
+\section{Gantt Chart} % (fold)
+\label{sec:gantt_chart}
+
+A Gantt chart is a bar chart that shows the tasks of a project, when each task must take place and how long each will take. It is helpful in monitoring project tasks within a project, especially which task has to be done first in order to start with the next one.
+
+
+\subsection{Development} % (fold)
+\label{sub:development}
+Before creating the chart, identify the tasks needed to complete the project. Key milestones may be helpful in structuring ... Then identify the time which is required for each task. At last, write down the order: Which tasks must be finished before another, on the first task dependent task, can begin? Which can be worked on at the same time? And which tasks must be completed for achieving a milestone/before the next review? \\
+Afterwards, create the chart by writing down the tasks in the previously defined order. For each task, draw a bar spanning the required time. Subsequently, assign team members to the tasks. Make sure that everyone has approximately the same workload.
+
+% subsection development (end)
+
+
+\subsection{Conventions} % (fold)
+\label{sub:conventions}
+
+\begin{itemize}
+	\item Try to keep it simple, i.e. choose not more task than fit onto one page.
+	\item Highlight milestones/reviews
+	\item Assign different colours to team members or a group working in the same area, respectively
+	\item Indicate the (temporal) dependency of one task from another with arrows
+\end{itemize}
+
+% subsection conventions (end)
+
+% section gantt_chart (end)
+
+
+\newpage
+
+\section{Technologies}
+\subsection{Mesh Processing} % (fold)
+\label{sec:Mesh processing}
+
+The 3D Model used for collaborative viewing on the web is captured using 3D scanning using Breukmann scanSCAN and stitched together using Optocat software. The mesh obtained contains millions of triangles and have to be cleaned and down sampled before it could be used directly for the web.
+
+\subsection{RoleSDK}
+\label{sub:RoleSDK}
+ROLE (\href{http://www.role-project.eu/}{http://www.role-project.eu/}) provides a learning environment in the browser which can be personalized with widgets and shared with others. We use the RoleSDK to embed our product into the already existing learning ecosystem. It provides us possibilities for inter-device and inter-widget communication.
+
+\subsection{XAMPP}
+\label{sub:XAMPP}
+XAMPP is a open, cross-platform web server solution stack. We mainly use it to test our project in small scale because it is easy to set up and provides many features we might need. We use the Apache HTTP server and MySQL as database.
+
+\subsection{X3DOM}
+\label{sub:X3Dom}
+X3DOM is an open-source framework and runtime for 3D graphics on the Web via WebGL. It can be freely used for non-commercial and commercial purposes, and is dual-licensed under MIT and GPL license. It provides us the ability to render any 3-D scene on the web without any plug-in.
+
+\subsection{Downsampling} % (fold)
+\label{sub:downsampling}
+For down sampling of the mesh, we use Meshlab which is an open source software.\\
+The software is available \href{http://meshlab.sourceforge.net}{here}.
+
+Optocat exports the 3D mesh as an STL/PLY file which can be easily imported by Meshlab for processing. In Meshlab we use filter \textit{“Quadratic Edge Collapse Decimation”} for reducing the polygon count. It is also used for general cleaning of the 3D mesh.
+
+% subsection downsampling (end)
+
+\subsection{Format conversion} % (fold)
+\label{sub:Format Conversion}
+Meshlab exports the down sampled and cleaned mesh as \textit{.WRL}  format which is a file extension for a \textit{Virtual Reality Modeling Language (VRML).} We have to convert it into \textit{X3D} file extension that is used in X3DOM which is an open-source framework and runtime for 3D graphics on the Web. We use InstantReality for this. The online conversion tool is available \href{http://doc.instantreality.org/tools/x3d_encoding_converter/}{here}.
+
+InstantReality is an online translator between \textit{Classic VRML or XML (.WRL)} encoding and can convert into X3DOM outputs (HTML5 or XHTML5).   We just paste the \textit{.WRL or .X3D} file in it and it creates a HTML output. \\
+It could also be used offline in the similar way as Instant Reality installations include \textit{aopt}, a local command-line converter.
+
+% subsection fromat conversion (end)
+% section mesh processing (end)
+
+\end{document}
