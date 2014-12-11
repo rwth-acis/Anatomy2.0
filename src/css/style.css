@@ -132,3 +132,12 @@ input[type="submit"]:hover {
     border-color: white;
 }
 
+.navbar-select {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.navbar-li {
+  margin-right: 8px;
+  margin-left: 8px;
+}
