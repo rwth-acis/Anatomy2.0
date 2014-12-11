@@ -12,3 +12,25 @@ body {
     border: 2px;
     border-color: white;
 }
+
+#metadata_overlay {
+  font-family 	: Arial, sans-serif;
+  font-weight 	: bold;
+  text-transform: uppercase;
+  font-size 	: 10px;
+  color 		: #C8C8C8;
+
+  position 		: absolute;
+  top 	 		: 30px; 
+  left 	 		: 2px; 
+
+  padding		: 5px;
+
+  width 		: 320px;
+
+  opacity 			: 0.9;
+  background-color	: #323232;
+  z-index 			: 1000;
+
+  cursor 		: help;
+}
