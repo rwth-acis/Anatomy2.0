@@ -58,6 +58,10 @@
             <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn" onclick="reset()">Reset view</button></li>          
             <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn" onclick="showAll()">Show all</button></li>
             <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn" onclick="upright()">Upright</button></li>
+            <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn" onclick="x3dSynchronize()" id="btnSynchronize">Synchronize</button></li>
+            <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn">Lecturer Mode</button></li>
+            <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn">Copy Link</button></li>
+            <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn">Screenshot</button></li>
           </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
@@ -69,7 +73,7 @@
       <p id='debugText'></p>
       <x3d id='viewer_object' showStat="true">
         <scene>
-          <navigationInfo headlight="true"></navigationInfo>
+          <navigationInfo headlight="true" type="examine" id="navType"></navigationInfo>
           <background skyColor='0.0 0.0 0.0'> </background>
       <?php
         include '../php/db_connect.php';
@@ -104,7 +108,9 @@
     </div>
 
     <?php include("footer.html"); ?>
-
+    
+    <!-- Functionality of menu toolbar -->
+    <script type="text/javascript" src="../js/menuToolbar.js"></script>
     </div>
   </body>
 </html>
