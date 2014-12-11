@@ -250,6 +250,17 @@ To retrieve a stash you have two options. The apply sub-command will retrieve th
 
 The stashes are organized as a stack. Without a parameter, all stash commands operate on the most recent stash.
 
+\subsection{Dos and Don'ts}
+Here, you can find a list of hints what you should do or should not do. We created this list from the mistakes we learned from in the past to avoid problems in the future.
+\begin{itemize}
+\item You shouldn't upload huge files into the repository to keep git fast and stable and be able to compare versions.
+\item You shouldn't copy files to modify them, this makes merging time-consuming and risky. If you want to change something without modifying the stuff of others directly, you can just do it in a new branch.
+\item You should be careful if you work on different branches, so you do not accidentally merge two feature branches together. This can create huge merge conflicts.
+\item You should follow the commit messages conventions of this DoD to make it much easier to understand and find commits afterwards.
+\item You shouldn't push directly into develop.
+\end{itemize}
+\label{sub:javascript}
+
 
 \begin{flushright} \emph{Source: trac.fawkesrobotics.org/wiki/GitNotes} \end{flushright}
 % section git_usage (end)
