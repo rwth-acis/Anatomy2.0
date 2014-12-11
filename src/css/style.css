@@ -132,12 +132,26 @@ input[type="submit"]:hover {
     border-color: white;
 }
 
+/* Styles the toolbar */
 .navbar-select {
   margin-top: 8px;
   margin-bottom: 8px;
 }
-
 .navbar-li {
   margin-right: 8px;
   margin-left: 8px;
+}
+
+/* Navigation info at lower left corner */
+#mainNav {
+	position:absolute;
+	left:20px;
+	bottom:20px;
+	width:200px;
+	background-color:#EEE;
+	border:1px solid silver;
+	padding:20px;
+	z-index:5;
+	opacity:0.8;
+	color:#000;
 }

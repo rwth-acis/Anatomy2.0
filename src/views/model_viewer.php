@@ -16,6 +16,10 @@
 
     <!-- Init communication with wrapper -->
     <script type='text/javascript' src='../js/init-subsite.js'> </script>
+    
+    <!-- JQuery and Turntable.js for navigation info -->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js" ></script>
+    <script type="text/javascript" src="visualizeTurntable.js" ></script>
 
     <script>
       var init = function (evt) {
@@ -46,13 +50,6 @@
           <ul class="nav navbar-nav">
             <li role="presentation" class="dropdown navbar-li">
               <select id="viewModeSelect" onChange="x3dChangeView()" class="form-control navbar-select">
-                <option>Walk</option>
-                <option id="optionExamine">Examine</option>
-                <option>Fly</option>
-                <option>Helicopter</option>
-                <option>LookAt</option>
-                <option>Turntable</option>
-                <option>Game</option>
               </select> 
             </li>
             <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn" onclick="reset()">Reset view</button></li>          
@@ -66,8 +63,9 @@
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
     </nav>
-
-    <!-- <h1>Model Inspector</h1> -->
+    
+    <!-- Creates a panel with information about mouse usage and hotkeys for navigation -->
+    <?php include("nav_info.html"); ?>
 
     <div class="row" style="position:relative; left:60px">
       <p id='debugText'></p>
