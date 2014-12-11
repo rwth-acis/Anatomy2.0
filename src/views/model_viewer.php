@@ -33,7 +33,7 @@
 
     <div class="row" style="position:relative; left:60px">
       <p id='debugText'></p>
-      <x3d id='viewer_object'>
+      <x3d id='viewer_object' showStat="true">
         <scene>
           <navigationInfo headlight="true"></navigationInfo>
           <background skyColor='0.0 0.0 0.0'> </background>
@@ -49,6 +49,24 @@
           <viewpoint id="viewport" DEF="viewport" centerOfRotation="0 0 0" position="0.00 0.00 5.00" orientation="-0.92 0.35 0.17 0.00" fieldOfView="0.858"> </viewpoint>
         </scene>
       </x3d>
+      <?php
+        $arg    = $_GET["id"];
+        $query  = "SELECT * FROM models WHERE id = $arg";
+        $result = mysql_query($query);
+        $entry  = mysql_fetch_object($result);
+        echo "<div id='metadata_overlay'>
+          <div class='x3dom-states-head'> </div>
+          <div class='x3dom-states-item-title'>Name:</div>
+          <div class='x3dom-states-item-value'>$entry->name</div> <br>
+          <div class='x3dom-states-item-title'>Classification:</div>
+          <div class='x3dom-states-item-value'>$entry->classification</div> <br>
+          <div class='x3dom-states-item-title'>Description:</div>
+          <div class='x3dom-states-item-value'>$entry->description</div> <br>
+          <div class='x3dom-states-item-title'>Upload Date:</div>
+          <div class='x3dom-states-item-value'>$entry->upload_date</div> <br>
+          <div class='x3dom-states-item-title'><a href=\"../../$entry->data_url\">Download</a></div>
+          </div>";
+      ?>
     </div>
 
     <?php include("footer.html"); ?>
