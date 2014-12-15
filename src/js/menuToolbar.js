@@ -23,4 +23,23 @@ function x3dSynchronize() {
     btn.innerHTML ="Synchronize";
   }
 }
+// Attached to "btnInfo" (Show info / Hide info)
+// Will turn the statistics view on and off based on current status
+// Will turn the metadata_overlay on and off accordingly
+function showInfo() {
+  var x3dom = document.getElementById('viewer_object');
+  var btn = document.getElementById('btnInfo');
+  var metadata_overlay = document.getElementById('metadata_overlay');
+  //alert(document.getElementById('x3dom-state-viewer').style.display);
+  if (btn.innerHTML == "Show info") {
+    x3dom.runtime.statistics(true);
+    btn.innerHTML = "Hide info";
+    metadata_overlay.style.display = "block";
+  }
+  else {
+    x3dom.runtime.statistics(false);
+    btn.innerHTML = "Show info";
+    metadata_overlay.style.display = "none";
+  }
+}
 document.getElementById('optionExamine').setAttribute("selected", "selected");
