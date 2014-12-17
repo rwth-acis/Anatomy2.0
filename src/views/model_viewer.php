@@ -17,12 +17,6 @@
 
     <!-- Init communication with wrapper -->
     <script type='text/javascript' src='../js/init-subsite.js'> </script>
-    
-    <script>
-      var init = function (evt) {
-        document.getElementById('viewer_object').runtime.showAll();
-      };
-    </script>
   </head>
 
   <body>
@@ -43,7 +37,7 @@
         $query  = "SELECT data_url FROM models WHERE id = $arg";
         $result = mysql_query($query);
         $entry  = mysql_fetch_object($result);
-        echo "<inline url=\"../../$entry->data_url\" onload=\"init()\"> </inline>";
+        echo "<inline url=\"../../$entry->data_url\" onload=\"initializeModelViewer()\"> </inline>";
       ?>
 
           <viewpoint id="viewport" DEF="viewport" centerOfRotation="0 0 0" position="0.00 0.00 5.00" orientation="-0.92 0.35 0.17 0.00" fieldOfView="0.858"> </viewpoint>
