@@ -1,0 +1,236 @@
+\input{header}
+
+\title[Collaborative 3D Model Viewing on the Web]{Collaborative 3D Model Viewing on the Web\\ Second Review}
+\author[Group 2]{%
+  Alexandra Wörner, Dominik Studer, Ali Demiralp\\ Dev Sharma, Frederik Zwilling, \\
+  Adam Brunnmeier, Luca Liehner and Marco Dung\\
+  \bigskip
+  {\scriptsize Group 2}
+}
+
+\date[Dec 12th 2014 @ HENM 2014]{Dec 12th 2014 -- Second Review HENM}
+
+\begin{document}
+
+\frame[plain]{\titlepage}
+\addtocounter{framenumber}{-1}
+
+\begin{frame}
+  \frametitle{Agenda}
+  \tableofcontents[hideallsubsections]
+\end{frame}
+%\addtocounter{framenumber}{-1}
+
+\section{Product Backlog}
+
+\begin{frame}
+  \frametitle{Product Backlog}
+  \begin{columns}
+    \begin{column}{0.52\textwidth}
+      \begin{description}[]
+        \item[Structure] \hfill \\
+        \begin{itemize}
+          \item Unique ID for references
+          \item Role - Desire - Benefit
+          \item Ordered by priority
+          %\item Estimated Effort
+          %\item Done
+        \end{itemize}
+        
+        \bigskip
+        \item[Progress] \hfill \\
+        \begin{tabular}{c | c | c}
+           & Review 1 & Review 2\\
+          \hline
+          $\#$ & $28$ & $33$\\
+          Done   & $8$  & $15$        
+        \end{tabular}
+        
+        \bigskip
+        \item[Tool: Google Spreadsheet] \hfill \\
+        \begin{itemize}
+          \item Collaborative editing
+          \item Commenting inside the document
+        \end{itemize}
+      \end{description}
+    \end{column}
+
+    \begin{column}{0.74\textwidth}
+      \includegraphics[width=.9\textwidth]{images/product-backlog.png}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+%Transition from what we do to how we do it
+
+\section{Definition of Done}
+
+\begin{frame}
+  \frametitle{Definition of Done \textcolor{green!60!black}{(improvements since first review)}}
+  \begin{columns}
+  \begin{column}{0.5\textwidth}  
+  \begin{description}[]
+    \item[Short definition of done] \hfill \\
+    \item[Git Usage] \hfill \\
+    \begin{itemize}
+      \item Branching work-flow
+      \item Commit Messages
+      \item Basic and necessary commands
+      \item \textcolor{green!60!black}{Dos and Don'ts}
+    \end{itemize}
+    \item[Programming Conventions] \hfill \\
+    \begin{itemize}
+      \item JS, HTML, CSS, \textcolor{green!60!black}{PHP, MySQL}
+      \item Mostly Google Guidelines
+    \end{itemize}
+    \end{description}
+  \end{column}
+  \begin{column}{0.5\textwidth}  
+    \begin{description}[]
+    \item[Testing] \hfill \\
+    \begin{itemize}
+      \item Manual system-tests
+      \item \textcolor{green!60!black}{Automated front/back-end tests}
+    \end{itemize}
+    \item[Gantt Chart] \hfill \\
+    \item[Technologies] \hfill \\
+    \begin{itemize}
+    \item MeshProcessing, RoleSDK, XAMPP, X3DOM, Downsampling, Format conversion
+    \end{itemize}
+  \end{description}
+  \end{column}
+  \end{columns}
+\end{frame}
+
+\section{Gantt Chart}
+
+\begin{frame}
+  \frametitle{Gantt Chart}
+  \begin{center}
+    \only<1>{\includegraphics[width=0.8\textwidth]{images/GanttComplete.png}}
+    \only<2>{\includegraphics[width=0.8\textwidth]{images/GanttCompleteAnnotated.png}}
+    \only<3>{\includegraphics[width=\textwidth]{images/Gantt.png}}
+  \end{center}
+\end{frame}
+
+\section{Reflection}
+
+\begin{frame}
+  \frametitle{Reflections on Team Process}
+  \begin{columns}
+  	\begin{column}{0.8\textwidth}
+   	  \begin{description}[]
+        \item[Workflow] \hfill \\
+        \begin{itemize}
+          \item Team meetings are more often
+          \item Live web server, updated every integration
+          \item GitLab issue tracker for internal organization and customer contact
+        \end{itemize}
+  
+        \bigskip
+        \item[New Colleagues] \hfill \\
+        \begin{itemize}
+          \item Orientation phase completed
+          \item Tasks and responsibilities
+          \item Full time support
+        \end{itemize}
+      \end{description}
+    \end{column}
+    \begin{column}{0.2\textwidth}
+   	  \includegraphics[width=.9\textwidth]{images/gitlab.png}\\
+      \vspace*{2cm}
+      \includegraphics[width=\textwidth]{images/teamwork.jpg}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Reflections on Team Process}
+  \begin{columns}
+    \begin{column}{0.7\textwidth}
+      \begin{description}[]
+        \item[Four Areas of Organizational Performance] \hfill \\
+        \begin{itemize}
+          \item Decreasing the learning curve of new employees
+          \item Responding more rapidly to customer needs and inquiries
+          \item Reducing rework and preventing “reinvention of the wheel”
+          \item Spawning new ideas for products and services
+        \end{itemize}
+        \it{Source: IBM Systems Journal, Vol 40, No 4}
+      \end{description}
+    \end{column}
+    \begin{column}{0.3\textwidth}
+      \includegraphics[width=.9\textwidth]{images/ibm.jpg}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\section{Demo}
+
+\begin{frame}
+  \frametitle{Demo}
+  \includegraphics[width=\textwidth]{images/demo}
+\end{frame}
+
+\section{Automated Testing}
+
+\begin{frame}
+  \frametitle{Automated Testing}
+  \begin{columns}
+    \begin{column}{0.8\textwidth}
+      \begin{description}[]
+        \item[Frontend] \hfill \\
+        \begin{itemize}
+          \item Records user interaction on a website
+          \item Executes the recordings automatically
+          \item Extend with assertions and verifications
+        \end{itemize}
+
+        \bigskip
+        \item[Backend] \hfill \\
+          \begin{itemize}
+            \item JavaScript
+            \item Write test suites containing multiple tests (specs)
+            \item Execute tests by calling web page
+        \end{itemize}
+      \end{description}
+    \end{column}
+
+    \begin{column}{0.2\textwidth}
+      \includegraphics[width=.9\textwidth]{images/selenium.png}\\
+      % Source: http://www.seleniumhq.org/images/big-logo.png
+      \vspace*{2cm}
+      \includegraphics[width=\textwidth]{images/jasmine.png}
+      % Source: http://jasmine.github.io/images/jasmine-horizontal.svg
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\section{Conclusion}
+
+\begin{frame}
+  \frametitle{Conclusion and next steps}
+  \begin{description}[]
+    \item[Conclusion] \hfill \\
+    \begin{block}{}
+      \centering{
+        \begin{itemize}
+          \item Improvements in organization and requirements
+          \item Frontend prototype of final product for further evaluation
+          \item Basic functionality working (device communication)
+          \item Automated tests to ensure quality
+        \end{itemize}
+      }
+    \end{block}
+    \item[Next Steps] \hfill \\
+      \begin{itemize}
+        \item Improving performance
+        \item Testing device interoperability
+        \item User management
+        \item Upload page
+      \end{itemize}
+  \end{description} 
+\end{frame}
+
+\end{document}

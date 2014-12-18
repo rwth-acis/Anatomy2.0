@@ -1,3 +1,5 @@
+var processingMessage = false;
+
 function receiveViewpointMsg(extras){
     //disable listening for changes in the viewport
     processingMessage = true;
@@ -10,7 +12,7 @@ function receiveViewpointMsg(extras){
 
     //clear any previous timeout
     if(typeof reenableViewpointListeningTimeout != 'undefined'){
-	clearTimeout(reenableViewpointListeningTimeout);
+  clearTimeout(reenableViewpointListeningTimeout);
     }
     //enable listening for changes in the viewport again some milliseconds after the last received msg
     reenableViewpointListeningTimeout = setTimeout(function(){processingMessage = false;} , 1000);
@@ -19,7 +21,6 @@ function receiveViewpointMsg(extras){
 document.onload = function() 
 {
   document.getElementById('viewport').addEventListener('viewpointChanged', viewpointChanged);
-  processingMessage = false;
 }
 
 
@@ -55,7 +56,7 @@ function viewpointChanged(evt) {
     'dataType'  :'text/xml',                    // data mime type
     'action'    :'ACTION_UPDATE',               // action to be performed by receivers
     'flags'     :['PUBLISH_GLOBAL'],            // control flags
-    'extras'    :{'position': pos, 'orientation': rot}, // optional auxiliary data
+    'extras'    :{'position': evt.position, 'orientation': evt.orientation}, // optional auxiliary data
   }
 
   console.info("subsite: intent: ", intent);

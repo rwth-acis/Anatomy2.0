@@ -4,8 +4,9 @@
 
 // IWC initialize section.
 var iwcClient;
+var contentWindow;
 var id = Math.random().toString(36).substr(2, 9);
-var widget = 'http://zxmma58.bplaced.net/henm/src/views/model_viewer%20-%20Copy.xml?id=' + id;
+var widget = window.location.origin + window.location.path + '?id=' + id;
 
 function init () {
   iwcClient = new iwc.Client();
