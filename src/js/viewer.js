@@ -1,5 +1,7 @@
 var processingMessage = false;
 var canSend           = true;
+var isSynchronized    = true;
+var posAndOrient;
 
 function initializeModelViewer() {
   showAllQuick(document.getElementById('viewer_object').runtime); 
@@ -7,6 +9,12 @@ function initializeModelViewer() {
 }
 
 function receiveViewpointMsg(extras){
+    // Synchronization is stopped
+    if(!isSynchronized) { 
+      posAndOrient = extras;
+      return;
+    }
+
     //disable listening for changes in the viewport
     processingMessage = true;
     
@@ -43,7 +51,8 @@ function viewpointChanged(evt) {
 
   // Prevent widgets from sending updates again and again
   // If we set the position because we received a message we do not want to send it back
-  if(!evt || processingMessage) {
+  // Also do not send the update if synchronization is stopped.
+  if(!evt || processingMessage || !isSynchronized) {
     return;
   }
     
@@ -145,3 +154,20 @@ function showAllQuick(runtime, axis) {
 
   runtime.canvas.doc._viewarea._scene.getViewpoint().setView(viewmat);
 };
+
+// Re-synchronize with last sent location from other widgets
+function synchronizePositionAndOrientation() {
+  console.log("synchronizing again!");
+  if(posAndOrient) {
+    //apply new viewpoint
+    var cam = printPositionAndOrientation('Re-synchronize', posAndOrient.position, posAndOrient.orientation);
+    document.getElementById('viewport').setAttribute('position', cam.pos);
+    document.getElementById('viewport').setAttribute('orientation', cam.rot);
+    posAndOrient = undefined;
+
+    // do not send the update to other widgets
+    // This is not needed any more when the synchronisation bug is fixed, i.e. that always the actual position get transmitted
+    processingMessage = true;
+    setTimeout(function(){processingMessage = false;} , 100);
+  }
+}

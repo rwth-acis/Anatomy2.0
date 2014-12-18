@@ -1,6 +1,8 @@
 // This file references the "optionExamine"  DOM element. Therefore it should
 // be inserted in the HTML file after the declaration of "optionExamine"
 
+// in viewer.js: isSynchronized = true;
+
 function reset() {
   document.getElementById('viewer_object').runtime.resetView();
 }
@@ -16,12 +18,14 @@ function x3dChangeView() {
 }
 function x3dSynchronize() {
   var btn = document.getElementById('btnSynchronize');
-  if (btn.innerHTML == "Synchronize") {
-    btn.innerHTML ="Stop synchronize";
-  }
-  else {
+  if (isSynchronized) {
     btn.innerHTML ="Synchronize";
   }
+  else {
+    btn.innerHTML ="Unsynchronize";
+    synchronizePositionAndOrientation();
+  }
+  isSynchronized = !isSynchronized;
 }
 // Attached to "btnInfo" (Show info / Hide info)
 // Will turn the statistics view on and off based on current status
