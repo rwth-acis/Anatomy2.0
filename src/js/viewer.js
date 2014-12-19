@@ -1,9 +1,11 @@
 var processingMessage = false;
-var canSend           = true;
+//can I currently send an updated pose to other devices?
+var canSend           = false;
 
 function initializeModelViewer() {
   showAllQuick(document.getElementById('viewer_object').runtime); 
   document.getElementById('viewport').addEventListener('viewpointChanged', viewpointChanged);
+  document.getElementById('viewer_object').addEventListener('mousedown', enableSendingOnFirstClick);
 }
 
 function receiveViewpointMsg(extras){
@@ -145,3 +147,12 @@ function showAllQuick(runtime, axis) {
 
   runtime.canvas.doc._viewarea._scene.getViewpoint().setView(viewmat);
 };
+
+/**
+ * Enable sending of the updated pose after the first click.
+ * This prevents sending a pose when opening the model and the view get automatically updated.
+ */
+function enableSendingOnFirstClick(evt){
+    canSend = true;
+    document.getElementById('viewer_object').removeEventListener('mousedown', enableSendingOnFirstClick);
+}
