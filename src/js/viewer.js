@@ -155,9 +155,8 @@ function showAllQuick(runtime, axis) {
   runtime.canvas.doc._viewarea._scene.getViewpoint().setView(viewmat);
 };
 
-// Re-synchronize with last sent location from other widgets
+// Re-synchronize with last location sent from other widgets
 function synchronizePositionAndOrientation() {
-  console.log("synchronizing again!");
   if(posAndOrient) {
     //apply new viewpoint
     var cam = printPositionAndOrientation('Re-synchronize', posAndOrient.position, posAndOrient.orientation);
@@ -170,4 +169,14 @@ function synchronizePositionAndOrientation() {
     processingMessage = true;
     setTimeout(function(){processingMessage = false;} , 100);
   }
+}
+
+// Save current location when stopping the synchronization in case nothing changes in the other widgets
+// Hopefully fixed with new version of location transmission
+function savePositionAndOrientation() {
+  //var pos = document.getElementById('viewport').getFieldValue('position');
+  //var orient = document.getElementById('viewport').requestFieldRef('orientation');
+  //document.getElementById('viewport').releaseFieldRef('orientation');
+
+  //posAndOrient = {position: pos, orientation: [{x: orient.x, y: orient.y, z: orient.z}, orient.w]};
 }

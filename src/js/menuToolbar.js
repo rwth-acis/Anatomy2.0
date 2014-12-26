@@ -20,6 +20,7 @@ function x3dSynchronize() {
   var btn = document.getElementById('btnSynchronize');
   if (isSynchronized) {
     btn.innerHTML ="Synchronize";
+    savePositionAndOrientation();
   }
   else {
     btn.innerHTML ="Unsynchronize";
@@ -46,4 +47,7 @@ function showInfo() {
     metadata_overlay.style.display = "none";
   }
 }
-document.getElementById('optionExamine').setAttribute("selected", "selected");
+
+document.addEventListener("DOMContentLoaded", function(event) { 
+  document.getElementById('optionExamine').setAttribute("selected", "selected");
+});

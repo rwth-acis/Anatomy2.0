@@ -2,8 +2,14 @@
  * Tests from init-subsite.js:
  */
 describe('The subsite', function() {
-    
-  afterEach(function () {
+  
+  beforeEach(function() {
+    spyOn(window, 'receiveViewpointMsg');
+    spyOn(console, 'info');
+  });
+
+  // Reset variable(s)
+  afterEach(function() {
     isEmbeddedInRole = false;
   });
 
@@ -12,35 +18,38 @@ describe('The subsite', function() {
         
     expect(isEmbeddedInRole).not.toBeTruthy();
     receiveMessage(event);
+    
     expect(isEmbeddedInRole).toBeTruthy();
+    expect(window.receiveViewpointMsg).not.toHaveBeenCalled();
+    expect(console.info).not.toHaveBeenCalled();
   });
 
   it('receives a message that the camera\'s viewpoint needs to be updated',
       function() {
         var event = {data: 'ViewpointUpdate 1'};
-        spyOn(window, 'receiveViewpointMsg');
-
         receiveMessage(event);
+
         expect(isEmbeddedInRole).not.toBeTruthy();
         expect(window.receiveViewpointMsg).toHaveBeenCalledWith(1);
+        expect(console.info).not.toHaveBeenCalled();
   });
 
   it('handles messages with an unknown topic', function() {
-    var event = {data: 'bla blub'};
-    spyOn(console, 'info');
-
+    var event = {data: 'test'};
     receiveMessage(event);
+
     expect(isEmbeddedInRole).not.toBeTruthy();
+    expect(window.receiveViewpointMsg).not.toHaveBeenCalled();
     expect(console.info).toHaveBeenCalledWith('Subsite: received unknown ' + 
-        'message', 'bla blub');
+        'message', 'test');
   });
 
   it('handles empty messages', function() {
     var event = {data: ''};
-    spyOn(console, 'info');
 
     receiveMessage(event);
     expect(isEmbeddedInRole).not.toBeTruthy();
+    expect(window.receiveViewpointMsg).not.toHaveBeenCalled();
     expect(console.info).toHaveBeenCalledWith('Subsite: received unknown ' + 
         'message', '');
   });
