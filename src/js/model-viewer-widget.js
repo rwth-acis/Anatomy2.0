@@ -17,5 +17,8 @@ document.addEventListener('DOMContentLoaded', initWidget, false);
  * An overview widget selected a model, we load it
  */
 function receiveModelSelectedByOverview(msgContent){
-    window.location.assign(msgContent);
+    console.log("model-viewer-widget: loading site: ", msgContent.href + "&widget=true");
+    window.location.assign(msgContent.href + "&widget=true");
 }
+//subscribe to ModelSelectByOverview messages
+subscribeIWC("ModelSelectByOverview", receiveModelSelectedByOverview);

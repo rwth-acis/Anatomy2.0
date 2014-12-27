@@ -37,7 +37,8 @@ function clickOnLink(evt){
 	//user clocked on element in <a> instead of a text in <a>
 	href = evt.target.parentNode.linkedModel;
     }
-    console.info("ModelSelectByOverview " + href);
+    // console.info("ModelSelectByOverview " + href);
     //send selected model to other widgets
-    roleWrapper.postMessage("ModelSelectByOverview " + href, "*");
+    var msgContent = {'href': href};
+    publishIWC("ModelSelectByOverview", msgContent);
 }

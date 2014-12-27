@@ -9,8 +9,7 @@
     <script type='text/javascript' src='../js/init-subsite.js'></script>
     <?php
        //Decide if this site is inside a separate widget
-       $widget = $_GET["widget"];
-       if($widget == "true") //TODO remove debug change
+       if(isset($_GET["widget"]) && $_GET["widget"] == "true")
        {
            print("<script type='text/javascript' src='../js/overview-widget.js'> </script>");
        }

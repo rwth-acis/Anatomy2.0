@@ -28,11 +28,9 @@ function iwcCallback(intent) {
 	return;
     }
 
-    //figure out what to to with the message:
-    switch(extras.topic){
-	case "ViewpointUpdate": receivedViewpointChanged(extras); break;
-	case "ModelSelectByOverview": receivedModelSelectedByOverview(extras); break;
-	default: console.log("Wrapper: received unknown message from iwc", intent); break;	
+    if($.inArray(extras.topic, subscribedTopics)) {
+	//send message to subsite
+	contentWindow.postMessage(extras.topic + " " + JSON.stringify(extras), "*");	
     }
 }
 
@@ -83,9 +81,22 @@ function receiveSubsiteMessage(event)
     var msgContent = event.data.slice(msgTopic.length);
     switch(msgTopic){
 	case "SubsiteLoaded": onSubsiteLoaded(); break;
-	case "ViewpointUpdate": publishViewpointChanged(JSON.parse(msgContent)); break;
-	case "ModelSelectByOverview": publishModelSelectedByOverview(msgContent); break;
-	default: /*console.log("Wrapper: received unknown message from iframe", event.data);*/ break;
+	case "SubscribeTo": subscribeTo(msgContent); break;
+	default: {
+	    //filter messages that are not from us (they start with '{')
+	    if(msgTopic.indexOf("{") == 0){
+		return;
+	    }
+	    //send message via iwc to other widgets
+	    var intent = getDefaultIntent();
+	    msg = JSON.parse(msgContent);
+	    //add topic to msg
+	    msg.topic = msgTopic;
+	    //insert pos and ori
+	    intent.extras = msg;
+	    publishMessage(intent);
+	    break;
+	}
     }
 }
 window.addEventListener("message", receiveSubsiteMessage, false);
@@ -102,44 +113,12 @@ function onSubsiteLoaded(){
     contentWindow.postMessage("EmbeddedInRole ", "*");
 }
 
-/**
- * Publish a Viewpoint message from the wrapped subsite by creating the message and sending it to other devices
- */
-function publishViewpointChanged(msg){
-    var intent = getDefaultIntent();
-
-    //add topic to msg
-    msg.topic = "ViewpointUpdate";
-    //insert pos and ori
-    intent.extras = msg;
-    
-    publishMessage(intent);
-}
+subscribedTopics = [];
 
 /**
- * Publish a which model was selected in the overview
+ * Add a topic the subsite wants to get
  */
-function publishModelSelectedByOverview(msg){
-    var intent = getDefaultIntent();
-
-    //add topic to msg
-    msg.topic = "ModelSelectedByOverview";
-    //insert pos and ori
-    intent.extras = msg;
-    
-    publishMessage(intent);
-}
-
-/**
- * Pass received Viewpoint to iframe
- */
-function receivedViewpointChanged(extras){
-    contentWindow.postMessage("ViewpointUpdate " + JSON.stringify(extras), "*");
-}
-
-/**
- * Pass selected model to iframe
- */
-function receivedModelSelectedByOverview(extras){
-    contentWindow.postMessage("ModelSelectedByOverview " + extras, "*");
+function subscribeTo(topic){
+    subscribedTopics.push(topic);
+    console.log("init-wrapper: subscribed to topic " + topic);
 }
