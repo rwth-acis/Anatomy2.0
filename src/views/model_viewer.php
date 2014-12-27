@@ -31,6 +31,14 @@
         <scene>
           <navigationInfo headlight="true" type="examine" id="navType"></navigationInfo>
           <background skyColor='0.0 0.0 0.0'> </background>
+    <?php
+       //Decide if this site is inside a separate widget
+       $widget = $_GET["widget"];
+       if($widget == "true") //TODO remove debug change
+       {
+           print("<script type='text/javascript' src='../js/model-viewer-widget.js'> </script>");
+       }
+    ?>
       <?php
         include '../php/db_connect.php';
         $arg    = $_GET["id"];

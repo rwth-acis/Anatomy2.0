@@ -31,6 +31,7 @@ function iwcCallback(intent) {
     //figure out what to to with the message:
     switch(extras.topic){
 	case "ViewpointUpdate": receivedViewpointChanged(extras); break;
+	case "ModelSelectByOverview": receivedModelSelectedByOverview(extras); break;
 	default: console.log("Wrapper: received unknown message from iwc", intent); break;	
     }
 }
@@ -83,6 +84,7 @@ function receiveSubsiteMessage(event)
     switch(msgTopic){
 	case "SubsiteLoaded": onSubsiteLoaded(); break;
 	case "ViewpointUpdate": publishViewpointChanged(JSON.parse(msgContent)); break;
+	case "ModelSelectByOverview": publishModelSelectedByOverview(msgContent); break;
 	default: /*console.log("Wrapper: received unknown message from iframe", event.data);*/ break;
     }
 }
@@ -115,8 +117,29 @@ function publishViewpointChanged(msg){
 }
 
 /**
+ * Publish a which model was selected in the overview
+ */
+function publishModelSelectedByOverview(msg){
+    var intent = getDefaultIntent();
+
+    //add topic to msg
+    msg.topic = "ModelSelectedByOverview";
+    //insert pos and ori
+    intent.extras = msg;
+    
+    publishMessage(intent);
+}
+
+/**
  * Pass received Viewpoint to iframe
  */
 function receivedViewpointChanged(extras){
     contentWindow.postMessage("ViewpointUpdate " + JSON.stringify(extras), "*");
+}
+
+/**
+ * Pass selected model to iframe
+ */
+function receivedModelSelectedByOverview(extras){
+    contentWindow.postMessage("ModelSelectedByOverview " + extras, "*");
 }

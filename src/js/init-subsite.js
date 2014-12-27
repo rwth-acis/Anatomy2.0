@@ -22,6 +22,7 @@ function receiveMessage(event)
     switch(msgTopic){
         case "ViewpointUpdate": receiveViewpointMsg(JSON.parse(msgContent)); break;
         case "EmbeddedInRole": isEmbeddedInRole = true; break;
+	case "ModelSelectByOverview": receiveModelSelectedByOverview(msgContent); break;
         default: console.info("Subsite: received unknown message", event.data); break;
     }
 }

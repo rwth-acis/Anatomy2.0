@@ -156,3 +156,10 @@ function enableSendingOnFirstClick(evt){
     canSend = true;
     document.getElementById('viewer_object').removeEventListener('mousedown', enableSendingOnFirstClick);
 }
+
+/*
+ * An overview widget selected a model, we load it
+ */
+function receiveModelSelectedByOverview(msgContent){
+    window.location.assign(msgContent);
+}
