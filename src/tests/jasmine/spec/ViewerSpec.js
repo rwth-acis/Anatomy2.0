@@ -3,14 +3,14 @@
  */
 describe('The viewer', function() {
     
-  var position = {x: 0, y: 0, z: 0};
-  var orientation = [{x: 0, y: 0, z: 0}, 0];
-  var event = {
-    position: position, 
-    orientation: orientation,
-    target: window
-  };
-  
+  var posMat = new x3dom.fields.SFMatrix4f(1, 0, 0, 1, 
+                                       0, 1, 0, -0.5, 
+                                       0, 0, 1, 0, 
+                                       0, 0, 0, 1);
+  var rotMat = x3dom.fields.SFMatrix4f.identity();
+  var view = {posMat: posMat, rotMat: rotMat};
+  var event = {target: window};
+
   afterAll(function() {
     isEmbeddedInRole = false;
   });
@@ -32,7 +32,7 @@ describe('The viewer', function() {
         isEmbeddedInRole = false;
         spyOn(roleWrapper, 'postMessage');
 
-        sendPositionAndOrientation(position, orientation);
+        sendPositionAndOrientation();
         expect(roleWrapper.postMessage).not.toHaveBeenCalled();
   });
 
@@ -41,10 +41,19 @@ describe('The viewer', function() {
         isEmbeddedInRole = true;
         spyOn(roleWrapper, 'postMessage');
 
-        sendPositionAndOrientation(position, orientation);
-        expect(roleWrapper.postMessage).toHaveBeenCalledWith(
-            'ViewpointUpdate {"position":{"x":0,"y":0,"z":0},"' +
-            'orientation":[{"x":0,"y":0,"z":0},0]}', '*');
+        // Allows to check if/how often the method is called but it does not get
+        // executed. Return a test value instead
+        spyOn(window, 'getView').and.returnValue(view);
+
+        sendPositionAndOrientation();
+        expect(getView).toHaveBeenCalled();
+        expect(roleWrapper.postMessage).toHaveBeenCalledWith('ViewpointUpdate' + 
+            ' {"posMat":{"_00":1,"_01":0,"_02":0,"_03":1,"_10":0,"_11":1,' + 
+            '"_12":0,"_13":-0.5,"_20":0,"_21":0,"_22":1,"_23":0,"_30":0,' + 
+            '"_31":0,"_32":0,"_33":1},' +
+            '"rotMat":{"_00":1,"_01":0,"_02":0,"_03":0,"_10":0,"_11":1,' + 
+            '"_12":0,"_13":0,"_20":0,"_21":0,"_22":1,"_23":0,"_30":0,"_31":0,' +
+            '"_32":0,"_33":1}}', '*');
   });
 
   it('does not send its position and orientation when it is currently ' +
@@ -65,12 +74,19 @@ describe('The viewer', function() {
         processingMessage = false;
         spyOn(window, 'sendPositionAndOrientation');
         spyOn(window, 'printPositionAndOrientation');
+        spyOn(window, 'getView').and.returnValue(view);
+        spyOn(console, 'info');
 
         viewpointChanged(event);
-        expect(sendPositionAndOrientation).toHaveBeenCalledWith(
-            {x: 0, y: 0, z: 0}, [{x: 0, y: 0, z: 0}, 0]);
-        expect(printPositionAndOrientation).toHaveBeenCalledWith('Updated',
-            {x: 0, y: 0, z: 0}, [{x: 0, y: 0, z: 0}, 0]);
+        expect(sendPositionAndOrientation).toHaveBeenCalled();
+        //expect(printPositionAndOrientation).toHaveBeenCalledWith('Updated',
+        //    {x: 0, y: 0, z: 0}, [{x: 0, y: 0, z: 0}, 0]);
+        expect(getView).toHaveBeenCalled();
+
+        var intent = console.info.calls.argsFor(0)[1];
+        expect(intent.extras.posMat).toEqual(posMat);
+        expect(intent.extras.rotMat).toEqual(rotMat);
+
   });
 
 });
