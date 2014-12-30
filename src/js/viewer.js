@@ -25,6 +25,8 @@ function receiveViewpointMsg(extras){
     //enable listening for changes in the viewport again some milliseconds after the last received msg
     reenableViewpointListeningTimeout = setTimeout(function(){processingMessage = false;} , 1000);
 }
+//subscribe for viewpoint update messages from iwc
+subscribeIWC("ViewpointUpdate", receiveViewpointMsg);
 
 // Viewport section.
 function sendPositionAndOrientation(pos, rot) {
@@ -37,7 +39,7 @@ function sendPositionAndOrientation(pos, rot) {
   var viewpointMsg = {'position': pos, 'orientation': rot}
 
   //send to wrapper
-  roleWrapper.postMessage("ViewpointUpdate " + JSON.stringify(viewpointMsg), "*");
+  publishIWC("ViewpointUpdate", viewpointMsg);
 }
 
 // Update position and rotation of the camera
@@ -155,4 +157,11 @@ function showAllQuick(runtime, axis) {
 function enableSendingOnFirstClick(evt){
     canSend = true;
     document.getElementById('viewer_object').removeEventListener('mousedown', enableSendingOnFirstClick);
+}
+
+/*
+ * An overview widget selected a model, we load it
+ */
+function receiveModelSelectedByOverview(msgContent){
+    window.location.assign(msgContent);
 }

@@ -5,6 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" charset="utf8"/>
      <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <!-- Init communication with wrapper -->
+    <script type='text/javascript' src='../js/init-subsite.js'></script>
+    <?php
+       //Decide if this site is inside a separate widget
+       if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+       {
+           print("<script type='text/javascript' src='../js/overview-widget.js'> </script>");
+       }
+    ?>
   </head>
 
   <body>
