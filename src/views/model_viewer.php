@@ -7,19 +7,16 @@
 
     <!-- X3Dom includes -->
     <script type='text/javascript' src='http://www.x3dom.org/download/x3dom.js'> </script>
-
-    <!-- Init communication with wrapper -->
-    <script type='text/javascript' src='../js/init-subsite.js'> </script>
-
     <script type='text/javascript' src='../js/viewer.js'> </script>
     <link type='text/css' rel='stylesheet' href='http://www.x3dom.org/download/x3dom.css'> </link> 
-    
     <link rel='stylesheet' type='text/css' href='../css/model_viewer.css'></link>
 
     <!-- Additional styles -->
     <link rel='stylesheet' type='text/css' href='../css/bootstrap.min.css'>
     <link rel='stylesheet' type='text/css' href='../css/style.css'>
 
+    <!-- Init communication with wrapper -->
+    <script type='text/javascript' src='../js/init-subsite.js'> </script>
   </head>
 
   <body>
@@ -34,13 +31,6 @@
         <scene>
           <navigationInfo headlight="true" type="examine" id="navType"></navigationInfo>
           <background skyColor='0.0 0.0 0.0'> </background>
-    <?php
-       //Decide if this site is inside a separate widget
-       if(isset($_GET["widget"]) && $_GET["widget"] == "true")
-       {
-           print("<script type='text/javascript' src='../js/model-viewer-widget.js'> </script>");
-       }
-    ?>
       <?php
         include '../php/db_connect.php';
         $arg    = $_GET["id"];

@@ -5,15 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" charset="utf8"/>
      <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../css/style.css">
-    <!-- Init communication with wrapper -->
-    <script type='text/javascript' src='../js/init-subsite.js'></script>
-    <?php
-       //Decide if this site is inside a separate widget
-       if(isset($_GET["widget"]) && $_GET["widget"] == "true")
-       {
-           print("<script type='text/javascript' src='../js/overview-widget.js'> </script>");
-       }
-    ?>
   </head>
 
   <body>
@@ -24,7 +15,6 @@
     </div>-->
     
     <!-- Build model table -->
-    <div id="table-container">
     <?php
       include '../php/db_connect.php';
       $query  = "SELECT * FROM models";
@@ -37,11 +27,11 @@
           $html .= '</div><div class="row">';
         }
         $html .= 
-        "<div class='col-md-6' name='table-entry' id='table_entry$i'>
-          <a href='model_viewer.php?id=$entry->id' id='a_img$i'>
+        "<div class='col-md-6'>
+          <a href='model_viewer.php?id=$entry->id'>
             <img src='../../$entry->preview_url' alt=$entry->name class='img-responsive img-fit'>
-            <h3>$entry->name</h3>
           </a>
+          <h3><a href='model_viewer.php?id=$entry->id'>$entry->name</a></h3>
         </div>";
 
         $i++;
@@ -50,7 +40,6 @@
 
       echo $html;
     ?>
-    </div>
 
     <?php include("footer.html"); ?>
 

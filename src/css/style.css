@@ -121,12 +121,7 @@ input[type="submit"]:hover {
 .img-fit {
     max-width: 100%;
     max-height: 100%x;
-    width: 200px;
-    height: 200px;
-}
-
-.div-highlight {
-    background-color: GreenYellow;
+    
 }
 
 #viewer_object {
