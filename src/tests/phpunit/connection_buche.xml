@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpunit>
+    <php>
+        <database name="henm1415g2"></database>
+        <var name="DB_DSN" value="mysql:dbname=henm1415g2;host=buche.informatik.rwth-aachen.de" />
+        <var name="DB_USER" value="henm1415g2" />
+        <var name="DB_PASSWD" value="pleko1744GRU" />
+        <var name="DB_DBNAME" value="henm1415g2" />
+    </php>
+</phpunit>
