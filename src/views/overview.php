@@ -24,6 +24,7 @@
     </div>-->
     
     <!-- Build model table -->
+    <div id="table-container">
     <?php
       include '../php/db_connect.php';
       $query  = "SELECT * FROM models";
@@ -36,11 +37,11 @@
           $html .= '</div><div class="row">';
         }
         $html .= 
-        "<div class='col-md-6'>
-          <a href='model_viewer.php?id=$entry->id'>
+        "<div class='col-md-6' name='table-entry'>
+          <a href='model_viewer.php?id=$entry->id' id='a_img$i'>
             <img src='../../$entry->preview_url' alt=$entry->name class='img-responsive img-fit'>
+            <h3>$entry->name</h3>
           </a>
-          <h3><a href='model_viewer.php?id=$entry->id'>$entry->name</a></h3>
         </div>";
 
         $i++;
@@ -49,6 +50,7 @@
 
       echo $html;
     ?>
+    </div>
 
     <?php include("footer.html"); ?>
 
