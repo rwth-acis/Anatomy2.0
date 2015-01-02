@@ -37,7 +37,7 @@
           $html .= '</div><div class="row">';
         }
         $html .= 
-        "<div class='col-md-6' name='table-entry'>
+        "<div class='col-md-6' name='table-entry' id='table_entry$i'>
           <a href='model_viewer.php?id=$entry->id' id='a_img$i'>
             <img src='../../$entry->preview_url' alt=$entry->name class='img-responsive img-fit'>
             <h3>$entry->name</h3>
