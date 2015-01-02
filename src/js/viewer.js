@@ -1,6 +1,9 @@
 var processingMessage = false;
 //can I currently send an updated pose to other devices?
 var canSend           = false;
+var canSend           = true;
+var isSynchronized    = true;
+var posAndOrient;
 
 function initializeModelViewer() {
   showAllQuick(document.getElementById('viewer_object').runtime); 
@@ -9,21 +12,27 @@ function initializeModelViewer() {
 }
 
 function receiveViewpointMsg(extras){
-    //disable listening for changes in the viewport
-    processingMessage = true;
-    
-    var cam = printPositionAndOrientation('Received', extras.position, extras.orientation);
+  // Synchronization is stopped
+  if(!isSynchronized) { 
+    posAndOrient = extras;
+    return;
+  }
 
-    //apply new viewpoint
-    document.getElementById('viewport').setAttribute('position', cam.pos);
-    document.getElementById('viewport').setAttribute('orientation', cam.rot);
+  //disable listening for changes in the viewport
+  processingMessage = true;
+  
+  var cam = printPositionAndOrientation('Received', extras.position, extras.orientation);
 
-    //clear any previous timeout
-    if(typeof reenableViewpointListeningTimeout != 'undefined'){
-  clearTimeout(reenableViewpointListeningTimeout);
-    }
-    //enable listening for changes in the viewport again some milliseconds after the last received msg
-    reenableViewpointListeningTimeout = setTimeout(function(){processingMessage = false;} , 1000);
+  //apply new viewpoint
+  document.getElementById('viewport').setAttribute('position', cam.pos);
+  document.getElementById('viewport').setAttribute('orientation', cam.rot);
+
+  //clear any previous timeout
+  if(typeof reenableViewpointListeningTimeout != 'undefined'){
+    clearTimeout(reenableViewpointListeningTimeout);
+  }
+  //enable listening for changes in the viewport again some milliseconds after the last received msg
+  reenableViewpointListeningTimeout = setTimeout(function(){processingMessage = false;} , 1000);
 }
 //subscribe for viewpoint update messages from iwc
 subscribeIWC("ViewpointUpdate", receiveViewpointMsg);
@@ -42,12 +51,15 @@ function sendPositionAndOrientation(pos, rot) {
   publishIWC("ViewpointUpdate", viewpointMsg);
 }
 
-// Update position and rotation of the camera
+/**
+ * Update position and rotation of the camera
+ */
 function viewpointChanged(evt) {    
 
   // Prevent widgets from sending updates again and again
   // If we set the position because we received a message we do not want to send it back
-  if(!evt || processingMessage) {
+  // Also do not send the update if synchronization is stopped.
+  if(!evt || processingMessage || !isSynchronized) {
     return;
   }
     
@@ -82,7 +94,9 @@ function viewpointChanged(evt) {
   console.info("subsite: intent: ", intent);
 }
 
-// Converts the position and orientation into a string and updates the view to display it.
+/**
+ * Converts the position and orientation into a string and updates the view to display it.
+ */
 function printPositionAndOrientation(str, pos, rot) {
   var camPos = pos.x.toFixed(4) + ' ' + pos.y.toFixed(4) + ' ' + pos.z.toFixed(4);
   var camRot = rot[0].x.toFixed(4) + ' ' + rot[0].y.toFixed(4) + ' ' 
@@ -159,9 +173,39 @@ function enableSendingOnFirstClick(evt){
     document.getElementById('viewer_object').removeEventListener('mousedown', enableSendingOnFirstClick);
 }
 
-/*
+/**
  * An overview widget selected a model, we load it
  */
 function receiveModelSelectedByOverview(msgContent){
-    window.location.assign(msgContent);
+  window.location.assign(msgContent);
+}
+
+/**
+ * Re-synchronize with last location sent from other widgets
+ */
+function synchronizePositionAndOrientation() {
+  if(posAndOrient) {
+    //apply new viewpoint
+    var cam = printPositionAndOrientation('Re-synchronize', posAndOrient.position, posAndOrient.orientation);
+    document.getElementById('viewport').setAttribute('position', cam.pos);
+    document.getElementById('viewport').setAttribute('orientation', cam.rot);
+    posAndOrient = undefined;
+
+    // do not send the update to other widgets
+    // This is not needed any more when the synchronisation bug is fixed, i.e. that always the actual position get transmitted
+    processingMessage = true;
+    setTimeout(function(){processingMessage = false;} , 100);
+  }
+}
+
+/**
+ * Save current location when stopping the synchronization in case nothing changes in the other widgets
+ * Hopefully fixed with new version of location transmission
+ */
+function savePositionAndOrientation() {
+  //var pos = document.getElementById('viewport').getFieldValue('position');
+  //var orient = document.getElementById('viewport').requestFieldRef('orientation');
+  //document.getElementById('viewport').releaseFieldRef('orientation');
+
+  //posAndOrient = {position: pos, orientation: [{x: orient.x, y: orient.y, z: orient.z}, orient.w]};
 }

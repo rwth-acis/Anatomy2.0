@@ -40,12 +40,15 @@ function x3dChangeView() {
  */
 function x3dSynchronize() {
   var btn = document.getElementById('btnSynchronize');
-  if (btn.innerHTML === "Synchronize") {
-    btn.innerHTML ="Stop synchronize";
+  if (isSynchronized) {
+    btn.innerHTML ="Synchronize";
+    savePositionAndOrientation();
   }
   else {
-    btn.innerHTML ="Synchronize";
+    btn.innerHTML ="Unsynchronize";
+    synchronizePositionAndOrientation();
   }
+  isSynchronized = !isSynchronized;
 }
 
 /**
