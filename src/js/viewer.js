@@ -1,13 +1,15 @@
 var processingMessage = false;
 //can I currently send an updated pose to other devices?
 var canSend           = false;
-var canSend           = true;
-var isSynchronized    = true;
-var posAndOrient;
+var lastPos           = "";
+var lastRot           = "";
+//synchronize with other devices? (can be switched in menuToolbar.js)
+var isSynchronized = true;
 
 function initializeModelViewer() {
   showAllQuick(document.getElementById('viewer_object').runtime); 
   document.getElementById('viewport').addEventListener('viewpointChanged', viewpointChanged);
+  document.getElementById('viewer_object').addEventListener('mouseup', viewerMouseUp, false);
   document.getElementById('viewer_object').addEventListener('mousedown', enableSendingOnFirstClick);
 }
 
@@ -20,12 +22,9 @@ function receiveViewpointMsg(extras){
 
   //disable listening for changes in the viewport
   processingMessage = true;
-  
-  var cam = printPositionAndOrientation('Received', extras.position, extras.orientation);
 
   //apply new viewpoint
-  document.getElementById('viewport').setAttribute('position', cam.pos);
-  document.getElementById('viewport').setAttribute('orientation', cam.rot);
+  setView(extras.posMat, extras.rotMat);
 
   //clear any previous timeout
   if(typeof reenableViewpointListeningTimeout != 'undefined'){
@@ -38,14 +37,15 @@ function receiveViewpointMsg(extras){
 subscribeIWC("ViewpointUpdate", receiveViewpointMsg);
 
 // Viewport section.
-function sendPositionAndOrientation(pos, rot) {
+function sendPositionAndOrientation() {
   //only send if there is a role environment the viewer is embedded in
   if(!isEmbeddedInRole){
     return;
   }
 
   // Send through IWC!
-  var viewpointMsg = {'position': pos, 'orientation': rot}
+  var view = getView();
+  var viewpointMsg = {'posMat': view.posMat, 'rotMat': view.rotMat}
 
   //send to wrapper
   publishIWC("ViewpointUpdate", viewpointMsg);
@@ -69,7 +69,7 @@ function viewpointChanged(evt) {
     console.log("Bypassing send!");
     return;
   }
-  canSend     = false;
+  canSend = false;
   if(typeof sendTimeout != 'undefined'){
     clearTimeout(sendTimeout);
   }
@@ -77,18 +77,20 @@ function viewpointChanged(evt) {
     canSend = true; 
     document.getElementById('debugText').innerHTML = "Can send again!";
     console.log("Can send again!");
-  } , 100);
+  } , 250);
 
-  printPositionAndOrientation('Updated', evt.position, evt.orientation);
-  sendPositionAndOrientation(evt.position, evt.orientation);
+  //printPositionAndOrientation('Updated', evt.position, evt.orientation);
+  sendPositionAndOrientation();
 
+  var view = getView();
   var intent = {
     'component' :'',                            // recipient, empty for broadcast
     'data'      :'http://data.org/some/data',   // data as URI
     'dataType'  :'text/xml',                    // data mime type
     'action'    :'ACTION_UPDATE',               // action to be performed by receivers
     'flags'     :['PUBLISH_GLOBAL'],            // control flags
-    'extras'    :{'position': evt.position, 'orientation': evt.orientation}, // optional auxiliary data
+    'extras'    :{'posMat': view.posMat,        // optional auxiliary data
+                  'rotMat': view.rotMat}, 
   }
 
   console.info("subsite: intent: ", intent);
@@ -108,61 +110,119 @@ function printPositionAndOrientation(str, pos, rot) {
 }
 
 function showAllQuick(runtime, axis) {
+  // If axis is not given, assume negative Z.
   if (axis === undefined)
     axis = "negZ";
 
+  // Get the X3D scene element from runtime.
   var scene = runtime.canvas.doc._viewarea._scene;
+  // Update it to latest boundary information.
   scene.updateVolume();
-
+  // Record minimum and maximum positions (X,Y,Z) of the scene.
   var min = x3dom.fields.SFVec3f.copy(scene._lastMin);
   var max = x3dom.fields.SFVec3f.copy(scene._lastMax);
+  // Get the scene main camera.
+  var viewpoint = scene.getViewpoint();
 
+  // Target forward axis for camera.
+  var forwardAxis = new x3dom.fields.SFVec3f(0, 0, -1);
+
+  // The coordinate system for camera.
   var x = "x", y = "y", z = "z";
   var sign = 1;
-  var to, from = new x3dom.fields.SFVec3f(0, 0, -1);
 
+  // Setup the axis of rotation and coordinate system according to axis parameter.
   switch (axis) {
+
       case "posX":
       sign = -1;
       case "negX":
-      z = "x"; x = "y"; y = "z";
-      to = new x3dom.fields.SFVec3f(sign, 0, 0);
+
+      x = "y"; 
+      y = "z";
+      z = "x"; 
+      forwardAxis = new x3dom.fields.SFVec3f(sign, 0, 0);
       break;
+
+
+
       case "posY":
       sign = -1;
       case "negY":
-      z = "y"; x = "z"; y = "x";
-      to = new x3dom.fields.SFVec3f(0, sign, 0);
+
+      x = "z"; 
+      y = "x";
+      z = "y"; 
+      forwardAxis = new x3dom.fields.SFVec3f(0, sign, 0);
       break;
+
+
+
       case "posZ":
       sign = -1;
       case "negZ":
       default:
-      to = new x3dom.fields.SFVec3f(0, 0, -sign);
+
+      forwardAxis = new x3dom.fields.SFVec3f(0, 0, -sign);
       break;
   }
 
-  var viewpoint = scene.getViewpoint();
+  // Get the field of view of camera.
   var fov = viewpoint.getFieldOfView();
+  // Calculate boundary extents of scene.
+  var extents = max.subtract(min);
+  // Calculate the x and y spans of the camera.
+  var denom = Math.tan(fov / 2.0);
+  var offset = extents[z] / 2.0;
+  var ySpan = (extents[y] / 2.0) / denom + offset;
+  var xSpan = (extents[x] / 2.0) / denom + offset;
+  // Offset the extents to the center.
+  extents = min.add(extents.multiply(0.5));
+  // Calculate and add the necessary Z to span all of scene.
+  extents[z] += sign * (ySpan > xSpan ? ySpan : xSpan) * 1.01;
 
-  var dia = max.subtract(min);
+  // Setup translation matrix from extents.
+  var translationMatrix = x3dom.fields.SFMatrix4f.translation(extents.negate());
+  // Setup rotation matrix from axis of rotation.
+  var rotationMatrix = x3dom.fields.Quaternion.rotateFromTo(new x3dom.fields.SFVec3f(0, 0, -1), forwardAxis).toMatrix();
+  // Calculate final view matrix.
+  var viewMatrix = rotationMatrix.mult(translationMatrix);
 
-  var diaz2 = dia[z] / 2.0, tanfov2 = Math.tan(fov / 2.0);
+  // Set scene camera's matrix to the result.
+  runtime.canvas.doc._viewarea._scene.getViewpoint().setView(viewMatrix);
+}
 
-  var dist1 = (dia[y] / 2.0) / tanfov2 + diaz2;
-  var dist2 = (dia[x] / 2.0) / tanfov2 + diaz2;
+function getView() {
+  var runtime = document.getElementById('viewer_object').runtime;
+  var posMat = runtime.canvas.doc._viewarea._transMat;
+  var rotMat = runtime.canvas.doc._viewarea._rotMat;
+  return {'posMat': posMat, 'rotMat': rotMat};
+}
 
-  dia = min.add(dia.multiply(0.5));
+function setView(posMat, rotMat) {
+  var runtime = document.getElementById('viewer_object').runtime;
+  runtime.canvas.doc._viewarea._transMat.setValues(posMat);
+  runtime.canvas.doc._viewarea._rotMat.setValues(rotMat);
+  runtime.canvas.doc._viewarea._needNavigationMatrixUpdate  = true;
+  runtime.canvas.doc.needRender = true;
+}
 
-  dia[z] += sign * (dist1 > dist2 ? dist1 : dist2) * 1.01;
+function viewerMouseUp(event) {
+  //printPositionAndOrientation('Sent final', getViewMatrix());
+  sendPositionAndOrientation();
 
-  var quat = x3dom.fields.Quaternion.rotateFromTo(from, to);
-
-  var viewmat = quat.toMatrix();
-  viewmat = viewmat.mult(x3dom.fields.SFMatrix4f.translation(dia.negate()));
-
-  runtime.canvas.doc._viewarea._scene.getViewpoint().setView(viewmat);
-};
+  var view = getView();
+  var intent = {
+    'component' :'',                            // recipient, empty for broadcast
+    'data'      :'http://data.org/some/data',   // data as URI
+    'dataType'  :'text/xml',                    // data mime type
+    'action'    :'ACTION_UPDATE',               // action to be performed by receivers
+    'flags'     :['PUBLISH_GLOBAL'],            // control flags
+    'extras'    :{'posMat': view.posMat,        // optional auxiliary data
+                  'rotMat': view.rotMat}, 
+  }
+  console.info("subsite: intent: ", intent);
+}
 
 /**
  * Enable sending of the updated pose after the first click.
