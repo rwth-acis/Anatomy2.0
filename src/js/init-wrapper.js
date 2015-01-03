@@ -6,7 +6,10 @@
 var iwcClient;
 var contentWindow;
 var id = Math.random().toString(36).substr(2, 9);
-var widget = window.location.origin + window.location.path + '?id=' + id;
+var space = window.location.origin + window.parent.location.pathname
+var widget = space + '?id=' + id;
+
+console.info("space: ", space);
 
 function init () {
   iwcClient = new iwc.Client();
@@ -21,6 +24,11 @@ function iwcCallback(intent) {
     //ignore the msgs sent from here
     if(intent.sender === widget) { return; }
 
+    //ignore msgs sent from other role spaces
+    if(intent.sender.indexOf(space) < 0){
+	return;
+    }
+    
     var extras = intent.extras;
 
     if(typeof extras.topic === 'undefined'){
