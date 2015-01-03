@@ -12,7 +12,6 @@ function init () {
   iwcClient = new iwc.Client();
   iwcClient.connect(iwcCallback);
 }
-gadgets.util.registerOnLoadHandler(init);
 
 /**
  *  Receive intents form other divces/widgets through iwc
@@ -122,3 +121,6 @@ function subscribeTo(topic){
     subscribedTopics.push(topic);
     console.log("init-wrapper: subscribed to topic " + topic);
 }
+
+//moved to the end, so that testing this file does not require the site to be in role
+gadgets.util.registerOnLoadHandler(init);

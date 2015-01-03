@@ -26,10 +26,13 @@ describe('The wrapper', function() {
   // Check correct behaviour of iwcCallback
   it('does not update the viewpoint if the received message comes from itself', 
       function() {
-        spyOn(window, 'receivedViewpointChanged');
+	subscribeTo("testTopic")
+	intent.extras.topic = "testTopic";
+
+        spyOn(contentWindow, 'postMessage');
 
         iwcCallback(intent);
-        expect(receivedViewpointChanged).not.toHaveBeenCalled();
+        expect(contentWindow.postMessage).not.toHaveBeenCalled();
   });
 
   it('handles messages with an undefined or unknown topic', function() {
@@ -40,7 +43,7 @@ describe('The wrapper', function() {
     iwcCallback(intent);
     intent.extras.topic = 'SubsiteLoaded';
     iwcCallback(intent);
-    expect(console.log.calls.count()).toEqual(2);
+    expect(console.log.calls.count()).toEqual(1);
 
     widget = tmp;
   });
