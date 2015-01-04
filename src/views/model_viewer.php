@@ -73,7 +73,7 @@
       <x3d id='viewer_object' showStat="true">
         <scene>
           <navigationInfo headlight="true" type="examine" id="navType"></navigationInfo>
-          <background skyColor='0.0 0.0 0.0'> </background>
+          <background skyColor='1.0 1.0 1.0'> </background>
       <?php
         include '../php/db_connect.php';
         $arg    = $_GET["id"];
