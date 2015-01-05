@@ -6,6 +6,8 @@ describe('The subsite', function() {
   beforeEach(function() {
     spyOn(window, 'receiveViewpointMsg');
     spyOn(console, 'info');
+    spyOn(console, 'log');
+    result = null;
   });
 
   // Reset variable(s)
@@ -13,35 +15,28 @@ describe('The subsite', function() {
     isEmbeddedInRole = false;
   });
 
-  it('receives a message that it is embedded in ROLE', function() {
-    var event = {data: 'EmbeddedInRole This is embedded in ROLE'};
-        
-    expect(isEmbeddedInRole).not.toBeTruthy();
+  it('receives a message that was subscribed before', function() {
+    subscribeIWC("testTopic", function(extras){result=extras.content});
+    
+    var msg = {content: 'butterbrot'};
+    var event = {data: 'testTopic ' + JSON.stringify(msg)};
+    
     receiveMessage(event);
     
-    expect(isEmbeddedInRole).toBeTruthy();
-    expect(window.receiveViewpointMsg).not.toHaveBeenCalled();
-    expect(console.info).not.toHaveBeenCalled();
+    expect(result).toBe("butterbrot");
   });
 
-  it('receives a message that the camera\'s viewpoint needs to be updated',
-      function() {
-        var event = {data: 'ViewpointUpdate 1'};
-        receiveMessage(event);
+  it('handles unsubscribed messages', function() {
+    subscribeIWC("testTopic", function(extras){result=extras.content});
 
-        expect(isEmbeddedInRole).not.toBeTruthy();
-        expect(window.receiveViewpointMsg).toHaveBeenCalledWith(1);
-        expect(console.info).not.toHaveBeenCalled();
-  });
-
-  it('handles messages with an unknown topic', function() {
-    var event = {data: 'test'};
+    var msg = {content: 'wurstbrot'};
+    var event = {data: 'wurstTopic ' + JSON.stringify(msg)};
     receiveMessage(event);
 
     expect(isEmbeddedInRole).not.toBeTruthy();
-    expect(window.receiveViewpointMsg).not.toHaveBeenCalled();
-    expect(console.info).toHaveBeenCalledWith('Subsite: received unknown ' + 
-        'message', 'test');
+    expect(result).toBe(null);
+    expect(console.log).toHaveBeenCalledWith('Subsite: received unknown ' + 
+        'message', 'wurstTopic {"content":"wurstbrot"}');
   });
 
   it('handles empty messages', function() {
@@ -49,8 +44,7 @@ describe('The subsite', function() {
 
     receiveMessage(event);
     expect(isEmbeddedInRole).not.toBeTruthy();
-    expect(window.receiveViewpointMsg).not.toHaveBeenCalled();
-    expect(console.info).toHaveBeenCalledWith('Subsite: received unknown ' + 
+    expect(console.log).toHaveBeenCalledWith('Subsite: received unknown ' + 
         'message', '');
   });
 

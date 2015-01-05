@@ -15,18 +15,17 @@ describe('The viewer', function() {
 
   afterAll(function() {
     isEmbeddedInRole = false;
+    canSend = false;
   });
 
   // Does not work because of access to elements that aren't available on site
-  xit('receives a message that it needs to update the camera\'s viewpoint',
+  it('receives a message that it needs to update the camera\'s viewpoint',
       function() {
-        var extras = {position: position, orientation: orientation};
-        spyOn(window, 'printPositionAndOrientation');
+        var extras = {position: posMat, orientation: rotMat};
+        spyOn(window, 'setView');
 
         receiveViewpointMsg(extras);
-        expect(printPositionAndOrientation).toHaveBeenCalledWith('Received', 
-            {x: 0, y: 0, z: 0}, [{x: 0, y: 0, z: 0}, 0]);
-        expect(reenableViewpointListeningTimeout).toBeDefined();
+        expect(setView).toHaveBeenCalled();
   }); 
   
   it('wants to send position and orientation but is not embedded in ROLE',
@@ -74,7 +73,7 @@ describe('The viewer', function() {
       'another message',
       function() {
         processingMessage = false;
-	canSend = true;
+	      canSend = true;
         spyOn(window, 'sendPositionAndOrientation');
         spyOn(window, 'printPositionAndOrientation');
         spyOn(window, 'getView').and.returnValue(view);
