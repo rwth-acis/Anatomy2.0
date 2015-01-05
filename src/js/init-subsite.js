@@ -11,7 +11,7 @@ function receiveMessage(event)
 {
     //TODO: check that message really comes from role
     // if (event.origin !== "http://example.org:8080")
-    // 	return;
+    //  return;
 
     //Debug output for message
     // console.info("Subsite: We got a message: ", event.data);
@@ -22,14 +22,14 @@ function receiveMessage(event)
     switch(msgTopic){
         case "EmbeddedInRole": isEmbeddedInRole = true; break;
         default: 
-	if(subscribeCallbacks.has(msgTopic)){
-	    //call callback function
-	    (subscribeCallbacks.get(msgTopic))(JSON.parse(msgContent));
-	}
-	else{
-	    console.log("Subsite: received unknown message", event.data);
-	}
-	break;
+    if(subscribeCallbacks.has(msgTopic)){
+        //call callback function
+        (subscribeCallbacks.get(msgTopic))(JSON.parse(msgContent));
+    }
+    else{
+        console.log("Subsite: received unknown message", event.data);
+    }
+    break;
     }
 }
 window.addEventListener("message", receiveMessage, false);
@@ -53,9 +53,9 @@ function subscribeIWC(topic, callback){
  */
 function publishIWC(topic, content){
     if(!isEmbeddedInRole){
-	//we are not in role, therefore we cant use iwc
-	console.log("init-subsite: can't send iwc message if not embedded in role");
-	return;
+    //we are not in role, therefore we cant use iwc
+    console.log("init-subsite: can't send iwc message if not embedded in role");
+    return;
     }
     //send message to wrapper to send it via iwc
     roleWrapper.postMessage(topic + " " + JSON.stringify(content), "*");

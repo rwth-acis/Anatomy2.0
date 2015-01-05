@@ -18,11 +18,11 @@ function initOverviewWidget(){
     var href = aElememts[i].href;
     //check if link goes to model_viewer:
     if(href.indexOf("model_viewer") > -1){
-	    //disable href
-	    aElememts[i].href = "javascript:void(0)";
-	    //send iwc message instead
-	    aElememts[i].linkedModel= href;
-	    aElememts[i].addEventListener("click", clickOnLink);
+        //disable href
+        aElememts[i].href = "javascript:void(0)";
+        //send iwc message instead
+        aElememts[i].linkedModel= href;
+        aElememts[i].addEventListener("click", clickOnLink);
       console.log("ID: "+aElememts[i].id);
     }
   }

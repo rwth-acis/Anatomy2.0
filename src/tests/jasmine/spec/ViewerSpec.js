@@ -1,5 +1,7 @@
 /**  
- * Tests from viewer.js: 
+ * Tests from viewer.js: Checks, if messages concerning the location of the 
+ * model are sent and processed correctly. Tests also, if stopping/restarting 
+ * model synchronization works.
  */
 describe('The viewer', function() {
     
