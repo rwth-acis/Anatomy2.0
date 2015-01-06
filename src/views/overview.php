@@ -29,9 +29,14 @@
         $html .= 
         "<div class='col-md-6'>
           <a href='model_viewer.php?id=$entry->id'>
-            <img src='../../$entry->preview_url' alt=$entry->name class='img-responsive img-fit'>
+            <img src='../../$entry->preview_url' alt=$entry->name class='img-responsive img-fit' align='left'>
+            <h3>$entry->name</h3>
           </a>
-          <h3><a href='model_viewer.php?id=$entry->id'>$entry->name</a></h3>
+          <p><b>Model Name:</b>$entry->name</p>
+            <p><b>Category:</b>$entry->classification</p>
+            <p><b>Size:</b> 18,431 Triangles</p>
+            <p><b>Upload Date:</b>$entry->upload_date</p>
+            <p><b>Description:</b> Video provides a powerful way to help you prove your point. When you click Online Video, you can paste in the embed code for the video you want to add. You can also type a keyword to search online for the video.</p>
         </div>";
 
         $i++;
@@ -44,5 +49,4 @@
     <?php include("footer.html"); ?>
 
   </body>
-
 </html>
