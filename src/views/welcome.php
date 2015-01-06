@@ -18,53 +18,95 @@
 
   <body>
     <?php include("menu.html"); ?>
-
-    <h1>Welcome to Collaborative 3D Model Viewing</h1>
     
-    <p>This site introduces you into Collaborative 3D Model Viewing
-    and shows you how to use it.</p>
+    <div style="text-align: center;" class="jumbotron">
+	  <h1 style="color: black;">Welcome to Collaborative 3D Model Viewing</h1>
+	  <p>This site introduces you into Collaborative 3D Model Viewing
+	    and shows you how to use it</p>
+	  <p><a class="btn btn-primary btn-lg" href="overview.php" role="button">View Models</a></p>
+	</div>
+	
+	<div class="container" style="text-align: justify;">
+		<p>Collaborative 3D Model Viewing allows investigating and learning
+		    from a 3D model in a group. You can open a model on different
+		    devices and if one person moves the model on his device, the view
+		    on all other devices is synchronized. Therefore, you can easily
+		    show, explain or discuss parts of the model, no matter if you are
+		    explaining something as a teacher, learning in a group over the
+		    internet or discussing about an object you don't have physical
+		    access to. The project mainly focuses on models from 3D scanned
+		    real objects that often are too valuable or not available for
+		    investigation by hands. If you want to view a model that is not
+		    already in the database, you can also upload it yourself.
+		</p>
+		<hr>
+		<p>Collaborative 3D Model Viewing allows investigating and learning
+		    from a 3D model in a group. You can open a model on different
+		    devices and if one person moves the model on his device, the view
+		    on all other devices is synchronized. Therefore, you can easily
+		    show, explain or discuss parts of the model, no matter if you are
+		    explaining something as a teacher, learning in a group over the
+		    internet or discussing about an object you don't have physical
+		    access to. The project mainly focuses on models from 3D scanned
+		    real objects that often are too valuable or not available for
+		    investigation by hands. If you want to view a model that is not
+		    already in the database, you can also upload it yourself.
+		</p>
+		<hr>
+		<p>The Collaborative 3D Model Viewing is provided in widgets for
+		    the <a href="http://www.role-project.eu/">Responsive Open Learning
+		    Environments (ROLE)</a>. Here you can create a workspace, setup a
+		    learning environment and invite other people to join you. ROLE
+		    allows you to combine the Collaborative 3D Model Viewing with many
+		    other widgets for collaborative learing.
+		</p>
+		
+	</div>  
+    
+    <div class="container" style="margin-top: 50px;">
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4><i class="fa fa-fw fa-check"></i>3D Models</h4>
+                    </div>
+                    <div class="panel-body">
+	                    <img src="../images/skull.png" alt="...">
+	                    <hr>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque, optio corporis quae nulla aspernatur in alias at numquam rerum ea excepturi expedita tenetur assumenda voluptatibus eveniet incidunt dicta nostrum quod?</p>
+                        <a href="overview.php" class="btn btn-default">View Models</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4><i class="fa fa-fw fa-gift"></i>Set Up Viewing Environement</h4>
+                    </div>
+                    <div class="panel-body">
+	                    <img src="../images/role.png" alt="...">
+	                    <hr>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque, optio corporis quae nulla aspernatur in alias at numquam rerum ea excepturi expedita tenetur assumenda voluptatibus eveniet incidunt dicta nostrum quod? </p>
+    					
+                        <a href="http://role-sandbox.eu/" class="btn btn-default">To ROLE Space</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4><i class="fa fa-fw fa-compass"></i>Upload your own Model</h4>
+                    </div>
+                    <div class="panel-body">
+	                    <img src="../images/upload.png" alt="...">
+	                    <hr>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque, optio corporis quae nulla aspernatur in alias at numquam rerum ea excepturi expedita tenetur assumenda voluptatibus eveniet incidunt dicta nostrum quod?</p>
+                        <a href="upload.php" class="btn btn-default">Upload Page</a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <p>Collaborative 3D Model Viewing allows investigating and learning
-    from a 3D model in a group. You can open a model on different
-    devices and if one person moves the model on his device, the view
-    on all other devices is synchronized. Therefore, you can easily
-    show, explain or discuss parts of the model, no matter if you are
-    explaining something as a teacher, learning in a group over the
-    internet or discussing about an object you don't have physical
-    access to. The project mainly focuses on models from 3D scanned
-    real objects that often are too valuable or not available for
-    investigation by hands. If you want to view a model that is not
-    already in the database, you can also upload it yourself.</p>
-
-    <p>The Collaborative 3D Model Viewing is provided in widgets for
-    the <a href="http://www.role-project.eu/">Responsive Open Learning
-    Environments (ROLE)</a>. Here you can create a workspace, setup a
-    learning environment and invite other people to join you. ROLE
-    allows you to combine the Collaborative 3D Model Viewing with many
-    other widgets for collaborative learing.</p>
-
-    <!-- TODO: h2 is written in white on white background? -->
-    <h2>How to setup the viewing environment</h2>
-
-    <p>Setting up the environment for collaborative viewing is really
-    easy. If you do it for the first time, you can follow these steps: </p>
-
-    <ol>
-      <li>Create a ROLE space <a href="http://role-sandbox.eu/">here</a></li>
-      <li>Log in (e.g. with your Google account)</li>
-      <li>Add the following widgets in the sidebar on the left</li>
-        <ul>
-	  <li>http://eiche.informatik.rwth-aachen.de/henm1415g2/src/role/overview.xml</li>
-	  <li>http://eiche.informatik.rwth-aachen.de/henm1415g2/src/role/model_viewer.xml</li>
-	</ul>
-      <li>Invite others by providing the link to the space (e.g. http://role-sandbox.eu/spaces/spacename)</li>
-      <li>Select a model in the overview</li>
-    </ol>
-
-
-    <h2>How to upload models</h2>
-
-    <?php include("footer.html"); ?>
+       <?php include("footer.html"); ?>
 
   </body>
 
