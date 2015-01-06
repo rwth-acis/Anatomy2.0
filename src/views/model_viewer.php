@@ -27,7 +27,6 @@
 
   <body>
     
-    <?php include("menu.html"); ?>
 
     <!-- Toolbar -->
     <nav class="navbar navbar-default" role="navigation">
@@ -67,7 +66,7 @@
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
     </nav>
-
+  <div >  
     <div class="row" style="position:relative; left:60px">
       <p id='debugText'></p>
       <x3d id='viewer_object' showStat="true">
@@ -105,7 +104,7 @@
           </div>";
       ?>
     </div>
-
+  </div>  
     <?php include("footer.html"); ?>
     
     <!-- Functionality of menu toolbar -->
