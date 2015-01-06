@@ -216,6 +216,14 @@ function setView(posMat, rotMat) {
 
 function viewerMouseUp(event) {
   //printPositionAndOrientation('Sent final', getViewMatrix());
+  
+  // Prevent widgets from sending updates again and again
+  // If we set the position because we received a message we do not want to send it back
+  // Also do not send the update if synchronization is stopped.
+  if(!evt || processingMessage || !isSynchronized) {
+    return;
+  }
+
   sendPositionAndOrientation();
 
   var view = getView();
@@ -251,28 +259,16 @@ function receiveModelSelectedByOverview(msgContent){
  * Re-synchronize with last location sent from other widgets
  */
 function synchronizePositionAndOrientation() {
-  if(posAndOrient) {
-    //apply new viewpoint
-    var cam = printPositionAndOrientation('Re-synchronize', posAndOrient.position, posAndOrient.orientation);
-    document.getElementById('viewport').setAttribute('position', cam.pos);
-    document.getElementById('viewport').setAttribute('orientation', cam.rot);
+  if(posAndOrient !== undefined) {
+    // apply new viewpoint
+    setView(posAndOrient.posMat, posAndOrient.rotMat);
     posAndOrient = undefined;
-
-    // do not send the update to other widgets
-    // This is not needed any more when the synchronisation bug is fixed, i.e. that always the actual position get transmitted
-    processingMessage = true;
-    setTimeout(function(){processingMessage = false;} , 100);
   }
 }
 
 /**
  * Save current location when stopping the synchronization in case nothing changes in the other widgets
- * Hopefully fixed with new version of location transmission
  */
 function savePositionAndOrientation() {
-  //var pos = document.getElementById('viewport').getFieldValue('position');
-  //var orient = document.getElementById('viewport').requestFieldRef('orientation');
-  //document.getElementById('viewport').releaseFieldRef('orientation');
-
-  //posAndOrient = {position: pos, orientation: [{x: orient.x, y: orient.y, z: orient.z}, orient.w]};
+  posAndOrient = getView();
 }

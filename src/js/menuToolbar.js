@@ -36,7 +36,7 @@ function x3dChangeView() {
 }
 
 /**
- * Dummy
+ * Enables/disables synchronization of the widget with others
  */
 function x3dSynchronize() {
   var btn = document.getElementById('btnSynchronize');
