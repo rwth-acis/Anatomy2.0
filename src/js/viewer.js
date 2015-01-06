@@ -14,6 +14,11 @@ function initializeModelViewer() {
 }
 
 function receiveViewpointMsg(extras){
+  //don't synchronize if the viewpoint is from another model
+  if(extras.selectedModel != window.location.search){
+    return;
+  }
+
   // Synchronization is stopped
   if(!isSynchronized) { 
     posAndOrient = extras;
@@ -46,6 +51,8 @@ function sendPositionAndOrientation() {
   // Send through IWC!
   var view = getView();
   var viewpointMsg = {'posMat': view.posMat, 'rotMat': view.rotMat}
+  //also specifiy what model was moved (included in uri)
+  viewpointMsg.selectedModel = window.location.search;
 
   //send to wrapper
   publishIWC("ViewpointUpdate", viewpointMsg);
