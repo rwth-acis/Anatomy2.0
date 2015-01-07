@@ -1,0 +1,180 @@
+\ProvidesPackage{beamerouterthemefawkessimple}[2007/01/23]
+
+% Based on themes Copyright 2003 by Till Tantau and 2005-2006 by Joerg Cassens
+%
+% Copyright 2007 by Tim Niemueller <tim@niemueller.de>
+%
+% This program can be redistributed and/or modified under the terms
+% of the GNU Public License, version 2.
+
+\mode<presentation>
+
+\useoutertheme[subsection=false]{miniframes}
+
+% this part is based on the shadow theme
+
+\pgfdeclarehorizontalshading[frametitle.bg,frametitle right.bg]{beamer@frametitleshade}{\paperheight}{%
+    color(0pt)=(frametitle.bg);
+    color(\paperwidth)=(frametitle right.bg)}
+
+\AtBeginDocument{
+  \definecolor{shade end}{RGB}{222,222,222}
+  \definecolor{shade start}{RGB}{246,246,246}
+  %\definecolor{shade end}{RGB}{68,68,68}
+  %\definecolor{shade start}{RGB}{100,100,100}
+  \pgfdeclareverticalshading{beamer@headfade}{\paperwidth}{%
+    color(0pt)=(shade start);
+    color(.45cm)=(shade end)}
+
+  \pgfdeclareimage[height=1.1ex]{rwth-logo}{images/rwth-logo}%
+}
+
+                                % Head
+%\newlength{\titlewidth}
+%\newlength{\circleboxwidth}
+%\newlength{\navwidth}
+\defbeamertemplate*{headline}{fawkes theme}
+{%
+  \ifbeamer@titlehead
+  \pgfuseshading{beamer@headfade}\vskip-.45cm
+  \def\radius{1.8mm}
+  \setlength{\circleboxwidth}{20mm}%
+  \setlength{\titlewidth}{\paperwidth - \circleboxwidth}
+  \raisebox{-0.4mm}{\begin{minipage}{\titlewidth}%
+    \makebox[1mm]{}%{\usebeamercolor[fg]{author in head/foot}\insertshorttitle}
+    \scriptsize\textrm{\insertshorttitle}
+  \end{minipage}}%
+  \begin{minipage}{\circleboxwidth}%
+    \vskip1pt%
+    \begin{flushright}%
+      \ifthenelse{\insertframenumber = 1}
+      { % if first slide
+        \tikz{\draw[black!20!white] (0mm,0mm) circle(\radius);}%
+      }{ % else
+        \ifthenelse{\insertframenumber = \inserttotalframenumber}
+        {% if last slide
+          \def\angleend{-270}
+        }{% else
+          \def\angleend{90 - 360 / \inserttotalframenumber * \insertframenumber}%
+        }%
+        \def\anglestart{90}%
+        \begin{tikzpicture}%
+          \colorlet{custombg}{FawkesRed!50!black}
+          \fill[FawkesRed] (0,0) -- (\anglestart:\radius) arc (\anglestart:\angleend:\radius) -- cycle;%
+          \draw[FawkesRed!80!black] [very thin] (0mm,0mm)
+          circle(\radius);%
+          %\node at (0,0) [white] {\insertframenumber};
+        \end{tikzpicture}%
+      } % end if first slide
+      \makebox[1pt]{}%
+    \end{flushright}%
+  \end{minipage}%
+  \vskip0.4mm%
+  \begin{beamercolorbox}[colsep=0.05mm]{head bottom line}
+  \end{beamercolorbox}
+  \fi
+  % %\begin{beamercolorbox}{section in head/foot}
+  % %  \setlength{\navwidth}{\paperwidth - 1.68cm}
+  % %  \vskip1pt\hskip.84cm\insertnavigation{\navwidth}\vskip1pt
+  % %\end{beamercolorbox}%
+  % \begin{beamercolorbox}[colsep=0.05mm]{head bottom line}
+  % \end{beamercolorbox}
+}
+
+%\addtoheadtemplate{\pgfuseshading{beamer@headfade}\vskip-1.25cm}{}
+
+%\addtobeamertemplate{headline}
+%{}
+%{%
+%  \vskip-0.2pt
+%  \pgfuseshading{beamer@topshade}
+%  \vskip-2pt
+%}
+
+\newlength{\titlewidth}
+\newlength{\circleboxwidth}
+\newlength{\navwidth}
+\defbeamertemplate*{frametitle}{fawkes theme}[1]
+{%
+  \def\radius{1.8mm}
+  \setlength{\circleboxwidth}{10mm}%
+  \setlength{\titlewidth}{\paperwidth - \circleboxwidth}
+  \nointerlineskip%
+  %\vskip-2pt%
+    %\hskip-\Gm@lmargin
+  %\hbox{
+  %  \begin{beamercolorbox}[colsep=0.05mm]{frametitle}
+  %    \usebeamerfont*{frametitle}\insertframetitle
+  %  \end{beamercolorbox}
+  %}
+  %\ifbeamercolorempty[bg]{frametitle}{}{\nointerlineskip}%
+  %\vskip-5.5pt%
+  \@tempdima=\titlewidth%
+\ifbeamer@frametitlebg
+  \advance\@tempdima by\beamer@leftmargin%
+  \advance\@tempdima by\beamer@rightmargin%
+\else
+  \advance\@tempdima by\beamer@leftmargin%
+  %\advance\@tempdima by\beamer@rightmargin%
+\fi
+  \begin{beamercolorbox}[sep=0.3cm,wd=\the\@tempdima]{frametitle}
+    \usebeamerfont{frametitle}%
+    \vskip-1.5ex%
+    \if@tempswa\else\csname beamer@fte#1\endcsname\fi%
+    \strut\insertframetitle\strut\par%
+    {%
+      \ifx\insertframesubtitle\@empty%
+      \else%
+      {\usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}\insertframesubtitle\strut\par}%
+      \fi
+    }%
+    \vskip-1ex%
+    \if@tempswa\else\vskip-.3cm\fi% set inside beamercolorbox... evil here...
+  \end{beamercolorbox}%
+  \nointerlineskip%
+\ifbeamer@frametitlebg
+  \begin{beamercolorbox}[colsep=0.05mm,wd=\the\@tempdima]{head bottom line}%
+  \end{beamercolorbox}
+\fi
+}
+
+
+\defbeamertemplate*{footline}{fawkes theme}
+{
+  \leavevmode%
+  \begin{beamercolorbox}[colsep=0.05mm]{head bottom line}%
+  \end{beamercolorbox}
+  \vskip-0.05mm%
+  \hbox{%
+  %\begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,left]{author in head/foot}%
+  %  \hspace*{4ex}\raisebox{-0.6ex}{\pgfimage[height=2.6ex]{common/images/logos/intel}}
+  %  \hspace*{3em}\usebeamerfont{author in head/foot}\insertshortauthor
+  %\end{beamercolorbox}%
+  %\begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+  %  \usebeamerfont{title in head/foot}\insertshorttitle
+  %\end{beamercolorbox}%
+  %\begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+  %  \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{1.5em}
+  %  \insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
+  %\end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,left]{white}%
+    %\hspace*{4ex}\raisebox{-0.6ex}{\pgfimage[height=2.6ex]{common/images/logos/intel}}
+    %\hspace*{3em}
+    \hspace*{2ex}\usebeamerfont{author in head/foot}\textrm{\insertshortauthor}
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{white}%
+    %\usebeamerfont{date in head/foot}\textrm{\insertframenumber{} /
+    %\inserttotalframenumber} 
+    \raisebox{-0.3ex}{\pgfuseimage{rwth-logo}}%
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{white}%
+    \usebeamerfont{title in head/foot}\textrm{\insertshortdate{}}
+    \quad \textrm{\insertframenumber~/~\inserttotalframenumber}\hspace*{2ex}
+  \end{beamercolorbox}%
+  }%
+  \vskip0pt%
+}
+
+
+\mode
+<all>
