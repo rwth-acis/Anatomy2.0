@@ -27,9 +27,9 @@
           $html .= '</div><div class="row">';
         }
         $html .= 
-        "<div class='col-md-6'>
+        "<div class='col-md-6 overview-entry'>
           <a href='model_viewer.php?id=$entry->id'>
-            <img src='../../$entry->preview_url' alt=$entry->name class='img-responsive img-fit' align='left'>
+            <img src='../../$entry->preview_url' alt=$entry->name class='img-responsive img-fit'>
             <h3>$entry->name</h3>
           </a>
           <p><b>Model Name:</b> $entry->name</p>

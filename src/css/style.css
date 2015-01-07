@@ -108,6 +108,11 @@ input[type=submit]
     padding: 10px;
     width: 300px;
     height: 300px;
+    float: left;
+}
+
+.overview-entry {
+    float: left;
 }
 
 #viewer_object {
