@@ -7,24 +7,10 @@ function initNavigationMode() {
 document.addEventListener('DOMContentLoaded', initNavigationMode, false);
 
 /**
- * Button "reset" functionality
- */
-function reset() {
-  document.getElementById('viewer_object').runtime.resetView();
-}
-
-/**
  * Button "Show All" functionality
  */
 function showAll() {
   document.getElementById('viewer_object').runtime.showAll();
-}
-
-/**
- * Button "Upright" functionality
- */
-function upright() {
-  document.getElementById('viewer_object').runtime.uprightView();
 }
 
 /**
