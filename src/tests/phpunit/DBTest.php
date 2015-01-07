@@ -9,7 +9,7 @@ class DBTest extends Generic_Tests_DatabaseTestCase {
     
     public function getDataSet()
     {
-        return $this->createXmlDataSet("fixture.xml");
+        return $this->createXmlDataSet("small_dataset.xml");
     }
 
     public function testGetRowCount() {
@@ -20,7 +20,7 @@ class DBTest extends Generic_Tests_DatabaseTestCase {
         $this->assertEquals(8, $this->getConnection()->getRowCount("models_test"));
         $this->getConnection()->getConnection()->query("INSERT INTO models_test VALUES (
             7, 'Helmet down to 1%', 'Scanned helmet, downscaled to 1%', 'Archeology', 
-            '2014-11-25 00:00:00','models/7/7.x3d','models/7/preview/7.png')");
+            '2014-11-25 00:00:00','1.2 MB','models/7/7.x3d','models/7/preview/7.png',NULL)");
         $this->assertEquals(9, $this->getConnection()->getRowCount("models_test"));
     }
 
@@ -31,7 +31,7 @@ class DBTest extends Generic_Tests_DatabaseTestCase {
         $result = $query->fetchAll();
 
         $this->assertEquals(1, count($result));
-        $this->assertEquals("Helmet down to 75%", $result[0]["name"]);
+        $this->assertEquals("Helmet", $result[0]["name"]);
 
     }
 
