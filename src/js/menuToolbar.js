@@ -36,6 +36,23 @@ function x3dChangeView() {
 }
 
 /**
+ * Initializes the copy to clipboard functionality
+ */
+function initCopy() {
+  // ZeroClipboard needs to know where it can find the ".swf" file (flash movie)
+  ZeroClipboard.config( { swfPath: 'http://eiche.informatik.rwth-aachen.de/henm1415g2/src/swf/ZeroClipboard.swf' } );
+  // Create client instance and attach copy event to it
+  var client = new ZeroClipboard();
+  client.on( "copy", function (event) {
+    var clipboard = event.clipboardData;
+    clipboard.setData( "text/plain", window.location.href );
+  });
+  // Glue button to client. The copy event is fired when button is clicked
+  client.clip( document.getElementById("btnCopy") );
+}
+document.addEventListener("DOMContentLoaded", initCopy, false);
+
+/**
  * Dummy
  */
 function x3dSynchronize() {

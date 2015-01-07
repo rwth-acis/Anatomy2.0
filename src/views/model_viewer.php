@@ -20,6 +20,8 @@
     <link rel='stylesheet' type='text/css' href='../css/bootstrap.min.css'>
     <link rel='stylesheet' type='text/css' href='../css/style.css'>
 
+    <!-- The library for the copy to clipboard feature in the toolbar -->
+    <script type="text/javascript" src="../js/ZeroClipboard.js"></script>
   </head>
 
   <body>
