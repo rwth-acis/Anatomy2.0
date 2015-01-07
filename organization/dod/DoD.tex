@@ -360,7 +360,7 @@ Opera:				& built-in (Dragonfly) \\
 We use automated tests to ensure correct behaviour of functional components. We separate the automated tests into Back-end-tests with Jasmine and Front-end-tests with Selenium. Interaction with the MySQL database is tested with PHPUnit.
 
 \subsubsection{Back-end}
-To test JavaScript code in the Back-end, we use Jasmine together with the plugin \href{jasmine-jquery}{https://github.com/velesin/jasmine-jquery}. The Jasmine Website and a tutorial with many examples can be found \href{http://jasmine.github.io/2.1/introduction.html}{here}.\\
+To test JavaScript code in the Back-end, we use Jasmine together with the plugin \href{https://github.com/velesin/jasmine-jquery}{jasmine-jquery}. The Jasmine Website and a tutorial with many examples can be found \href{http://jasmine.github.io/2.1/introduction.html}{here}.\\
 The tests are located in $src/tests/jasmine/spec$ and are written as JavaScript files. The tests and the JavaScript files containing the code which should be tested have to be included in $src/tests/jasmine/SpecRunner.php$. You can run tests by just opening $src/tests/jasmine/SpecRunner.php$ in the browser. This also allows us to test different devices and browsers very simply.\\
 If you want to test JavaScript code that interacts with website elements that are missing in the test scenario, you can use the spyOn() function from Jasmine which allows you to replace the output or register calls of any JavaScript function. Another possibility is to include those elements as fixtures, small files only containing the desired element. These elements can be loaded in the test suite and tested with the help of jasmine-jquery. The plugin also allows access to already existing DOM elements. To work with them, call them using the common jQuery syntax and apply the methods Jasmine provides or custom methods.
 
@@ -369,13 +369,13 @@ To test the Front-end and user interaction automatically, we use the tool Seleni
 
 \subsubsection{Database}
 Database interaction is tested with the tool PHPUnit which you can find \href{https://phpunit.de}{here}. Test suites, which are classes extending the \mbox{\emph{PHPUnit\_Extensions\_Database\_TestCase}} class. A test suite contains one or several test case(s), public function containing assertions. \\
-Test suites are executed on the console with the command
+A single test suite is executed on the console with the command
 
-\begin{lstlisting}[language=sh]
+\begin{lstlisting}
   php  <path-to-phpunit.phar> [--verbose] --configuration <configuration-file>.xml <test-suite>
 \end{lstlisting}
 
-from inside the directory, the test suite's file is saved. Thereby, $<$configuration-file$>$.xml contains the information for the database access, i.e. the database name, host, user name and password. \\
+from inside the directory in which the test suite's file is saved. Thereby, $<$configuration-file$>$.xml contains the information for the database access, i.e. the database name, host, user name and password. It can also contain the directory and/or the files of the test suites to be executed. In that case, use the above command without specifying a test suite. \\
 More details to the test classes and assertions can be founc in the \href{https://phpunit.de/manual/current/en/}{PHPUnit online manual}.
 \newpage
 
