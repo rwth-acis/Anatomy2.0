@@ -32,11 +32,11 @@
             <img src='../../$entry->preview_url' alt=$entry->name class='img-responsive img-fit' align='left'>
             <h3>$entry->name</h3>
           </a>
-          <p><b>Model Name:</b>$entry->name</p>
-            <p><b>Category:</b>$entry->classification</p>
-            <p><b>Size:</b> 18,431 Triangles</p>
-            <p><b>Upload Date:</b>$entry->upload_date</p>
-            <p><b>Description:</b> Video provides a powerful way to help you prove your point. When you click Online Video, you can paste in the embed code for the video you want to add. You can also type a keyword to search online for the video.</p>
+          <p><b>Model Name:</b> $entry->name</p>
+            <p><b>Category:</b> $entry->classification</p>
+            <p><b>Size:</b> $entry->size</p>
+            <p><b>Upload Date:</b> $entry->upload_date</p>
+            <p><b>Description:</b> $entry->description</p>
         </div>";
 
         $i++;
