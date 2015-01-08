@@ -3,33 +3,28 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="selenium.base" href="http://eiche.informatik.rwth-aachen.de/henm1415g2/overview.php" />
-<title>use overview</title>
+<link rel="selenium.base" href="http://eiche.informatik.rwth-aachen.de/henm1415g2/src/views/" />
+<title>execute-jasmine-test</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">use overview</td></tr>
+<tr><td rowspan="1" colspan="3">execute-jasmine-test</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>/henm1415g2/overview.php</td>
+	<td>/henm1415g2/src/tests/jasmine/</td>
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>link=Archeology</td>
+	<td>clickAndWait</td>
+	<td>link=SpecRunner.php</td>
 	<td></td>
 </tr>
 <tr>
-	<td>goBack</td>
-	<td></td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>link=Games</td>
-	<td></td>
+	<td>verifyNotText</td>
+	<td>css=span.bar.failed</td>
+	<td>failures</td>
 </tr>
 
 </tbody></table>
