@@ -1,4 +1,8 @@
 <?php
+	/** @file db_connect.php 
+	 * Connects to the database using predefined settings.
+	 */
+
 	$host = "buche.informatik.rwth-aachen.de";
 	$database = "henm1415g2";
 	$user = "henm1415g2";
