@@ -17,7 +17,7 @@
   </head>
 
   <body>
-    <?php include("menu.html"); ?>
+    <?php include("menu.php"); ?>
     
     <div style="text-align: center;" class="jumbotron">
 	  <h1 style="color: black;">Collaborative 3D Model Viewing</h1>
