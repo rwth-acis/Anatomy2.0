@@ -79,7 +79,7 @@ function setView(runtime, data) {
   }
   interpInterval = setInterval(function() {
     var posVal = lerpVector(curPos, targetPos, currentTime);
-    var rotVal = lerpQuaternion(curRot, targetRot, currentTime);
+    var rotVal = slerpQuaternion(curRot, targetRot, currentTime);
 
     var posMat = new x3dom.fields.SFMatrix4f();
     var rotMat = new x3dom.fields.SFMatrix4f();
@@ -119,11 +119,44 @@ function lerpVector(source, target, time) {
     lerp(source.x, target.x, time),
     lerp(source.y, target.y, time),
     lerp(source.z, target.z, time));
+}
+function lerpQuaternion(source, target, time) {
+  return new x3dom.fields.Quaternion(
+    lerp(source.x, target.x, time),
+    lerp(source.y, target.y, time),
+    lerp(source.z, target.z, time),
+    lerp(source.w, target.w, time));
+}
+function slerpQuaternion(qa, qb, t) {
+  var qm = new x3dom.fields.Quaternion();
+
+  var cosHalfTheta = qa.w * qb.w + qa.x * qb.x + qa.y * qb.y + qa.z * qb.z;
+
+  if (Math.abs(cosHalfTheta) >= 1.0){
+    qm.w = qa.w;
+    qm.x = qa.x;
+    qm.y = qa.y;
+    qm.z = qa.z;
+    return qm;
   }
-  function lerpQuaternion(source, target, time) {
-    return new x3dom.fields.Quaternion(
-      lerp(source.x, target.x, time),
-      lerp(source.y, target.y, time),
-      lerp(source.z, target.z, time),
-      lerp(source.w, target.w, time));
-    }
+
+  var halfTheta    = Math.acos(cosHalfTheta);
+  var sinHalfTheta = Math.sqrt(1.0 - cosHalfTheta * cosHalfTheta);
+
+  if (Math.abs(sinHalfTheta) < 0.001){
+    qm.w = (qa.w * 0.5 + qb.w * 0.5);
+    qm.x = (qa.x * 0.5 + qb.x * 0.5);
+    qm.y = (qa.y * 0.5 + qb.y * 0.5);
+    qm.z = (qa.z * 0.5 + qb.z * 0.5);
+    return qm;
+  }
+
+  var ratioA = Math.sin((1 - t) * halfTheta) / sinHalfTheta;
+  var ratioB = Math.sin(t * halfTheta) / sinHalfTheta;
+
+  qm.w = (qa.w * ratioA + qb.w * ratioB);
+  qm.x = (qa.x * ratioA + qb.x * ratioB);
+  qm.y = (qa.y * ratioA + qb.y * ratioB);
+  qm.z = (qa.z * ratioA + qb.z * ratioB);
+  return qm;
+}
