@@ -40,6 +40,7 @@ document.addEventListener("DOMContentLoaded", initCopy, false);
 
 /**
  * Stops or starts synchronization with the other viewer widget(s) respectively
+ * Enables/disables synchronization of the widget with others
  */
 function x3dSynchronize() {
   var btn = document.getElementById('btnSynchronize');

@@ -13,9 +13,12 @@ describe('The viewer', function() {
   var view = {posMat: posMat, rotMat: rotMat};
   var event = {target: window};
 
-  afterAll(function() {
+  afterEach(function() {
     isEmbeddedInRole = false;
+    processingMessage = false;
     canSend = false;
+    posAndOrient = undefined;
+    isSynchronized = true;
   });
 
   it('receives a message that the camera\'s viewpoint of another model\'s ' + 
@@ -43,7 +46,6 @@ describe('The viewer', function() {
   
   it('wants to send position and orientation but is not embedded in ROLE',
       function() {
-        isEmbeddedInRole = false;
         spyOn(roleWrapper, 'postMessage');
 
         sendPositionAndOrientation();
@@ -83,10 +85,21 @@ describe('The viewer', function() {
         expect(printPositionAndOrientation).not.toHaveBeenCalled();
   });
 
+  it('does not send its position and orientation when it is currently ' +
+      'not synchronized with the other widget(s)',
+      function() {
+        isSynchronized = false;
+        spyOn(window, 'sendPositionAndOrientation');
+        spyOn(window, 'printPositionAndOrientation');
+
+        viewpointChanged(event);
+        expect(sendPositionAndOrientation).not.toHaveBeenCalled();
+        expect(printPositionAndOrientation).not.toHaveBeenCalled();
+  });
+
   it('does send its position and orientation when it is not processing ' +
       'another message',
       function() {
-        processingMessage = false;
 	      canSend = true;
         spyOn(window, 'sendPositionAndOrientation');
         spyOn(window, 'printPositionAndOrientation');
@@ -105,4 +118,37 @@ describe('The viewer', function() {
 
   });
 
+  it('saves the current location of the model when unsynchronized', function() {
+    expect(window.posAndOrient).toBeUndefined();
+    spyOn(window, 'getView').and.returnValue(view);
+    
+    savePositionAndOrientation();
+    expect(window.posAndOrient).toEqual(view);
+  });
+
+  it('does not change the model\'s current location when no other model sent ' +
+     'its location', 
+    function() {
+      spyOn(window, 'setView');
+      
+      synchronizePositionAndOrientation();
+      expect(setView).not.toHaveBeenCalled();
+      expect(posAndOrient).toBeUndefined();
+  });
+
+  it('applies the current location of the other model(s) when re-synchronized', 
+    function() {
+      posAndOrient = view;
+      spyOn(window, 'setView');
+      
+      synchronizePositionAndOrientation();
+      expect(setView).toHaveBeenCalledWith(
+          new x3dom.fields.SFMatrix4f(1, 0, 0, 1, 
+                                      0, 1, 0, -0.5, 
+                                      0, 0, 1, 0, 
+                                      0, 0, 0, 1),
+          x3dom.fields.SFMatrix4f.identity()
+      );
+      expect(posAndOrient).toBeUndefined();
+  });
 });
