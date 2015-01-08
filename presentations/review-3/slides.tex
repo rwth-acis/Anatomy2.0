@@ -22,7 +22,80 @@
 
 \section{Reflection}
 
+\begin{frame}
+  \frametitle{Reflection}
+  \begin{columns}
+  	\begin{column}{0.8\textwidth}
+  \begin{description}[]
+    \item[General] \hfill \\
+        \begin{itemize}
+          \item Paper prototypes for customer discussions
+          \item Manual testing of responsive design
+        \end{itemize}
+    \item[Bachelor students team] \hfill \\
+      \begin{itemize}
+        \item Self-organization
+        \item Meeting for collaborative development
+        \item Guidance for git usage
+        \item Contribution with own ideas
+      \end{itemize}
+  \end{description} 
+    \end{column}
+    \begin{column}{0.2\textwidth}
+   	  \includegraphics[width=\textwidth]{images/team}
+    \end{column}
+  \end{columns}
+\end{frame}
+
 \section{Viewer}
+
+\begin{frame}
+  \frametitle{3D Models Application}
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[at=(current page.center)] {
+    \includegraphics[width=\paperwidth]{images/ApplicationStructure}
+    };
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+  \frametitle{3DModels Application}
+  \begin{center}
+    \includegraphics[width=0.9\textwidth]{images/LayerStructure}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Synchronization}
+  \begin{columns}
+  	\begin{column}{0.8\textwidth}
+  \begin{description}[]
+    \item[Sender] \hfill \\
+        \begin{itemize}
+          \item If manipulation occurs: send ``keyframe'' message every 0.7 seconds
+          \item Add timestamp to each message
+        \end{itemize}
+    \item[Receiver] \hfill \\
+      \begin{itemize}
+        \item When receiving message: Interpolate camera movement
+        \item Move: linear interpolation
+        \item Rotation: spherical linear interpolation
+      \end{itemize}
+  \end{description} 
+    \end{column}
+    \begin{column}{0.2\textwidth}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Database}
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[at=(current page.center)] {
+    \includegraphics[width=\paperwidth]{images/Database}
+    };
+  \end{tikzpicture}
+\end{frame}
 
 \section{Upload}
 
