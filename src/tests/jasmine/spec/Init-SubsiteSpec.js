@@ -2,46 +2,48 @@
  * Tests from init-subsite.js:
  */
 describe('The subsite', function() {
-    
-  afterEach(function () {
+  
+  beforeEach(function() {
+    spyOn(console, 'info');
+    spyOn(console, 'log');
+    result = null;
+  });
+
+  // Reset variable(s)
+  afterEach(function() {
     isEmbeddedInRole = false;
   });
 
-  it('receives a message that it is embedded in ROLE', function() {
-    var event = {data: 'EmbeddedInRole This is embedded in ROLE'};
-        
-    expect(isEmbeddedInRole).not.toBeTruthy();
+  it('receives a message that was subscribed before', function() {
+    subscribeIWC("testTopic", function(extras){result=extras.content});
+    
+    var msg = {content: 'butterbrot'};
+    var event = {data: 'testTopic ' + JSON.stringify(msg)};
+    
     receiveMessage(event);
-    expect(isEmbeddedInRole).toBeTruthy();
+    
+    expect(result).toBe("butterbrot");
   });
 
-  it('receives a message that the camera\'s viewpoint needs to be updated',
-      function() {
-        var event = {data: 'ViewpointUpdate 1'};
-        spyOn(window, 'receiveViewpointMsg');
+  it('handles unsubscribed messages', function() {
+    subscribeIWC("testTopic", function(extras){result=extras.content});
 
-        receiveMessage(event);
-        expect(isEmbeddedInRole).not.toBeTruthy();
-        expect(window.receiveViewpointMsg).toHaveBeenCalledWith(1);
-  });
-
-  it('handles messages with an unknown topic', function() {
-    var event = {data: 'bla blub'};
-    spyOn(console, 'info');
-
+    var msg = {content: 'wurstbrot'};
+    var event = {data: 'wurstTopic ' + JSON.stringify(msg)};
     receiveMessage(event);
+
     expect(isEmbeddedInRole).not.toBeTruthy();
-    expect(console.info).toHaveBeenCalledWith('Subsite: received unknown ' + 
-        'message', 'bla blub');
+    expect(result).toBe(null);
+    expect(console.log).toHaveBeenCalledWith('Subsite: received unknown ' + 
+        'message', 'wurstTopic {"content":"wurstbrot"}');
   });
 
   it('handles empty messages', function() {
     var event = {data: ''};
-    spyOn(console, 'info');
 
     receiveMessage(event);
     expect(isEmbeddedInRole).not.toBeTruthy();
-    expect(console.info).toHaveBeenCalledWith('Subsite: received unknown ' + 
+    expect(console.log).toHaveBeenCalledWith('Subsite: received unknown ' + 
         'message', '');
   });
 

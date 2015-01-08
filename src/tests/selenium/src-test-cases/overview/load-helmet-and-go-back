@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="http://eiche.informatik.rwth-aachen.de/henm1415g2/src/views/" />
-<title>Test failure: Model name wrong</title>
+<title>Load helmet and go back</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Test failure: Model name wrong</td></tr>
+<tr><td rowspan="1" colspan="3">Load helmet and go back</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -17,8 +17,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=Knight</td>
+	<td>verifyElementPresent</td>
+	<td>id=menu</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>css=footer</td>
 	<td></td>
 </tr>
 <tr>
@@ -27,13 +32,23 @@
 	<td></td>
 </tr>
 <tr>
-	<td>verifyElementPresent</td>
-	<td>id=viewer_object</td>
+	<td>clickAndWait</td>
+	<td>css=img.img-responsive.img-fit</td>
 	<td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>viewpoint position =</td>
+	<td>verifyElementPresent</td>
+	<td>id=menu</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>css=nav</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>id=viewer_object</td>
 	<td></td>
 </tr>
 <tr>
@@ -44,16 +59,11 @@
 <tr>
 	<td>verifyText</td>
 	<td>css=#metadata_overlay &gt; div.x3dom-states-item-value</td>
-	<td>Helmet down to 5%</td>
+	<td>Helmet</td>
 </tr>
 <tr>
 	<td>goBack</td>
 	<td></td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertTitle</td>
-	<td>Collaborative 3D Model Viewer</td>
 	<td></td>
 </tr>
 </tbody></table>

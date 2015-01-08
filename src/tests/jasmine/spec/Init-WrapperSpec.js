@@ -19,17 +19,20 @@ describe('The wrapper', function() {
   });
 
   it('has and id of length 9', function() {
-	expect(id).toBeDefined();
-	expect(id.length).toEqual(9);
+  	expect(id).toBeDefined();
+  	expect(id.length).toEqual(9);
   });
 
   // Check correct behaviour of iwcCallback
   it('does not update the viewpoint if the received message comes from itself', 
       function() {
-        spyOn(window, 'receivedViewpointChanged');
+	      subscribeTo("testTopic")
+	      intent.extras.topic = "testTopic";
+
+        spyOn(contentWindow, 'postMessage');
 
         iwcCallback(intent);
-        expect(receivedViewpointChanged).not.toHaveBeenCalled();
+        expect(contentWindow.postMessage).not.toHaveBeenCalled();
   });
 
   it('handles messages with an undefined or unknown topic', function() {
@@ -40,7 +43,7 @@ describe('The wrapper', function() {
     iwcCallback(intent);
     intent.extras.topic = 'SubsiteLoaded';
     iwcCallback(intent);
-    expect(console.log.calls.count()).toEqual(2);
+    expect(console.log.calls.count()).toEqual(1);
 
     widget = tmp;
   });
@@ -51,9 +54,9 @@ describe('The wrapper', function() {
     var tmp = widget;
     widget = 'widget';
     intent.extras = {
-      topic: 'ViewpointUpdate', 
-      position: {x:0, y:0, z:0},
-      orientation: [{x:0,y:0,z:0},0]
+        topic: 'ViewpointUpdate', 
+        position: {x:0, y:0, z:0},
+        orientation: [{x:0,y:0,z:0},0]
     };
     spyOn(contentWindow, 'postMessage');
 
@@ -98,16 +101,4 @@ describe('The wrapper', function() {
 
   //publishViewpointChanged
 
-});
-
-describe('The wrapper when gadgets is defined', function() {     
-  var gadgets = gadgets || undefined;     
-
-  if(gadgets !== undefined) {
-        
-      it('is added to the communication channel', function(){
-        expect(iwcClient).toBeDefined();
-      });
-
-  }
 });

@@ -1,3 +1,16 @@
+{
+    /* With these codes padding and border does not increase it's width and gives intuitive style.*/
+  
+  -webkit-box-sizing: border-box;   
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+<!--[if lt IE 9]>
+  <script src="http://css3-mediaqueries-js.googlecode.com/files/css3-mediaqueries.js"></script>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
 body {
     background-color: #fff;
     color: #fff;
@@ -11,6 +24,10 @@ h1 {
 }
 
 p {
+    color: black;
+}
+
+ol {
     color: black;
 }
 
@@ -35,6 +52,7 @@ p {
   display:block;
   float:center;
   width:600px}
+
 #menu li{
   display:inline-block}header
 #menu li a{
@@ -52,81 +70,78 @@ p {
   text-decoration:none;
   letter-spacing:3pt}header
 
+
+
+
 /* Input Search */
 
-#wrap {
-  margin: 50px 100px;
-  display: inline-block;
-  position: relative;
-  height: 60px;
-  float: right;
-  padding: 0;
-  position: relative;
-}
+#wrap{
+  width: 55%;
+  margin: 10px 30% 10px 25%;
+  padding:10px 0;
+  border: 2px solid gray;
+  border-radius:10px;
+} 
 
-input[type="text"] {
-  height: 60px;
-  font-size: 55px;
-  display: inline-block;
-  font-family: "Open Sans";
-  font-weight: 100;
-  border: none;
-  outline: none;
+
+input[type=text]{
   color: #1e1e1e;
-  padding: 3px;
-  padding-right: 60px;
-  width: 0px;
-  position: absolute;
-  top: 0;
-  right: 0;
-  background: none;
-  z-index: 3;
-  transition: width .4s cubic-bezier(0.000, 0.795, 0.000, 1.000);
-  cursor: pointer;
+  font-size: 15px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  width:100%;
+  padding: 15px;
+  border-radius:5px;
+  border:1px solid #7ac9b7;
 }
 
-input[type="text"]:focus:hover {
-  border-bottom: 1px solid #1e1e1e;
+input[type=submit]
+{
+  margin-bottom: 20px;
+  width:100%;
+  padding: 15px;
+  border-radius:5px;
+  border:1px solid #7ac9b7;
+  background-color: #4180C5;
+  color: white;
+  font-size:15px;
+  cursor:pointer;
 }
 
-input[type="text"]:focus {
-  width: 700px;
-  z-index: 1;
-  border-bottom: 1px solid #bbb;
-  cursor: text;
-}
-input[type="submit"] {
-  height: 67px;
-  width: 63px;
-  display: inline-block;
-  color:red;
-  float: right;
-  background: url(../images/search.png) center center no-repeat;
-  text-indent: -10000px;
-  border: none;
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 2;
-  cursor: pointer;
-  opacity: 0.4;
-  cursor: pointer;
-  transition: opacity .4s ease;
-}
-
-input[type="submit"]:hover {
-  opacity: 0.8;
+.img-fit {
+    padding: 10px;
+    width: 300px;
+    height: 300px;
+    float: left;
 }
 
 .img-fit {
     max-width: 100%;
-    max-height: 100%x;
-    
+    max-height: 100%;
+    width: 200px;
+    height: 200px;
+}
+
+.img-welcome{
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+    max-height: 100%;
+}
+ 
+.div-highlight {
+    background-color: GreenYellow;
+}
+
+.overview-entry {
+    float: left;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 #viewer_object {
-    width: 90%;
-    height: 90%;
+    width: 100%;
+    height: 100%;
     vertical-align: middle;
     border: 2px;
     border-color: white;
@@ -141,3 +156,4 @@ input[type="submit"]:hover {
   margin-right: 8px;
   margin-left: 8px;
 }
+

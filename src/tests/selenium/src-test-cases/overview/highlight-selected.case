@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://role-sandbox.eu/spaces/henm3dmodels" />
+<title>highlight-selected</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">highlight-selected</td></tr>
+</thead><tbody>
+<tr>
+	<td>selectFrame</td>
+	<td>__gadget_0</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=img.img-responsive.img-fit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyAttribute</td>
+	<td>id=table_entry1@class</td>
+	<td>col-md-6 overview-entry div-highlight</td>
+</tr>
+<tr>
+	<td>verifyAttribute</td>
+	<td>id=table_entry2@class</td>
+	<td>col-md-6 overview-entry</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=a_img2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyAttribute</td>
+	<td>id=table_entry1@class</td>
+	<td>col-md-6 overview-entry</td>
+</tr>
+<tr>
+	<td>verifyAttribute</td>
+	<td>id=table_entry2@class</td>
+	<td>col-md-6 overview-entry div-highlight</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=h3</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyAttribute</td>
+	<td>id=table_entry1@class</td>
+	<td>col-md-6 overview-entry div-highlight</td>
+</tr>
+<tr>
+	<td>verifyAttribute</td>
+	<td>id=table_entry2@class</td>
+	<td>col-md-6 overview-entry</td>
+</tr>
+</tbody></table>
+</body>
+</html>

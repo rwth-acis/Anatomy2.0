@@ -1,12 +1,25 @@
 /**
+ * @file tools.js
+ * File for some java script helper functions that are generally useful
+ */
+
+/**
  * Wrapper for getting the location url (necessary to test with given input data, see spyon in Jasmine)
  */
 get_location = {
+    /**
+     * Get the url string
+     * @return url as string
+     */
     search: function(){
 	return window.location.search;
     }
 }
 
+/**
+ * Get the querry string to access url parameters
+ * @return object containing all querry variables
+ */
 function getQueryString() {
   // This function is anonymous, is executed immediately and 
   // the return value is assigned to QueryString!
@@ -30,5 +43,5 @@ function getQueryString() {
     return query_string;
 }
 
-//init QueryString
+///initialized QueryString by default
 var QueryString = getQueryString();

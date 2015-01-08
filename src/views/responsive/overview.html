@@ -1,0 +1,155 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Collaborative 3D Model Viewer</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" charset="utf8"/>
+     <link rel="stylesheet" type="text/css" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <!-- Init communication with wrapper -->
+    <script type='text/javascript' src='../../js/init-subsite.js'></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <header>
+        <div class="row">
+          <div class="col-md-12"> 
+            <ul id="menu">
+              <li><a href="overview.html"><h1><strong>HENM</strong></h1></a></li>
+              <li><a href="uploadpage.html">Upload</a></li>
+            </ul>
+          </div>
+        </div>    
+        <div class="row">
+          <div class="col-md-12" style="position:relative; right:20px">   
+            <ul id="color">
+              <li class="color color-red"></li>
+              <li class="color color-yellow"></li>
+              <li class="color color-blue"></li>
+            </ul>
+          </div>  
+        </div>
+      </header>
+      <div id="wrap">
+        <form action="" autocomplete="on">
+        <input id="search" name="search" type="text" placeholder="Which model ?">
+        <input id="search_submit" value="search" type="submit">
+        </form>
+      </div>
+      <!--<div class="row">
+        <h2>Models</h2>
+      </div>-->
+    
+      <!-- Build model table -->
+      <div id="table-container">
+      <div class="row">
+        <div class='col-md-6' name='table-entry' id='table_entry2'>
+          <a href='model_viewer.php?id=2' id='a_img2'>
+            <img src='http://placehold.it/300x300"' alt=Knight class='img-responsive img-fit' align="left">
+            <h3>Knight</h3>
+          </a>
+          <p><b>Model Name:</b> Knight</p>
+          <p><b>Category:</b> Games</p>
+          <p><b>Size:</b> 18,431 Triangles</p>
+          <p><b>Upload Date:</b> 2014-11-25 00:00:00</p>
+          <p><b>Description:</b> Video provides a powerful way to help you prove your point. When you click Online Video, you can paste in the embed code for the video you want to add. You can also type a keyword to search online for the video.</p>
+        </div>
+        <div class='col-md-6' name='table-entry' id='table_entry1'>
+          <a href='model_viewer.php?id=1' id='a_img1'>
+            <img src='../../images/helmet.png' alt=Helmet down to 5% class='img-responsive img-fit' align="left">
+            <h3>Helmet I</h3>
+          </a>
+          <p><b>Model Name:</b> Helmet</p>
+          <p><b>Category:</b> Archeology</p>
+          <p><b>Size:</b> 81,044 Triangles</p>
+          <p><b>Upload Date:</b> 2014-11-25 00:00:00</p>
+          <p><b>Description:</b> Video provides a powerful way to help you prove your point. When you click Online Video, you can paste in the embed code for the video you want to add. You can also type a keyword to search online for the video.</p>
+        </div>
+        <br>
+      </div>
+      <br>
+      <div class="row">
+        <div class='col-md-6' name='table-entry' id='table_entry3'>
+          <a href='model_viewer.php?id=3' id='a_img3'>
+            <img src='../../images/helmet.png' alt=Helmet down to 25% class='img-responsive img-fit' align="left">
+            <h3>Helmet II</h3>
+          </a>
+          <p><b>Model Name:</b> Helmet</p>
+          <p><b>Category:</b> Archeology</p>
+          <p><b>Size:</b> 256,187 Triangles</p>
+          <p><b>Upload Date:</b> 2014-11-25 00:00:00</p>
+          <p><b>Description:</b> Video provides a powerful way to help you prove your point. When you click Online Video, you can paste in the embed code for the video you want to add. You can also type a keyword to search online for the video.</p>
+        </div>
+        <div class='col-md-6' name='table-entry' id='table_entry4'>
+          <a href='model_viewer.php?id=4' id='a_img4'>
+            <img src='../../images/helmet.png' alt=Helmet down to 50% class='img-responsive img-fit' align="left">
+            <h3>Helmet III</h3>
+          </a>
+          <p><b>Model Name:</b> Helmet</p>
+          <p><b>Category:</b> Archeology</p>
+          <p><b>Size:</b> 516,817 Triangles</p>
+          <p><b>Upload Date:</b> 2014-11-25 00:00:00</p>
+          <p><b>Description:</b> Video provides a powerful way to help you prove your point. When you click Online Video, you can paste in the embed code for the video you want to add. You can also type a keyword to search online for the video.</p>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class='col-md-6' name='table-entry' id='table_entry5'>
+          <a href='model_viewer.php?id=5' id='a_img5'>
+            <img src='../../images/helmet.png' alt=Helmet down to 75% class='img-responsive img-fit' align="left">
+            <h3>Helmet IV</h3>
+          </a>
+          <p><b>Model Name:</b> Helmet</p>
+          <p><b>Category:</b> Archeology</p>
+          <p><b>Size:</b> 750,187 Triangles</p>
+          <p><b>Upload Date:</b> 2014-11-25 00:00:00</p>
+          <p><b>Description:</b> Video provides a powerful way to help you prove your point. When you click Online Video, you can paste in the embed code for the video you want to add. You can also type a keyword to search online for the video.</p>
+        </div>
+        <div class='col-md-6' name='table-entry' id='table_entry6'>
+          <a href='model_viewer.php?id=6' id='a_img6'>
+            <img src='../../images/helmet.png' alt=Helmet down to 95% class='img-responsive img-fit' align="left">
+            <h3>Helmet V</h3>
+          </a>
+          <p><b>Model Name:</b> Helmet</p>
+          <p><b>Category:</b> Archeology</p>
+          <p><b>Size:</b> 987,431 Triangles</p>
+          <p><b>Upload Date:</b> 2014-11-25 00:00:00</p>
+          <p><b>Description:</b> Video provides a powerful way to help you prove your point. When you click Online Video, you can paste in the embed code for the video you want to add. You can also type a keyword to search online for the video.</p>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class='col-md-6' name='table-entry' id='table_entry7'>
+          <a href='model_viewer.php?id=11' id='a_img7'>
+            <img src='../../images/skull.png' alt=Skull 5% class='img-responsive img-fit' align="left">
+            <h3>Skull</h3>
+          </a>
+          <p><b>Model Name:</b> Skull</p>
+          <p><b>Category:</b> Anatomy</p>
+          <p><b>Size:</b> 39,037 Triangles</p>
+          <p><b>Upload Date:</b> 2014-11-25 00:00:00</p>
+          <p><b>Description:</b> Video provides a powerful way to help you prove your point. When you click Online Video, you can paste in the embed code for the video you want to add. You can also type a keyword to search online for the video.</p>
+        </div>
+        <div class='col-md-6' name='table-entry' id='table_entry8'>
+          <a href='model_viewer.php?id=12' id='a_img8'>
+            <img src='../../images/skull.png' alt=Skull 15% class='img-responsive img-fit' align="left">
+            <h3>Skull</h3>
+          </a>
+          <p><b>Model Name:</b> Knight</p>
+          <p><b>Category:</b> Anatomy</p>
+          <p><b>Size:</b> 170,369 Triangles</p>
+          <p><b>Upload Date:</b> 2014-11-25 00:00:00</p>
+          <p><b>Description:</b> Video provides a powerful way to help you prove your point. When you click Online Video, you can paste in the embed code for the video you want to add. You can also type a keyword to search online for the video.</p>
+        </div>
+      </div>
+      </div>
+
+      <footer>
+        <p class="text-center">HENM LAB 2014/15: 3D Models</p>
+        <p class="text-center">Reach us at: <a href="mailto:henm1415g2@dbis.rwth-aachen.de">henm1415g2@dbis.rwth-aachen.de</a></p>
+      </footer>
+<!-- Close surrounding container -->
+    </div>
+  </body>
+</html>
