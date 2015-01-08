@@ -1,3 +1,6 @@
+///time to interpolate to the next position
+interpolateTime = 1.0;
+
 /**
 * Modifies the current camera of the scene in such a way that
 * all elements are visible to the user.
@@ -64,7 +67,7 @@ function getView(runtime) {
   return {'position': targetPos, 'rotation': targetRot};
 }
 
-function setView(runtime, data) {
+function setView(runtime, data, finishedCallback) {
   targetPos = data['position'];
   targetRot = data['rotation'];
 
@@ -94,8 +97,10 @@ function setView(runtime, data) {
 
     currentTime += 0.01;
 
-    if(currentTime >= 1) {
+    if(currentTime >= interpolateTime) {
       clearInterval(interpInterval);
+      //tell the viewer that the interpolation finished
+      finishedCallback();
     }
   }, 10);
 
