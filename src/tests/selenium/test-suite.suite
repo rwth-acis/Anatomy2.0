@@ -10,10 +10,7 @@
 <tr><td><b>Test Suite</b></td></tr>
 <tr><td><a href="src-test-cases/overview/highlight-selected.case">highlight-selected</a></td></tr>
 <tr><td><a href="src-test-cases/overview/load-helmet-and-go-back">load-helmet-and-go-back</a></td></tr>
-<tr><td><a href="src-test-cases/overview/use-overview">use-overview</a></td></tr>
-<tr><td><a href="src-test-cases/role/open-use-close-widget-in-role">open-use-close-widget-in-role</a></td></tr>
 <tr><td><a href="src-test-cases/viewer/btn-show-info">btn-show-info</a></td></tr>
-<tr><td><a href="src-test-cases/viewer/sending-enabled-after-first-click.case">sending-enabled-after-first-click</a></td></tr>
 </tbody></table>
 </body>
 </html>

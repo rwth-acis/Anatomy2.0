@@ -23,11 +23,6 @@
 </tr>
 <tr>
 	<td>verifyElementPresent</td>
-	<td>id=search</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyElementPresent</td>
 	<td>css=footer</td>
 	<td></td>
 </tr>
@@ -48,27 +43,12 @@
 </tr>
 <tr>
 	<td>verifyElementPresent</td>
-	<td>id=search</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyElementPresent</td>
 	<td>css=nav</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyElementPresent</td>
-	<td>css=footer</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyElementPresent</td>
 	<td>id=viewer_object</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>viewpoint position =</td>
 	<td></td>
 </tr>
 <tr>
@@ -79,7 +59,7 @@
 <tr>
 	<td>verifyText</td>
 	<td>css=#metadata_overlay &gt; div.x3dom-states-item-value</td>
-	<td>Helmet down to 5%</td>
+	<td>Helmet</td>
 </tr>
 <tr>
 	<td>goBack</td>
