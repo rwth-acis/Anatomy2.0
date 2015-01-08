@@ -16,6 +16,7 @@
 <tr><td><a href="src-test-cases/viewer/viewer-move-model">viewer-move-model</a></td></tr>
 <tr><td><a href="src-test-cases/viewer/viewer-toolbar">viewer-toolbar</a></td></tr>
 <tr><td><a href="src-test-cases/upload/upload-required-field">upload-required-fiields</a></td></tr>
+<tr><td><a href="src-test-cases/selenium-tests">execute-jasmine-test</a></td></tr>
 </tbody></table>
 </body>
 </html>
