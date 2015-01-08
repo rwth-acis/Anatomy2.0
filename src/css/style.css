@@ -27,6 +27,10 @@ p {
     color: black;
 }
 
+ol {
+    color: black;
+}
+
 /* Header */
 #color{
   height:3px;
@@ -113,9 +117,16 @@ input[type=submit]
 
 .img-fit {
     max-width: 100%;
-    max-height: 100%x;
+    max-height: 100%;
     width: 200px;
     height: 200px;
+}
+
+.img-welcome{
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+    max-height: 100%;
 }
  
 .div-highlight {
