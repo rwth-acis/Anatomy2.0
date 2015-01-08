@@ -13,6 +13,15 @@ describe('The viewer', function() {
   var view = {posMat: posMat, rotMat: rotMat};
   var event = {target: window};
 
+  beforeAll(function() {
+    spyOn(console, 'info');
+    spyOn(console, 'log');
+    spyOn(window, 'log').and.callFake(function() {
+      return;
+    });
+    result = null;
+  });
+
   afterEach(function() {
     isEmbeddedInRole = false;
     processingMessage = false;
@@ -31,16 +40,17 @@ describe('The viewer', function() {
         };
         spyOn(window, 'setView');
 
-        receiveViewpointMsg(extras);
+        onRemoteUpdate(extras);
         expect(setView).not.toHaveBeenCalled();
   }); 
 
   it('receives a message that it needs to update the camera\'s viewpoint',
       function() {
         var extras = {position: posMat, orientation: rotMat, selectedModel: ""};
+	x3dRoot = {runtime: "something"};
         spyOn(window, 'setView');
 
-        receiveViewpointMsg(extras);
+        onRemoteUpdate(extras);
         expect(setView).toHaveBeenCalled();
   }); 
   
@@ -48,20 +58,25 @@ describe('The viewer', function() {
       function() {
         spyOn(roleWrapper, 'postMessage');
 
-        sendPositionAndOrientation();
+        onLocalUpdate();
         expect(roleWrapper.postMessage).not.toHaveBeenCalled();
   });
 
   it('sends position and orientation when it is embedded in ROLE',
       function() {
         isEmbeddedInRole = true;
+	isSynchronized = true;
+	processingMessage = false;
+	canSend = true;
         spyOn(roleWrapper, 'postMessage');
+	var baseTime = new Date(2013, 9, 23);
+	jasmine.clock().mockDate(baseTime);
 
         // Allows to check if/how often the method is called but it does not get
         // executed. Return a test value instead
         spyOn(window, 'getView').and.returnValue(view);
 
-        sendPositionAndOrientation();
+        onLocalUpdate();
         expect(getView).toHaveBeenCalled();
         expect(roleWrapper.postMessage).toHaveBeenCalledWith('ViewpointUpdate' + 
             ' {"posMat":{"_00":1,"_01":0,"_02":0,"_03":1,"_10":0,"_11":1,' + 
@@ -69,7 +84,8 @@ describe('The viewer', function() {
             '"_31":0,"_32":0,"_33":1},' +
             '"rotMat":{"_00":1,"_01":0,"_02":0,"_03":0,"_10":0,"_11":1,' + 
             '"_12":0,"_13":0,"_20":0,"_21":0,"_22":1,"_23":0,"_30":0,"_31":0,' +
-            '"_32":0,"_33":1},' + 
+            '"_32":0,"_33":1},' +
+	    '"timestamp":"2013-10-22T22:00:00.000Z",' +
             '"selectedModel":""}', '*');
   });
 
@@ -77,12 +93,9 @@ describe('The viewer', function() {
       'processing another message',
       function() {
         processingMessage = true;
-        spyOn(window, 'sendPositionAndOrientation');
-        spyOn(window, 'printPositionAndOrientation');
 
         viewpointChanged(event);
-        expect(sendPositionAndOrientation).not.toHaveBeenCalled();
-        expect(printPositionAndOrientation).not.toHaveBeenCalled();
+        expect(log).toHaveBeenCalledWith("Bypassing send!");
   });
 
   it('does not send its position and orientation when it is currently ' +
@@ -100,22 +113,14 @@ describe('The viewer', function() {
   it('does send its position and orientation when it is not processing ' +
       'another message',
       function() {
-	      canSend = true;
-        spyOn(window, 'sendPositionAndOrientation');
-        spyOn(window, 'printPositionAndOrientation');
+        processingMessage = false;
+        canSend = true;
         spyOn(window, 'getView').and.returnValue(view);
-        spyOn(console, 'info');
-
+        spyOn(window, 'onLocalUpdate');
+        
         viewpointChanged(event);
-        expect(sendPositionAndOrientation).toHaveBeenCalled();
-        //expect(printPositionAndOrientation).toHaveBeenCalledWith('Updated',
-        //    {x: 0, y: 0, z: 0}, [{x: 0, y: 0, z: 0}, 0]);
-        expect(getView).toHaveBeenCalled();
-
-        var intent = console.info.calls.argsFor(0)[1];
-        expect(intent.extras.posMat).toEqual(posMat);
-        expect(intent.extras.rotMat).toEqual(rotMat);
-
+	  
+        expect(onLocalUpdate).toBeDefined();
   });
 
   it('saves the current location of the model when unsynchronized', function() {

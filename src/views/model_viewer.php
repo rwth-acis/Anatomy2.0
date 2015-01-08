@@ -11,9 +11,10 @@
     <!-- Init communication with wrapper -->
     <script type='text/javascript' src='../js/init-subsite.js'> </script>
 
+    <script type='text/javascript' src='../js/x3d-extensions.js'> </script>
     <script type='text/javascript' src='../js/viewer.js'> </script>
-    <link type='text/css' rel='stylesheet' href='http://www.x3dom.org/download/x3dom.css'> </link> 
-    
+    <link type='text/css' rel='stylesheet' href='http://www.x3dom.org/download/x3dom.css'> </link>
+
     <link rel='stylesheet' type='text/css' href='../css/model_viewer.css'></link>
 
     <!-- Additional styles -->
@@ -25,8 +26,6 @@
   </head>
 
   <body>
-    
-
     <?php include("toolbar.html"); ?>
     
     <div class="row" style="position:relative; padding-left:5%; padding-right:5%">

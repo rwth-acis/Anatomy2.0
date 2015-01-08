@@ -4,7 +4,6 @@
 describe('The subsite', function() {
   
   beforeEach(function() {
-    spyOn(window, 'receiveViewpointMsg');
     spyOn(console, 'info');
     spyOn(console, 'log');
     result = null;

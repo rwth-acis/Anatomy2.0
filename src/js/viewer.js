@@ -1,255 +1,141 @@
 var processingMessage = false;
-//can I currently send an updated pose to other devices?
 var canSend           = false;
-var lastPos           = "";
-var lastRot           = "";
 //synchronize with other devices? (can be switched in menuToolbar.js)
-var isSynchronized = true;
+var isSynchronized    = true;
+
+///interval between two synchronization msgs in ms
+var sendInterval = 700;
+
+var lastTimestamp;
+
+var lastData;
+
+var x3dRoot;
 
 function initializeModelViewer() {
-  showAllQuick(document.getElementById('viewer_object').runtime); 
-  document.getElementById('viewport').addEventListener('viewpointChanged', viewpointChanged);
-  document.getElementById('viewer_object').addEventListener('mouseup', viewerMouseUp, false);
-  document.getElementById('viewer_object').addEventListener('mousedown', enableSendingOnFirstClick);
+  x3dRoot     = document.getElementById('viewer_object');
+  x3dViewport = document.getElementById('viewport');
+
+  // Normalize scene camera to view all content.
+  normalizeCamera(x3dRoot.runtime);
+
+  // Add listeners for publishing local changes.
+  x3dViewport.addEventListener('viewpointChanged', viewpointChanged);
+
+  // !!!HACK!!! to prevent propagating initial position when new user connected.
+  x3dRoot.addEventListener('mousedown', function() {
+    canSend = true;
+    x3dRoot.removeEventListener('mousedown', arguments.callee);
+    log('Enabled publishing!');
+  });
+  x3dRoot.addEventListener('touchstart', function() {
+    canSend = true;
+    x3dRoot.removeEventListener('touchstart', arguments.callee);
+    log('Enabled publishing!');
+  });
 }
 
-function receiveViewpointMsg(extras){
-  //don't synchronize if the viewpoint is from another model
+/**
+ * Event handler for getting a new iwc message with a new viewpoint we should rotate to
+ * @param extras parameters from the message with position and rotation
+ */
+function onRemoteUpdate(extras) {
+  // Don't synchronize if the viewpoint is from another model
   if(extras.selectedModel != window.location.search){
     return;
   }
 
+  var newTimestamp = new Date(extras.timestamp);
+
   // Synchronization is stopped
-  if(!isSynchronized) { 
-    posAndOrient = extras;
+  if(!isSynchronized) {
+    // Save the timestamp, position and rotation data.
+    if(lastTimestamp == null || newTimestamp > lastTimestamp) {
+      lastData = extras;
+    }
     return;
   }
 
-  //disable listening for changes in the viewport
+  // Prevent async local and remote updates.
   processingMessage = true;
 
-  //apply new viewpoint
-  setView(extras.posMat, extras.rotMat);
-
-  //clear any previous timeout
-  if(typeof reenableViewpointListeningTimeout != 'undefined'){
-    clearTimeout(reenableViewpointListeningTimeout);
+  // Update only if received timestamp is greater than last timestamp.
+  if(lastTimestamp == null || newTimestamp > lastTimestamp) {
+    //disable sending position updates until we receive no more update
+    canSend = false;
+      
+    setView(x3dRoot.runtime, extras, finishedSettingView);
+    lastTimestamp = newTimestamp;
   }
-  //enable listening for changes in the viewport again some milliseconds after the last received msg
-  reenableViewpointListeningTimeout = setTimeout(function(){processingMessage = false;} , 1000);
-}
-//subscribe for viewpoint update messages from iwc
-subscribeIWC("ViewpointUpdate", receiveViewpointMsg);
 
-// Viewport section.
-function sendPositionAndOrientation() {
-  //only send if there is a role environment the viewer is embedded in
-  if(!isEmbeddedInRole){
+  // Re-enable async local and remote updates.
+  processingMessage = false;
+}
+subscribeIWC("ViewpointUpdate", onRemoteUpdate);
+
+/**
+ * Iteratively called function to send the local view update to other widgets/devices
+ */
+function onLocalUpdate() {
+  if(!isEmbeddedInRole || !isSynchronized || processingMessage || !canSend) {
     return;
   }
 
-  // Send through IWC!
-  var view = getView();
-  var viewpointMsg = {'posMat': view.posMat, 'rotMat': view.rotMat}
-  //also specifiy what model was moved (included in uri)
-  viewpointMsg.selectedModel = window.location.search;
+  // Setup the data to be sent to others.
+  var data = getView(x3dRoot.runtime);
+  data["timestamp"] = new Date();
+  lastTimestamp = data["timestamp"];
 
-  //send to wrapper
-  publishIWC("ViewpointUpdate", viewpointMsg);
+  //also specifiy what model was moved (included in uri)
+  data.selectedModel = window.location.search;
+
+  publishIWC("ViewpointUpdate", data);
+  log('Published message!');
 }
 
 /**
- * Update position and rotation of the camera
+ * On a change of the viewpoint we might want to start the synchronization
+ * with the other widgets.
+ * @param evt viewpoint changed event
  */
 function viewpointChanged(evt) {    
 
-  // Prevent widgets from sending updates again and again
+  // Prevent widgets from sending updates while applying a received viewpoint msg
   // If we set the position because we received a message we do not want to send it back
-  // Also do not send the update if synchronization is stopped.
-  if(!evt || processingMessage || !isSynchronized) {
-    return;
-  }
+  if(!evt || processingMessage || !canSend) {
+    log("Bypassing send!");
     
-  // You can only send data once every 0.1 seconds.
-  if(!canSend) {
-    document.getElementById('debugText').innerHTML = "Bypassing send!";
-    console.log("Bypassing send!");
     return;
   }
-  canSend = false;
+
+  //enable sending the position in a loop
+  if(typeof updateInterval != 'number'){ //but only when its not already enabled
+    updateInterval = setInterval(onLocalUpdate, sendInterval);
+    log("sending");
+  }
+
+  //disable sending the positions a bit after the last update
   if(typeof sendTimeout != 'undefined'){
     clearTimeout(sendTimeout);
   }
   sendTimeout = setTimeout(function(){ 
-    canSend = true; 
-    document.getElementById('debugText').innerHTML = "Can send again!";
-    console.log("Can send again!");
-  } , 250);
-
-  //printPositionAndOrientation('Updated', evt.position, evt.orientation);
-  sendPositionAndOrientation();
-
-  var view = getView();
-  var intent = {
-    'component' :'',                            // recipient, empty for broadcast
-    'data'      :'http://data.org/some/data',   // data as URI
-    'dataType'  :'text/xml',                    // data mime type
-    'action'    :'ACTION_UPDATE',               // action to be performed by receivers
-    'flags'     :['PUBLISH_GLOBAL'],            // control flags
-    'extras'    :{'posMat': view.posMat,        // optional auxiliary data
-                  'rotMat': view.rotMat}, 
-  }
-
-  console.info("subsite: intent: ", intent);
+    //disable sending
+    clearTimeout(updateInterval);
+    updateInterval = null;
+    log("Not sending anymore");
+  } , sendInterval + 50);
 }
 
-/**
- * Converts the position and orientation into a string and updates the view to display it.
- */
-function printPositionAndOrientation(str, pos, rot) {
-  var camPos = pos.x.toFixed(4) + ' ' + pos.y.toFixed(4) + ' ' + pos.z.toFixed(4);
-  var camRot = rot[0].x.toFixed(4) + ' ' + rot[0].y.toFixed(4) + ' ' 
-                + rot[0].z.toFixed(4) + ' ' + rot[1].toFixed(4);
-  document.getElementById('debugText').innerHTML = str + ' viewpoint position = ' +
-                                                    camPos + ' orientation = ' + camRot;
-
-  return {'pos': camPos, 'rot': camRot};
-}
-
-function showAllQuick(runtime, axis) {
-  // If axis is not given, assume negative Z.
-  if (axis === undefined)
-    axis = "negZ";
-
-  // Get the X3D scene element from runtime.
-  var scene = runtime.canvas.doc._viewarea._scene;
-  // Update it to latest boundary information.
-  scene.updateVolume();
-  // Record minimum and maximum positions (X,Y,Z) of the scene.
-  var min = x3dom.fields.SFVec3f.copy(scene._lastMin);
-  var max = x3dom.fields.SFVec3f.copy(scene._lastMax);
-  // Get the scene main camera.
-  var viewpoint = scene.getViewpoint();
-
-  // Target forward axis for camera.
-  var forwardAxis = new x3dom.fields.SFVec3f(0, 0, -1);
-
-  // The coordinate system for camera.
-  var x = "x", y = "y", z = "z";
-  var sign = 1;
-
-  // Setup the axis of rotation and coordinate system according to axis parameter.
-  switch (axis) {
-
-      case "posX":
-      sign = -1;
-      case "negX":
-
-      x = "y"; 
-      y = "z";
-      z = "x"; 
-      forwardAxis = new x3dom.fields.SFVec3f(sign, 0, 0);
-      break;
-
-
-
-      case "posY":
-      sign = -1;
-      case "negY":
-
-      x = "z"; 
-      y = "x";
-      z = "y"; 
-      forwardAxis = new x3dom.fields.SFVec3f(0, sign, 0);
-      break;
-
-
-
-      case "posZ":
-      sign = -1;
-      case "negZ":
-      default:
-
-      forwardAxis = new x3dom.fields.SFVec3f(0, 0, -sign);
-      break;
-  }
-
-  // Get the field of view of camera.
-  var fov = viewpoint.getFieldOfView();
-  // Calculate boundary extents of scene.
-  var extents = max.subtract(min);
-  // Calculate the x and y spans of the camera.
-  var denom = Math.tan(fov / 2.0);
-  var offset = extents[z] / 2.0;
-  var ySpan = (extents[y] / 2.0) / denom + offset;
-  var xSpan = (extents[x] / 2.0) / denom + offset;
-  // Offset the extents to the center.
-  extents = min.add(extents.multiply(0.5));
-  // Calculate and add the necessary Z to span all of scene.
-  extents[z] += sign * (ySpan > xSpan ? ySpan : xSpan) * 1.01;
-
-  // Setup translation matrix from extents.
-  var translationMatrix = x3dom.fields.SFMatrix4f.translation(extents.negate());
-  // Setup rotation matrix from axis of rotation.
-  var rotationMatrix = x3dom.fields.Quaternion.rotateFromTo(new x3dom.fields.SFVec3f(0, 0, -1), forwardAxis).toMatrix();
-  // Calculate final view matrix.
-  var viewMatrix = rotationMatrix.mult(translationMatrix);
-
-  // Set scene camera's matrix to the result.
-  runtime.canvas.doc._viewarea._scene.getViewpoint().setView(viewMatrix);
-}
-
-function getView() {
-  var runtime = document.getElementById('viewer_object').runtime;
-  var posMat = runtime.canvas.doc._viewarea._transMat;
-  var rotMat = runtime.canvas.doc._viewarea._rotMat;
-  return {'posMat': posMat, 'rotMat': rotMat};
-}
-
-function setView(posMat, rotMat) {
-  var runtime = document.getElementById('viewer_object').runtime;
-  runtime.canvas.doc._viewarea._transMat.setValues(posMat);
-  runtime.canvas.doc._viewarea._rotMat.setValues(rotMat);
-  runtime.canvas.doc._viewarea._needNavigationMatrixUpdate  = true;
-  runtime.canvas.doc.needRender = true;
-}
-
-function viewerMouseUp(event) {
-  //printPositionAndOrientation('Sent final', getViewMatrix());
-  
-  // Prevent widgets from sending updates again and again
-  // If we set the position because we received a message we do not want to send it back
-  // Also do not send the update if synchronization is stopped.
-  if(!evt || processingMessage || !isSynchronized) {
-    return;
-  }
-
-  sendPositionAndOrientation();
-
-  var view = getView();
-  var intent = {
-    'component' :'',                            // recipient, empty for broadcast
-    'data'      :'http://data.org/some/data',   // data as URI
-    'dataType'  :'text/xml',                    // data mime type
-    'action'    :'ACTION_UPDATE',               // action to be performed by receivers
-    'flags'     :['PUBLISH_GLOBAL'],            // control flags
-    'extras'    :{'posMat': view.posMat,        // optional auxiliary data
-                  'rotMat': view.rotMat}, 
-  }
-  console.info("subsite: intent: ", intent);
-}
-
-/**
- * Enable sending of the updated pose after the first click.
- * This prevents sending a pose when opening the model and the view get automatically updated.
- */
-function enableSendingOnFirstClick(evt){
-    canSend = true;
-    document.getElementById('viewer_object').removeEventListener('mousedown', enableSendingOnFirstClick);
+function log(message) {
+  document.getElementById('debugText').innerHTML =
+  (new Date()).toLocaleTimeString() + ' - ' + message;
 }
 
 /**
  * An overview widget selected a model, we load it
+ *
+ * Ali: Is this used by other JS files? If so, mark it in
+ * the JSDoc!!!
  */
 function receiveModelSelectedByOverview(msgContent){
   window.location.assign(msgContent);
@@ -257,18 +143,37 @@ function receiveModelSelectedByOverview(msgContent){
 
 /**
  * Re-synchronize with last location sent from other widgets
+ * Used in menuToolbar.js
+ *
+ * Ali: Is this used by other JS files? If so, mark it in
+ * the JSDoc!!!
  */
 function synchronizePositionAndOrientation() {
-  if(posAndOrient !== undefined) {
-    // apply new viewpoint
-    setView(posAndOrient.posMat, posAndOrient.rotMat);
-    posAndOrient = undefined;
+  if(lastData != null) {
+    setView(x3dRoot.runtime, lastData, function() {});
   }
 }
 
 /**
  * Save current location when stopping the synchronization in case nothing changes in the other widgets
+ * Used in menuToolbar.js
  */
 function savePositionAndOrientation() {
-  posAndOrient = getView();
+  posAndOrient = getView(x3dRoot.runtime);
+}
+
+/**  
+ * Callback function for the setView function,
+ * so we get notified when the interpolation is finished.
+ */
+function finishedSettingView(){
+  //reenable sending position updates
+  if(typeof enableSendingTimeout != 'undefined'){
+    clearTimeout(enableSendingTimeout);
+  }
+  enableSendingTimeout = setTimeout(function(){ 
+    //disable sending
+    canSend = true; 
+    log("finished updating");
+  } , 50);
 }
