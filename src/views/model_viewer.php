@@ -26,32 +26,30 @@
 
   <body>
     
-    <?php include("menu.html"); ?>
 
     <?php include("toolbar.html"); ?>
-
-    <div class="row" style="position:relative; left:60px">
+    
+    <div class="row" style="position:relative; padding-left:5%; padding-right:5%">
       <p id='debugText'></p>
       <x3d id='viewer_object' showStat="false">
         <scene>
           <navigationInfo headlight="true" type="examine" id="navType"></navigationInfo>
-          <background skyColor='0.0 0.0 0.0'> </background>
-    <?php
-       //Decide if this site is inside a separate widget
-       if(isset($_GET["widget"]) && $_GET["widget"] == "true")
-       {
-           print("<script type='text/javascript' src='../js/model-viewer-widget.js'> </script>");
-       }
-    ?>
-      <?php
-        include '../php/db_connect.php';
-        $arg    = $_GET["id"];
-        $query  = "SELECT data_url FROM models WHERE id = $arg";
-        $result = mysql_query($query);
-        $entry  = mysql_fetch_object($result);
-        echo "<inline url=\"../../$entry->data_url\" onload=\"initializeModelViewer()\"> </inline>";
-      ?>
-
+          <background skyColor='1.0 1.0 1.0'> </background>
+          <?php
+             //Decide if this site is inside a separate widget
+             if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+             {
+                 print("<script type='text/javascript' src='../js/model-viewer-widget.js'> </script>");
+             }
+          ?>
+          <?php
+            include '../php/db_connect.php';
+            $arg    = $_GET["id"];
+            $query  = "SELECT data_url FROM models WHERE id = $arg";
+            $result = mysql_query($query);
+            $entry  = mysql_fetch_object($result);
+            echo "<inline url=\"../../$entry->data_url\" onload=\"initializeModelViewer()\"> </inline>";
+          ?>
           <viewpoint id="viewport" DEF="viewport" centerOfRotation="0 0 0" position="0.00 0.00 5.00" orientation="-0.92 0.35 0.17 0.00" fieldOfView="0.858"> </viewpoint>
         </scene>
       </x3d>
@@ -74,7 +72,5 @@
           </div>";
       ?>
     </div>
-
-    <?php include("footer.html"); ?>
   </body>
 </html>

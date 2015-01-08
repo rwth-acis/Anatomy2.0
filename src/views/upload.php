@@ -36,51 +36,49 @@
 	</style>
   </head>
   <body>
-    <!-- <?php include("menu.html"); ?> -->
-
+    <?php include("menu.html"); ?> 
 	
     <div class="container">
 	    <h1>Upload Model</h1>
 	    <!--- UPLOAD FORM -->
    		<form role="form" action="../php/upload_script.php" method="post" enctype="multipart/form-data" id="UploadForm">
-		  <div class="form-group">
-		    <label for="targetName">Your Model Name</label>
-		    <input type="text" class="form-control" name="name" id="targetName" placeholder="Enter your model name" required>
-		  </div>
-		  <div class="form-group">
-			<label for="targetText">Your Model Description</label>
-		    <textarea class="form-control" rows="3" name="text" id="targetText" placeholder="Enter you model description" required></textarea>
-		  </div>
-		  <div class="form-group">
-			  <label for="targetOption">Choose Category</label>
-			  <select class="form-control" name="cat" id="targetOption">
-				  <option value="Archaeology">Archaeology</option>
-				  <option value="Games">Games</option>
-				  <option value="Medicine">Medicine</option>
-				  <option value="Other">Other</option>
-			  </select>
-		  </div>
-		  <div class="form-group">
-		    <label for="tagetInputFile">File input</label>
-		    <input type="file" name="file" id="targetInputFile" required>
-		    <p class="help-block">
-			<ul>
-			  <li>File Format: *.x3d</li>
-			  <li>File Size: 50MB</li>
-			</ul>
-		    </p>
-		  </div>
-		  <button type="submit" class="btn btn-default" id="SubmitButton" value="Upload">Submit</button>
-		</form>  
-		<div id="progressbox">
-			<div id="progressbar"></div >
-			<div id="statustxt">0%</div >
-		</div>
-		<div id="output"></div>		
+        <div class="form-group">
+          <label for="targetName">Your Model Name</label>
+          <input type="text" class="form-control" name="name" id="targetName" placeholder="Enter your model name" required>
+        </div>
+        <div class="form-group">
+        <label for="targetText">Your Model Description</label>
+          <textarea class="form-control" rows="3" name="text" id="targetText" placeholder="Enter you model description" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="targetOption">Choose Category</label>
+          <select class="form-control" name="cat" id="targetOption">
+            <option value="Archaeology">Archaeology</option>
+            <option value="Games">Games</option>
+            <option value="Medicine">Medicine</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="tagetInputFile">File input</label>
+          <input type="file" name="file" id="targetInputFile" required>
+          <p class="help-block">
+        <ul>
+          <li>File Format: *.x3d</li>
+          <li>File Size: 50MB</li>
+        </ul>
+          </p>
+        </div>
+        <button type="submit" class="btn btn-default" id="SubmitButton" value="Upload">Submit</button>
+      </form>  
+      <div id="progressbox">
+        <div id="progressbar"></div >
+        <div id="statustxt">0%</div >
+      </div>
+      <div id="output"></div>		
     </div>
     
-	<?php include("footer.html");?>
-
+    <?php include("footer.html");?>
   </body>
 
 </html>

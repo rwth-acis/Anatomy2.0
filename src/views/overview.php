@@ -3,7 +3,7 @@
   <head>
     <title>Collaborative 3D Model Viewer</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" charset="utf8"/>
-     <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../css/style.css">
     <!-- Init communication with wrapper -->
     <script type='text/javascript' src='../js/init-subsite.js'></script>
@@ -37,11 +37,16 @@
           $html .= '</div><div class="row">';
         }
         $html .= 
-        "<div class='col-md-6' name='table-entry' id='table_entry$i'>
+        "<div class='col-md-6 overview-entry' name='table-entry' id='table_entry$i'>
           <a href='model_viewer.php?id=$entry->id' id='a_img$i'>
             <img src='../../$entry->preview_url' alt=$entry->name class='img-responsive img-fit'>
             <h3>$entry->name</h3>
           </a>
+          <p><b>Model Name:</b> $entry->name</p>
+            <p><b>Category:</b> $entry->classification</p>
+            <p><b>Size:</b> $entry->size</p>
+            <p><b>Upload Date:</b> $entry->upload_date</p>
+            <p><b>Description:</b> $entry->description</p>
         </div>";
 
         $i++;
@@ -55,5 +60,4 @@
     <?php include("footer.html"); ?>
 
   </body>
-
 </html>
