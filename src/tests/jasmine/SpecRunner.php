@@ -24,6 +24,7 @@
     <script src="../../js/menuToolbar.js"></script>
     <script src="../../js/init-wrapper.js"></script>
     <script src="../../js/init-subsite.js"></script>
+    <script src="../../js/x3d-extensions.js"></script>
 
     <!-- Helper for Specs: -->
     <script src="spec/SpecHelper.js"></script>

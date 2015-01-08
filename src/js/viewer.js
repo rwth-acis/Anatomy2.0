@@ -34,6 +34,11 @@ function initializeModelViewer() {
     log('Enabled publishing!');
   });
 }
+
+/**
+ * Event handler for getting a new iwc message with a new viewpoint we should rotate to
+ * @param extras parameters from the message with position and rotation
+ */
 function onRemoteUpdate(extras) {
   // Don't synchronize if the viewpoint is from another model
   if(extras.selectedModel != window.location.search){
@@ -68,6 +73,9 @@ function onRemoteUpdate(extras) {
 }
 subscribeIWC("ViewpointUpdate", onRemoteUpdate);
 
+/**
+ * Iteratively called function to send the local view update to other widgets/devices
+ */
 function onLocalUpdate() {
   if(!isEmbeddedInRole || !isSynchronized || processingMessage || !canSend) {
     return;
@@ -95,7 +103,7 @@ function viewpointChanged(evt) {
   // Prevent widgets from sending updates while applying a received viewpoint msg
   // If we set the position because we received a message we do not want to send it back
   if(!evt || processingMessage || !canSend) {
-    log("Bypassing send!" + processingMessage + canSend);
+    log("Bypassing send!");
     
     return;
   }
