@@ -1,4 +1,5 @@
 /**
+ * @file overview-widget.js
  *  Additional js functions if the overview is loaded as seperate widget
  */
 
@@ -35,6 +36,7 @@ document.addEventListener('DOMContentLoaded', initOverviewWidget, false);
 /**
  * event handler for clicking on a link
  * sends iwc message to select the model in some other widget
+ * @param evt the click event
  */
 function clickOnLink(evt){
   // Remove the highlighting from currently selected model (by removing it from all divs)

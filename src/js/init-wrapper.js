@@ -1,16 +1,23 @@
 /**
+ * @file init-wrapper.js
  * Initialization of wrapper in Role to pass necessary objects to the wrapped site and enable inter device-communication
  */
 
 // IWC initialize section.
 var iwcClient;
 var contentWindow;
+///unique id of the widget
 var id = Math.random().toString(36).substr(2, 9);
+///name of the role space
 var space = window.location.origin + window.parent.location.pathname
+///unique name of the widget
 var widget = space + '?id=' + id;
 
 console.info("space: ", space);
 
+/**
+ * Initialization of the wrapper when loaded
+ */
 function init () {
     iwcClient = new iwc.Client();
     iwcClient.connect(iwcCallback);
@@ -18,6 +25,7 @@ function init () {
 
 /**
  *  Receive intents form other divces/widgets through iwc
+ * @param intent The received intent (iwc msg)
  */
 function iwcCallback(intent) {
     //ignore the msgs sent from here
@@ -43,6 +51,7 @@ function iwcCallback(intent) {
 
 /**
  *  Send intent to other widgets/devices through iwc
+ * @param intent The intent of the message to publish
  */
 function publishMessage(intent) 
 {
@@ -73,6 +82,7 @@ function getDefaultIntent(){
 /**
  * How to react on incoming messages (from the subsite)
  * The data field of the messages should have the format "topic JSON-stringifyed-object" or "topic"
+ * @param event event from the messageEventListener
  */
 function receiveSubsiteMessage(event)
 {
@@ -124,6 +134,7 @@ subscribedTopics = [];
 
 /**
  * Add a topic the subsite wants to get
+ * @param topic the topic string to subscribe to
  */
 function subscribeTo(topic){
     subscribedTopics.push(topic);

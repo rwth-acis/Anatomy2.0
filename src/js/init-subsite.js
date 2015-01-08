@@ -1,4 +1,5 @@
 /**
+ * @file init-subsite.js
  * Initialization of a subside inside a wrapper in Role
  */
 
@@ -6,10 +7,11 @@
 
 /**
  * How to react on incoming messages (from the wrapper)
+ * @param event event from the messageEventListener
  */
 function receiveMessage(event)
 {
-    //TODO: check that message really comes from role
+    ///TODO: check that message really comes from role
     // if (event.origin !== "http://example.org:8080")
     //  return;
 
@@ -32,12 +34,13 @@ function receiveMessage(event)
     break;
     }
 }
+
 window.addEventListener("message", receiveMessage, false);
 
-/*
+/**
  * Subscribe to a topic with a given callback function to get notified if a message of the topic was sent to you
- * @topic the topic you want to subscribe to
- * @callback The callback function that should accept a parameter with an object that corresponds to the extra field in the iwc message
+ * @param topic the topic you want to subscribe to
+ * @param callback The callback function that should accept a parameter with an object that corresponds to the extra field in the iwc message
  */
 function subscribeIWC(topic, callback){
     //inform wrapper, that we want to get messages about the topic
@@ -46,10 +49,10 @@ function subscribeIWC(topic, callback){
     subscribeCallbacks.set(topic, callback);
 }
 
-/*
+/**
  * Publish a message via IWC to other widgets
- * @topic: the topic of the message
- * @content: content of the message as object (e.g. {x:0, y:2})
+ * @param topic: the topic of the message
+ * @param content: content of the message as object (e.g. {x:0, y:2})
  */
 function publishIWC(topic, content){
     if(!isEmbeddedInRole){
@@ -63,13 +66,13 @@ function publishIWC(topic, content){
 
 
 
-//initial map topic->callback funciton
+///initial map topic->callback funciton
 subscribeCallbacks = new Map();
 
-//is this site embedded in a role sandbox?
+///is this site embedded in a role sandbox?
 isEmbeddedInRole = false;
 
-//variable for accessing the wrapper:
+///variable for accessing the wrapper:
 roleWrapper = window.parent;
 
 //Inform wrapper, that we are loaded and ready to receive the data we need

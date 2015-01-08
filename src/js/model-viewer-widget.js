@@ -1,4 +1,5 @@
 /**
+ * @file model-viewer-widget.js
  *  Additional js functions if the model_viewer is loaded as seperate widget
  */
 
@@ -15,6 +16,7 @@ document.addEventListener('DOMContentLoaded', initWidget, false);
 
 /*
  * An overview widget selected a model, we load it
+ * @param msgContent received message content from iwc
  */
 function receiveModelSelectedByOverview(msgContent){
     console.log("model-viewer-widget: loading site: ", msgContent.href + "&widget=true");
