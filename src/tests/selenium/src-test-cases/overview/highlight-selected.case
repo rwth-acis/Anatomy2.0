@@ -24,12 +24,12 @@
 <tr>
 	<td>verifyAttribute</td>
 	<td>id=table_entry1@class</td>
-	<td>col-md-6 div-highlight</td>
+	<td>col-md-6 overview-entry div-highlight</td>
 </tr>
 <tr>
 	<td>verifyAttribute</td>
 	<td>id=table_entry2@class</td>
-	<td>col-md-6</td>
+	<td>col-md-6 overview-entry</td>
 </tr>
 <tr>
 	<td>click</td>
@@ -39,12 +39,12 @@
 <tr>
 	<td>verifyAttribute</td>
 	<td>id=table_entry1@class</td>
-	<td>col-md-6</td>
+	<td>col-md-6 overview-entry</td>
 </tr>
 <tr>
 	<td>verifyAttribute</td>
 	<td>id=table_entry2@class</td>
-	<td>col-md-6 div-highlight</td>
+	<td>col-md-6 overview-entry div-highlight</td>
 </tr>
 <tr>
 	<td>click</td>
@@ -54,12 +54,12 @@
 <tr>
 	<td>verifyAttribute</td>
 	<td>id=table_entry1@class</td>
-	<td>col-md-6 div-highlight</td>
+	<td>col-md-6 overview-entry div-highlight</td>
 </tr>
 <tr>
 	<td>verifyAttribute</td>
 	<td>id=table_entry2@class</td>
-	<td>col-md-6</td>
+	<td>col-md-6 overview-entry</td>
 </tr>
 </tbody></table>
 </body>
