@@ -1,9 +1,16 @@
 /**
+ * @file menuToolbar.js
+ * Provides event handler for click events of all toolbar buttons
+ * Also initializes toolbar elements if needed
+ */
+
+/**
  * Initialize the combo box for navigation modes in toolbar
  */
 function initNavigationMode() {
   document.getElementById('optionExamine').setAttribute("selected", "selected");
 }
+/// Call initialize for navigation mode when DOM loaded
 document.addEventListener('DOMContentLoaded', initNavigationMode, false);
 
 /**

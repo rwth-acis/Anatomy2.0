@@ -5,7 +5,7 @@ interpolateTime = 1.0;
 * Modifies the current camera of the scene in such a way that
 * all elements are visible to the user.
 *
-* @param {X3D.runtime} Instance of X3D runtime which becomes available
+* @param X3D.runtime Instance of X3D runtime which becomes available
 *    after a scene is fully loaded.
 */
 function normalizeCamera(runtime) {
@@ -46,6 +46,14 @@ function normalizeCamera(runtime) {
   runtime.canvas.doc._viewarea._scene.getViewpoint().setView(viewMatrix);
 }
 
+/**
+ * Returns the view matrix components from 
+ * the IWC parameters 
+ * @param X3DRuntime runtime information for retrieving
+ *  the current local state of view matrix.
+ * @return position translationMatrix
+ * @return rotation rotationMatrix
+ */
 function getView(runtime) {
   var targetPos;
   var targetRot;
@@ -67,6 +75,14 @@ function getView(runtime) {
   return {'position': targetPos, 'rotation': targetRot};
 }
 
+/*
+ * Sets up the view matrix from the data provided
+ * by a remote client.
+ * @param X3DRuntime Runtime element to modify the local view matrix.
+ * @param data Remote data
+ * @param finishedCallback Callback triggered when modification
+ * is complete
+ */
 function setView(runtime, data, finishedCallback) {
   targetPos = data['position'];
   targetRot = data['rotation'];
@@ -116,15 +132,48 @@ function setView(runtime, data, finishedCallback) {
   //runtime.canvas.doc.needRender = true;
 }
 
+/**
+ * Linear interpolates between two scalars, with
+ * time ranging between 0 and 1.
+ * @param source initial value
+ * @param target final value
+ * @param time time interval within [0,1], 
+ *  closer to zero means closer to source and
+ *  vice versa.
+ * @return interpolated value between
+ *  initial and final value.
+ */
 function lerp(source, target, time) {
   return source * (1.0-time) + target * time;
 }
+/**
+ * Linear interpolates a x3dom.fields.SFVec3f.
+
+ * @param source initial vector
+ * @param target final vector
+ * @param time time interval within [0,1], 
+ *  closer to zero means closer to source and
+ *  vice versa.
+ * @return interpolated vector between
+ *  initial and final vector.
+ */
 function lerpVector(source, target, time) {
   return new x3dom.fields.SFVec3f(
     lerp(source.x, target.x, time),
     lerp(source.y, target.y, time),
     lerp(source.z, target.z, time));
 }
+/**
+ * Linear interpolates a x3dom.fields.Quaternion.
+ 
+ * @param source initial quaternion
+ * @param target final quaternion
+ * @param time time interval within [0,1], 
+ *  closer to zero means closer to source and
+ *  vice versa.
+ * @return interpolated quaternion between
+ *  initial and final quaternion.
+ */
 function lerpQuaternion(source, target, time) {
   return new x3dom.fields.Quaternion(
     lerp(source.x, target.x, time),
@@ -132,6 +181,19 @@ function lerpQuaternion(source, target, time) {
     lerp(source.z, target.z, time),
     lerp(source.w, target.w, time));
 }
+/**
+ * Spherically interpolates a x3dom.fields.Quaternion.
+ * See http://en.wikipedia.org/wiki/Slerp for details
+ * on implementation.
+ *
+ * @param qa initial quaternion
+ * @param qb final quaternion
+ * @param t time interval within [0,1], 
+ *  closer to zero means closer to source and
+ *  vice versa.
+ * @return spherically interpolated quaternion between
+ *  initial and final quaternion.
+ */
 function slerpQuaternion(qa, qb, t) {
   var qm = new x3dom.fields.Quaternion();
 
