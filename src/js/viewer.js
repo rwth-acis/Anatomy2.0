@@ -1,3 +1,8 @@
+/**
+ * @file Viewer.js
+ * File for X3D viewer functionality
+ */
+
 var processingMessage = false;
 var canSend           = false;
 //synchronize with other devices? (can be switched in menuToolbar.js)
@@ -12,6 +17,10 @@ var lastData;
 
 var x3dRoot;
 
+/**
+ * Sets up the X3D viewport and subscribes to
+ * mouse callbacks for propagating changes.
+ */
 function initializeModelViewer() {
   x3dRoot     = document.getElementById('viewer_object');
   x3dViewport = document.getElementById('viewport');
@@ -36,8 +45,9 @@ function initializeModelViewer() {
 }
 
 /**
- * Event handler for getting a new iwc message with a new viewpoint we should rotate to
- * @param extras parameters from the message with position and rotation
+ * Event handler for getting a new iwc message with a new view matrix and 
+ * updating the local viewer with remote data.
+ * @param extras parameters from the iwc message with position and rotation
  */
 function onRemoteUpdate(extras) {
   // Don't synchronize if the viewpoint is from another model
@@ -74,7 +84,8 @@ function onRemoteUpdate(extras) {
 subscribeIWC("ViewpointUpdate", onRemoteUpdate);
 
 /**
- * Iteratively called function to send the local view update to other widgets/devices
+ * Propagates local changes via mouse to all remote clients 
+ * when synchronization is enabled.
  */
 function onLocalUpdate() {
   if(!isEmbeddedInRole || !isSynchronized || processingMessage || !canSend) {
@@ -94,8 +105,8 @@ function onLocalUpdate() {
 }
 
 /**
- * On a change of the viewpoint we might want to start the synchronization
- * with the other widgets.
+ * Propagates local changes via viewport events to all remote clients
+ * when synchronization is enabled.
  * @param evt viewpoint changed event
  */
 function viewpointChanged(evt) {    
@@ -133,9 +144,6 @@ function log(message) {
 
 /**
  * An overview widget selected a model, we load it
- *
- * Ali: Is this used by other JS files? If so, mark it in
- * the JSDoc!!!
  */
 function receiveModelSelectedByOverview(msgContent){
   window.location.assign(msgContent);
@@ -143,10 +151,7 @@ function receiveModelSelectedByOverview(msgContent){
 
 /**
  * Re-synchronize with last location sent from other widgets
- * Used in menuToolbar.js
- *
- * Ali: Is this used by other JS files? If so, mark it in
- * the JSDoc!!!
+ * Used in menuToolbar.js.
  */
 function synchronizePositionAndOrientation() {
   if(lastData != null) {
@@ -156,7 +161,7 @@ function synchronizePositionAndOrientation() {
 
 /**
  * Save current location when stopping the synchronization in case nothing changes in the other widgets
- * Used in menuToolbar.js
+ * Used in menuToolbar.js.
  */
 function savePositionAndOrientation() {
   posAndOrient = getView(x3dRoot.runtime);
