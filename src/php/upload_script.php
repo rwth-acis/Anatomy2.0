@@ -1,4 +1,10 @@
 <?php 
+	/**
+	 * @file upload_script.php
+	 * 
+	 * Uploads a model to the repository and
+	 * adds metadata about it to the models database.
+	 */
 	if(isset($_FILES['file'])){
 		
 		//Get input data
