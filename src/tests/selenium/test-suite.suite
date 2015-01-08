@@ -11,6 +11,11 @@
 <tr><td><a href="src-test-cases/overview/highlight-selected.case">highlight-selected</a></td></tr>
 <tr><td><a href="src-test-cases/overview/load-helmet-and-go-back">load-helmet-and-go-back</a></td></tr>
 <tr><td><a href="src-test-cases/viewer/btn-show-info">btn-show-info</a></td></tr>
+<tr><td><a href="src-test-cases/welcome/test-suite.suite">welcome-site-navigation</a></td></tr>
+<tr><td><a href="src-test-cases/welcome/navigation-bar">navigation-bar</a></td></tr>
+<tr><td><a href="src-test-cases/viewer/viewer-move-model">viewer-move-model</a></td></tr>
+<tr><td><a href="src-test-cases/viewer/viewer-toolbar">viewer-toolbar</a></td></tr>
+<tr><td><a href="src-test-cases/upload/upload-required-field">upload-required-fiields</a></td></tr>
 </tbody></table>
 </body>
 </html>
