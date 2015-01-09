@@ -47,9 +47,8 @@
 					
 					if (move_uploaded_file($file_tmp, $file_destination)){
 						// Try to create preview-image automatically
-						$screenshot_script_url = '../../applications/screenshot';	
 						$previewimage_url = $root_url.DIRECTORY_SEPARATOR.$last_id.DIRECTORY_SEPARATOR."preview".DIRECTORY_SEPARATOR.$last_id.".png";
-						exec("$screenshot_script_url $file_destination $previewimage_url");
+						exec("../../applications/auto_preview $file_destination $previewimage_url");
 						
 						header("Location: ../views/success.php?id=$last_id");
 
