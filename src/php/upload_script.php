@@ -48,14 +48,16 @@
 						header("Location: ../views/success.php?id=$last_id");
 
 					}else{
-						echo 'Upload Failed';
+						$message = 'Upload Failed';
+						header("Location: ../views/error.php?message=$message");
 						
 					}
 					
 				}	
 				else{
-					echo 'File to big';
 					
+					$message = 'File to big';
+						header("Location: ../views/error.php?message=$message");
 				}
 			}
 			else {
@@ -67,16 +69,19 @@
 				    4 => "No file was uploaded",
 				    6 => "Missing a temporary folder"
 				]; 
-				echo 'Upload error: '.$file_error.': '.$errorMsg[$file_error];
+				$message = 'Upload error: '.$file_error.': '.$errorMsg[$file_error];
+				header("Location: ../views/error.php?message=$message");
 			}
 			
 		}
 		else{
-			echo 'Not allowed file type';
+			$message = 'Not allowed filetype';
+			header("Location: ../views/error.php?message=$message");
 		}
 
 	} else {
-		echo 'Maybe File-API is not supported.';
+		$message = 'Maybe File-API is not supported.';
+		header("Location: ../views/error.php?message=$message");
 	}
 	
 ?>
