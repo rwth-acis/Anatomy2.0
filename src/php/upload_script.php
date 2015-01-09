@@ -14,11 +14,11 @@
 		$name = $_POST['name'];
 		$text = $_POST['text'];
 		$cat = $_POST['cat'];
-		
+
 		if (in_array($file_ext, $allowed)){
 			if ($file_error === 0){
 				if ($file_size <= 52428800){
-					
+				
 					// Create database-entry
 					$conn = require '../php/db_connect.php';
 				
@@ -31,20 +31,22 @@
 				
 					// Copy to model-folder
 					$dirname = $root_url.DIRECTORY_SEPARATOR.$last_id;
-					mkdir($dirname);
-					mkdir($dirname.DIRECTORY_SEPARATOR."preview");
+					$old = umask(0); 
+					mkdir($dirname, 0777);
+					mkdir($dirname.DIRECTORY_SEPARATOR."preview", 0777);
+					umask($old);
 					
 					$file_destination = $dirname.DIRECTORY_SEPARATOR.$last_id.'.x3d';
 					
 					
 					if (move_uploaded_file($file_tmp, $file_destination)){
-						header("Location: ../views/success.php?id=$last_id");
-						
-						// Create preview-image
-						$view3dscene_url = '../../applications/view3dscene/view3dscene';	
+						// Try to create preview-image automatically
+						$screenshot_script_url = '../../applications/screenshot';	
 						$previewimage_url = $root_url.DIRECTORY_SEPARATOR.$last_id.DIRECTORY_SEPARATOR."preview".DIRECTORY_SEPARATOR.$last_id.".png";
-						exec("$view3dscene_url --screenshot 0 $previewimage_url $file_destination");
+						exec("$screenshot_script_url $file_destination $previewimage_url");
 						
+						header("Location: ../views/success.php?id=$last_id");
+
 					}else{
 						echo 'Upload Failed';
 						
@@ -56,11 +58,26 @@
 					
 				}
 			}
+			else {
+				$errorMsg = [
+				    0 => "There is no error, the file uploaded with success",
+				    1 => "The uploaded file exceeds the upload_max_filesize directive in php.ini",
+				    2 => "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form",
+				    3 => "The uploaded file was only partially uploaded",
+				    4 => "No file was uploaded",
+				    6 => "Missing a temporary folder"
+				]; 
+				echo 'Upload error: '.$file_error.': '.$errorMsg[$file_error];
+			}
 			
 		}
 		else{
 			echo 'Not allowed file type';
 		}
 
+	} else {
+		echo 'Maybe File-API is not supported.';
 	}
+	
+?>
 	
