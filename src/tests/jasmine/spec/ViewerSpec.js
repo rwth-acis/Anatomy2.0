@@ -102,12 +102,10 @@ describe('The viewer', function() {
       'not synchronized with the other widget(s)',
       function() {
         isSynchronized = false;
-        spyOn(window, 'sendPositionAndOrientation');
-        spyOn(window, 'printPositionAndOrientation');
+        spyOn(window, 'publishIWC');
 
-        viewpointChanged(event);
-        expect(sendPositionAndOrientation).not.toHaveBeenCalled();
-        expect(printPositionAndOrientation).not.toHaveBeenCalled();
+        onLocalUpdate();
+        expect(publishIWC).not.toHaveBeenCalled();
   });
 
   it('does send its position and orientation when it is not processing ' +
@@ -138,22 +136,6 @@ describe('The viewer', function() {
       
       synchronizePositionAndOrientation();
       expect(setView).not.toHaveBeenCalled();
-      expect(posAndOrient).toBeUndefined();
-  });
-
-  it('applies the current location of the other model(s) when re-synchronized', 
-    function() {
-      posAndOrient = view;
-      spyOn(window, 'setView');
-      
-      synchronizePositionAndOrientation();
-      expect(setView).toHaveBeenCalledWith(
-          new x3dom.fields.SFMatrix4f(1, 0, 0, 1, 
-                                      0, 1, 0, -0.5, 
-                                      0, 0, 1, 0, 
-                                      0, 0, 0, 1),
-          x3dom.fields.SFMatrix4f.identity()
-      );
       expect(posAndOrient).toBeUndefined();
   });
 });
