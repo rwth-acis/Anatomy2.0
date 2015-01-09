@@ -45,7 +45,7 @@
    		<form role="form" action="../php/upload_script.php" method="post" enctype="multipart/form-data" id="UploadForm">
 		  <div class="form-group">
 		    <label for="targetName">Your Model Name</label>
-		    <input type="text" class="form-control" name="name" id="targetName" placeholder="Enter your model name" required>
+		    <input class="form-control" name="name" id="targetName" placeholder="Enter your model name" required>
 		  </div>
 		  <div class="form-group">
 			<label for="targetText">Your Model Description</label>
