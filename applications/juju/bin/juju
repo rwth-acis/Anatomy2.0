@@ -1,0 +1,184 @@
+#!/usr/bin/env bash
+#
+# This file is part of JuJu: The portable GNU/Linux distribution
+#
+# Copyright (c) 2012-2014 Filippo Squillace <feel.squally@gmail.com>
+#
+# This program is free software; you can redistribute it and/or modify it
+# under the terms of the GNU Library General Public License as published
+# by the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+NAME='JuJu'
+CMD='juju'
+VERSION='2.5.6'
+CODE_NAME='Lion'
+DESCRIPTION='The GNU/Linux distribution container for non-root users'
+AUTHOR='Filippo Squillace <feel dot squally at gmail.com>'
+HOMEPAGE='https://github.com/fsquillace/juju'
+COPYRIGHT='2012-2014'
+
+source "$(dirname $0)/../lib/core.sh"
+
+###################################
+### General functions           ###
+###################################
+
+usage() {
+    echo -e "$NAME: $DESCRIPTION"
+    echo -e "Usage: $CMD [options] [command]"
+    echo -e "Options:"
+    echo -e "-i, --setup-from-file <image>  Setup the $NAME image in ${JUJU_HOME}"
+    echo -e "-f, --fakeroot                 Run $NAME with fakeroot privileges"
+    echo -e "-r, --root                     Run $NAME with root privileges"
+    echo -e "-p, --proot-args               Proot arguments"
+    echo -e "-b, --build-image              Build a $NAME image (must run in ArchLinux)"
+    echo -e "-d, --delete                   Delete $NAME from ${JUJU_HOME}"
+    echo -e "-h, --help                     Show this help message"
+    echo -e "-v, --version                  Show the $NAME version"
+}
+
+version() {
+	echo -e "$NAME $VERSION ($CODE_NAME): $DESCRIPTION"
+    echo -e "Copyright (c) $COPYRIGHT $AUTHOR"
+    echo -e "Homepage: $HOMEPAGE"
+}
+
+check_cli(){
+    if $OPT_BUILD_IMAGE
+    then
+        if $OPT_DELETE || $OPT_HELP || $OPT_VERSION || $OPT_SETUP_FROM_FILE || \
+            $OPT_FAKEROOT || $OPT_ROOT
+        then
+            die "The build image option must be used exclusively"
+        fi
+    fi
+    if $OPT_DELETE
+    then
+        if $OPT_BUILD_IMAGE || $OPT_HELP || $OPT_VERSION || $OPT_SETUP_FROM_FILE || \
+            $OPT_FAKEROOT || $OPT_ROOT
+        then
+            die "The $NAME delete option must be used exclusively"
+        fi
+    fi
+    if $OPT_HELP
+    then
+        if $OPT_BUILD_IMAGE || $OPT_DELETE || $OPT_VERSION || $OPT_SETUP_FROM_FILE || \
+            $OPT_FAKEROOT || $OPT_ROOT
+        then
+            die "The $NAME help option must be used exclusively"
+        fi
+    fi
+    if $OPT_VERSION
+    then
+        if $OPT_BUILD_IMAGE || $OPT_DELETE || $OPT_HELP || $OPT_SETUP_FROM_FILE || \
+            $OPT_FAKEROOT || $OPT_ROOT
+        then
+            die "The $NAME version option must be used exclusively"
+        fi
+    fi
+    if $OPT_FAKEROOT && $OPT_ROOT
+    then
+        die "You must access to $NAME with either fakeroot or root permissions"
+    fi
+    if $OPT_PROOT_ARGS
+    then
+        if $OPT_BUILD_IMAGE || $OPT_DELETE || $OPT_HELP || $OPT_SETUP_FROM_FILE || \
+            $OPT_ROOT || $OPT_VERSION
+        then
+            die "Invalid syntax: Proot args are not allowed with the other options"
+        fi
+    fi
+    if [ "$ARGS" != "" ]
+    then
+        if $OPT_BUILD_IMAGE || $OPT_DELETE || $OPT_HELP || $OPT_SETUP_FROM_FILE || \
+            $OPT_VERSION
+        then
+            die "No arguments are needed. For the CLI syntax run: $CMD --help"
+        fi
+    fi
+
+    return 0
+}
+
+
+function parse_arguments(){
+    TEMP=$(getopt -o drp:fbi:hv --long delete,root,proot-args:,fakeroot,build-image,setup-from-file:,help,version -n "$CMD" -- "$@")
+	eval set -- "$TEMP"
+
+	OPT_SETUP_FROM_FILE=false
+	IMAGE_FILE=""
+	OPT_FAKEROOT=false
+	OPT_ROOT=false
+	OPT_PROOT_ARGS=false
+	PROOT_ARGS=""
+	OPT_BUILD_IMAGE=false
+	OPT_DELETE=false
+	OPT_HELP=false
+	OPT_VERSION=false
+	while true ; do
+		case "$1" in
+			-i|--setup-from-file) OPT_SETUP_FROM_FILE=true ; shift ; IMAGE_FILE=$1 ; shift ;;
+			-f|--fakeroot) OPT_FAKEROOT=true ; shift ;;
+			-r|--root) OPT_ROOT=true ; shift ;;
+			-p|--proot-args) OPT_PROOT_ARGS=true ; shift ; PROOT_ARGS=$1; shift ;;
+			-b|--build-image) OPT_BUILD_IMAGE=true ; shift ;;
+			-d|--delete) OPT_DELETE=true ; shift ;;
+			-h|--help) OPT_HELP=true ; shift ;;
+			-v|--version) OPT_VERSION=true ; shift ;;
+			--) shift ; break ;;
+			*) die "Internal error!" ;;
+		esac
+	done
+
+	ARGS=()
+	for arg do
+		ARGS+=($arg)
+	done
+}
+
+function execute_operation(){
+	$OPT_HELP && usage && return
+	$OPT_VERSION && version && return
+
+	if $OPT_BUILD_IMAGE; then
+		build_image_juju
+		return
+	elif $OPT_DELETE; then
+		delete_juju
+		return
+	fi
+
+	if ! is_juju_installed
+	then
+		if $OPT_SETUP_FROM_FILE; then
+			setup_from_file_juju $IMAGE_FILE
+		else
+			setup_juju
+		fi
+	elif $OPT_SETUP_FROM_FILE; then
+		die "Error: The image cannot be installed since $JUJU_HOME is not empty."
+	fi
+
+	if $OPT_FAKEROOT; then
+		run_juju_as_fakeroot "${PROOT_ARGS}" ${ARGS[@]}
+	elif $OPT_ROOT; then
+		run_juju_as_root ${ARGS[@]}
+	else
+		run_juju_as_user "${PROOT_ARGS}" ${ARGS[@]}
+	fi
+}
+
+parse_arguments $@
+check_cli
+execute_operation
+# vim: set ts=4 sw=4 noet:

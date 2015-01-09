@@ -1,0 +1,722 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+
+<html lang="en">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta name="Author" content="Michalis Kamburelis">
+
+<meta name="Language" content="English">
+
+<title>Texturing component - implementation status - Castle Game Engine</title>
+
+
+<!--
+  This is unclean, but it's more comfortable to keep below CSS
+  directly inside HTML page. This is in kambi_common.php,
+  that should be useful for both michalis.ii and castle-engine.sf.net webpages,
+  and must be suitable also for offline documentation in castle-engine programs.
+-->
+<!-- link type="text/css" rel="stylesheet" media="all"  href="kambi-php-lib/kambi_common.css" -->
+
+<style type="text/css"><!--
+body { background: white; font-family: sans-serif; }
+
+dt { font-weight: bold; }
+div.page_footer { }
+span.page_copyright { font-size: smaller }
+
+span.version_number { font-size: small }
+
+div.quick_links_bottom_line { text-align: left; }
+
+.rss_link {
+  float: right;
+  background: red;
+  padding: 0.3em;
+  border: thin outset black;
+}
+
+.rss_link a {
+  color: white;
+  font-weight: bold
+}
+--></style>
+
+
+<link rel="alternate" type="application/rss+xml"
+  title="Castle Game Engine - News Feed"
+  href="http://castle-engine.sourceforge.net/news_feed.php">
+
+<link type="text/css" rel="stylesheet" media="all" href="castle-engine.css">
+<link type="text/css" rel="stylesheet" href="colorbox/example3/colorbox.css">
+
+<script type="text/javascript" src="castle-engine.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="colorbox/jquery.colorbox-min.js"></script>
+
+<style type="text/css"><!--
+/**
+ * GeSHi Dynamically Generated Stylesheet
+ * --------------------------------------
+ * Dynamically generated stylesheet for delphi
+ * CSS class: sourcecode, CSS id: 
+ * GeSHi (C) 2004 - 2007 Nigel McNie, 2007 - 2008 Benny Baumann
+ * (http://qbnz.com/highlighter/ and http://geshi.org/)
+ * --------------------------------------
+ */
+.delphi.sourcecode .de1, .delphi.sourcecode .de2 {font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;}
+.delphi.sourcecode  {font-family:monospace;}
+.delphi.sourcecode .imp {font-weight: bold; color: red;}
+.delphi.sourcecode li, .delphi.sourcecode .li1 {font-weight: normal; vertical-align:top;}
+.delphi.sourcecode .ln {width:1px;text-align:right;margin:0;padding:0 2px;vertical-align:top;}
+.delphi.sourcecode .li2 {font-weight: bold; vertical-align:top;}
+.delphi.sourcecode .kw1 {color: #000000; font-weight: bold;}
+.delphi.sourcecode .kw2 {color: #000000; font-weight: bold;}
+.delphi.sourcecode .kw3 {color: #000066;}
+.delphi.sourcecode .kw4 {color: #000066; font-weight: bold;}
+.delphi.sourcecode .co1 {color: #808080; font-style: italic;}
+.delphi.sourcecode .co2 {color: #008000; font-style: italic;}
+.delphi.sourcecode .coMULTI {color: #808080; font-style: italic;}
+.delphi.sourcecode .es0 {color: #ff0000; font-weight: bold;}
+.delphi.sourcecode .br0 {color: #000066;}
+.delphi.sourcecode .sy0 {color: #000066;}
+.delphi.sourcecode .sy1 {color: #000066;}
+.delphi.sourcecode .sy2 {color: #000066;}
+.delphi.sourcecode .sy3 {color: #000066;}
+.delphi.sourcecode .st0 {color: #ff0000;}
+.delphi.sourcecode .nu0 {color: #0000ff;}
+.delphi.sourcecode .me1 {color: #006600;}
+.delphi.sourcecode .re0 {color: #0000cc;}
+.delphi.sourcecode .re1 {color: #ff0000;}
+.delphi.sourcecode .ln-xtra, .delphi.sourcecode li.ln-xtra, .delphi.sourcecode div.ln-xtra {background-color: #ffc;}
+.delphi.sourcecode span.xtra { display:block; }
+ -->
+</style>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    (function() {
+        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+        s.type = 'text/javascript';
+        s.async = true;
+        s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+        t.parentNode.insertBefore(s, t);
+    })();
+/* ]]> */
+</script><script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+  </head>
+<body>
+
+
+  <div class="header">
+    <!--img class="header_icon" src="images/header_icon.png" alt="Castle Game Engine icon" /-->
+    <div class="header_title"><a href="http://castle-engine.sourceforge.net/index.php">Castle Game Engine</a></div>
+    
+    <table class="header_menu">
+      <tr>
+        <td colspan="15" class="higher higher_left">&larr; Users</td>
+        <td colspan="6" class="higher higher_right">Developers &rarr;</td>
+      </tr>
+      <tr><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/index.php">Intro</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/news.php">News</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/view3dscene.php" title="VRML / X3D browser, and a viewer for other 3D model formats">view3dscene</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/castle.php" title="First-person perspective game, in a dark fantasy setting">The Castle</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/all_programs.php" title="All the games and tools using our 3D engine">All Programs</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/forum.php" title="Ask for help, report bugs, discuss features">Forum</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/donate.php">Donate</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/engine.php" title="Sources and documentation for developers">Engine</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="vrml_x3d.html" title="Our extensions and status of VRML/X3D implementation" id="current">VRML/X3D</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/blender.php" title="Customized Blender X3D exporter">Blender</a></td><td class="lower_separator"><div>&nbsp;</div></td>
+      </tr>
+    </table>
+  </div><table class="layout" cellspacing="0">
+      <col class="content_column">
+      <col class="sidebar_column">
+      <tr><td class="layout content"><div class="header_breadcrumbs"><a href="http://castle-engine.sourceforge.net/index.php">Home <i>(online docs)</i></a> &#187; <a href="vrml_x3d.html">VRML / X3D support</a> &#187; <a href="x3d_implementation_status.html">Implementation status</a></div><h1>Texturing component</h1><div class="x3d_component_intro">
+    <p class="paragraph_first">This component provides extensive textures support.
+     2D textures may be loaded from image files (<tt>ImageTexture</tt>),
+     movie files (<tt>MovieTexture</tt>) or encoded directly in VRML/X3D files
+     (<tt>PixelTexture</tt>, also <tt>ImageTexture</tt> with <a href="http://en.wikipedia.org/wiki/Data_URI_scheme">data</a> urls).
+     Multiple textures may be overlayed on a single polygon in a variety
+     of ways. Texture coordinates may be explicitly provided or automatically
+     calculated, and may be transformed.</p>
+    <p class="paragraph_last">See also <a href="http://www.web3d.org/files/specifications/19775-1/V3.2/Part01/components/texturing.html">X3D specification of Texturing component</a>.</p></div>
+<p>Contents:
+<div class="table_of_contents"><ol>
+<li><a href="#section_demos">Demos</a>
+</li>
+<li><a href="#section_support">Supported nodes</a>
+</li>
+<li><a href="#section_support_formats">Supported image file formats</a>
+</li>
+<li><a href="#section_multi_texturing">Clarifications to X3D multi-texturing specification</a>
+<ol>
+<li><a href="#section_multi_texturing_clarifications">Precise and corrected MultiTexture.mode specification (aka "how do we handle it")</a>
+</li>
+<li><a href="#section_multi_texturing_source">MultiTexture.source extensions</a>
+</li>
+<li><a href="#section_multi_texturing_spec_problems">Problems with existing X3D MultiTexture.mode specification</a>
+</li>
+</ol>
+</li>
+<li><a href="#section_dds">DDS (DirectDraw Surface) support details</a>
+</li>
+</ol>
+</div>
+<h2><a name="section_demos">1. Demos</a></h2>
+
+<p>For demos and tests of these features,
+see the <tt>texturing_advanced</tt> and <tt>movie_texture</tt>
+subdirectories inside <a href="demo_models.html">our VRML/X3D demo models</a>.</p>
+
+<h2><a name="section_support">2. Supported nodes</a></h2>
+
+<ul>
+  <li><p><tt><a href="http://www.web3d.org/files/specifications/19775-1/V3.2/Part01/components/texturing.html#ImageTexture">ImageTexture</a></tt>,
+    <tt><a href="http://www.web3d.org/files/specifications/19775-1/V3.2/Part01/components/texturing.html#TextureTransform">TextureTransform</a></tt>,
+    <tt><a href="http://www.web3d.org/files/specifications/19775-1/V3.2/Part01/components/texturing.html#TextureCoordinate">TextureCoordinate</a></tt>,
+    <tt><a href="http://www.web3d.org/files/specifications/19775-1/V3.2/Part01/components/texturing.html#PixelTexture">PixelTexture</a></tt></p>
+
+    <p><i>Note</i>: ImageTexture allows various texture formats,
+    including JPEG, PNG, GIF, BMP, PPM, RGBE.
+    See <a href="http://castle-engine.sourceforge.net/glviewimage.php">glViewImage <i>(online docs)</i></a>    documentation for more detailed list.
+
+    <p><i>Note about alpha channel</i>: alpha channel of the textures
+    is fully supported, both a simple yes-no transparency (done
+    by alpha_test in OpenGL) and full range transparency
+    (done by blending in OpenGL, just like partially transparent materials).
+    See <a href="x3d_extensions.html#section_ext_alpha_channel_detection">"override alpha channel detection"
+    extension description</a> for details.
+    The bottom line is: everything will magically work fast and look perfect.
+
+    <p><a name="default_texture_mode_modulate"></a><b>Note
+    about REPLACE vs MODULATE modes</b>: VRML 2 / X3D specifications
+    say that RGB textures should <tt>REPLACE</tt> the color (as opposed
+    to <tt>MODULATE</tt> the color from lighting calculations, material etc.).
+    The problem with that is that this makes RGB textures nearly useless
+    in typical 3D world (when you usually expect textured surfaces to be
+    properly lit, regardless of RGB or grayscale format).
+    That's why the default engine behavior contradicts the specification:
+    it's <tt>MODULATE</tt>, making an RGB texture modulated by lighting just
+    like a grayscale texture.</p>
+
+    <p>I didn't decide it lightly (noone likes
+    to deliberately contradict the specification...), but I think this case
+    is justified &mdash; <tt>MODULATE</tt> behavior is much more useful and usually
+    desired, IMO. Feel welcome to send me emails and argument against this.
+    After all, I'm trying to fit the needs of most people with default
+    behavior. If many people think that specification is right and I'm dumb,
+    and the default behavior should follow the spec and be <tt>REPLACE</tt>,
+    I'll obey :)</p>
+
+    <p>You have menu item in view3dscene <i>RGB Textures Color Mode -&gt;
+    GL_REPLACE</i> to change this (from code, use
+    <tt>Scene.Attributes.TextureModeRGB := GL_REPLACE;</tt>).</p>
+
+  <li><p><tt><a href="http://www.web3d.org/files/specifications/19775-1/V3.2/Part01/components/texturing.html#MovieTexture">MovieTexture</a></tt>
+    <p><i>TODO</i>: for now, the sound of the movie is not played.
+
+    <p><i>Notes</i>:
+
+    <ul>
+      <li><p>Current implementation keeps the whole encoded video in memory
+        (images may be discarded after loading (by TCastleSceneCore.FreeResources
+        feature), but still the textures for all frames are kept in memory).
+        The <i>disadvantage</i> is that this makes it impractical to load "real"
+        movies, normal 2-hour movie will most usually eat all of your memory.
+        The <i>advantage</i> is that once the movie is loaded, the playback is
+        super-fast, just like you would display normal nodes with static
+        textures. Since there's no streaming, decoding etc. in the background
+        while you browse your models.
+
+        <p>In other words, this is quite perfect for movie textures
+        with game effects, like smoke or flame. But it's not a substitute
+        for your "real" multimedia movie player.
+
+      <li><p><a href="http://ffmpeg.mplayerhq.hu/">ffmpeg</a> must be
+        installed and available on $PATH to actually open any movie format.
+        See <a href="http://castle-engine.sourceforge.net/view3dscene.php#section_depends">instructions for
+        installing ffmpeg in view3dscene docs <i>(online docs)</i></a>.
+        Thanks to ffmpeg, we can handle probably any movie format you will
+        ever need to open.
+
+      <li><p>We can also open movies from images sequence.
+        This doesn't require ffmpeg, and allows for some tricks
+        (movie texture with alpha channel).
+        See <a href="x3d_extensions.html#section_ext_movie_from_image_sequence">"Movies from images sequence"
+        extension description</a>.
+    </ul>
+
+  <li><tt><a href="http://www.web3d.org/files/specifications/19775-1/V3.2/Part01/components/texturing.html#MultiTexture">MultiTexture</a></tt>,
+      <tt><a href="http://www.web3d.org/files/specifications/19775-1/V3.2/Part01/components/texturing.html#MultiTextureCoordinate">MultiTextureCoordinate</a></tt>,
+      <tt><a href="http://www.web3d.org/files/specifications/19775-1/V3.2/Part01/components/texturing.html#MultiTextureTransform">MultiTextureTransform</a></tt>
+    <p><i>TODO</i>: modes
+    <tt>MODULATEALPHA_ADDCOLOR</tt>,
+    <tt>MODULATEINVALPHA_ADDCOLOR</tt>,
+    <tt>MODULATEINVCOLOR_ADDALPHA</tt>
+    are temporarily not supported.</p>
+
+    <p><i>TODO</i>: source values "DIFFUSE" and "SPECULAR" are treated
+    the same, as <tt>PRIMARY_COLOR</tt> (in the sense of OpenGL
+    ARB_texture_env_combine extension). Primary color contains
+    material ambient, diffuse and specular factors,
+    multiplied by lighting properties, summed over all lights.
+    I don't know of any way to efficiently implement separate
+    diffuse / specular sources &mdash; please report if you do,
+    otherwise there's no way this can be fixed (note that engine's
+    multi-texturing must work without shaders too).</p>
+
+    <p><i>TODO</i>: <tt>function</tt> field is not supported for now.
+    It's somewhat uncomfortable, corresponding OpenGL settings
+    (GL_OPERANDx) operate <i>before</i> normal texture unit calculations
+    are done, while X3D spec requires <tt>function</tt> to act afterwards.
+    To implement it generally, I'd have to use 1 more texture unit than
+    requested (if the last texture unit will use any non-default function).</p>
+
+    <p>See <a href="#section_multi_texturing">clarifications to X3D multi-texturing specification</a>
+    for more details about multi-texture handling.
+  </li>
+
+  <li><tt><a href="http://www.web3d.org/files/specifications/19775-1/V3.2/Part01/components/texturing.html#TextureCoordinateGenerator">TextureCoordinateGenerator</a></tt>
+    <p>Supported modes are now "SPHERE", "COORD", "COORD-EYE",
+    "CAMERASPACEPOSITION", "CAMERASPACENORMAL", "CAMERASPACEREFLECTIONVECTOR".</p>
+
+    <p>Note that "CAMERASPACEPOSITION" and
+    "COORD-EYE" are exactly the same thing. Google confirms it
+    (<a href="https://www.h3dapi.org:8090/H3DAPI/trunk/H3DAPI/src/TextureCoordinateGenerator.cpp">e.g.
+    this source code also treats them as equal</a> and
+    <a href="http://www.bitmanagement.com/developer/contact/labs/chrome.html">in this old
+    bitmanagement spec they mention they are equal</a>).</p>
+
+    <p>As an extension, we also allow <a href="x3d_extensions.html#section_ext_tex_coord_worldspace">"WORLDSPACEREFLECTIONVECTOR"
+    and "WORLDSPACENORMAL" texture generation modes</a>.</p>
+
+    <p>TODO: not implemented modes: "SPHERE-LOCAL", "NOISE", "NOISE-EYE",
+    "SPHERE-REFLECT", "SPHERE-REFLECT-LOCAL".
+
+  <li><p><tt><a href="http://www.web3d.org/files/specifications/19775-1/V3.2/Part01/components/texturing.html#TextureProperties">TextureProperties</a></tt>
+    <p><tt>minificationFilter</tt>, <tt>magnificationFilter</tt>,
+    <tt>anisotropicDegree</tt> are supported. <i>TODO</i>: rest is not.
+</ul>
+
+<h2><a name="section_support_formats">3. Supported image file formats</a></h2>
+
+<p>See <a href="http://castle-engine.sourceforge.net/glviewimage.php">glViewImage <i>(online docs)</i></a> features
+for the full list of 2D image formats we can handle.
+See <a href="#section_dds">lower on this page for details about DDS format
+support</a>.</p>
+
+<h2><a name="section_multi_texturing">4. Clarifications to X3D multi-texturing specification</a></h2>
+
+<h3><a name="section_multi_texturing_clarifications">4.1. Precise and corrected MultiTexture.mode specification (aka "how do we handle it")</a></h3>
+
+<p>To allow different texture modes for RGB and for alpha channel,
+you should just write two mode names inside one string, and separate
+them by a comma or slash (additional whitespace around is allowed).
+For example, <tt>mode [ "MODULATE / REPLACE" ]</tt>
+means that on the 1st texture unit, RGB is modulated and alpha is replaced.
+Contrast this with <tt>mode [ "MODULATE" "REPLACE" ]</tt>, that means
+to modulate (both RGB and alpha) on the 1st texture unit,
+and then to replace (both RGB and alpha) on the 2nd texture unit.</p>
+
+<p>This way we keep the interpretation that "one string on the mode field
+always describes full behavior of exactly one texture unit".
+Of course, some modes are not available for alpha channel (these are
+the OpenGL constraints).</p>
+
+<p>Table below describes precise behavior and disallowed
+situations for all mode names. Treat this as a corrected and precise version
+of the similar table in X3D spec of <tt>MultiTexture</tt>
+(see text down for details where and why it's corrected,
+short version: specification is simply poor and inconsistent).
+In table below,</p>
+
+<ol>
+  <li><b>Arg1 is the current texture unit,</b></li>
+  <li><b>Arg2 is determined by the source field</b>. By default,
+    it's the result of previous texture stage, or (for the 1st stage)
+    it's interpolated material*lighting.</li>
+</ol>
+
+<table class="specification">
+  <tr>
+    <th>Mode name</th>
+    <th>Behavior when used alone<br/>
+      (like "REPLACE")</th>
+    <th>Behavior when used for only RGB channel<br/>
+      (like "REPLACE / ...")</th>
+    <th>Behavior when used for only alpha channel<br/>
+      (like "... / REPLACE")</th>
+  </tr>
+
+  <tr>
+    <td>MODULATE</td>
+    <td>Output.RGBA := Arg1.RGBA * Arg2.RGBA</td>
+    <td>Output.RGB  := Arg1.RGB  * Arg2.RGB </td>
+    <td>Output.A    := Arg1.A    * Arg2.A   </td>
+  </tr>
+
+  <tr>
+    <td>MODULATE2X</td>
+    <td>Output.RGBA := Arg1.RGBA * Arg2.RGBA * 2</td>
+    <td>Output.RGB  := Arg1.RGB  * Arg2.RGB  * 2</td>
+    <td>Output.A    := Arg1.A    * Arg2.A    * 2</td>
+  </tr>
+
+  <tr>
+    <td>MODULATE4X</td>
+    <td>Output.RGBA := Arg1.RGBA * Arg2.RGBA * 4</td>
+    <td>Output.RGB  := Arg1.RGB  * Arg2.RGB  * 4</td>
+    <td>Output.A    := Arg1.A    * Arg2.A    * 4</td>
+  </tr>
+
+  <tr>
+    <td>REPLACE or SELECTARG1</td>
+    <td>Output.RGBA := Arg1.RGBA</td>
+    <td>Output.RGB  := Arg1.RGB </td>
+    <td>Output.A    := Arg1.A   </td>
+  </tr>
+
+  <tr>
+    <td>SELECTARG2</td>
+    <td>Output.RGBA := Arg2.RGBA</td>
+    <td>Output.RGB  := Arg2.RGB </td>
+    <td>Output.A    := Arg2.A   </td>
+  </tr>
+
+  <tr>
+    <td>ADD</td>
+    <td>Output.RGBA := Arg1.RGBA + Arg2.RGBA</td>
+    <td>Output.RGB  := Arg1.RGB  + Arg2.RGB </td>
+    <td>Output.A    := Arg1.A    + Arg2.A   </td>
+  </tr>
+
+  <tr>
+    <td>ADDSIGNED</td>
+    <td>Output.RGBA := Arg1.RGBA + Arg2.RGBA - 0.5</td>
+    <td>Output.RGB  := Arg1.RGB  + Arg2.RGB  - 0.5</td>
+    <td>Output.A    := Arg1.A    + Arg2.A    - 0.5</td>
+  </tr>
+
+  <tr>
+    <td>ADDSIGNED2X</td>
+    <td>Output.RGBA := (Arg1.RGBA + Arg2.RGBA - 0.5) * 2</td>
+    <td>Output.RGB  := (Arg1.RGB  + Arg2.RGB  - 0.5) * 2</td>
+    <td>Output.A    := (Arg1.A    + Arg2.A    - 0.5) * 2</td>
+  </tr>
+
+  <tr>
+    <td>SUBTRACT</td>
+    <td>Output.RGBA := Arg1.RGBA - Arg2.RGBA</td>
+    <td>Output.RGB  := Arg1.RGB  - Arg2.RGB </td>
+    <td>Output.A    := Arg1.A    - Arg2.A   </td>
+  </tr>
+
+  <tr>
+    <td>OFF</td>
+    <td>Texture stage is simply turned off.</td>
+    <!-- What actually happens there? Previous takes value from previous tex unit? -->
+    <td colspan="2">Not allowed.</td>
+  </tr>
+
+  <tr>
+    <td>DOTPRODUCT3</td>
+    <td>NewArg1.RGB := (Arg1.RGB - 0.5) * 2;<br/>
+        NewArg2.RGB := (Arg2.RGB - 0.5) * 2;<br/>
+        Output.RGBA := dot(NewArg1.RGB, NewArg2.RGB)</td>
+    <td>... (calculate NewArg* same as on the left)...<br/>
+        Output.RGB := dot(NewArg1.RGB, NewArg2.RGB)</td>
+    <td>Not allowed.</td>
+  </tr>
+
+  <tr>
+    <td>BLENDDIFFUSEALPHA</td>
+    <td>Output.RGBA :=<br/>
+        &nbsp;&nbsp;Arg1 * PRIMARY_COLOR.Alpha +<br/>
+        &nbsp;&nbsp;Arg2 * (1 - PRIMARY_COLOR.Alpha)</td>
+    <td colspan="2">Not allowed.</td>
+  </tr>
+
+  <tr>
+    <td>BLENDTEXTUREALPHA</td>
+    <td>Output.RGBA :=<br/>
+        &nbsp;&nbsp;Arg1 * Arg1.A +<br/>
+        &nbsp;&nbsp;Arg2 * (1 - Arg1.A)</td>
+    <td colspan="2">Not allowed.</td>
+  </tr>
+
+  <tr>
+    <td>BLENDFACTORALPHA</td>
+    <td>Output.RGBA :=<br/>
+        &nbsp;&nbsp;Arg1 * MULTI_TEXTURE_CONSTANT.Alpha +<br/>
+        &nbsp;&nbsp;Arg2 * (1 - MULTI_TEXTURE_CONSTANT.Alpha)</td>
+    <td colspan="2">Not allowed.</td>
+  </tr>
+
+  <tr>
+    <td>BLENDCURRENTALPHA</td>
+    <td>Output.RGBA :=<br/>
+        &nbsp;&nbsp;Arg1 * PREVIOUS_STAGE.Alpha +<br/>
+        &nbsp;&nbsp;Arg2 * (1 - PREVIOUS_STAGE.Alpha)</td>
+    <td colspan="2">Not allowed.</td>
+  </tr>
+</table>
+
+<h3><a name="section_multi_texturing_source">4.2. MultiTexture.source extensions</a></h3>
+
+<p>In the same spirit, you can specify separate sources for RGB and alpha
+channels, just separate them by comma or slash within a single string.
+For example, source string <tt>"DIFFUSE / FACTOR"</tt> says to take diffuse
+color as a source for Arg2.RGB and constant factor (<tt>MultiTexture.alpha</tt> field)
+for Arg2.Alpha.
+
+<p>Note that the empty string is also a source name (it means to take
+color from previous texture stage). So source string like <tt>"/ FACTOR"</tt>
+is also Ok (takes RGB from previous stage, and alpha from constant factor),
+and <tt>"FACTOR /"</tt> is Ok (takes RGB from constant factor
+<tt>MultiTexture.color</tt>, and alpha from previous stage).
+
+<p>An example: suppose you have two textures that you want to subtract
+on RGB (tex2 - tex1) channel, and you want to set resulting alpha channel
+to 1.0 (regardless of any texture value). This will work:
+
+<pre class="vrml_code">
+MultiTexture {
+  texture [
+    ImageTexture { url "tex1.png" }
+    ImageTexture { url "tex2.png" }
+  ]
+  mode [ "REPLACE" "SUBTRACT / SELECTARG2" ]
+  source [ "" " / FACTOR" ]
+  alpha 1.0
+}
+
+# Calculations on texture unit 1:
+#   Stage1Output.RGBA := Tex1.RGBA;
+# Calculations on texture unit 2:
+#   Output.RGB := Tex2.RGB - Stage1Output.RGB;
+#   Output.A := Arg2.A := 1.0;
+</pre>
+
+
+<h3><a name="section_multi_texturing_spec_problems">4.3. Problems with existing X3D MultiTexture.mode specification</a></h3>
+
+<p>Unfortunately, X3D specification is awfully ambiguous
+when talking about multi-texturing modes.
+Below is my list of spotted problems, and an explanation how we handle it in our
+engine (for a short summary, modes table in section above should also
+be informative).
+I tried to make my implementation following common-sense,
+hopefully it will be somewhat compatible to other implementations
+and at the same time comfortable to users.
+
+<p>Please report if any other VRML/X3D browser treats it differently,
+although it doesn't necessarily mean that I will fix to be compatible
+(I know that Octaga seems to revert the order of textures, for starters,
+which seems to contradict the spec... No wonder people get this messed
+up, since specification is so poor at this point.)</p>
+
+<p>(And if you have any power over the spec, please fix issues mentioned
+below in the next version.
+<a href="http://www.web3d.org/message_boards/viewtopic.php?f=1&amp;t=775">It
+seems I'm not the only one confused by specs</a>.
+<a href="http://www.web3d.org/message_boards/viewtopic.php?f=1&amp;t=1387">I
+posted on forum asking for input about this</a>, without any answer so far.)</p>
+
+<ol>
+  <li><p><i>The mode field may contain an additional blending mode
+    for the alpha channel.</i> &mdash; this is the most troublesome
+    part of the specification. It contradicts most of the remaining
+    specification for MultiTexture node &mdash; other parts clearly
+    suggest that exactly one mode string corresponds to one texture unit,
+    for example 1. it's mentioned explicitly that
+    if the mode.length is less than texture.length,
+    remaining modes should be assumed as "modulate" 2. many modes
+    are clearly used over both RGB and Alpha channels, and they
+    specify results for both RGB and Alpha channels.</p>
+
+    <p>This means that the meaning of <tt>mode=["MODULATE","REPLACE"]</tt>
+    is not clear.</p>
+
+    <p>What did the authors meant by the word <b>may</b>
+    in the sentence "may contain an additional blending mode"?
+    Expecting two mode strings for one texture unit
+    clearly contradicts the spec, expecting only 1 mode means that
+    no mode specific for alpha channel is available.
+    Doing some smart detection when to expect the next mode to be
+    for alpha channel seems very risky &mdash; since the specification
+    says absolutely nothing about it. Should I expect separate
+    mode for alpha channel only when
+    the texture in current unit has some alpha channel?
+    This isn't as sensible on the 2nd look, since operating on alpha channel
+    in multi-texturing makes sense even if current texture unit
+    doesn't provide any (after all, alpha may come from previous unit,
+    or constant).</p>
+
+    <p>Not to mention that some modes are clearly not possible for
+    alpha channel.</p>
+
+    <p><i>Our interpretation:</i> One string inside the mode field
+    always describes behavior for both RGB and alpha channel.
+    So <i>one string inside mode field always corresponds to one
+    texture unit, Ok?</i>.
+
+    <p>To allow different modes for RGB and alpha channel,
+    you should just write two mode names inside one string, and separate
+    them by a comma or slash. Like <tt>"MODULATE / REPLACE"</tt>.
+    See the modes table in previous section for a list of all possible values.</p>
+
+  <li><p>In <i>Table 18.3 - Multitexture modes</i>, "REPLACE" mode
+    is specified as "Arg2", which makes no sense. Arg2 comes
+    by default from previous unit (or material color),
+    this is implicated by the sentence "The source field
+    determines the colour source for the second argument".
+    So <tt>mode "REPLACE"</tt> interpreted as "Arg2"
+    would then 1. completely ignore current
+    texture unit 2. contradict the normal meaning of "REPLACE",
+    which is explicitly mentioned in specification at paragraph
+    before this table ("REPLACE for unlit appearance").
+    An example with alpha (although ambiguous on it's own,
+    more about this in previous point) clearly shows that
+    "REPLACE" takes from 1st argument.</p>
+
+    <p><i>Our interpretation:</i> "REPLACE" copies the "Arg1" (that is,
+    current texture unit values). IOW, it's equivalent to "SELECTARG1".
+    To make it absolutely clear, it would also help if the spec
+    would clearly say something along
+    the lines "Arg1 is the current texture unit, Arg2 is what is determined
+    by the source field (by default, it's previous tex unit (or mat color
+    for 1st unit))".</p>
+
+  <li><p>The meaning of "ADDSIGNED" and "ADDSIGNED2X" is unsure.
+    Spec doesn't give the exact equation, and from the wording description
+    it's not clear whether the -0.5 bias is applied to the sum,
+    or each component.</p>
+
+    <p>Note that no interpretation results in the output
+    range of values in -0.5 ... 0.5, so it's not clear what is the "effective"
+    range they talk about in "ADDSIGNED" spec.</p>
+
+    <p><i>Our interpretation:</i> I interpret it
+    as "-0.5 bias is added to the sum",
+    this follows OpenGL GL_ADD_SIGNED constant, so I guess this
+    was the intention of the spec.</p>
+
+  <li><p>Although some modes say explicitly what happens with
+    alpha channel, some do not. This is especially visible with
+    "subtract" mode, that will subtract alphas making resulting
+    alpha = 0 for the most common situation when both textures
+    have alpha = 1.</p>
+
+    <p><i>Our interpretation:</i>  I interpret this all as operating on all
+    RGBA channels the same way. Comparing with Octaga, results
+    for "subtract" seem equal this way: with default alphas = 1,
+    result gets alpha = 0.</p>
+
+    <p>If you don't like this behavior, you can specify
+    separate mode names for RGB and alpha channel, separating them by a slash.
+    For example, <tt>"SUBTRACT / MODULATE"</tt> will subtract RGB but modulate alpha.</p>
+
+  <li><p>It's not specified what channels are inverted by function="COMPLEMENT"
+    value. Only RGB seems most sensible (that's what would seem
+    usually useful), but it's not written explicitly.
+
+    <p><i>Our interpretation:</i> I plan to treat it as "only RGB",
+    that is not invert alpha channel. Although for now "function" field
+    is not handled.
+
+  <li><p>Oh, by the way: the paragraphs for <tt>MultiTextureTransform</tt>
+    (<i>texture coordinates for channel 0 are replicated...</i>)
+    and <tt>MultiTextureCoordinate</tt>
+    (<i>identity matrices are assumed...</i>) should be swapped in
+    the spec :)
+
+  <li><p>Another note: <tt>MODULATEINVCOLOR_ADDALPHA</tt> mentions
+    that another mode, somehow forgotten, should exist:
+    <tt>MODULATECOLOR_ADDALPHA</tt> (that doesn't invert the color).
+</ol>
+
+<h2><a name="section_dds">5. DDS (DirectDraw Surface) support details</a></h2>
+
+<p><a href="http://en.wikipedia.org/wiki/DirectDraw_Surface">DirectDraw
+Surface (DDS) image format</a> is supported. This format allows to store textures
+compressed for GPU (S3TC), storing mipmaps, cube maps, and volume (3D) textures.
+A number of technical details about DDS implementation are below, but in short:
+we try to support all formats and all options of DDS in a standard way.
+You may find example DDS images inside <a href="demo_models.html">our VRML/X3D demo models</a> (look inside <tt>textures</tt> subdirectory for <tt>*.dds</tt> files). You can open them directly with our image viewer <a href="http://castle-engine.sourceforge.net/glviewimage.php">glViewImage <i>(online docs)</i></a>.</p>
+
+<p>Implementation history:
+
+<ul>
+  <li>DDS support is natively built into the engine. Since I knew that I want to use many of DDS features, like cube maps, 3D textures, mipmaps, compression, I decided the best way to go will be to create my own reader, instead of relying on external tools.
+
+  <li>Other notable open-source implementations of DDS are by <a href="http://nifelheim.dyndns.org/~cocidius/dds/">GIMP-DDS plugin</a> and new <a href="http://www.imagemagick.org/">ImageMagick</a> (<a href="http://www.imagemagick.org/discourse-server/viewtopic.php?f=2&amp;t=10729">since 6.3.9</a>).
+
+  <li>While implementing, I was looking at GIMP DDS source code (it's on GNU GPL >= 2 :) ) and <a href="http://msdn.microsoft.com/en-us/library/bb943990(VS.85).aspx">MS documentation for DDS</a>.
+</ul>
+
+<p>Cube maps in DDS are supposed to be oriented as usual for DDS:
+
+<ol>
+  <li><p>Which means that they match Direct X "positive/negative x/y/z". For OpenGL rendering we swap positive/negative Y faces (because Direct X has left-handed coordinate system, <a href="http://doc.51windows.net/directx9_sdk/graphics/programmingguide/advancedtopics/PixelPipe/envmap/cubicenvironmentmapping.htm">see here for drawing of DirectX cube map images orientation</a> and compare with <a href="http://www.opengl.org/registry/specs/ARB/texture_cube_map.txt">OpenGL cube map orientation</a>).
+
+  <li><p>It's also a different orientation then the one of X3D ComposedCubeMap specification (left/right, bottom/top, front/back, with bottom/top on Y axis; X3D orientation needs rotating left,right,front,back images by 180 degrees for OpenGL orientation).
+</ol>
+
+<p>Images in DDS are supposed to be written from top to bottom row, as is the standard in DDS. (One particular tool, AMD CubeMapGen, allows to invert rows of the DDS images to match OpenGL bottom-to-top ordering; don't use this &mdash; we expect rows ordered as is standard in DDS, top-to-bottom.) Internally, our engine just inverts the rows for OpenGL (yes, <a href="http://users.telenet.be/tfautre/softdev/ddsload/explanation.htm">this is doable also for S3TC compressed images</a>.)</p>
+
+<p>Pixel formats supported:</p>
+
+<ol>
+  <li><p>Absolutely <i>all uncompressed non-float pixel formats are supported</i>.</p>
+
+    <p>Details:</p>
+
+    <p>The formats that are currently loaded optimally are ABGR8, BGR8, AL8, L8. They translate to RGBA8, RGB8 etc. OpenGL formats (reversed order, as DDS color masks are little-endian). Popular ARGB8 and RGB8 are also loaded very fast.</p>
+
+    <p>Grayscale (luminance) images are allowed. AL8 and L8 are optimized. Note that grayscale images aren't officially allowed by DDS docs, but at least GIMP-DDS plugin can write it (just sets all R, G and B masks equal, and doesn't set any of DDPF_RGB, DDPF_FOURCC, DDPF_PALETTEINDEXED8).</p>
+
+    <p>Also only-alpha images are allowed (another undocumented DDS feature, GIMP-DDS can write it, for now they will result in grayscale(white) with alpha image).</p></li>
+
+  <li><p>Compressed texture formats handled: DXT1, DXT3, DXT5 are supported.
+    Texture with DXT1 is always treated like a texture with simple (yes/no)
+    alpha channel (so it will be rendered with alpha testing) and
+    DXT3 / DXT5 are always treated like a texture with full range
+    alpha channel (so they will be rendered with blending).</p>
+
+    <p>Both normal (2D) textures and cube maps may be compressed. (There is no compression possible for 3D textures &mdash; neighter DDS format allows it, nor do common graphic cards.)</p></li>
+
+  <li><p>Float textures are for now not supported, so our DDS reader also
+    doesn't support them.</p></li>
+</ol>
+
+<p>If DDS file includes mipmaps, and mipmaps are required for texture minification filter, we will use DDS mipmaps (instead of generating mipmaps automatically). Works for all 2D, 3D, cubemap DDS files.</p>
+
+</td><td class="layout">
+  <div class="sidebar">
+    <div class="sidebar_title"><a href="vrml_x3d.html">VRML / X3D support</a></div><ul><li><a href="demo_models.html">Demo models</a></li><li><a href="x3d_extensions.html">Extensions</a><ul><li><a href="compositing_shaders.html">Compositing Shaders</a></li><li><a href="x3d_extensions_screen_effects.html">Screen Effects</a></li><li><a href="x3d_extensions_shadow_maps.html">Shadow Maps</a></li><li><a href="x3d_extensions_vrml1.html">(Old) VRML 1.0</a></li></ul></li><li><a href="x3d_implementation_status.html">Implementation status</a><ul><li><a href="x3d_implementation_core.html">Core</a></li><li><a href="x3d_implementation_time.html">Time</a></li><li><a href="x3d_implementation_networking.html">Networking</a></li><li><a href="x3d_implementation_grouping.html">Grouping</a></li><li><a href="x3d_implementation_rendering.html">Rendering</a></li><li><a href="x3d_implementation_shape.html">Shape</a></li><li><a href="x3d_implementation_geometry3d.html">Geometry3D</a></li><li><a href="x3d_implementation_geometry2d.html">Geometry2D</a></li><li><a href="x3d_implementation_text.html">Text</a></li><li><a href="x3d_implementation_sound.html">Sound</a></li><li><a href="x3d_implementation_lighting.html">Lighting</a></li><li>Texturing<ul><li><a href="x3d_implementation_texturing.html#section_multi_texturing">Clarifications to X3D multi-texturing</a></li><li><a href="x3d_implementation_texturing.html#section_dds">DDS (DirectDraw Surface)</a></li></ul></li><li><a href="x3d_implementation_interpolation.html">Interpolation</a></li><li><a href="x3d_implementation_pointingdevicesensor.html">Pointing device sensor</a></li><li><a href="x3d_implementation_keydevicesensor.html">Key device sensor</a></li><li><a href="x3d_implementation_environmentalsensor.html">Environmental sensor</a></li><li><a href="x3d_implementation_navigation.html">Navigation</a></li><li><a href="x3d_implementation_environmentaleffects.html">Environmental effects</a></li><li><a href="x3d_implementation_hanim.html">H-Anim</a></li><li><a href="x3d_implementation_nurbs.html">NURBS</a><ul><li><a href="x3d_implementation_nurbs.html#section_homogeneous_coordinates">Control points are in homogeneous coordinates</a></li></ul></li><li><a href="x3d_implementation_scripting.html">Scripting</a></li><li><a href="x3d_implementation_eventutilities.html">Event utilities</a></li><li><a href="x3d_implementation_shaders.html">Programmable shaders</a></li><li><a href="x3d_implementation_cadgeometry.html">CAD geometry</a></li><li><a href="x3d_implementation_texturing3d.html">Texturing3D</a></li><li><a href="x3d_implementation_cubemaptexturing.html">Cube map environmental texturing</a></li></ul></li><li><a href="nist_vrml_test_suite.html">NIST conformace test suite</a></li><li><a href="castle_script.html">CastleScript language reference</a></li><li><a href="kanim_format.html">Kanim (precalculated animations) file format</a></li><li><a href="x3d_time_origin_considered_uncomfortable.html">VRML / X3D time origin considered uncomfortable</a></li></ul></div></td></tr></table><script type="text/javascript">
+  jQuery('a.screenshot').colorbox({opacity: 0.9, rel:'screenshot', maxWidth:'90%', maxHeight:'90%'});
+</script>
+  
+<hr>
+
+<div class="page_footer">
+
+    <address>
+    By Michalis Kamburelis, as part of
+    <a href="http://castle-engine.sourceforge.net/">Castle Game Engine</a>.
+    </address>
+    
+  <table><tr>
+
+    <td><a href="http://sourceforge.net/projects/castle-engine">Hosted by SourceForge.net</a></td>
+
+    <td><span class="page_copyright">Copyright <a href="http://michalis.ii.uni.wroc.pl/~michalis/">Michalis Kamburelis</a>.
+This page is considered part of documentation of my programs,
+and you are free to modify and further distribute it on terms of
+<a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License</a>.
+</span></td>
+
+    
+  </tr></table>
+
+  
+</div>
+
+</body>
+</html>
+

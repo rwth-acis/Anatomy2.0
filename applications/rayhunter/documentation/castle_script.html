@@ -1,0 +1,1098 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+
+<html lang="en">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta name="Author" content="Michalis Kamburelis">
+
+<meta name="Language" content="English">
+
+<title>CastleScript language</title>
+
+
+<!--
+  This is unclean, but it's more comfortable to keep below CSS
+  directly inside HTML page. This is in kambi_common.php,
+  that should be useful for both michalis.ii and castle-engine.sf.net webpages,
+  and must be suitable also for offline documentation in castle-engine programs.
+-->
+<!-- link type="text/css" rel="stylesheet" media="all"  href="kambi-php-lib/kambi_common.css" -->
+
+<style type="text/css"><!--
+body { background: white; font-family: sans-serif; }
+
+dt { font-weight: bold; }
+div.page_footer { }
+span.page_copyright { font-size: smaller }
+
+span.version_number { font-size: small }
+
+div.quick_links_bottom_line { text-align: left; }
+
+.rss_link {
+  float: right;
+  background: red;
+  padding: 0.3em;
+  border: thin outset black;
+}
+
+.rss_link a {
+  color: white;
+  font-weight: bold
+}
+--></style>
+
+
+<link rel="alternate" type="application/rss+xml"
+  title="Castle Game Engine - News Feed"
+  href="http://castle-engine.sourceforge.net/news_feed.php">
+
+<link type="text/css" rel="stylesheet" media="all" href="castle-engine.css">
+<link type="text/css" rel="stylesheet" href="colorbox/example3/colorbox.css">
+
+<script type="text/javascript" src="castle-engine.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="colorbox/jquery.colorbox-min.js"></script>
+
+<style type="text/css"><!--
+/**
+ * GeSHi Dynamically Generated Stylesheet
+ * --------------------------------------
+ * Dynamically generated stylesheet for delphi
+ * CSS class: sourcecode, CSS id: 
+ * GeSHi (C) 2004 - 2007 Nigel McNie, 2007 - 2008 Benny Baumann
+ * (http://qbnz.com/highlighter/ and http://geshi.org/)
+ * --------------------------------------
+ */
+.delphi.sourcecode .de1, .delphi.sourcecode .de2 {font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;}
+.delphi.sourcecode  {font-family:monospace;}
+.delphi.sourcecode .imp {font-weight: bold; color: red;}
+.delphi.sourcecode li, .delphi.sourcecode .li1 {font-weight: normal; vertical-align:top;}
+.delphi.sourcecode .ln {width:1px;text-align:right;margin:0;padding:0 2px;vertical-align:top;}
+.delphi.sourcecode .li2 {font-weight: bold; vertical-align:top;}
+.delphi.sourcecode .kw1 {color: #000000; font-weight: bold;}
+.delphi.sourcecode .kw2 {color: #000000; font-weight: bold;}
+.delphi.sourcecode .kw3 {color: #000066;}
+.delphi.sourcecode .kw4 {color: #000066; font-weight: bold;}
+.delphi.sourcecode .co1 {color: #808080; font-style: italic;}
+.delphi.sourcecode .co2 {color: #008000; font-style: italic;}
+.delphi.sourcecode .coMULTI {color: #808080; font-style: italic;}
+.delphi.sourcecode .es0 {color: #ff0000; font-weight: bold;}
+.delphi.sourcecode .br0 {color: #000066;}
+.delphi.sourcecode .sy0 {color: #000066;}
+.delphi.sourcecode .sy1 {color: #000066;}
+.delphi.sourcecode .sy2 {color: #000066;}
+.delphi.sourcecode .sy3 {color: #000066;}
+.delphi.sourcecode .st0 {color: #ff0000;}
+.delphi.sourcecode .nu0 {color: #0000ff;}
+.delphi.sourcecode .me1 {color: #006600;}
+.delphi.sourcecode .re0 {color: #0000cc;}
+.delphi.sourcecode .re1 {color: #ff0000;}
+.delphi.sourcecode .ln-xtra, .delphi.sourcecode li.ln-xtra, .delphi.sourcecode div.ln-xtra {background-color: #ffc;}
+.delphi.sourcecode span.xtra { display:block; }
+ -->
+</style>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    (function() {
+        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+        s.type = 'text/javascript';
+        s.async = true;
+        s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+        t.parentNode.insertBefore(s, t);
+    })();
+/* ]]> */
+</script><script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+  </head>
+<body>
+
+
+  <div class="header">
+    <!--img class="header_icon" src="images/header_icon.png" alt="Castle Game Engine icon" /-->
+    <div class="header_title"><a href="http://castle-engine.sourceforge.net/index.php">Castle Game Engine</a></div>
+    
+    <table class="header_menu">
+      <tr>
+        <td colspan="15" class="higher higher_left">&larr; Users</td>
+        <td colspan="6" class="higher higher_right">Developers &rarr;</td>
+      </tr>
+      <tr><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/index.php">Intro</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/news.php">News</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/view3dscene.php" title="VRML / X3D browser, and a viewer for other 3D model formats">view3dscene</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/castle.php" title="First-person perspective game, in a dark fantasy setting">The Castle</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/all_programs.php" title="All the games and tools using our 3D engine">All Programs</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/forum.php" title="Ask for help, report bugs, discuss features">Forum</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/donate.php">Donate</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/engine.php" title="Sources and documentation for developers">Engine</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="vrml_x3d.html" title="Our extensions and status of VRML/X3D implementation" id="current">VRML/X3D</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/blender.php" title="Customized Blender X3D exporter">Blender</a></td><td class="lower_separator"><div>&nbsp;</div></td>
+      </tr>
+    </table>
+  </div><table class="layout" cellspacing="0">
+      <col class="content_column">
+      <col class="sidebar_column">
+      <tr><td class="layout content">
+
+<h1>CastleScript language<br/><span style="font-size: medium">Simple scripting language for Castle Game Engine</span></h1>
+<p><tt>CastleScript</tt> (previously "KambiScript")
+is a simple scripting language used in
+our <i>Castle Game Engine</i>. You can use it in VRML/X3D <tt>Script</tt>
+nodes. Also it's syntax of mathematical expressions is usable
+throughout our engine, for example <a href="http://castle-engine.sourceforge.net/glplotter_and_gen_function.php">glplotter and gen_function <i>(online docs)</i></a> (which are completely
+not related to VRML) use this syntax to define function expressions.</p>
+
+<p>The language is deliberately very simple. It's a scripting language,
+with features inspired by many other languages, and by author's laziness.
+For example I was too lazy to add <tt>if</tt>, <tt>while</tt> and such
+constructs to the grammar,
+instead you have built-in functions like
+<a href="#function_if"><tt>if(condition, then_code, else_code)</tt></a>.
+<b>This language doesn't try to compete with other scripting languages</b>
+(like <i>ECMAScript</i>, commonly used in VRML scripting).
+It's not suitable for larger programs
+(for starters, you cannot define your own types).<!-- ; you also cannot
+currently call user-defined functions (you can only call built-in functions;
+user-defined functions are only automatically called when VRML Script
+receives an event); also you cannot declare your own local variables
+(but you can use VRML Script initializeOnly fields for this purpose)-->
+Also it's specific to our engine, and probably always will be.</p>
+
+<p>That said, the language is powerful enough for many uses.
+You can process all VRML field types with it, including strings,
+vectors, matrices and even images. Also arrays (VRML MFXxx fields) are covered.
+There are many built-in functions and operators, heavily overloaded
+for all types where they apply (for example, you can add numbers,
+vectors, matrices or strings).
+It's an integral part of our engine, without the need for any external libraries.
+And do note that our engine doesn't support (yet) ECMAScript for VRML script
+at all, so this is the only way to do scripting for now (without
+writing and compiling any ObjectPascal code).</p>
+
+<p>Programmers may also be interested that language implementation is flexible,
+you can extend it easily from ObjectPascal (adding new data-types and
+built-in functions), for many uses (not necessarily related with VRML).
+The language is completely safe (that is, there's no possibility for
+malicious script author to do something harmful)
+simply because the language is a closed data-processing language
+(the only I/O routines,
+<a href="#function_image_load"><tt>image_load(url)</tt></a> and
+<a href="#function_writeln"><tt>writeln(string)</tt></a>,
+expose functionality that is possible anyway with
+pure non-scripted VRML).</p>
+
+
+<div class="table_of_contents"><ol>
+<li><a href="#section_script_urls">Writing scripts inside VRML Script URLs</a>
+</li>
+<li><a href="#section_examples">Examples</a>
+</li>
+<li><a href="#section_syntax">Syntax</a>
+<ol>
+<li><a href="#section_types_constants">Types and constants</a>
+</li>
+<li><a href="#section_programs_expressions">Programs and expressions</a>
+</li>
+</ol>
+</li>
+<li><a href="#section_built_in_functions">Built-in functions</a>
+<ol>
+<li><a href="#section_functions_conversion">Type conversion</a>
+</li>
+<li><a href="#section_functions_control_flow">Control flow</a>
+</li>
+<li><a href="#section_functions_number">Number (integer and float) functions</a>
+<ol>
+<li><a href="#section_functions_random">Random numbers functions</a>
+</li>
+</ol>
+</li>
+<li><a href="#section_functions_boolean">Boolean functions</a>
+</li>
+<li><a href="#section_functions_string">String functions</a>
+</li>
+<li><a href="#section_functions_array">Array functions</a>
+</li>
+<li><a href="#section_functions_vector">Vector functions</a>
+<ol>
+<li><a href="#section_functions_rotation">Rotation functions</a>
+</li>
+</ol>
+</li>
+<li><a href="#section_functions_matrix">Matrix functions</a>
+</li>
+<li><a href="#section_functions_image">Image functions</a>
+</li>
+<li><a href="#section_functions_node">VRML node functions</a>
+</li>
+</ol>
+</li>
+<li><a href="#section_precise_grammar">Precise grammar</a>
+</li>
+</ol>
+</div>
+<h2><a name="section_script_urls">1. Writing scripts inside VRML Script URLs</a></h2>
+
+<p>URLs in <tt>Script</tt> node starting with <tt>castlescript:</tt>
+are understood to contain program in CastleScript language.
+URLs to external files with extension <tt>.castlescript</tt> point
+to whole files in CastleScript language.
+(Deprecated: also <tt>kambiscript:</tt> as a protocol and
+<tt>.castlescript</tt> as extension are recognized.) Like</p>
+
+<pre class="sourcecode">
+Script {
+  inputOnly SFFloat foo
+  outputOnly SFFloat foo_plus_one
+
+  url "castlescript:
+function foo(value, timestamp)
+foo_plus_one := value + 1
+"
+}
+
+Script {
+  url "my_script.castlescript"
+}
+</pre>
+
+<h2><a name="section_examples">2. Examples</a></h2>
+
+<p>Some examples of simple mathematical expressions for glplotter:</p>
+
+<pre class="sourcecode">
+  sin(x) ^ 10
+  2 * (cos(ln(x)) - 1)
+  sin(x) &gt; cos(x)
+  or( sin(x) &gt; cos(x), sin(x) &gt; 0 )
+</pre>
+
+<p>Some example of simple program for VRML script node:</p>
+
+<pre class="sourcecode">
+Script {
+  # Let's assume some TouchSensor.touchTime is routed here.
+  # When user clicks on this touch sensor, you want to close the door
+  # if they are open, or open them if they are closed.
+  inputOnly SFTime touch_time
+
+  initializeOnly SFBool open FALSE
+
+  # Let's assume this is routed to some TimeSensor.set_startTime
+  # that starts closing animation.
+  outputOnly SFTime close_time
+
+  # Let's assume this is routed to some TimeSensor.set_startTime
+  # that starts opening animation.
+  outputOnly SFTime open_time
+
+  url "castlescript:
+function touch_time(value, timestamp)
+if (open,
+    close_time := timestamp,
+    open_time := timestamp);
+open := not(open)
+"
+}
+</pre>
+
+<p>Example script behavior above could also be done by combining
+<tt>BooleanToggle</tt>, <tt>BooleanFilter</tt>, <tt>TimeTrigger</tt>
+X3D nodes.
+But script is already simpler and shorter, and allows you to trivially
+add other interesting things.</p>
+
+<pre class="sourcecode">
+# Simple converter from SFString to MFString using built-in <a href="#function_array"><tt>array</tt></a> function.
+Script {
+  inputOnly SFString input
+  outputOnly MFString output
+    url "castlescript:
+function input(value, timestamp)
+  output := array(value)
+"
+}
+</pre>
+
+<p>Some larger examples:
+<ul>
+  <li><p><a href="http://svn.code.sf.net/p/castle-engine/code/trunk/demo_models/castle_script/ball_game.x3dv">ball_game.x3dv</a>
+    &mdash; a small X3D game, with whole game logic implemented in CastleScript
+    (key handling by KeySensor node). Can be played in any VRML browser
+    supporting CastleScript, like <a href="http://castle-engine.sourceforge.net/view3dscene.php">view3dscene <i>(online docs)</i></a>    or any of the example VRML browser components in engine sources.
+
+  <li><p><a href="http://svn.code.sf.net/p/castle-engine/code/trunk/demo_models/castle_script/edit_texture.x3dv">edit_texture.x3dv</a>
+    &mdash; a toy image editor. Again, it's a pure X3D file (you can
+    open it and use with any VRML browser supporting CastleScript).
+    Uses CastleScript to implement various simple image editing
+    functions. It's a toy, not to be treated as a serious image editor
+    of course (there is no possibility to save created image for starter,
+    since CastleScript doesn't allow to save files from VRML for safety reasons.)
+    But it shows that even image processing is quite easy with CastleScript.
+
+  <li><p><a href="http://svn.code.sf.net/p/castle-engine/code/trunk/demo_models/castle_script/particles.x3dv">particles.x3dv</a>
+    &mdash; a simple particle engine. Whole particles animation,
+    logic (randomization, speed, gravity) is implemented in CastleScript.
+    "Particles" are rendered as points and lines (<tt>PointSet</tt>,
+    <tt>IndexedLineSet</tt>).
+</ul>
+
+<h2><a name="section_syntax">3. Syntax</a></h2>
+
+<p><i>Syntax is free-form</i>, the only use of whitespace (including newlines,
+or any indentation) is to separate tokens when needed (for example, between
+two identifiers).</p>
+
+<p><i>Comments</i> are within curly braces: <tt>{ this is a comment }</tt>
+(Pascal-like).</p>
+
+<h3><a name="section_types_constants">3.1. Types and constants</a></h3>
+
+<p><i>Types</i> are never explicitly declared, and are checked
+at runtime. Four core types are available:</p>
+
+<ol>
+  <li><p><i>Integers.</i>
+    Syntax of integer constants is obvious,
+    like <tt>123</tt>. Built-in function
+    <a href="#function_int"><tt>int(...)</tt></a> allows
+    you to convert other core types into integer.</p>
+
+    <p>We use 64-bit signed integers (although for VRML long/int32
+    fields, they will have to fit within 32-bit.)</p>
+
+    <p>Specifically for comfortable processing of
+    <a href="http://web3d.org/x3d/specifications/ISO-IEC-19775-1.2-X3D-AbstractSpecification/Part01/components/keyboard.html#KeySensor">X3D
+    KeySensor node</a> events <tt>actionKeyPress/Release</tt>
+    you have 20 key constants available: <tt>ACTION_KEY_F1</tt>,
+    ... <tt>ACTION_KEY_F12</tt>, <tt>ACTION_KEY_HOME</tt>, etc.
+    (see KeySensor specification for full list).</p></li>
+
+  <li><p><i>Floats.</i> Syntax of float constants
+    is also obvious, like <tt>3.1415</tt>. You have
+    constants <tt>pi</tt> and <tt>enat</tt> (Euler's number).
+    Built-in function
+    <a href="#function_float"><tt>float(...)</tt></a> allows
+    you to convert other core types into float.</p>
+
+    <p>Precision: uses the best floating-point type precision on given
+    platform, which means at least Double, and on many platforms
+    Extended.</p></li>
+
+  <li><p><i>Booleans.</i> Two obvious constants are available, <tt>false</tt>
+    and <tt>true</tt> (case is ignored, as usual in CastleScript,
+    so you can also write uppercase
+    <tt>FALSE</tt> or <tt>TRUE</tt> like in classic VRML).
+    Built-in function
+    <a href="#function_bool"><tt>bool(...)</tt></a> allows
+    you to convert other core types into boolean.</p></li>
+
+  <li><p><i>Strings.</i> Syntax of constants is Pascalish (in apostrophes, and two
+    consecutive apostrophes inside mean that you want a single literal
+    apostrophe character). For example <tt>'He said "It''s mine."'</tt>.
+    Apostrophe was chosen not only because, y'know, it's Pascalish :),
+    but also because it makes embedding CastleScript code within
+    VRML string easier (no need to escape quotes by backslashes).
+    You can make actual newlines within the string, like in VRML.
+    For example:
+<pre class="sourcecode">
+Script {
+  # Let's assume some TouchSensor.touchTime is routed here.
+  inputOnly SFTime touch_time
+  outputOnly MFString text
+
+  url "castlescript:
+function touch_time(value, timestamp)
+  text := array(
+    'First string of text clicked on ' + string(value),
+    'Second string of text.
+Still second string of text.
+Simply make a newline in the string literal to get a newline inside the string.'
+  )
+"
+}
+</pre>
+
+    <p>Built-in function
+    <a href="#function_string"><tt>string(...)</tt></a> allows
+    you to convert other core types into string.</p></li>
+</ol>
+
+<p>The one and only implicit type conversion (promotion) of types is from
+integer to float (for example, <tt>my_float := 44</tt> works,
+you don't have to write <tt>my_float := 44.0</tt>).
+In particular, note that <i>boolean type is not interchangeable
+with integer</i> like in C. If you want to convert between boolean and integer,
+you have to convert explicitly by <tt>bool(my_int)</tt> or <tt>int(my_bool)</tt>,
+like in Pascal. The only exception is when using CastleScript solely for
+mathematical expressions (like in <a href="http://castle-engine.sourceforge.net/glplotter_and_gen_function.php">glplotter and gen_function <i>(online docs)</i></a>, internally using <tt>ParseFloatExpression</tt>
+function): in this case, result is always implicitly converted to float,
+like it would be embedded within <tt>float(...)</tt> call.
+</p>
+
+<p>When using CastleScript inside VRML scripts, internally you have
+all the VRML field types available (which means that
+vec2f, vec3f, vec4f, matrix, image and others are included).
+There is no special syntax for reading/writing other types, instead
+you have many functions to construct and set them.
+For example for vec3f type you have "constructor"
+<a href="#function_vector"><tt>vector(x, y, z)</tt></a> ,
+reader for particular component <a href="#function_vector_get"><tt>vector_get(vector, index)</tt></a>,
+and setter for particular component <a href="#function_vector_set"><tt>vector_set(vector, index, component_value)</tt></a>.
+Even images have functions to create and modify them, which means
+that you can use CastleScript to perform basic image creation and processing.</p>
+
+<p>Also array types are internally available, for VRML multiple-value
+(MFXxx) types. Again no special syntax is available (sorry, no bracket parenthesis),
+but there are functions to construct array
+<a href="#function_array"><tt>array(item1, item2, ...)</tt></a>,
+read component <a href="#function_array_get"><tt>array_get(array, index)</tt></a> and
+set component <a href="#function_array_set"><tt>array_set(array, index, component_value)</tt></a>.
+
+<h3><a name="section_programs_expressions">3.2. Programs and expressions</a></h3>
+
+<p><i>Program</i> is just a set of functions. VRML engine will take care
+to call function <tt>xxx</tt> when input event of the same name will arrive.</p>
+
+<p><i>Expressions and instructions</i> are the same thing within
+the language. For example, "assignment" is an instruction, since
+it causes calculation of the right operand and assigning it to the left
+operand, but it's also an "expression", since it returns the value
+(the assigned value).
+So "chained" assignment, like in C, is possible (although
+usually discouraged, to not obfuscate the code): <tt>a := b := x + y</tt> works.
+In the rest of this description, terms "instruction" and "expression"
+mean exactly the same thing.</p>
+
+<p><i>Function</i> starts from the <tt>function</tt> keyword,
+then function name (identifier),
+then list of 0 or more parameters (identifiers separated by commas),
+always within parenthesis. For functions within VRML Script nodes:
+<tt>initialize</tt> and <tt>shutdown</tt> must take exactly
+one parameter (timestamp of the event: SFTime), functions called
+by incoming events must take exactly two parameters (value send to the event,
+and timestamp: SFTime).</p>
+
+<p>Function body is just a sequence of expressions separated by
+semicolon. Formally, function body is actually a single expression,
+but we have a semicolon operator: <tt>A;B</tt> means "calculate A,
+ignore result, then calculate and return result of B".
+For now, result of functions body is ignored (so all our functions
+are in fact <i>procedures</i>).
+Semicolon works like a delimiter (not a terminator,
+so it's used only between instructions).</p>
+
+<p>Note that the way semicolon and expressions are defined means
+that we don't need any special syntax for compound instruction
+(like <tt>begin end</tt> in Pascal or
+<tt>{ }</tt> in C). Instead, normal parenthesis may be
+used if necessary to group instructions.</p>
+
+<p>An <i>assignment instruction</i> is an operand, followed by
+the assignment operator <tt>:=</tt> (Pascal-like),
+followed by an expression to calculate value to assign.
+
+<p>For VRML scripts, you are allowed to assign to output events
+and to fields (exposed or not). Events sending behavior follows ECMAScript
+standard:</p>
+
+<ul>
+  <li><p>Assigning value to initializeOnly (not exposed) field is simple, it just
+    assigns value to this field. You can use initializeOnly fields as
+    "variables" available for your scripts (since CastleScript doesn't
+    allow you to declare or use new variables within the program, for now).
+    </p></li>
+
+  <li><p>Assigning value to output event results in sending this event,
+    assigning to exposed field results in sending this to input event of this field.
+
+    <p>Following ECMAScript standard, events are not send immediately
+    (right at the assignment), instead they are stacked and send
+    when script function finished execution. When you assigned
+    multiple values for the same field/event, only the last one is send.
+    In case of multiple-value fields, the combined end value is send.
+    For example, assuming <tt>output</tt> is an <tt>outputOnly</tt>
+    event of MFFloat type:
+
+<pre class="sourcecode">
+function foo(value, timestamp)
+  output := array(0.0, 1.0, 2.0, 3.0);
+  array_set(output, 1, 666.0);
+  array_set(output, 2, 44.0)
+</pre>
+
+    <p>The example above will send one <tt>output</tt> event with value
+    <tt>(0.0, 666.0, 44.0, 3.0)</tt>.</p></li>
+</ul>
+
+<p>Right side of the assignment instruction is the value to calculate
+and assign. In short, a normal mathematical expression is allowed there,
+just like you seen in all programming languages. We have multiplicative
+operators (<tt>/, *, ^, %</tt>),
+we have additive operators (<tt>+, -</tt>) with lower
+priority, we have comparison operators
+(<tt>&lt;, &gt;, &lt;=, &gt;=, = or &lt;&gt;</tt>) with even lower
+priority. We have all standard math
+functions. Built-in functions and operators are overloaded
+for all suitable types. Section below gives a full list of operators
+and functions.</p>
+
+<h2><a name="section_built_in_functions">4. Built-in functions</a></h2>
+
+<h3><a name="section_functions_conversion">4.1. Type conversion</a></h3>
+
+<ul>
+  <li><p><a name="function_int" class="kscript_func_docs"><tt>int(...)</tt></a> converts a "core" type
+    to an integer.</p>
+
+    <p>Float is converted to int by discarding it's fractional
+    part (like in C; for positive numbers, this is like <tt>floor</tt>, for negative
+    this is like <tt>ceil</tt>).
+    There are also functions <a name="function_floor" class="kscript_func_docs"><tt>floor</tt></a>, <a name="function_ceil" class="kscript_func_docs"><tt>ceil</tt></a> and
+    <a name="function_round" class="kscript_func_docs"><tt>round</tt></a> that convert float to an integer with other rounding
+    modes.</p>
+
+    <p>Bool is converted to 0 (false) or 1 (true).
+    Yes, unlike most languages that usually
+    don't guarantee "true" value (saying "true" is anything &lt;&gt; 0),
+    CastleScript actually guarantees that "true" will result in 1.
+    This is sometimes useful in smart mathematical expressions
+    (like <tt>my_int := 1 - int(my_bool)</tt>).</p>
+
+    <p>String is converted to int by, well,
+    converting string to integer using standard decimal notation
+    (<tt>int('123') = 123</tt>).</p></li>
+
+  <li><p><a name="function_float" class="kscript_func_docs"><tt>float(...)</tt></a> converts a "core" type
+    to a float.</p>
+
+    <p>Integer is converted obviously. Actually it's never needed to
+    explicitly cast integer to float, this conversion happens automatically,
+    like in most programming languages.</p>
+
+    <p>Bool is converted to 0.0 (false) or 1.0 (true).</p>
+
+    <p>String is converted to float by parsing number from string,
+    like <tt>float('3.14') = 3.14</tt>.</p></li>
+
+  <li><p><a name="function_bool" class="kscript_func_docs"><tt>bool(...)</tt></a> converts a "core" type
+    to a boolean.</p>
+
+    <p>Integers and floats are converted to "false" if equal zero, "true"
+    otherwise.</p>
+
+    <p>Strings are converted to booleans recognizing 'false' and 'true'
+    strings (and making errors in other cases).</p></li>
+
+  <li><p><a name="function_string" class="kscript_func_docs"><tt>string(...)</tt></a> converts a "core" type
+    to a string.</p>
+
+    <p>Not much to write here, numbers (integers and floats) are converted
+    to normal notation and boolean is converted to 'false' or 'true'.</p></li>
+</ul>
+
+<p>All four basic conversion functions accept also variables that already
+have the necessary type. For example, converting float to float is a valid
+(and harmless) operation.</p>
+
+<h3><a name="section_functions_control_flow">4.2. Control flow</a></h3>
+
+<p><a name="function_if" class="kscript_func_docs"><tt>if(condition, then_code, else_code)</tt></a> is our
+conditional instruction. <tt>condition</tt> is first calculated, must be a boolean
+value. If it's true, then <tt>then_code</tt> is executed and returned as
+"if" value. Otherwise, <tt>else_code</tt> is executed and returned as
+"if" value. You may note that (because of CastleScript unification of
+"instruction" and "expression" terms) this can be used in both
+functional and imperative form. That is, all below are valid:</p>
+
+<pre class="sourcecode">
+  { imperative form }
+  if(x &gt; 3, y := 'yes', y := 'no');
+
+  { functional form, equivalent to above, looks more elegant in this case }
+  y := if(x &gt; 3, 'yes', 'no');
+
+  { actually, even this is possible if you need it: }
+  y_copy := if(x &gt; 3, y := 'yes', y:= 'no');
+</pre>
+
+<p><a name="function_when" class="kscript_func_docs"><tt>when(condition, then_code)</tt></a> is
+a conditional instruction without the "else" clause.
+It's equivalent to <tt>if(condition, then_code, false)</tt>, so it simply
+returns <tt>false</tt> when condition is not satisfied.
+(This is considered a good thing that the normal <tt>if</tt>
+<i>requires</i> the else clause; this way we avoid trivial errors
+when programmer forgets to write <tt>else</tt> clause; similar
+<tt>when</tt> expression may be found e.g. in Lisp and <a href="http://nemerle.org/">Nemerle</a>.)
+</p>
+
+<p><a name="function_while" class="kscript_func_docs"><tt>while(condition, loop_code)</tt></a> performs
+a while loop. Calculate <tt>condition</tt> (must yield a boolean value),
+if true then execute <tt>loop_code</tt> and again calculate <tt>condition</tt>,
+if it's still true then execute <tt>loop_code</tt> again, ... you get the idea.</p>
+
+<p><a name="function_for" class="kscript_func_docs"><tt>for(counter, begin_value, end_value, loop_code)</tt></a> performs
+a for loop. <tt>counter</tt> must be an assignable integer variable
+(note that for now you cannot declare new variables for CastleScript;
+you usually need to overuse <tt>initializeOnly</tt> field of VRML script
+node for this). <tt>begin_value</tt>, <tt>end_value</tt> must also
+be integer values, will be calculated once at the beginning of the loop.
+We will assign to <tt>counter</tt> variable integer values
+from <tt>begin_value</tt> to <tt>end_value</tt>, and for each
+counter value we will execute <tt>loop_code</tt>.
+It's undefined what happens when <tt>loop_code</tt> changes directly the
+<tt>counter</tt> value.</p>
+
+<p><tt>for</tt> and <tt>while</tt> loops return
+the value of last executed <tt>loop_code</tt>,
+or <tt>false</tt> if <tt>loop_code</tt> did not get executed even once.</p>
+
+<h3><a name="section_functions_number">4.3. Number (integer and float) functions</a></h3>
+
+<p>Self-explanatory math functions are listed below.
+They all take a float type, and return a float type unless otherwise noted:</p>
+
+<ul>
+  <li><a name="function_Sin" class="kscript_func_docs"><tt>Sin</tt></a>,
+      <a name="function_Cos" class="kscript_func_docs"><tt>Cos</tt></a>,
+      <a name="function_Tan" class="kscript_func_docs"><tt>Tan</tt></a>,
+      <a name="function_CoTan" class="kscript_func_docs"><tt>CoTan</tt></a>  <li><a name="function_ArcSin" class="kscript_func_docs"><tt>ArcSin</tt></a>,
+      <a name="function_ArcCos" class="kscript_func_docs"><tt>ArcCos</tt></a>,
+      <a name="function_ArcTan" class="kscript_func_docs"><tt>ArcTan</tt></a>,
+      <a name="function_ArcCoTan" class="kscript_func_docs"><tt>ArcCoTan</tt></a>  <li><a name="function_SinH" class="kscript_func_docs"><tt>SinH</tt></a>,
+      <a name="function_CosH" class="kscript_func_docs"><tt>CosH</tt></a>,
+      <a name="function_TanH" class="kscript_func_docs"><tt>TanH</tt></a>,
+      <a name="function_CoTanH" class="kscript_func_docs"><tt>CoTanH</tt></a>  <li><a name="function_Log2" class="kscript_func_docs"><tt>Log2</tt></a> (same as <tt>Log(2, x)</tt>),
+      <a name="function_Ln" class="kscript_func_docs"><tt>Ln</tt></a>,
+      <a name="function_Log" class="kscript_func_docs"><tt>Log</tt></a>,
+      <a name="function_Power2" class="kscript_func_docs"><tt>Power2</tt></a> (same as <tt>Power(2, x) = 2^x</tt>),
+      <a name="function_Exp" class="kscript_func_docs"><tt>Exp</tt></a> (same as <tt>Power(enat, x) = enat^x</tt>),
+      <a name="function_Power" class="kscript_func_docs"><tt>Power</tt></a>,
+      <a name="function_Sqr" class="kscript_func_docs"><tt>Sqr</tt></a>,
+      <a name="function_Sqrt" class="kscript_func_docs"><tt>Sqrt</tt></a><br>
+  <li><a name="function_Sgn" class="kscript_func_docs"><tt>Sgn</tt></a> (returns integer), <a name="function_Abs" class="kscript_func_docs"><tt>Abs</tt></a>  <li><a name="function_Max" class="kscript_func_docs"><tt>Max</tt></a>, <a name="function_Min" class="kscript_func_docs"><tt>Min</tt></a>    (any number of arguments &gt;= 1 allowed; works on either floats or ints)
+</ul>
+
+<h4><a name="section_functions_random">4.3.1. Random numbers functions</a></h4>
+
+<p><a name="function_random" class="kscript_func_docs"><tt>random()</tt></a> returns a random float number
+within 0...1 range (0 included, 1 excluded).</p>
+
+<p><a name="function_random" class="kscript_func_docs"><tt>random(int)</tt></a> returns a random integer number
+strictly less than <tt>int</tt> and &gt;= 0.
+(<tt>int</tt> argument must be &gt; 0).</p>
+
+<h3><a name="section_functions_boolean">4.4. Boolean functions</a></h3>
+
+<p>Basic boolean operations:
+<a name="function_or" class="kscript_func_docs"><tt>or(bool1, bool2...)</tt></a>,
+<a name="function_and" class="kscript_func_docs"><tt>and(bool1, bool2...)</tt></a> (any number of arguments
+&gt;= 1), <a name="function_not" class="kscript_func_docs"><tt>not(bool1)</tt></a>.</p>
+
+<h3><a name="section_functions_string">4.5. String functions</a></h3>
+
+<p>You can add (concatenate) and compare (case-sensitive) strings
+by normal operators. Converting other
+core types (numbers, booleans) to string may be done by the
+<a href="#function_string"><tt>string(...)</tt></a> function.
+
+<p><a name="function_writeln" class="kscript_func_docs"><tt>writeln(my_string)</tt></a> outputs a string.
+How exactly it is displayed depends on the application:
+normal 3D browsers (like <a href="http://castle-engine.sourceforge.net/view3dscene.php">view3dscene <i>(online docs)</i></a>)
+display it on the console (standard error output),
+games (like <a href="http://castle-engine.sourceforge.net/castle.php">The Castle <i>(online docs)</i></a>)
+display it as in-game notification.
+(As a developer, you can configure how this is handled,
+see <tt>OnScriptMessage</tt> in <tt>CastleScript</tt> unit.
+By default, it results in <tt>OnWarning</tt>, that by default is simply ignored.
+Although my programs usually take care to do something more useful with it.)</p>
+
+<p>Most array functions can also treat the string as an array of characters.
+We do not have a special type for a "character" &mdash; we just use a string with length 1.
+You can get / set the length of the string with
+<a href="#function_array_get_count"><tt>array_get_count(string)</tt></a> /
+<a href="#function_array_set_count"><tt>array_set_count(string, count)</tt></a>.
+And you can get / set a specific character of the string with
+<a href="#function_array_get_count"><tt>array_get(string, index)</tt></a> /
+<a href="#function_array_set_count"><tt>array_set(string, index, character)</tt></a>.
+Indexes for characters inside string are zero-based, like for all arrays
+in CastleScript.</p>
+
+<p><a name="function_character_from_code" class="kscript_func_docs"><tt>character_from_code(int)</tt></a> converts integer
+character code to a 1-letter string with this character.
+<i>Only the ASCII character codes are
+guaranteed to work in the long run.</i> In the future, all Unicode character codes
+will be accepted here, and rendered if present in the font.
+Currently, our font rendering is limited to 256-character encodings.</p>
+
+<p><a name="function_shortcut" class="kscript_func_docs"><tt>shortcut(name)</tt></a> is a function
+only available in games (technically: only in programs using <tt>CastleInputs</tt>
+unit). It returns a nice string describing the named key/mouse shortcut
+in the game. It's useful if you want to show a message describing some
+shortcut, for example <tt>writeln('Hint: you can open this door using the ' +
+shortcut('interact'))</tt>. Depending on user current key definitions,
+we will show something like <i>Hint: you can open this door using the key "e"</i>
+or <i>Hint: you can open this door using the mouse "left"</i>.
+See <tt>CastleInputs</tt> for available shortcut names, additionally
+games may define their own key shortcuts by creating new <tt>TInputConfiguration</tt>
+instances.</p>
+
+<p>A lot of string functions are trivial to add
+&mdash; report if you need some particular function.
+
+<h3><a name="section_functions_array">4.6. Array functions</a></h3>
+
+<p><a name="function_array" class="kscript_func_docs"><tt>array(item1, item2, ...)</tt></a> constructs an array. At least one argument is required.
+All arguments must have the same type (VRML multiple-value fields
+can't have mixed types).</p>
+
+<p>Note that parameter-less <tt>array()</tt> call is not allowed,
+because we wouldn't know then the resulting type (is it an
+empty array of floats? empty array of integers? etc.)
+Don't worry, you can use <tt>array_set_count(my_array, 0)</tt> for making
+array empty.</p>
+
+<p>Note that floating-point values in arrays are stored only with single-
+or double- precision. This contrasts with singleton values, which are always stored
+in the best precision possible. Having explicit single-
+or double- precision arrays is better for storage and allows faster
+copying between VRML fields. Normal <tt>array</tt> with float parameters will create
+an array of single-precision values (that is, VRML <tt>MFFloat</tt>).
+You have to call <a name="function_array_d" class="kscript_func_docs"><tt>array_d</tt></a> to request double-precision storage
+(suitable for VRML <tt>MFDouble</tt> or <tt>MFTime</tt>).</p>
+
+<p><a name="function_array_get_count" class="kscript_func_docs"><tt>array_get_count(my_array)</tt></a> and
+<a name="function_array_set_count" class="kscript_func_docs"><tt>array_set_count(my_array, new_count)</tt></a> get and set array count.
+When you grow array, newly added items have undefined values.
+When you shrink array, excessive values are discarded.</p>
+
+<p><a name="function_array_get" class="kscript_func_docs"><tt>array_get(my_array, index)</tt></a> gets an item from array on given index. In "normal" programming languages,
+implemented by less lazy programmers, this is written as <tt>my_array[index]</tt> :)
+Analogous
+<a name="function_array_set" class="kscript_func_docs"><tt>array_set(my_array, index, component_value)</tt></a> sets a value of item in an array.
+In "normal" programming languages you would write <tt>my_array[index] := component_value</tt>.
+
+<p><tt>array_set</tt> and <tt>array_set_count</tt> also return the new array
+(that is, they return the new value of their 1st argument),
+this may be comfortable sometimes.</p>
+
+<p>You can glue (concatenate) two or more arrays by the "+" operator.</p>
+
+
+<h3><a name="section_functions_vector">4.7. Vector functions</a></h3>
+
+<p><a name="function_vector" class="kscript_func_docs"><tt>vector(x, y), vector(x, y, z), vector(x, y, z, w)</tt></a> create a single-precision vectors (called <tt>SFVec2f</tt>,
+<tt>SFVec3f</tt>, <tt>SFVec4f</tt> in VRML).
+Suffix <tt>_d</tt> means that you want double-precision vectors:
+<a name="function_vector_d" class="kscript_func_docs"><tt>vector_d(x, y), vector_d(x, y, z), vector_d(x, y, z, w)</tt></a>.</p>
+
+<p><a name="function_vector_get" class="kscript_func_docs"><tt>vector_get(my_vec, index)</tt></a> gets vector component. Allowed index values obviously depend on vector size,
+for example on <tt>SFVec3f</tt> you can use index 0, 1, 2.
+<a name="function_vector_set" class="kscript_func_docs"><tt>vector_set(my_vec, index, component_value)</tt></a> sets given vector component (and returns new vector, for comfort).</p>
+
+<p><a name="function_vector_get_count" class="kscript_func_docs"><tt>vector_get_count(my_vec)</tt></a> is available,
+for analogy with <tt>array_get_count</tt>. Vector has a fixed number
+of components, so there is no <tt>vector_set_count</tt>.
+</p>
+
+<p>Standard vector math utilities are available:
+<a name="function_vector_length(v)" class="kscript_func_docs"><tt>vector_length(v)</tt></a>, <a name="function_vector_sqr_length(v)" class="kscript_func_docs"><tt>vector_sqr_length(v)</tt></a>,
+<a name="function_vector_dot(v1, v2)" class="kscript_func_docs"><tt>vector_dot(v1, v2)</tt></a>  (see <a href="http://en.wikipedia.org/wiki/Dot_product">vector dot product in wikipedia</a>),
+<a name="function_vector_cross(v1, v2)" class="kscript_func_docs"><tt>vector_cross(v1, v2)</tt></a> (see <a href="http://en.wikipedia.org/wiki/Cross_product">vector cross product in wikipedia</a>,
+only on 3-component vectors).
+<a name="function_max" class="kscript_func_docs"><tt>max(vector1, vector2)</tt></a>,
+<a name="function_min" class="kscript_func_docs"><tt>min(vector1, vector2)</tt></a> also work (make max/min on corresponding vector components).
+
+<p>You can also add, subtract, multiply by scalar, divide by scalar,
+compare vectors by normal operators.</p>
+
+<p>Color functions: <a name="function_grayscale" class="kscript_func_docs"><tt>grayscale(v)</tt></a> takes a vec3f, treats it
+as RGB color, and converts it to a single float &mdash; color intensity
+(calculated much like an average of vector components, but taking into
+account human eye sensitivity).
+
+<h4><a name="section_functions_rotation">4.7.1. Rotation functions</a></h4>
+
+<p>VRML/X3D rotations (<tt>SFRotation</tt>, or an element of
+<tt>MFRotation</tt> array) are, in CastleScript, just 4-value single-precision
+vectors. First three items are rotation axis (should be always normalized,
+VRML/X3D require this), 4th item is the rotation angle (in radians).
+So you can operate on rotations from CastleScript using all normal functions
+on vectors.</p>
+
+<p>Some functions specially suitable for rotations are also available:</p>
+
+<ul>
+  <li><p><a name="function_orientation_from_direction_up" class="kscript_func_docs"><tt>orientation_from_direction_up(dir, up)</tt></a>    converts a direction and up 3D vectors into an orientation.
+    This is a rotation that transforms default direction (0, 0, -1)
+    and default up (0, 1, 0) into your desired <tt>direction</tt> and <tt>up</tt> vectors.
+    This is suitable for example for calculating
+    VRML/X3D <tt>Viewpoint.orientation</tt>.</p>
+
+    <p>Given here direction and up vectors do not have to be normalized
+    (they only must not be zero). They also do not have to be orthogonal
+    (we will internally fix the up vector, if needed, to be orthogonal
+    to direction).</p>
+
+  <li><p><a name="function_rotate" class="kscript_func_docs"><tt>rotate(rotation, point)</tt></a>    rotates given 3D <tt>point</tt>. <tt>rotation</tt> parameter contains
+    an axis (first three components) and an angle in radians (last component),
+    so it's compatible with VRML/X3D <tt>SFRotation</tt>.</p>
+
+  <li><p><a name="function_orientation_to_direction" class="kscript_func_docs"><tt>orientation_to_direction(rotation)</tt></a>    determines direction vector back from an orientation,
+    inverting what <a href="#function_orientation_from_direction_up"><tt>orientation_from_direction_up</tt></a> did.
+    Similarly <a name="function_orientation_to_up" class="kscript_func_docs"><tt>orientation_to_up(rotation)</tt></a>.
+    Resulting direction and up vectors are always normalized.</p>
+
+    <p>These functions are equivalent to using <tt>rotate(rotation, (0, 0, -1))</tt>
+    (for <tt>orientation_to_direction</tt>) and <tt>rotate(rotation, (0, 1, 0))</tt>
+    (for <tt>orientation_to_up</tt>).</p></li>
+
+  <li><p><a name="function_slerp" class="kscript_func_docs"><tt>slerp(value, rotation1, rotation2)</tt></a>    calculates a <a href="http://en.wikipedia.org/wiki/Slerp">spherical linear interpolation</a>
+    between two rotations. For <tt>value</tt> = 0 the result
+    is <tt>rotation1</tt>, for <tt>value</tt> = 1 the result
+    is <tt>rotation2</tt>, and between (and outside) the result is a nicely interpolated
+    rotation on a unit sphere.</p></li>
+</ul>
+
+<p>Example: see <a href="http://svn.code.sf.net/p/castle-engine/code/trunk/demo_models/castle_script/rotations.x3dv">rotations.x3dv</a>
+for a simple X3D Script using above rotation functions.</p>
+
+<h3><a name="section_functions_matrix">4.8. Matrix functions</a></h3>
+
+<p>3x3 and 4x4 matrices are supported. Single- and double- precision.
+VRML calls these matrix types <tt>SFMatrix3f</tt>, <tt>SFMatrix4f</tt>,
+<tt>SFMatrix3d</tt>, <tt>SFMatrix4d</tt>.
+Matrix is treated similar to an array of vectors (array of columns).</p>
+
+<p><a name="function_matrix" class="kscript_func_docs"><tt>matrix(column1, column2, column3), matrix(column1, column2, column3, column4)</tt></a> create a matrix. Each <tt>column</tt> argument is a vector.
+Number or arguments determines if it's 3x3 or 4x4 matrix.
+Type of arguments (single- or double- precision vectors) determines
+if matrix is single or double precision.
+
+<p><a name="function_matrix_get" class="kscript_func_docs"><tt>matrix_get(my_matrix, column_index)</tt></a> gets matrix column. Allowed index values obviously depend on matrix size,
+for example on <tt>SFMatrix4f</tt> you can use index 0, 1, 2, 3.
+<a name="function_matrix_set" class="kscript_func_docs"><tt>matrix_set(my_matrix, column_index, column_value)</tt></a> sets given matrix column (and returns new matrix, for comfort).</p>
+
+<p><a name="function_matrix_get_count" class="kscript_func_docs"><tt>matrix_get_count(my_vec)</tt></a> is available,
+for analogy with <tt>array_get_count</tt> and <tt>vector_get_count</tt>.
+Returns number of columns, 3 or 4. For now, non-uniform matrices are not
+supported, so this is also the number of rows.</p>
+
+<p>You can add, subtract, negate, multiply (by another matrix, or by scalar,
+or by vector on the right side), divide (by scalar),
+compare matrix using normal operators.</p>
+
+<h3><a name="section_functions_image">4.9. Image functions</a></h3>
+
+<p><a name="function_image" class="kscript_func_docs"><tt>image(width, height, components)</tt></a> creates
+a new image. <tt>components</tt> is the number of image components,
+like in VRML <tt>SFImage</tt> field:
+
+<ul>
+  <li>1 component is grayscale image,
+  <li>2 components is grayscale image with alpha channel,
+  <li>3 components is RGB image,
+  <li>4 components is RGB image with alpha channel.
+</ul>
+
+<p>Note that image contents are <i>not initialized</i> (meaning:
+they are filled with random garbage in memory) by <tt>image</tt> function.
+This is for the sake of speed.</p>
+
+<p><a name="function_image_load" class="kscript_func_docs"><tt>image_load(url)</tt></a> loads
+an image from file. This is quite powerful utility, allowing you
+to load textures at any time from a script. (It's not a security
+problem, since you can do the same from normal VRML nodes like <tt>ImageTexture</tt>.)
+URL may be relative to VRML file containing the Script node.</p>
+
+<p><a name="function_image_width" class="kscript_func_docs"><tt>image_width(my_image)</tt></a>,
+<a name="function_image_height" class="kscript_func_docs"><tt>image_height(my_image)</tt></a>,
+<a name="function_image_components" class="kscript_func_docs"><tt>image_components(my_image)</tt></a> return
+width, height and number of image components.</p>
+
+<p>For functions that get/set image contents, there are 3 variants of each
+of them:
+
+<ul>
+  <li><p>Functions with <tt>_color</tt> suffix operate only on non-alpha channels
+    of the image. For 1 and 2 component images, they take/return
+    a single floating point value describing color intensity
+    (in 0..1 range). For 3 and 4 component images, they take/return
+    a 3-element vector with single precision, describing RGB color value.</p></li>
+
+  <li><p>Functions with <tt>_alpha</tt> operate only on alpha channel
+    of the image. They take/return a single floating point value
+    describing alpha (opacity), in 0..1 range.</p></li>
+
+  <li><p>Finally functions without alpha/color suffix operate on all image
+    channels at once. For 1 component images, they take/return
+    a single floating point value. For 2,3,4 component images,
+    they take/return a vector (with single precision) describing
+    color with alpha value. For images without alpha value (1 or 3
+    components), these functions are exactly equivalent to <tt>_color</tt>
+    functions.</p></li>
+</ul>
+
+<p>Functions to get/set image contents:
+
+<ul>
+  <li><p><a name="function_image_get" class="kscript_func_docs"><tt>image_get&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(my_image, x, y)</tt></a>,<br/>
+    <a name="function_image_get_color" class="kscript_func_docs"><tt>image_get_color(my_image, x, y)</tt></a>,<br/>
+    <a name="function_image_get_alpha" class="kscript_func_docs"><tt>image_get_alpha(my_image, x, y)</tt></a><br/>
+    Get single pixel's color/alpha.</p></li>
+
+  <li><p><a name="function_image_set" class="kscript_func_docs"><tt>image_set&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(my_image, x, y, color_with_alpha)</tt></a>,<br/>
+    <a name="function_image_set_color" class="kscript_func_docs"><tt>image_set_color(my_image, x, y, color)</tt></a>,<br/>
+    <a name="function_image_set_alpha" class="kscript_func_docs"><tt>image_set_alpha(my_image, x, y, alpha)</tt></a><br/>
+    Set single pixel to given color/alpha.</p></li>
+
+  <li><p>More "set" functions were planned, like <tt>image_set_rectangle</tt>,
+    <tt>image_apply_decal</tt>, but finally I didn't have the nerve
+    to implement everything possible :) Report if you would like any function to be added
+    to CastleScript for images.</p></li>
+</ul>
+
+<p>For comfort, <tt>set</tt> functions return back the image (that is,
+the new value of 1st argument).</p>
+
+<p>For example CastleScript programs that generate and process images,
+see e.g. <a href="http://svn.code.sf.net/p/castle-engine/code/trunk/castle_game_engine/examples/castlescript/mkimage_gradient.castlescript">mkimage_gradient.castlescript
+(generate simple gradient image)</a> and
+<a href="http://svn.code.sf.net/p/castle-engine/code/trunk/castle_game_engine/examples/castlescript/mkimage_sobel_edge.castlescript">mkimage_sobel_edge.castlescript
+(process any image with Sobel operator (edge detection))</a>.
+
+<h3><a name="section_functions_node">4.10. VRML node functions</a></h3>
+
+<p>None for now. Currently, you cannot process VRML nodes directly by
+CastleScript. Whether it will ever be allowed in CastleScript, depends
+on the "success" of CastleScript &mdash; if you write your own scripts
+in CastleScript and feel that you need this, please report. Michalis
+will be more than happy to add them :)
+
+<h2><a name="section_precise_grammar">5. Precise grammar</a></h2>
+
+<pre class="sourcecode">
+  Operand (aka "something that can be assigned") = Identifier
+
+  Factor = Operand |
+           Constant |
+           "-" Factor |
+           "(" Expression ")" |
+           FunctionName [ "(" Expression [{"," Expression}] ")" ]
+  FactorOperator = "^" | "*" | "/" | "%"
+
+  # In other words, all multiplicative operators have the same priority
+  # and are left-associative.
+  # "^" operator is for power.
+  #     X ^ Y = Power(X, Y)
+  #     This works for non-integer Y, but in this case Y has to be &gt;= 0.
+  # "%" operator is for modulo (remainder of division).
+  #     X % Y = X - Floor(X/Y) * Y
+  # "/" does division. Like in C, when both operands are integers,
+  #     this performs an integer division (that is, it's the floor of
+  #     actual division result, corresponding to Pascal's "div" operator).
+  #     When either operand is float then this is normal float division
+  #     (more precisely, if only one operand is float, the other will be
+  #     promoted to float then; and then float division will be done.)
+
+  Term = Factor [{FactorOperator Factor}]
+  TermOperator = "+" | "-"
+
+  ComparisonArgument = Term [{TermOperator Term}]
+  ComparisonOperator = "&lt;" | "&gt;" | "&lt;=" | "&gt;=" | "=" | "&lt;&gt;"
+
+  # Note that comparisons on float types (this also includes vectors, matrices
+  # and arrays based on float types) perform <i>exact</i> comparison
+  # (like in all programming languages).
+  # This means that adding 1.0 one hundred times will not necessarily yield result
+  # equal to literal 100.0. You can compare with some epsilon, like
+  # "abs(a-b) < 0.001", if needed.
+
+  NonAssignmentExpression = ComparisonArgument [{ComparisonOperator ComparisonArgument}] |
+
+  # Programmers using our engine: note that CastleScriptParser.ParseFloatExpression
+  # parses exactly "NonAssignmentExpression" token, as defined above,
+  # with the Factor definition hacked to also allow only NonAssignmentExpression
+  # inside parenthesis. In other words, ParseFloatExpression takes care to only
+  # parse a calculated expression, without any assignments or sequence.
+
+  PossiblyAssignmentExpression = NonAssignmentExpression |
+                                 Operand ":=" PossiblyAssignmentExpression
+
+  Expression = PossiblyAssignmentExpression [{";" PossiblyAssignmentExpression}]
+
+  Function = "function" "(" [Identifier [{"," Identifier}] ")" Expression
+  Program = [{Function}]
+
+  # Programmers using our engine: note that CastleScriptParser.ParseProgram
+  # parses exactly "Program" token defined above.
+
+  # ------------------------------------------------
+  # Programmers using our engine: note that above part of the grammar
+  # was handled inside CastleScriptParser. Grammar below is handled
+  # inside CastleScriptLexer.
+  # A "token" returned by CastleScriptLexer corresponds to a non-terminal
+  # symbol in the part of the grammar below, resolved by lexer.
+
+  # Identifier is just a sequence of letters, underscores, digits,
+  # not starting with a digit.
+  Identifier = Letter [{Letter | Digit}]
+  Letter = 'a' .. 'z' | 'A' .. 'Z' | "_"
+  Digit = '0' .. '9'
+
+  Constant = "pi" | "enat" |
+             Digit [{Digit}] ["." Digit [{Digit}] ] |
+             "true" | "false" |
+             string constant in apostrophes
+
+  FunctionName = (see list of built-in functions above)
+</pre>
+
+<p>Generally, at least one whitespace is required between two tokens.
+But there are many exceptions, when situation is unambiguous,
+for example no whitespace is needed between
+identifiers and parenthesis.
+In case of uncertainty lexer is greedy, that is lexer tries to eat as much
+characters as it can for a single token.</p>
+
+<p>Case sensitivity: language is not case-sensitive.
+That said, in the future in may be partially case-sensitive,
+in places where you specify field/event names of VRML
+since <i>whole VRML is case-sensitive</i>. So always specify
+VRML field/event names with matching case.
+
+<!--
+(wszystko jest na wartosciach rzeczywistych;
+pamietaj tez ze operator potegowania ma taki sam priorytet jak
+np. mnozenie a operatory o rownym priorytecie sa obliczane od
+lewej do prawej wiec np. 2*4^2 = 8^2, nie 2*16))
+-->
+
+</td><td class="layout">
+  <div class="sidebar">
+    <div class="sidebar_title"><a href="vrml_x3d.html">VRML / X3D support</a></div><ul><li><a href="demo_models.html">Demo models</a></li><li><a href="x3d_extensions.html">Extensions</a><ul><li><a href="compositing_shaders.html">Compositing Shaders</a></li><li><a href="x3d_extensions_screen_effects.html">Screen Effects</a></li><li><a href="x3d_extensions_shadow_maps.html">Shadow Maps</a></li><li><a href="x3d_extensions_vrml1.html">(Old) VRML 1.0</a></li></ul></li><li><a href="x3d_implementation_status.html">Implementation status</a><ul><li><a href="x3d_implementation_core.html">Core</a></li><li><a href="x3d_implementation_time.html">Time</a></li><li><a href="x3d_implementation_networking.html">Networking</a></li><li><a href="x3d_implementation_grouping.html">Grouping</a></li><li><a href="x3d_implementation_rendering.html">Rendering</a></li><li><a href="x3d_implementation_shape.html">Shape</a></li><li><a href="x3d_implementation_geometry3d.html">Geometry3D</a></li><li><a href="x3d_implementation_geometry2d.html">Geometry2D</a></li><li><a href="x3d_implementation_text.html">Text</a></li><li><a href="x3d_implementation_sound.html">Sound</a></li><li><a href="x3d_implementation_lighting.html">Lighting</a></li><li><a href="x3d_implementation_texturing.html">Texturing</a><ul><li><a href="x3d_implementation_texturing.html#section_multi_texturing">Clarifications to X3D multi-texturing</a></li><li><a href="x3d_implementation_texturing.html#section_dds">DDS (DirectDraw Surface)</a></li></ul></li><li><a href="x3d_implementation_interpolation.html">Interpolation</a></li><li><a href="x3d_implementation_pointingdevicesensor.html">Pointing device sensor</a></li><li><a href="x3d_implementation_keydevicesensor.html">Key device sensor</a></li><li><a href="x3d_implementation_environmentalsensor.html">Environmental sensor</a></li><li><a href="x3d_implementation_navigation.html">Navigation</a></li><li><a href="x3d_implementation_environmentaleffects.html">Environmental effects</a></li><li><a href="x3d_implementation_hanim.html">H-Anim</a></li><li><a href="x3d_implementation_nurbs.html">NURBS</a><ul><li><a href="x3d_implementation_nurbs.html#section_homogeneous_coordinates">Control points are in homogeneous coordinates</a></li></ul></li><li><a href="x3d_implementation_scripting.html">Scripting</a></li><li><a href="x3d_implementation_eventutilities.html">Event utilities</a></li><li><a href="x3d_implementation_shaders.html">Programmable shaders</a></li><li><a href="x3d_implementation_cadgeometry.html">CAD geometry</a></li><li><a href="x3d_implementation_texturing3d.html">Texturing3D</a></li><li><a href="x3d_implementation_cubemaptexturing.html">Cube map environmental texturing</a></li></ul></li><li><a href="nist_vrml_test_suite.html">NIST conformace test suite</a></li><li>CastleScript language reference</li><li><a href="kanim_format.html">Kanim (precalculated animations) file format</a></li><li><a href="x3d_time_origin_considered_uncomfortable.html">VRML / X3D time origin considered uncomfortable</a></li></ul></div></td></tr></table><script type="text/javascript">
+  jQuery('a.screenshot').colorbox({opacity: 0.9, rel:'screenshot', maxWidth:'90%', maxHeight:'90%'});
+</script>
+  
+<hr>
+
+<div class="page_footer">
+
+    <address>
+    By Michalis Kamburelis, as part of
+    <a href="http://castle-engine.sourceforge.net/">Castle Game Engine</a>.
+    </address>
+    
+  <table><tr>
+
+    <td><a href="http://sourceforge.net/projects/castle-engine">Hosted by SourceForge.net</a></td>
+
+    <td><span class="page_copyright">Copyright <a href="http://michalis.ii.uni.wroc.pl/~michalis/">Michalis Kamburelis</a>.
+This page is considered part of documentation of my programs,
+and you are free to modify and further distribute it on terms of
+<a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License</a>.
+</span></td>
+
+    
+  </tr></table>
+
+  
+</div>
+
+</body>
+</html>
+
