@@ -1,0 +1,2334 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+
+<html lang="en">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta name="Author" content="Michalis Kamburelis">
+
+<meta name="Language" content="English">
+
+<title>VRML / X3D extensions in our engine</title>
+
+
+<!--
+  This is unclean, but it's more comfortable to keep below CSS
+  directly inside HTML page. This is in kambi_common.php,
+  that should be useful for both michalis.ii and castle-engine.sf.net webpages,
+  and must be suitable also for offline documentation in castle-engine programs.
+-->
+<!-- link type="text/css" rel="stylesheet" media="all"  href="kambi-php-lib/kambi_common.css" -->
+
+<style type="text/css"><!--
+body { background: white; font-family: sans-serif; }
+
+dt { font-weight: bold; }
+div.page_footer { }
+span.page_copyright { font-size: smaller }
+
+span.version_number { font-size: small }
+
+div.quick_links_bottom_line { text-align: left; }
+
+.rss_link {
+  float: right;
+  background: red;
+  padding: 0.3em;
+  border: thin outset black;
+}
+
+.rss_link a {
+  color: white;
+  font-weight: bold
+}
+--></style>
+
+
+<link rel="alternate" type="application/rss+xml"
+  title="Castle Game Engine - News Feed"
+  href="http://castle-engine.sourceforge.net/news_feed.php">
+
+<link type="text/css" rel="stylesheet" media="all" href="castle-engine.css">
+<link type="text/css" rel="stylesheet" href="colorbox/example3/colorbox.css">
+
+<script type="text/javascript" src="castle-engine.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="colorbox/jquery.colorbox-min.js"></script>
+
+<style type="text/css"><!--
+/**
+ * GeSHi Dynamically Generated Stylesheet
+ * --------------------------------------
+ * Dynamically generated stylesheet for delphi
+ * CSS class: sourcecode, CSS id: 
+ * GeSHi (C) 2004 - 2007 Nigel McNie, 2007 - 2008 Benny Baumann
+ * (http://qbnz.com/highlighter/ and http://geshi.org/)
+ * --------------------------------------
+ */
+.delphi.sourcecode .de1, .delphi.sourcecode .de2 {font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;}
+.delphi.sourcecode  {font-family:monospace;}
+.delphi.sourcecode .imp {font-weight: bold; color: red;}
+.delphi.sourcecode li, .delphi.sourcecode .li1 {font-weight: normal; vertical-align:top;}
+.delphi.sourcecode .ln {width:1px;text-align:right;margin:0;padding:0 2px;vertical-align:top;}
+.delphi.sourcecode .li2 {font-weight: bold; vertical-align:top;}
+.delphi.sourcecode .kw1 {color: #000000; font-weight: bold;}
+.delphi.sourcecode .kw2 {color: #000000; font-weight: bold;}
+.delphi.sourcecode .kw3 {color: #000066;}
+.delphi.sourcecode .kw4 {color: #000066; font-weight: bold;}
+.delphi.sourcecode .co1 {color: #808080; font-style: italic;}
+.delphi.sourcecode .co2 {color: #008000; font-style: italic;}
+.delphi.sourcecode .coMULTI {color: #808080; font-style: italic;}
+.delphi.sourcecode .es0 {color: #ff0000; font-weight: bold;}
+.delphi.sourcecode .br0 {color: #000066;}
+.delphi.sourcecode .sy0 {color: #000066;}
+.delphi.sourcecode .sy1 {color: #000066;}
+.delphi.sourcecode .sy2 {color: #000066;}
+.delphi.sourcecode .sy3 {color: #000066;}
+.delphi.sourcecode .st0 {color: #ff0000;}
+.delphi.sourcecode .nu0 {color: #0000ff;}
+.delphi.sourcecode .me1 {color: #006600;}
+.delphi.sourcecode .re0 {color: #0000cc;}
+.delphi.sourcecode .re1 {color: #ff0000;}
+.delphi.sourcecode .ln-xtra, .delphi.sourcecode li.ln-xtra, .delphi.sourcecode div.ln-xtra {background-color: #ffc;}
+.delphi.sourcecode span.xtra { display:block; }
+ -->
+</style>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    (function() {
+        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+        s.type = 'text/javascript';
+        s.async = true;
+        s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+        t.parentNode.insertBefore(s, t);
+    })();
+/* ]]> */
+</script><script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+  </head>
+<body>
+
+
+  <div class="header">
+    <!--img class="header_icon" src="images/header_icon.png" alt="Castle Game Engine icon" /-->
+    <div class="header_title"><a href="http://castle-engine.sourceforge.net/index.php">Castle Game Engine</a></div>
+    
+    <table class="header_menu">
+      <tr>
+        <td colspan="15" class="higher higher_left">&larr; Users</td>
+        <td colspan="6" class="higher higher_right">Developers &rarr;</td>
+      </tr>
+      <tr><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/index.php">Intro</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/news.php">News</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/view3dscene.php" title="VRML / X3D browser, and a viewer for other 3D model formats">view3dscene</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/castle.php" title="First-person perspective game, in a dark fantasy setting">The Castle</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/all_programs.php" title="All the games and tools using our 3D engine">All Programs</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/forum.php" title="Ask for help, report bugs, discuss features">Forum</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/donate.php">Donate</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/engine.php" title="Sources and documentation for developers">Engine</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="vrml_x3d.html" title="Our extensions and status of VRML/X3D implementation" id="current">VRML/X3D</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/blender.php" title="Customized Blender X3D exporter">Blender</a></td><td class="lower_separator"><div>&nbsp;</div></td>
+      </tr>
+    </table>
+  </div><table class="layout" cellspacing="0">
+      <col class="content_column">
+      <col class="sidebar_column">
+      <tr><td class="layout content">
+<h1>VRML / X3D extensions in our engine</h1>
+<p>Contents:
+<div class="table_of_contents"><ol>
+<li><a href="#section_introduction">Introduction</a>
+</li>
+<li><a href="#section_extensions">Extensions</a>
+<ol>
+<li><a href="#section_ext_shading">Specify shading, force Phong shading for a shape (<tt>Shape.shading</tt> field)</a>
+</li>
+<li><a href="#section_ext_screen_effects">Screen effects (<tt>ScreenEffect</tt> node)</a>
+</li>
+<li><a href="#section_ext_bump_mapping">Bump mapping (<tt>normalMap</tt>, <tt>heightMap</tt>, <tt>heightMapScale</tt> fields of <tt>Appearance</tt>)</a>
+</li>
+<li><a href="#section_ext_shadow_maps">Shadow maps extensions</a>
+</li>
+<li><a href="#section_ext_shadows">Shadow volumes extensions</a>
+<ol>
+<li><a href="#section_ext_shadows_light">Specify what lights cast shadows for shadow volumes (fields <tt>shadowVolumes</tt> and <tt>shadowVolumesMain</tt> for light nodes)</a>
+</li>
+</ol>
+</li>
+<li><a href="#section_ext_tex_coord">Generate texture coordinates on primitives (<tt>Box/Cone/Cylinder/Sphere.texCoord</tt>)</a>
+</li>
+<li><a href="#section_ext_viewpoint_camera_matrix">Output events to generate camera matrix (<tt>Viewpoint.camera*Matrix</tt> events)</a>
+</li>
+<li><a href="#section_ext_tex_coord_worldspace">Generating 3D tex coords in world space (easy mirrors by additional <tt>TextureCoordinateGenerator.mode</tt> values)</a>
+</li>
+<li><a href="#section_ext_tex_coord_bounds">Tex coord generation dependent on bounding box (<tt>TextureCoordinateGenerator.mode</tt> = BOUNDS*)</a>
+</li>
+<li><a href="#section_ext_text3d">3D text (node <tt>Text3D</tt>)</a>
+</li>
+<li><a href="#section_ext_alpha_channel_detection">Override alpha channel detection (field <tt>alphaChannel</tt> for <tt>ImageTexture</tt>, <tt>MovieTexture</tt> and other textures)</a>
+</li>
+<li><a href="#section_ext_movie_from_image_sequence">Movies for <tt>MovieTexture</tt> can be loaded from images sequence</a>
+</li>
+<li><a href="#section_ext_kambi_inline">Automatic processing of inlined content (node <tt>KambiInline</tt>)</a>
+</li>
+<li><a href="#section_ext_time_origin_at_load">Force VRML time origin to be 0.0 at load time (<tt>KambiNavigationInfo.timeOriginAtLoad</tt>)</a>
+</li>
+<li><a href="#section_ext_head_bobbing">Control head bobbing (<tt>KambiNavigationInfo.headBobbing*</tt> fields)</a>
+</li>
+<li><a href="#section_ext_script_compiled">Executing compiled-in code on Script events (<tt>compiled:</tt> Script protocol)</a>
+</li>
+<li><a href="#section_ext_castlescript">CastleScript (<tt>castlescript:</tt> Script protocol)</a>
+</li>
+<li><a href="#section_ext_radiance_transfer">Precalculated radiance transfer (<tt>radianceTransfer</tt> in all <tt>X3DComposedGeometryNode</tt> nodes)</a>
+</li>
+<li><a href="#section_ext_mix_vrml_1_2">Mixing VRML 1.0, 2.0, X3D nodes and features</a>
+</li>
+<li><a href="#section_ext_fog_volumetric">Volumetric fog (additional fields for <tt>Fog</tt> and <tt>LocalFog</tt> nodes)</a>
+</li>
+<li><a href="#section_ext_inline_for_all">Inline nodes allow to include 3D models in other handled formats (Collada, 3DS, MD3, Wavefront OBJ, others) and any VRML/X3D version</a>
+</li>
+<li><a href="#section_ext_kambi_triangulation">Specify triangulation (node <tt>KambiTriangulation</tt>)</a>
+</li>
+<li><a href="#section_ext_gzip">VRML files may be compressed by gzip</a>
+</li>
+<li><a href="#section_ext_cameras_alt_orient">Fields <tt>direction</tt> and <tt>up</tt> and <tt>gravityUp</tt> for <tt>PerspectiveCamera</tt>, <tt>OrthographicCamera</tt> and <tt>Viewpoint</tt> nodes</a>
+</li>
+<li><a href="#section_ext_material_mirror">Mirror material (field <tt>mirror</tt> for <tt>Material</tt> node)</a>
+</li>
+<li><a href="#section_ext_headlight">Customize headlight (<tt>KambiNavigationInfo.headlightNode</tt>)</a>
+</li>
+<li><a href="#section_ext_material_phong_brdf_fields">Fields describing physical properties (Phong's BRDF) for <tt>Material</tt> node</a>
+</li>
+<li><a href="#section_ext_octree_properties">Specify octree properties (node <tt>KambiOctreeProperties</tt>, various fields <tt>octreeXxx</tt>)</a>
+</li>
+<li><a href="#section_ext_color_set_interpolator">Interpolate sets of colors (node <tt>ColorSetInterpolator</tt>)</a>
+</li>
+<li><a href="#section_ext_avalon">Extensions compatible with Avalon / instant-reality</a>
+<ol>
+<li><a href="#section_ext_blending">Blending factors (node <tt>BlendMode</tt> and field <tt>Appearance.blendMode</tt>)</a>
+</li>
+<li><a href="#section_ext_matrix_transform">Transform by explicit 4x4 matrix (<tt>MatrixTransform</tt> node)</a>
+</li>
+<li><a href="#section_ext_logger">Events logger (<tt>Logger</tt> node)</a>
+</li>
+<li><a href="#section_ext_teapot">Teapot primitive (<tt>Teapot</tt> node)</a>
+</li>
+<li><a href="#section_ext_rendered_texture">Texture automatically rendered from a viewpoint (<tt>RenderedTexture</tt> node)</a>
+</li>
+<li><a href="#section_ext_plane">Plane (<tt>Plane</tt> node)</a>
+</li>
+<li><a href="#section_ext_toggler">Boolean value toggler (<tt>Toggler</tt> node)</a>
+</li>
+<li><a href="#section_ext_vector_interpolator">Interpolate sets of floats (node <tt>VectorInterpolator</tt>)</a>
+</li>
+</ol>
+</li>
+<li><a href="#section_ext_bitmanagement">Extensions compatible with BitManagement / BS Contact</a>
+</li>
+<li><a href="#section_exts_vrml1">VRML 1.0-specific extensions</a>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+<h2><a name="section_introduction">1. Introduction</a></h2>
+
+<p>This page documents our extensions to the VRML/X3D standard: new fields, new nodes, allowing you to do something not otherwise possible in VRML/X3D.</p>
+
+<p><b>Compatibility</b> notes:</p>
+
+<ul>
+  <li><p>Other VRML/X3D browsers may not handle these extensions. But many VRML 2.0 / X3D extensions may be preceded by appropriate <tt>EXTERNPROTO</tt> statements, this will allow other VRML 2.0 / X3D implementations to at least gracefully omit them.</p>
+
+    <p><a href="demo_models.html">Our VRML/X3D demo models</a> uses the <tt>EXTERNPROTO</tt> mechanism whenever possible, so that even things inside <tt>castle_extensions/</tt> should be partially handled by other VRML browsers.</p>
+
+    <p>Our extensions are identified by URN like "<tt>urn:castle-engine.sourceforge.net:node:KambiTriangulation</tt>". For compatibility, also deprecated "<tt>urn:vrmlengine.sourceforge.net:node:KambiTriangulation</tt>" is recognized.</p>
+
+    <p>Our extensions' external prototypes may specify a fallback URL <a href="http://castle-engine.sourceforge.net/fallback_prototypes.wrl">http://castle-engine.sourceforge.net/fallback_prototypes.wrl</a> for VRML 2.0. For X3D, analogous URL is <a href="http://castle-engine.sourceforge.net/fallback_prototypes.x3dv">http://castle-engine.sourceforge.net/fallback_prototypes.x3dv</a>. Such fallback URL will allow other VRML browsers to partially handle our extensions. For example, see <tt>EXTERNPROTO</tt> example for <a href="#section_ext_text3d">Text3D</a> &mdash; browsers that don't handle Text3D node directly should use our fallback URL and render Text3D like normal 2D text node.</p>
+
+    <p>TODO: eventual goal is to make all extensions this way, so that they can be nicely omitted. Also, it would be nice to use VRML 1.0 similar feature, <tt>isA</tt> and <tt>fields</tt>, for the same purpose, but it's not implemented (and probably never will be, since VRML 1.0 is basically dead and VRML 2.0 / X3D externproto is so much better).</p>
+  </li>
+
+  <li><p><a href="http://vrml.cip.ica.uni-stuttgart.de/dune/">White dune</a> parses and allows to visually design nodes with our extensions.</p></li>
+
+  <li><p>Some extensions are <a href="#section_ext_avalon">designed for compatibility with Avalon (instant-reality, InstantPlayer)</a>.</p></li>
+</ul>
+
+<!--
+Commented out, too much useless info:
+
+Some other extensions may be able supported for other reasons:
+
+- Some of VRML 1.0 extensions are borrowed from VRML 97 specification
+    (e.g. <a href="#section_ext_light_attenuation">attenuation field for lights</a>),
+    I just allow them also in VRML 1.0.</p></li>
+
+- Some other extensions like
+    <a href="#section_ext_gzip">compressing VRML files by gzip</a>
+    or <a href="#section_ext_multi_root_node">multiple root nodes in VRML 1.0</a>
+    are often implemented in other VRML viewers.</p></li>
+
+-->
+
+<p><b>Conventions</b>: fields and nodes are specified on this page in the convention somewhat similar to X3D specification:</p>
+
+<pre class="vrml_extension_spec"><b>NodeName : X3DDescendantNode {</b>
+  SF/MF-FieldType      [in,out]      <b>fieldName   default_value</b>  #&nbsp;short comment
+  ...
+<b>}</b>
+</pre>
+<p><tt>[in,out]</tt> should be interpreted as:</p>
+
+<div style="margin-left: 1em">
+<table border="1" style="border-collapse: collapse; border: thin solid #777">
+  <tr> <th>[xxx]</th>    <th>X3D name (for prototypes etc.)</th> <th>VRML 2.0 name</th> </tr>
+  <tr> <td>[]</td>       <td>initializeOnly</td>                 <td>field</td> </tr>
+  <tr> <td>[in]</td>     <td>inputOnly</td>                      <td>eventIn</td> </tr>
+  <tr> <td>[out]</td>    <td>outputOnly</td>                     <td>eventOut</td> </tr>
+  <tr> <td>[in,out]</td> <td>inputOutput</td>                    <td>exposedField</td> </tr>
+</table>
+</div>
+
+<p>To understand these extensions you will need some basic knowledge of VRML/X3D, <a href="http://www.web3d.org/x3d/specifications/vrml/">you can find the official VRML / X3D specifications here</a>.</p>
+
+<p><b>Examples</b>: VRML/X3D models that use these extensions may be found
+in <a href="demo_models.html">our VRML/X3D demo models</a>. Look there at directory names,
+in particular <tt>castle_extensions</tt> subdirectories (but also some
+others) are full of demos of our extensions.</p>
+
+<h2><a name="section_extensions">2. Extensions</a></h2>
+
+<h3><a name="section_ext_shading">2.1. Specify shading, force Phong shading for a shape (<tt>Shape.shading</tt> field)</a></h3>
+
+<p>We add a simple field to the <tt>Shape</tt> node
+(more precisely, to the abstract <tt>X3DShapeNode</tt>):</p>
+
+<pre class="vrml_extension_spec"><b>X3DShapeNode (e.g. Shape) {</b>
+  ... all normal X3DShapeNode fields ...
+  SFString   [in,out]      <b>shading     "DEFAULT" </b>  #&nbsp;["DEFAULT"|"PHONG"]
+<b>}</b>
+</pre>
+<p>For now this honors two values:</p>
+
+<ul>
+  <li><tt>DEFAULT</tt>: use normal browser behavior,
+    whatever that currently is (depends on <i>"Shading -&gt; Enable When Required"</i>
+    in <a href="http://castle-engine.sourceforge.net/view3dscene.php">view3dscene <i>(online docs)</i></a>).
+  </li>
+
+  <li><tt>PHONG</tt>: force per-pixel lighting calculation.
+    For our engine,
+    <a href="x3d_implementation_lighting.html#section_per_pixel_lighting">this means using modern shader rendering
+    for this particular shape</a>.
+  </li>
+</ul>
+
+<p>In the future, we plan to add other options to this field,
+like <tt>WIREFRAME</tt>, <tt>FLAT</tt>, <tt>GOURAUD</tt>.
+These names are not invented by us, they are the names used for <a href="http://www.web3d.org/files/specifications/19775-1/V3.2/Part01/components/networking.html#t-BrowserProperties">"Browser options" in X3D spec</a>
+(with <tt>DEFAULT</tt> added by us).</p>
+
+<h3><a name="section_ext_screen_effects">2.2. Screen effects (<tt>ScreenEffect</tt> node)</a></h3>
+
+  <p><a href="x3d_extensions_screen_effects.html">Screen Effect extensions are described here</a>.</p>
+
+<a name="ext_bump_mapping"></a><h3><a name="section_ext_bump_mapping">2.3. Bump mapping (<tt>normalMap</tt>, <tt>heightMap</tt>, <tt>heightMapScale</tt> fields of <tt>Appearance</tt>)</a></h3>
+
+    <p>We add to the <tt>Appearance</tt> node new fields useful for bump mapping:
+
+    <pre class="vrml_extension_spec"><b>Appearance : X3DAppearanceNode {</b>
+  ... all previous Appearance fields ...
+  SFNode     [in,out]      <b>normalMap        NULL      </b>  #&nbsp;only 2D texture nodes (ImageTexture, MovieTexture, PixelTexture) allowed
+  SFNode     [in,out]      <b>heightMap        NULL      </b>  #&nbsp;deprecated; only 2D texture nodes (ImageTexture, MovieTexture, PixelTexture) allowed
+  SFFloat    [in,out]      <b>heightMapScale   0.01      </b>  #&nbsp;must be &gt; 0
+<b>}</b>
+</pre>
+    <table align="right" style="clear: right"><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/bump_demo_leaf_nobump.png"
+             class="screenshot"
+             title="Leaf (without bump mapping)"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/bump_demo_leaf_nobump.png"
+            alt="Leaf (without bump mapping)"
+          /></a></td></tr><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/bump_demo_leaf.png"
+             class="screenshot"
+             title="Leaf (with bump mapping)"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/bump_demo_leaf.png"
+            alt="Leaf (with bump mapping)"
+          /></a></td></tr><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/parallax_demo_lion_noparallax.png"
+             class="screenshot"
+             title="Lion texture (without parallax mapping)"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/parallax_demo_lion_noparallax.png"
+            alt="Lion texture (without parallax mapping)"
+          /></a></td></tr><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/parallax_demo_lion.png"
+             class="screenshot"
+             title="Lion texture (with parallax mapping)"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/parallax_demo_lion.png"
+            alt="Lion texture (with parallax mapping)"
+          /></a></td></tr></table>
+    <p>RGB channels of the texture specified as <tt>normalMap</tt> describe
+    normal vector values of the surface. Normal vectors are encoded as colors:
+    vector <tt>(x, y, z)</tt> should be encoded as <tt>RGB((x+1)/2, (y+1)/2, (z+1)/2)</tt>.
+
+    <p>You can use e.g.
+    <a href="http://code.google.com/p/gimp-normalmap/">GIMP
+    normalmap plugin</a> to generate such normal maps from your textures.
+    <i>Hint:</i> Remember to check "invert y" when generating normal maps,
+    in image editing programs image Y grows down but we want Y
+    (as interpreted by normals) to grow up, just like texture T coordinate.</p>
+
+    <p>Such normal map is enough to use the classic bump mapping method,
+    and already enhances the visual look of your scene. For most effective
+    results, you can place some dynamic light source in the scene
+    &mdash; the bump mapping effect is then obvious.</p>
+
+    <p>You can additionally specify a height map.
+    Since version 3.10.0 of view3dscene (2.5.0 of engine), this height map
+    is specified within the alpha channel of the <tt>normalMap</tt> texture.
+    This leads to easy and efficient implementation, and also it is easy
+    for texture creators: in <a href="http://code.google.com/p/gimp-normalmap/">GIMP
+    normal map plugin</a> just set <i>"Alpha Channel"</i> to <i>"Height"</i>.
+    A height map allows to use more sophisticated <i>parallax bump mapping</i> algorithm,
+    actually we have a full <a href="http://graphics.cs.brown.edu/games/SteepParallax/index.html">steep parallax mapping with
+    self-shadowing</a> implementation. This can make the effect truly
+    amazing, but also slower.</p>
+
+    <p>If the height map (that is, the alpha channel of <tt>normalMap</tt>)
+    exists, then we also look at the <tt>heightMapScale</tt> field.
+    This allows you to tweak the perceived height of bumps
+    for parallax mapping.</p>
+
+    <p>Since version 3.10.0 of view3dscene (2.5.0 of engine),
+    new shader pipeline allows the bump mapping to cooperate with
+    all normal VRML/X3D lighting and multi-texturing settings.
+    So the same lights and textures are used for bump mapping lighting
+    equations, only they have more interesting normals.</p>
+
+    <p>Note that bump mapping only works if you also assigned a normal
+    (2D) texture to your shape. We assume that normal map and height map
+    is mapped on your surface in the same way (same texture coordinates,
+    same texture transform) as the first texture (in case of multi-texturing).</p>
+
+    <p>Examples:</p>
+
+    <ul>
+      <li><p>Open with
+        <a href="http://castle-engine.sourceforge.net/view3dscene.php">view3dscene <i>(online docs)</i></a>        sample models from <a href="demo_models.html">our VRML/X3D demo models</a> (see subdirectory
+        <tt>bump_mapping/)</tt>.</p></li>
+
+      <li><p>You can see this used in
+        <a href="http://castle-engine.sourceforge.net/castle.php">The Castle <i>(online docs)</i></a> "The Fountain" level.
+        Authors of new levels are encouraged to use bump mapping&nbsp;!</p></li>
+    </ul>
+
+    <p>Note: you can also use these fields within <tt>KambiAppearance</tt> node
+    instead of <tt>Appearance</tt>. This allows you to declare <tt>KambiAppearance</tt>
+    by EXTERNPROTO, that fallbacks on standard <tt>Appearance</tt>,
+    and thus bump mapping extensions will be gracefully omitted by other
+    browsers. See <a href="demo_models.html">VRML/X3D demo models</a> for examples.</p>
+
+<h3><a name="section_ext_shadow_maps">2.4. Shadow maps extensions</a></h3>
+
+  <p><a href="x3d_extensions_shadow_maps.html">Shadow Maps extensions are described here</a>.</p>
+
+<h3><a name="section_ext_shadows">2.5. Shadow volumes extensions</a></h3>
+
+    <table align="right" style="clear: right"><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/fountain_shadows_0.png"
+             class="screenshot"
+             title="Fountain level model, with shadow volumes."><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/fountain_shadows_0.png"
+            alt="Fountain level model, with shadow volumes."
+          /></a></td></tr><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/fountain_shadows_1.png"
+             class="screenshot"
+             title="The same fountain level model, with shadow volumes. After some interactive fun with moving/rotating stuff around :)"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/fountain_shadows_1.png"
+            alt="The same fountain level model, with shadow volumes. After some interactive fun with moving/rotating stuff around :)"
+          /></a></td></tr><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/castle_screen_3.png"
+             class="screenshot"
+             title="Werewolves with shadows"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/castle_screen_3.png"
+            alt="Werewolves with shadows"
+          /></a></td></tr><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/castle_shadows_fountain.png"
+             class="screenshot"
+             title="Castle &quot;fountain&quot; level with shadows"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/castle_shadows_fountain.png"
+            alt="Castle &quot;fountain&quot; level with shadows"
+          /></a></td></tr></table>
+    <p>Specify the shadows behavior for the <i>shadow volumes</i> algorithm.</p>
+
+    <ul>
+      <li><p>To see the shadows, it is necessary to choose
+        one light in the scene (probably the brightest, main light)
+        and set it's fields <tt>shadowVolumes</tt> and <tt>shadowVolumesMain</tt>
+        both to <tt>TRUE</tt>. That's it. Everything by default
+        is a shadow caster.</p></li>
+
+      <li><p>Demo VRML/X3D models that use dynamic shadows volumes are
+        inside our <a href="demo_models.html">VRML/X3D demo models</a>, see subdirectory <tt>shadow_volumes/</tt>.
+
+      <li>
+        <!-- this is somewhat copied and modified text from
+             castle-development.php about creatures. -->
+
+        <p>For shadow volumes to work, all parts of the model
+        that are shadow casters should sum to a number of 2-manifold parts.
+        This means that every edge has exactly 2 (not more, not less)
+        neighbor faces, so the whole shape is a closed volume.
+        Also, faces must be oriented consistently (e.g. CCW outside).
+        This requirement is often quite naturally satisfiable for natural
+        objects. Also, consistent ordering allows you to use backface culling
+        (<tt>solid=TRUE</tt> in VRML/X3D), which
+        is a good thing on it's own.</p>
+
+        <p>In earlier engine/view3dscene versions, it was allowed
+        for some part of the model to not be perfectly 2-manifold.
+        But some rendering problems are unavoidable in this case. See
+        <a href="http://castle-engine.sourceforge.net/vrml_engine_doc/output/xsl/html/chapter.shadows.html">chapter "Shadow Volumes"</a>
+        (inside <a href="http://castle-engine.sourceforge.net/engine_doc.php">engine documentation <i>(online docs)</i></a>)
+        for description.
+        Since <a href="http://castle-engine.sourceforge.net/view3dscene.php">view3dscene <i>(online docs)</i></a>        3.12.0, your model must be perfectly 2-manifold to cast any shadows
+        for shadow volumes.
+
+        <p>You can inspect whether your model is detected as a 2-manifold
+        by <a href="http://castle-engine.sourceforge.net/view3dscene.php">view3dscene <i>(online docs)</i></a>:
+        see menu item <i>Help -&gt; Manifold Edges Information</i>.
+        To check which edges are actually detected as border you can use
+        <i>View -&gt; Fill mode -&gt; Silhouette and Border Edges</i>,
+        manifold silhouette edges are displayed yellow and border edges
+        (you want to get rid of them) are blue.</p>
+
+        <p>You can also check manifold edges in <a href="http://www.blender.org/">Blender</a>:
+        you can easily detect why the mesh is not
+        manifold by <i>Select non-manifold</i> command (in edit mode).
+        Also, remember that faces must be ordered consistently CCW
+        &mdash; in some cases <i>Recalculate normals outside</i>
+        (this actually changes vertex order in Blender)
+        may be needed to reorder them properly.
+      </li>
+
+      <li><p>Shadow casters may be transparent (have material with
+        <tt>transparency</tt> &gt; 0), this is handled perfectly.
+
+        <p>However, note that <i>all opaque shapes must
+        be 2-manifold</i> and separately <i>all transparent shapes must
+        be 2-manifold</i>. For example, it's Ok to have some transparent
+        box cast shadows over the model. But it's not Ok to have a shadow casting
+        box composed from two separate VRML/X3D shapes: one shape defining
+        one box face as transparent, the other shape defining
+        the rest of box faces as opaque.
+
+        <!--p>(For programmers: reasoning may be found in
+        <tt>TCastleScene.RenderSilhouetteShadowVolume</tt> comments,
+        see <tt>glDepthFunc(GL_NEVER)</tt> notes. For transparent triangles,
+        light/dark caps must always be drawn, even in Z-pass approach.)-->
+    </ul>
+
+<h4><a name="section_ext_shadows_light">2.5.1. Specify what lights cast shadows for shadow volumes (fields <tt>shadowVolumes</tt> and <tt>shadowVolumesMain</tt> for light nodes)</a></h4>
+
+    <p>To all VRML/X3D light nodes, we add two fields:
+
+    <pre class="vrml_extension_spec"><b>*Light {</b>
+  ... all normal *Light fields ...
+  SFBool  [in,out]  <b>shadowVolumes     FALSE</b>
+  SFBool  [in,out]  <b>shadowVolumesMain  FALSE</b>  #&nbsp;meaningful only when shadowVolumes = TRUE
+<b>}</b>
+</pre>
+    <p>The idea is that shadows are actually projected from only one light source
+    (with shadow volumes, number of light sources is limited,
+    since more light sources mean more rendering passes; for now, I decided
+    to use only one light). The scene lights are divided into three groups:
+    <ol>
+      <li><p>First of all, there's one and exactly one light
+        that makes shadows. Which means that shadows are made
+        where this light doesn't reach. This should usually be the
+        dominant, most intensive light on the scene.
+
+        <p>This is taken as the first light node with
+        <tt>shadowVolumesMain</tt> and <tt>shadowVolumes</tt> = <tt>TRUE</tt>.
+        Usually you will set <tt>shadowVolumesMain</tt> to <tt>TRUE</tt>
+        on only one light node.</li>
+
+      <li><p>There are other lights that don't determine <b>where</b>
+        shadows are, but they are turned off where shadows are.
+        This seems like a nonsense from "realistic" point of view
+        &mdash; we turn off the lights,
+        even though they may reach given scene point ?
+        But, in practice, it's often needed to put many lights
+        in this group. Otherwise, the scene could be so light,
+        that shadows do not look "dark enough".
+
+        <p>All lights with <tt>shadowVolumes</tt> = <tt>TRUE</tt> are
+        in this group. (As you see, the main light has to have
+        <tt>shadowVolumes</tt> = <tt>TRUE</tt> also, so the main light
+        is always turned off where the shadow is).</li>
+
+      <li>Other lights that light everything. These just
+        work like usual VRML lights, they shine everywhere
+        (actually, according to VRML light scope rules).
+        Usually only the dark lights should be in this group.
+
+        <p>These are lights with <tt>shadowVolumes</tt> = <tt>FALSE</tt>
+        (default).</li>
+    </ol>
+
+    <p>Usually you have to experiment a little to make the shadows look
+    good. This involves determining which light should be the main light
+    (<tt>shadowVolumesMain</tt> = <tt>shadowVolumes</tt> = <tt>TRUE</tt>),
+    and which lights should be just turned off inside the shadow
+    (only <tt>shadowVolumes</tt> = <tt>TRUE</tt>).
+    This system tries to be flexible, to allow you to make
+    shadows look good &mdash; which usually means "dark, but
+    not absolutely unrealistically black".
+
+    <p>In <a href="http://castle-engine.sourceforge.net/view3dscene.php">view3dscene <i>(online docs)</i></a>    you can experiment with this using <i>Edit -> Lights Editor</i>.</p>
+
+    <p>If no "main" light is found
+    (<tt>shadowVolumesMain</tt> = <tt>shadowVolumes</tt> = <tt>TRUE</tt>)
+    then shadows are turned off on this model.</p>
+
+    <p><i>Trick:</i> note that you can set the main light
+    to have <tt>on</tt> = <tt>FALSE</tt>. This is the way to make "fake light"
+    &mdash; this light will determine the shadows position (it will
+    be treated as light source when calculating shadow placement),
+    but will actually not make the scene lighter (be sure to set
+    for some other lights <tt>shadowVolumes</tt> = <tt>TRUE</tt> then).
+    This is a useful trick when there is no comfortable main light on the scene,
+    so you want to add it, but you don't want to make the scene
+    actually brighter.</p>
+
+    <p><i>To be deprecated some day: currently
+    <tt>shadowVolumes</tt> and <tt>shadowVolumesMain</tt> are the only
+    way to get shadow volumes. However, we plan in the future to instead
+    make our <a href="http://castle-engine.sourceforge.net/x3d_extensions_shadow_maps.php#section_light_shadows_on_everything">X3DLightNode.shadows field (currently only for shadow maps)</a>
+    usable also for shadow volumes. The <tt>shadowVolumes*</tt> will become
+    deprecated then.</i></p>
+
+<h3><a name="section_ext_tex_coord">2.6. Generate texture coordinates on primitives (<tt>Box/Cone/Cylinder/Sphere.texCoord</tt>)</a></h3>
+
+  <p>We add a <tt>texCoord</tt> field to various VRML/X3D primitives.
+  You can use it to generate texture coordinates on a primitive,
+  by the <tt>TextureCoordinateGenerator</tt> node (for example
+  <a href="#section_ext_tex_coord_worldspace">to make mirrors</a>),
+  or (for shadow maps) <a href="#section_ext_texture_gen_projective"><tt>ProjectedTextureCoordinate</tt></a>.
+
+  <p>You can even use multi-texturing on primitives, by
+  <tt>MultiGeneratedTextureCoordinate</tt> node. This works exactly like
+  standard <tt>MultiTextureCoordinate</tt>, except only coordinate-generating
+  children are allowed.</p>
+
+  <p>Note that you cannot use explicit <tt>TextureCoordinate</tt> nodes
+  for primitives, because you don't know the geometry of the primitive.
+  For a similar reason you cannot use <tt>MultiTextureCoordinate</tt>
+  (as it would allow <tt>TextureCoordinate</tt> as children).</p>
+
+  <pre class="vrml_extension_spec"><b>Box / Cone / Cylinder / Sphere {</b>
+  ...
+  SFNode     [in,out]      <b>texCoord    NULL      </b>  #&nbsp;[TextureCoordinateGenerator, ProjectedTextureCoordinate, MultiGeneratedTextureCoordinate]
+<b>}</b>
+</pre>
+  <pre class="vrml_extension_spec"><b>MultiGeneratedTextureCoordinate : X3DTextureCoordinateNode {</b>
+  SFNode     [in,out]      <b>metadata    NULL      </b>  #&nbsp;[X3DMetadataObject]
+  SFNode     [in,out]      <b>texCoord    NULL      </b>  #&nbsp;[TextureCoordinateGenerator, ProjectedTextureCoordinate]
+<b>}</b>
+</pre>
+  <p><i>Note: <tt>MultiGeneratedTextureCoordinate</tt> is not available
+  in older view3dscene &lt;= 3.7.0.</i>.</p>
+
+<h3><a name="section_ext_viewpoint_camera_matrix">2.7. Output events to generate camera matrix (<tt>Viewpoint.camera*Matrix</tt> events)</a></h3>
+
+  <p>To every viewpoint node (this applies to all viewpoints usable
+  in our engine, including all <tt>X3DViewpointNode</tt> descendants,
+  like <tt>Viewpoint</tt> and <tt>OrthoViewpoint</tt>, and even to
+  VRML 1.0 <tt>PerspectiveCamera</tt> and <tt>OrthographicCamera</tt>)
+  we add output events that provide you with current camera matrix.
+  One use for such matrices is to route them to your GLSL shaders (as
+  uniform variables), and use inside the shaders to transform between
+  world and camera space.</p>
+
+  <pre class="vrml_extension_spec"><b>*Viewpoint {</b>
+  ... all normal *Viewpoint fields ...
+  SFMatrix4f [out]         <b>cameraMatrix            </b>
+  SFMatrix4f [out]         <b>cameraInverseMatrix            </b>
+  SFMatrix3f [out]         <b>cameraRotationMatrix            </b>
+  SFMatrix3f [out]         <b>cameraRotationInverseMatrix            </b>
+  SFBool     [in,out]      <b>cameraMatrixSendAlsoOnOffscreenRendering  FALSE     </b>
+<b>}</b>
+</pre>
+  <p><tt>"cameraMatrix"</tt> transforms from world-space (global 3D space
+  that we most often think within) to camera-space (aka eye-space;
+  when thinking within this space, you know then that the camera
+  position is at (0, 0, 0), looking along -Z, with up in +Y).
+  It takes care of both the camera position and orientation,
+  so it's 4x4 matrix.
+  <tt>"cameraInverseMatrix"</tt> is simply the inverse of this matrix,
+  so it transforms from camera-space back to world-space.</p>
+
+  <p><tt>"cameraRotationMatrix"</tt> again
+  transforms from world-space to camera-space, but now it only takes
+  care of camera rotations, disregarding camera position. As such,
+  it fits within a 3x3 matrix (9 floats), so it's smaller than full
+  <tt>cameraMatrix</tt> (4x4, 16 floats).
+  <tt>"cameraRotationInverseMatrix"</tt> is simply it's inverse.
+  Ideal to transform directions
+  between world- and camera-space in shaders.</p>
+
+  <p><tt>"cameraMatrixSendAlsoOnOffscreenRendering"</tt> controls
+  when the four output events above are generated.
+  The default (<tt>FALSE</tt>) behavior is that they are generated only
+  for camera that corresponds to the actual viewpoint, that is: for the
+  camera settings used when rendering scene to the screen.
+  The value <tt>TRUE</tt> causes the output matrix events to be generated
+  also for temporary camera settings used for off-screen rendering
+  (used when generating textures for <tt>GeneratedCubeMapTexture</tt>,
+  <tt>GeneratedShadowMap</tt>, <tt>RenderedTexture</tt>). This is a little
+  dirty, as cameras used for off-screen rendering do not (usually) have
+  any relation to actual viewpoint (for example, for
+  <tt>GeneratedCubeMapTexture</tt>, camera is positioned in the middle
+  of the shape using the cube map). But this can be useful: when you route
+  these events straight to the shaders, you usually need in shaders "actual
+  camera" (which is not necessarily current viewpoint camera) matrices.</p>
+
+  <p>These events are usually generated only by the currently bound viewpoint node.
+  The only exception is when you use <tt>RenderedTexture</tt>
+  and set something in <tt>RenderedTexture.viewpoint</tt>:
+  in this case, <tt>RenderedTexture.viewpoint</tt> will generate appropriate
+  events (as long as you set <tt>cameraMatrixSendAlsoOnOffscreenRendering</tt>
+  to <tt>TRUE</tt>). Conceptually, <tt>RenderedTexture.viewpoint</tt>
+  is temporarily bound (although it doesn't send isBound/bindTime events).
+
+<h3><a name="section_ext_tex_coord_worldspace">2.8. Generating 3D tex coords in world space (easy mirrors by additional <tt>TextureCoordinateGenerator.mode</tt> values)</a></h3>
+
+  <table align="right" style="clear: right"><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/cubemap_teapot.png"
+             class="screenshot"
+             title="Teapot with cube map reflections"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/cubemap_teapot.png"
+            alt="Teapot with cube map reflections"
+          /></a></td></tr></table>
+    <p><tt>TextureCoordinateGenerator.mode</tt> allows two additional
+    generation modes:
+
+    <ol>
+      <li><tt>WORLDSPACEREFLECTIONVECTOR</tt>:
+        Generates reflection coordinates mapping to 3D direction in <i>world space</i>.
+        This will make the cube map reflection
+        simulating real mirror. It's analogous to standard
+        "CAMERASPACEREFLECTIONVECTOR", that does the same but in camera space,
+        making the mirror reflecting mostly the "back" side of the cube,
+        regardless of how the scene is rotated.</li>
+
+      <li><tt>WORLDSPACENORMAL</tt>: Use the vertex normal, transformed
+        to <i>world space</i>, as texture coordinates. Analogous to
+        standard "CAMERASPACENORMAL", that does the same but in camera space.</li>
+    </ol>
+
+<h3><a name="section_ext_tex_coord_bounds">2.9. Tex coord generation dependent on bounding box (<tt>TextureCoordinateGenerator.mode</tt> = BOUNDS*)</a></h3>
+
+  <p>Three more values for <tt>TextureCoordinateGenerator.mode</tt>:</p>
+
+  <ol>
+    <li><tt>BOUNDS</tt>:
+      Automatically generate nice texture coordinates, suitable for 2D or 3D
+      textures. This is equivalent to either <tt>BOUNDS2D</tt> or <tt>BOUNDS3D</tt>,
+      depending on what type of texture is actually used during rendering.
+
+    <li><tt>BOUNDS2D</tt>:
+      Automatically generate nice 2D texture coordinates, based on the local
+      bounding box of given shape. This texture mapping is precisely defined
+      by the VRML/X3D standard at <a href="http://www.web3d.org/x3d/specifications/ISO-IEC-19775-1.2-X3D-AbstractSpecification/Part01/components/geometry3D.html#IndexedFaceSet"><tt>IndexedFaceSet</tt> description</a>.
+
+    <li><tt>BOUNDS3D</tt>:
+      Automatically generate nice 3D texture coordinates, based on the local
+      bounding box of given shape. This texture mapping is precisely defined
+      by the VRML/X3D standard at <a href="http://www.web3d.org/x3d/specifications/ISO-IEC-19775-1.2-X3D-AbstractSpecification/Part01/components/texture3D.html#Texturecoordinategeneration"><i>Texturing3D</i> component,
+      section "Texture coordinate generation for primitive objects"</a>.
+  </ol>
+
+  <p>Following VRML/X3D standards, above texture mappings are
+  automatically used when you supply a texture but no texture coordinates for your
+  shape. Our extensions make it possible to also explicitly use these mappgins,
+  when you really want to explicitly use <tt>TextureCoordinateGenerator</tt> node.
+  This is useful when working with multi-texturing (e.g. one texture unit
+  may have BOUNDS mapping, while the other texture unit has different mapping).</p>
+
+<h3><a name="section_ext_text3d">2.10. 3D text (node <tt>Text3D</tt>)</a></h3>
+
+    <p>We add new node:
+
+    <pre class="vrml_extension_spec"><b>Text3D : X3DGeometryNode {</b>
+  MFString   [in,out]      <b>string      []        </b>
+  SFNode     [in,out]      <b>fontStyle   NULL      </b>
+  MFFloat    [in,out]      <b>length      []        </b>
+  SFFloat    [in,out]      <b>maxExtent   0         </b>
+  SFFloat    [in,out]      <b>depth       0.1       </b>  #&nbsp;must be &gt;= 0
+  SFBool     [in,out]      <b>solid       TRUE      </b>
+<b>}</b>
+</pre>
+    <p>This renders the text, pretty much like <tt>Text</tt> node from
+    VRML 97 (see VRML 97 specification about <tt>string</tt>, <tt>fontStyle</tt>,
+    <tt>length</tt>, <tt>maxExtent</tt> fields). But the text is 3D:
+    it's "pushed" by the amount <tt>depth</tt> into negative Z. The normal
+    text is on Z = 0, the 3D text had front cap on Z = 0, back cap on Z = -Depth,
+    and of course the extrusion (sides).</p>
+
+    <p>Also, it's natural to apply backface culling to such text, so we have
+    a <tt>solid</tt> field. When true (default), then backface culling is done.
+    This may provide much speedup, unless camera is able to enter
+    "inside" the text geometry (in which case solid should be set to <tt>FALSE</tt>).</p>
+
+    <p>If <tt>depth</tt> is zero, then normal 2D text is rendered.
+    However, backface culling may still be applied (if <tt>solid</tt> is true)
+    &mdash; so this node also allows you to make 2D text that's supposed to be
+    visible from only front side.</p>
+
+    <p>See our <a href="demo_models.html">VRML/X3D demo models</a>, file <tt>text/text_depth.wrl</tt> for example use of this.</p>
+
+    <p>Compatibility:
+    <ul>
+      <li>You should specify external prototype before using this node:
+
+        <pre>
+EXTERNPROTO Text3D [
+  exposedField MFString string
+  exposedField SFNode fontStyle
+  exposedField MFFloat length
+  exposedField SFFloat maxExtent
+  exposedField SFFloat depth
+  exposedField SFBool solid
+] [ "urn:castle-engine.sourceforge.net:node:Text3D",
+    "http://castle-engine.sourceforge.net/fallback_prototypes.wrl#Text3D" ]
+</pre>
+
+        <p>This way other VRML browsers should be able to
+        render Text3D node like normal 2D Text.</p></li>
+
+      <li>This is somewhat compatible to <a href="http://www.parallelgraphics.com/developer/products/cortona/extensions/text3d/">Text3D
+        node from Parallel Graphics</a>. At the beginning I implemented this
+        extension differently (<tt>kambiDepth</tt>, <tt>kambiSolid</tt> fields
+        for <tt>AsciiText</tt> and <tt>Text</tt> nodes). But later I found
+        these Parallel Graphics <tt>Text3D</tt> definition, so I decided
+        to make my version compatible.</li>
+    </ul>
+
+<h3><a name="section_ext_alpha_channel_detection">2.11. Override alpha channel detection (field <tt>alphaChannel</tt> for <tt>ImageTexture</tt>, <tt>MovieTexture</tt> and other textures)</a></h3>
+
+    <table align="right" style="clear: right"><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/alpha_channel_override_demo.png"
+             class="screenshot"
+             title="Demo of alphaChannel override"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/alpha_channel_override_demo.png"
+            alt="Demo of alphaChannel override"
+          /></a></td></tr></table>
+    <p>Alpha channel of your textures
+    is fully supported, both a simple yes-no transparency (done
+    by alpha_test in OpenGL) and full range transparency
+    (done by blending in OpenGL, just like partially transparent materials).
+    Internally, we have a simple and very nice algorithm that detects whether texture's
+    alpha channel qualifies as simple yes-no or full range, see
+    <a href="http://castle-engine.sourceforge.net/apidoc/html/CastleImages.TEncodedImage.html#AlphaChannel">AlphaChannel method reference</a>    (default tolerance values used by X3D renderer are 5 and 0.01).
+    There is also a special program in <a href="http://castle-engine.sourceforge.net/engine.php">engine sources <i>(online docs)</i></a> (see <tt>examples/images_videos/detect_alpha_simple_yes_no.lpr</tt>
+    file) if you want to use this algorithm yourself.
+    You can also see the results for your textures if you run view3dscene
+    with <tt>--debug-log</tt> option.
+
+    <p>Sometimes you want to override results of this automatic detection.
+    For example, maybe your texture has some pixels using full range alpha
+    but you still want to use simpler rendering by alpha_test.
+
+    <p>So we add new field to all texture nodes
+    (everything descending from <tt>X3DTextureNode</tt>,
+    like <tt>ImageTexture</tt>, <tt>MovieTexture</tt>; also <tt>Texture2</tt>
+    in VRML 1.0):
+
+    <pre class="vrml_extension_spec"><b>X3DTextureNode {</b>
+  ... all normal X3DTextureNode fields ...
+  SFString   []            <b>alphaChannel  "AUTO"    </b>  #&nbsp;"AUTO", "SIMPLE_YES_NO" or "FULL_RANGE"
+<b>}</b>
+</pre>
+    <p>Value <tt>AUTO</tt> means that automatic detection is used, this
+    is the default. Value <tt>SIMPLE_YES_NO</tt> means that alpha channel,
+    if present, will always be treated like a simple yes/no channel (only fully
+    opaque or fully transparent pixels). <tt>FULL_RANGE</tt> means that
+    we will always consider alpha channel as full range, and always render
+    it using blending.
+
+<h3><a name="section_ext_movie_from_image_sequence">2.12. Movies for <tt>MovieTexture</tt> can be loaded from images sequence</a></h3>
+
+<table align="right" style="clear: right"><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/fireplace_movie_texture_demo.png"
+             class="screenshot"
+             title="Fireplace demo screenshot"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/fireplace_movie_texture_demo.png"
+            alt="Fireplace demo screenshot"
+          /></a></td></tr><tr><td><div class="thumbs_cell_with_text_or_movie">This movie shows how it looks animated.<object class="youtube_thumbnail_video"><param name="movie" value="http://www.youtube.com/v/V-EJvVbi1DQ"> </param> <embed src="http://www.youtube.com/v/V-EJvVbi1DQ" type="application/x-shockwave-flash" width="200" height="167"> </embed> </object></div></td></tr></table>
+    <p>For <tt>MovieTexture</tt> nodes, you can use an URL like
+    <tt>image%d.png</tt> to load movie from a sequence of images.
+    This will load all successive images, substituting counter
+    in place of <tt>%d</tt>, starting from 1.
+
+    <p>You can specify a number between <tt>%</tt> and <tt>d</tt>,
+    like <tt>%4d</tt>, to pad counter with zeros. For example, normal
+    <tt>%d.png</tt> results in names like 1.png, 2.png, ..., 9.png, 10.png...
+    But <tt>%4d.png</tt> results in names like 0001.png,
+    0002.png, ..., 0009.png, 0010.png, ...
+
+    <p>Such movie will always be considered to run at the speed of 25 frames
+    per second.
+
+    <p>A simple image filename (without <tt>%d</tt> pattern) is also accepted
+    as a movie URL. This just loads a trivial movie, that consists of one
+    frame and is always still...
+
+    <p>Allowed image formats are just like everywhere in our engine &mdash;
+    PNG, JPEG and many others, see <a href="http://castle-engine.sourceforge.net/glviewimage.php">glViewImage docs <i>(online docs)</i></a> for the list.
+
+    <p>Besides the fact that loading image sequence doesn't require
+    ffmpeg installed, using image sequence has also one very important
+    advantage over any other movie format: <i>you can use images
+    with alpha channel</i> (e.g. in PNG format), and MovieTexture
+    will be rendered with
+    alpha channel appropriately. This is crucial if you want to have
+    a video of smoke or flame in your game, since such textures usually
+    require an alpha channel.
+
+    <p>Samples of <tt>MovieTexture</tt> usage
+    are inside <a href="demo_models.html">our VRML/X3D demo models</a>, in subdirectory <tt>movie_texture/</tt>.
+
+<h3><a name="section_ext_kambi_inline">2.13. Automatic processing of inlined content (node <tt>KambiInline</tt>)</a></h3>
+
+    <p>New <tt>KambiInline</tt> node extends standard <tt>Inline</tt>
+    node, allowing you to do something like search-and-replace automatically
+    on inlined content.
+
+    <pre class="vrml_extension_spec"><b>KambiInline : Inline {</b>
+  ... all normal Inline fields ...
+  MFString   [in,out]      <b>replaceNames  []        </b>
+  MFNode     [in,out]      <b>replaceNodes  []        </b>  #&nbsp;any VRML node is valid on this list
+<b>}</b>
+</pre>
+    <p><tt>replaceNames</tt> specifies the node names in inlined content
+    to search. <tt>replaceNodes</tt> are the new nodes to replace with.
+    <tt>replaceNames</tt> and <tt>replaceNodes</tt> fields should have the same
+    length. By default, the lists are empty and so <tt>KambiInline</tt>
+    works exactly like standard <tt>Inline</tt> node.
+
+    <p>An example when this is extremely useful: imagine you have a VRML file
+    generated by exporting from some 3D authoring tool. Imagine that this tool
+    is not capable of producing some VRML content, so you write a couple
+    of VRML nodes by hand, and inline the generated file. For example
+    this is your generated file, <tt>generated.wrl</tt>:
+
+<pre class="vrml_code">
+#VRML V2.0 utf8
+
+Shape {
+  geometry Box { size 1 2 3 }
+  appearance Appearance {
+    texture DEF Tex ImageTexture { url "test.png" }
+  }
+}
+</pre>
+
+    <p>and this is your file created by hand, <tt>final.wrl</tt>:
+
+<pre class="vrml_code">
+#VRML V2.0 utf8
+
+# File written by hand, because your 3D authoring tool cannot generate
+# NavigationInfo node.
+
+NavigationInfo { headlight "FALSE" }
+Inline { url "generated.wrl" }
+</pre>
+
+    <p>The advantage of this system is that you can get back to working
+    with your 3D authoring tool, export as many times as you want
+    overriding <tt>generated.wrl</tt>, and your hand-crafted content
+    stays nicely in <tt>final.wrl</tt>.
+
+    <p>The problem of the above example: what happens if you want
+    to always automatically replace some part inside <tt>generated.wrl</tt>?
+    For example, assume that your 3D authoring tool cannot export with
+    <tt>MovieTexture</tt> node, but you would like to use it instead of
+    <tt>ImageTexture</tt>. Of course, you could just change
+    <tt>generated.wrl</tt> in any text editor, but this gets very tiresome
+    and dangerous if you plan to later regenerate <tt>generated.wrl</tt> from
+    3D authoring tool: you would have to remember to always replace
+    <tt>ImageTexture</tt> to <tt>MovieTexture</tt> after exporting. Needless to say,
+    it's easy to forget about such thing, and it gets very annoying when
+    there are more replaces needed. Here's when <tt>KambiInline</tt>
+    comes to help. Imagine that you use the same <tt>generated.wrl</tt>
+    file, and as <tt>final.wrl</tt> you will use
+
+<pre class="vrml_code">
+#VRML V2.0 utf8
+
+# File written by hand, because your 3D authoring tool cannot generate
+# MovieTexture node.
+
+KambiInline {
+  url "generated.wrl"
+  replaceNames "Tex"
+  replaceNodes MovieTexture { url "test.avi" }
+}
+</pre>
+
+    <p>Each time when loading <tt>final.wrl</tt>, our engine will
+    automatically replace in the VRML graph node <tt>Tex</tt> with
+    specified <tt>MovieTexture</tt>. Of course the "replacing" happens
+    only in the memory, it's not written back to any file, your files
+    are untouched. Effectively, the effect is like you would load a file
+
+<pre class="vrml_code">
+#VRML V2.0 utf8
+
+Shape {
+  geometry Box { size 1 2 3 }
+  appearance Appearance {
+    texture MovieTexture { url "test.avi" }
+  }
+}
+</pre>
+
+<h3><a name="section_ext_time_origin_at_load">2.14. Force VRML time origin to be 0.0 at load time (<tt>KambiNavigationInfo.timeOriginAtLoad</tt>)</a></h3>
+
+    <p>By default, VRML/X3D time origin is at <i>00:00:00 GMT January 1, 1970</i>
+    and <tt>SFTime</tt> reflects real-world time (taken from your OS).
+    <a href="x3d_time_origin_considered_uncomfortable.html">This is somewhat broken idea in my opinion</a>, unsuitable
+    for normal single-user games. So you can change this by using
+    <tt>KambiNavigationInfo</tt> node:
+
+    <pre class="vrml_extension_spec"><b>KambiNavigationInfo : NavigationInfo {</b>
+  ... all normal NavigationInfo fields ...
+  SFBool     []            <b>timeOriginAtLoad    FALSE     </b>
+<b>}</b>
+</pre>
+    <p>The default value, <tt>FALSE</tt>, means the standard VRML behavior.
+    When <tt>TRUE</tt> the time origin for this VRML scene is considered
+    to be 0.0 when browser loads the file. For example this means that you can
+    easily specify desired <tt>startTime</tt> values for time-dependent nodes
+    (like <tt>MovieTexture</tt> or <tt>TimeSensor</tt>)
+    to start playing at load time, or a determined number of seconds
+    after loading of the scene.
+
+<h3><a name="section_ext_head_bobbing">2.15. Control head bobbing (<tt>KambiNavigationInfo.headBobbing*</tt> fields)</a></h3>
+
+    <p><i>"Head bobbing"</i> is the effect of camera moving slightly up
+    and down when you walk on the ground (when gravity works).
+    This simulates our normal human vision &mdash; we can't usually keep
+    our head at the exact same height above the ground when walking
+    or running :)
+    By default our engine does head bobbing (remember, only when gravity
+    works; that is when the navigation mode is <tt>WALK</tt>).
+    This is common in FPS games.</p>
+
+    <p>Using the extensions below you can tune (or even turn off)
+    the head bobbing behavior. For this we add new fields to the
+    <tt>KambiNavigationInfo</tt> node (introduced in the previous section,
+    can be simply used instead of the standard <tt>NavigationInfo</tt>).</p>
+
+    <pre class="vrml_extension_spec"><b>KambiNavigationInfo : NavigationInfo {</b>
+  ... all normal NavigationInfo fields, and KambiNavigationInfo fields documented previously ...
+  SFFloat    [in,out]      <b>headBobbing             0.02      </b>
+  SFFloat    [in,out]      <b>headBobbingTime         0.5       </b>
+<b>}</b>
+</pre>
+    <p>Intuitively, <tt>headBobbing</tt> is the intensity of the whole effect
+    (0 = no head bobbing) and <tt>headBobbingTime</tt> determines
+    the time of a one step of a walking human.</p>
+
+    <p>The field <tt>headBobbing</tt> multiplied by the avatar height specifies how far
+    the camera can move up and down. The avatar height is taken from
+    the standard <tt>NavigationInfo.avatarSize</tt> (2nd array element).
+    Set this to exact 0 to disable head bobbing.
+    This must always be &lt; 1. For sensible effects, this should
+    be something rather close to 0.
+
+    <small>(<a href="http://castle-engine.sourceforge.net/apidoc/html/CastleCameras.TWalkCamera.html#HeadBobbing">Developers: see also TWalkCamera.HeadBobbing property.</a>)</small></p>
+
+    <p>The field <tt>headBobbingTime</tt> determines how much time passes
+    to make full head bobbing sequence (camera swing up and then down back to original height).
+
+    <small>(<a href="http://castle-engine.sourceforge.net/apidoc/html/CastleCameras.TWalkCamera.html#HeadBobbingTime">Developers: see also TWalkCamera.HeadBobbingTime property.</a>)</small></p>
+
+<h3><a name="section_ext_script_compiled">2.16. Executing compiled-in code on Script events (<tt>compiled:</tt> Script protocol)</a></h3>
+
+    <p>A special Script protocol "<tt>compiled:</tt>" allows programmers to
+    execute compiled-in code on normal Script events.
+    "Compiled-in code" means simply that you write a piece of code
+    in ObjectPascal and register it after creating the scene.
+    This piece of code will be executed whenever appropriate script
+    will receive an event (when eventIn of the Script is received,
+    or when exposedField is changed by event, or when the script
+    receives <tt>initialize</tt> or <tt>shutdown</tt> notifications).</p>
+
+    <p>This should be very handy for programmers that integrate our VRML engine
+    in their own programs, and would like to have some programmed response
+    to some VRML events. Using Script node allows you to easily connect
+    programmed code to the VRML graph: you write the code in Pascal, and
+    in VRML you route anything you want to your script.</p>
+
+    <p>For example consider this Script:
+
+<pre class="vrml_code">
+  DEF S Script {
+    inputOnly SFTime touch_event
+    inputOnly SFBool some_other_event
+    inputOnly SFInt32 yet_another_event
+    url "compiled:
+initialize=script_initialization
+touch_event=touch_handler
+some_other_event=some_other_handler
+" }
+
+  DEF T TouchSensor { }
+  ROUTE T.touchTime TO S.touch_event
+</pre>
+
+    <p>This means that handler named <tt>touch_handler</tt> will
+    be executed when user will activate TouchSensor.
+    As additional examples, I added handler named
+    <tt>script_initialization</tt> to be executed
+    on script initialization, and <tt>some_other_handler</tt> to execute when
+    <tt>some_other_event</tt> is received. Note that nothing will happen
+    when <tt>yet_another_event</tt> is received.</p>
+
+    <p>As you see, <tt>compiled:</tt> Script content simply maps
+    VRML/X3D event names to Pascal compiled handler names.
+    Each line maps <tt>event_name=handler_name</tt>. Lines without
+    <tt>=</tt> character are understood to map handler of the same
+    name, that is simple line <tt>event_name</tt> is equivalent to
+    <tt>event_name=event_name</tt>.</p>
+
+    <p>To make this actually work, you have to define and register
+    appropriate handlers
+    in your Pascal code. Like this:</p>
+
+<pre class="sourcecode">
+type
+  TMyObject = class
+    procedure ScriptInitialization(Value: TX3DField; const Time: TX3DTime);
+    procedure TouchHandler(Value: TX3DField; const Time: TX3DTime);
+  end;
+
+procedure TMyObject.ScriptInitialization(Value: TX3DField; const Time: TX3DTime);
+begin
+  { ... do here whatever you want ...
+
+    Value parameter is nil for script initialize/shutdown handler.
+  }
+end;
+
+procedure TMyObject.TouchHandler(Value: TX3DField; const Time: TX3DTime);
+begin
+  { ... do here whatever you want ...
+
+    Value parameter here contains a value passed to Script.touch_event.
+    You can cast it to appropriate field type and get it's value,
+    like "(Value as TSFTime).Value".
+
+    (Although in case of this example, Value here will always come from
+    TouchSensor.touchTime, so it will contain the same thing
+    as our Time.Seconds parameter. But in general case, Value can be very useful to you.)
+  }
+end;
+
+  { ... and somewhere after creating TCastleSceneCore (or TCastleScene) do this: }
+
+  Scene.RegisterCompiledScript('script_initialization', @MyObject.ScriptInitialization);
+  Scene.RegisterCompiledScript('touch_handler', @MyObject.TouchHandler);
+</pre>
+
+    <p>For working example code in Pascal and VRML/X3D of this, see
+    <tt>castle_game_engine/examples/3d_rendering_processing/call_pascal_code_from_3d_model_script.lpr</tt>
+    in <a href="http://castle-engine.sourceforge.net/engine.php">engine sources <i>(online docs)</i></a>.
+
+<h3><a name="section_ext_castlescript">2.17. CastleScript (<tt>castlescript:</tt> Script protocol)</a></h3>
+
+    <p>We have a simple scripting language that can be used inside <tt>Script</tt>
+    nodes. See <a href="castle_script.html">CastleScript documentation (with examples)</a>.
+
+<h3><a name="section_ext_radiance_transfer">2.18. Precalculated radiance transfer (<tt>radianceTransfer</tt> in all <tt>X3DComposedGeometryNode</tt> nodes)</a></h3>
+
+<table align="right" style="clear: right"><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/chinchilla_normal.png"
+             class="screenshot"
+             title="Normal OpenGL lighting"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/chinchilla_normal.png"
+            alt="Normal OpenGL lighting"
+          /></a></td></tr><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/chinchilla_simple_occlusion.png"
+             class="screenshot"
+             title="Rendering with simple ambient occlusion"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/chinchilla_simple_occlusion.png"
+            alt="Rendering with simple ambient occlusion"
+          /></a></td></tr><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/chinchilla_diffuse_prt.png"
+             class="screenshot"
+             title="Precomputed Radiance Transfer"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/chinchilla_diffuse_prt.png"
+            alt="Precomputed Radiance Transfer"
+          /></a></td></tr></table>
+    <pre class="vrml_extension_spec"><b>X3DComposedGeometryNode : X3DGeometryNode {</b>
+  ... all normal X3DComposedGeometryNode fields ...
+  MFVec3f    [in,out]      <b>radianceTransfer  []        </b>
+<b>}</b>
+</pre>
+    <p>The field <tt>radianceTransfer</tt> specifies per-vertex values for
+    <a href="http://en.wikipedia.org/wiki/Precomputed_Radiance_Transfer">Precomputed
+    Radiance Transfer</a>. For each vertex, a vector of N triples is specified
+    (this describes the radiance transfer of this vertex).
+    We use Vec3f, since our transfer is for RGB (so we need 3 values
+    instead of one).
+    The number of items in <tt>radianceTransfer</tt> must be a multiple
+    of the number of <tt>coord</tt> points.</p>
+
+    <p>Since this field is available in <tt>X3DComposedGeometryNode</tt>,
+    PRT can be used with most of the VRML/X3D geometry,
+    like <tt>IndexedFaceSet</tt>. Note that when using PRT, the color
+    values (<tt>color</tt>, <tt>colorPerVertex</tt> fields) are ignored
+    (TODO: in the future I may implement mixing).
+    We also add this field to VRML 1.0 <tt>IndexedFaceSet</tt>, so with
+    VRML 1.0 this works too.</p>
+
+    <p>For PRT to work, the object with <tt>radianceTransfer</tt> computed
+    must keep this <tt>radianceTransfer</tt> always corresponding to
+    current coords. This means that you either don't animate coordinates,
+    or you animate coords together with <tt>radianceTransfer</tt> fields.
+    TODO: make precompute_xxx work with animations, and make an example
+    of this.
+
+    <p>For more information, see <tt>kambi_vrml_game_engine/examples/vrml/radiance_transfer/</tt>
+    demo in engine sources.</p>
+
+    <p>TODO: currently <tt>radianceTransfer</tt> is read but ignored
+    by <i>view3dscene</i> and simple VRML browser components.
+    This means that you have to write and compile some ObjectPascal code
+    (see above <tt>radiance_transfer/</tt> example) to actually use this
+    in your games.</p>
+
+<h3><a name="section_ext_mix_vrml_1_2">2.19. Mixing VRML 1.0, 2.0, X3D nodes and features</a></h3>
+
+    <p>Because of the way how I implemented VRML 1.0, 2.0 and X3D handling,
+    you have effectively the <i>sum of all VRML features</i>
+    available. Which means that actually you can mix VRML 1.0 and 2.0 and X3D
+    nodes to some extent. If given node name exists in two VRML/X3D versions,
+    then VRML/X3D file header defines how the node behaves. Otherwise,
+    node behaves according to it's VRML/X3D specification.</p>
+
+    <p>For example, this means that a couple of VRML 2.0/X3D nodes
+    are available (and behave exactly like they should) also for VRML 1.0
+    authors:
+    <ul>
+      <li><a href="http://www.web3d.org/x3d/specifications/vrml/ISO-IEC-14772-VRML97/part1/nodesRef.html#Background">Background</a>
+      <li><a href="http://www.web3d.org/x3d/specifications/vrml/ISO-IEC-14772-VRML97/part1/nodesRef.html#Fog">Fog</a>
+      <li><a href="http://www.web3d.org/x3d/specifications/vrml/ISO-IEC-14772-VRML97/part1/nodesRef.html#WorldInfo">WorldInfo</a>
+      <li><a href="http://www.web3d.org/x3d/specifications/vrml/ISO-IEC-14772-VRML97/part1/nodesRef.html#NavigationInfo">NavigationInfo</a>
+    </ul>
+
+    <p>If you're missing an orthographic viewpoint in VRML 2.0,
+    you can use VRML 1.0 <tt>OrthographicCamera</tt> or
+    you ca use X3D <tt>OrthoViewpoint</tt>.</p>
+
+    <p>If you're missing GLSL shaders in VRML 2.0,
+    you can use <a href="x3d_implementation_shaders.html">X3D programmable shaders</a> inside VRML 2.0.</p>
+
+    <p>You can also <a href="#section_ext_inline_for_all">freely include
+    VRML 1.0 files inside VRML 2.0, or X3D, or the other way around</a>.
+
+<h3><a name="section_ext_fog_volumetric">2.20. Volumetric fog (additional fields for <tt>Fog</tt> and <tt>LocalFog</tt> nodes)</a></h3>
+
+    We add to all <tt>X3DFogObject</tt> nodes
+    (<tt>Fog</tt> and <tt>LocalFog</tt>) additional fields to allow
+    easy definition of volumetric fog:
+
+    <pre class="vrml_extension_spec"><b>X3DFogObject {</b>
+  ... all normal X3DFogObject fields ...
+  SFBool   [in,out]      <b>volumetric                    FALSE   </b>
+  SFVec3f  [in,out]      <b>volumetricDirection           0 -1 0  </b>  #&nbsp;any non-zero vector
+  SFFloat  [in,out]      <b>volumetricVisibilityStart     0       </b>
+<b>}</b>
+</pre>
+    <p>When "<tt>volumetric</tt>" is <tt>FALSE</tt> (the default),
+    every other "<tt>volumetricXxx</tt>" field is ignored and you have
+    normal (not volumetric) fog following the VRML/X3D specification.
+    When "<tt>volumetric</tt>" is <tt>TRUE</tt>, then the volumetric fog
+    described below is used.</p>
+
+    <p>"<tt>volumetricDirection</tt>" determines in which direction density
+    of the fog increases (that is, fog color is more visible).
+    It must not be a zero vector. It's length doesn't matter.
+    Every vertex of the 3D scene is projected on the "<tt>volumetricDirection</tt>"
+    vector, attached to the origin of fog node coordinate system
+    (TODO: for now, origin of global coordinate system).
+    From the resulting signed distance along this vector we subtract
+    "<tt>volumetricVisibilityStart</tt>", and then use the result to determine
+    fog amount, just like it would be a distance to the camera for normal fog.</p>
+
+    <p>For example in the default case when
+    "<tt>volumetricDirection</tt>" is <tt>(0, -1, 0)</tt>,
+    then the <i>negated</i> Y coordinate of every vertex determines
+    the amount of fog (that is, fog density increases when Y decreases).</p>
+
+    <p>The effect of "<tt>volumetricVisibilityStart</tt>" is to shift
+    where fog starts. Effectively, fog density changes between the distances
+    "<tt>volumetricVisibilityStart</tt>" (no fog) and
+    "<tt>volumetricVisibilityStart + visibilityRange</tt>" (full fog).
+    Remember that "<tt>visibilityRange</tt>" must be &gt;= 0, as required
+    by VRML/X3D specification.
+    Note that <tt>fogType</tt> still determines how values
+    between are interpolated, so the fog may be linear or exponential,
+    following normal VRML/X3D equations.</p>
+
+    <p>For example if your world is oriented such that the +Y is the "up",
+    and ground is on Y = 0, and you want your fog to start from height Y = 20,
+    you should set "<tt>volumetricDirection</tt>" to <tt>(0, -1, 0)</tt>
+    (actually, that's the default) and set "<tt>volumetricVisibilityStart</tt>"
+    to <tt>-20</tt> (note <tt>-20</tt> instead of <tt>20</tt>;
+    flipping "<tt>volumetricDirection</tt>" flips also the meaning of
+    "<tt>volumetricVisibilityStart</tt>").</p>
+
+    <p>The "<tt>volumetricVisibilityStart</tt>" is transformed
+    by the fog node transformation scaling,
+    just like "<tt>visibilityRange</tt>" in VRML/X3D spec.
+
+    <p>Oh, and note that in our programs for now <tt>EXPONENTIAL</tt> fog
+    (both volumetric and not) is actually approximated by OpenGL
+    exponential fog. Equations for OpenGL exponential fog and VRML
+    exponential fog are actually different and incompatible,
+    so results will be a little different than they should be.
+
+    <p><a href="demo_models.html">Our VRML/X3D demo models</a> have test models for this
+    (see <tt>fog/fog_volumetric/</tt> subdirectory there).
+    Also our games <a href="http://castle-engine.sourceforge.net/malfunction.php">malfunction <i>(online docs)</i></a>    and <a href="http://castle-engine.sourceforge.net/castle.php">The Castle <i>(online docs)</i></a> use it.
+
+<h3><a name="section_ext_inline_for_all">2.21. Inline nodes allow to include 3D models in other handled formats (Collada, 3DS, MD3, Wavefront OBJ, others) and any VRML/X3D version</a></h3>
+
+    All inline nodes (<tt>Inline</tt> in X3D,
+    <tt>Inline</tt> and <tt>InlineLoadControl</tt> in VRML &gt;= 2.0
+    and <tt>WWWInline</tt> in VRML 1.0) allow you to include any 3D model
+    format understood by our engine.
+    So you can inline not only other VRML/X3D files,
+    but also Collada, 3DS, MD3, Wavefront OBJ models.
+    Internally, all those formats are converted to X3D before
+    displaying anyway. If you want to precisely know how the conversion
+    to X3D goes, you can always try the explicit conversion
+    by "<i>File -&gt; Save as X3D</i>" menu option in
+    <a href="http://castle-engine.sourceforge.net/view3dscene.php">view3dscene <i>(online docs)</i></a>.
+
+    <p>Also, you can freely mix VRML/X3D versions when including.
+    You're free to include VRML 1.0 file inside VRML 2.0 file, or X3D,
+    or the other way around. Everything works.
+
+    <p>This also works for jumping to scenes by clicking on an
+    <tt>Anchor</tt> node &mdash; you can make an <tt>Anchor</tt> to any
+    VRML/X3D version, or a Collada, 3DS, etc. file.
+
+<h3><a name="section_ext_kambi_triangulation">2.22. Specify triangulation (node <tt>KambiTriangulation</tt>)</a></h3>
+
+    <table align="right" style="clear: right"><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/kambi_triangulation_demo.png"
+             class="screenshot"
+             title="KambiTriangulation demo screenshot"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/kambi_triangulation_demo.png"
+            alt="KambiTriangulation demo screenshot"
+          /></a></td></tr></table>
+    <p>New node:
+
+    <pre class="vrml_extension_spec"><b>KambiTriangulation : X3DChildNode {</b>
+  SFInt32  [in,out]      <b>quadricSlices    -1   </b>  #&nbsp;{-1} + [3, infinity)
+  SFInt32  [in,out]      <b>quadricStacks    -1   </b>  #&nbsp;{-1} + [2, infinity)
+  SFInt32  [in,out]      <b>rectDivisions    -1   </b>  #&nbsp;[-1, infinity)
+<b>}</b>
+</pre>
+    <p>This node affects rendering of subsequent <tt>Sphere</tt>,
+    <tt>Cylinder</tt>, <tt>Cone</tt> and <tt>Cube</tt> nodes.
+    For VRML  1.0 you can delimit the effect of this node by
+    using <tt>Separator</tt>
+    node, just like with other VRML "state changing" nodes.
+    For VRML 2.0 every grouping node (like <tt>Group</tt>)
+    always delimits this, so it only affects nodes within
+    it's parent grouping node (like many other VRML 2.0 nodes,
+    e.g. <tt>DirectionalLight</tt> or sensors).
+
+    <p>When rendering sphere, cylinder, cone or cube we
+    will triangulate (divide the surfaces into triangles)
+    with settings specified in last <tt>KambiTriangulation</tt> node.
+    <tt>quadricSlices</tt> divides like pizza slices,
+    <tt>quadricStacks</tt> divides like tower stacks,
+    <tt>rectDivisions</tt> divides rectangular surfaces
+    of a <tt>Cube</tt>. More precise description of this triangulation
+    is given at <a href="http://castle-engine.sourceforge.net/view3dscene.php#command_line_options_detail">description of <tt>--detail-...</tt> options in view3dscene documentation <i>(online docs)</i></a>.
+    Comments given there about so-called <i>over-triangulating</i>
+    apply also here.
+
+    <p>Special value -1 for each of these fields means
+    that the program can use it's default value.
+    In case of <a href="http://castle-engine.sourceforge.net/view3dscene.php">view3dscene <i>(online docs)</i></a> and
+    <a href="rayhunter.html">rayhunter</a>    they will use values specified by command-line options
+    <tt>--detail-...</tt> (or just compiled-in
+    values (see source code) if you didn't specify <tt>--detail-...</tt>
+    options).
+
+    <p>Note that this node gives only a <i>hints</i> to the renderer.
+    Various algorithms and programs may realize triangulation differently,
+    and then hints given by this node may be interpreted somewhat
+    differently or just ignored.
+    <!-- np. program może ustalać jakość triangulacji w zależności
+    od odległości obiektu od patrzącego i wtedy zaimplementowanie
+    obsługi tego węzła wiązałoby się z dodatkowymi komplikacjami -->
+    That said, this node is useful when you're designing some
+    VRML models and you want to fine-tune the compromise
+    between OpenGL rendering speed and quality of some objects.
+    Generally, triangulate more if the object is large or you
+    want to see light effects (like light spot) looking good.
+    If the object is small you can triangulate less, to get
+    better rendering time.
+
+    <p>Test VRML file:
+    see <a href="demo_models.html">our VRML/X3D demo models</a>, file
+    <tt>vrml_2/castle_extensions/kambi_triangulation.wrl</tt>.
+
+<h3><a name="section_ext_gzip">2.23. VRML files may be compressed by gzip</a></h3>
+
+    All our programs can handle VRML files compressed with gzip.
+
+    <p>E.g. you can call <a href="http://castle-engine.sourceforge.net/view3dscene.php">view3dscene <i>(online docs)</i></a> like
+    <pre>
+      view3dscene my_compressed_vrml_file.wrl.gz
+    </pre>
+    and you can use WWWInline nodes that refer to gzip-compressed VRML
+    files, like
+    <pre>
+      WWWInline { name "my_compressed_vrml_file.wrl.gz" }
+    </pre>
+
+    <p>Filenames ending with <tt>.wrl.gz</tt> or <tt>.wrz</tt> are
+    assumed to be always compressed by gzip.</p>
+
+    <p>Files with normal extension <tt>.wrl</tt> but actually compressed by gzip
+    are also handled OK.
+    Currently, there's a small exception to this: when you give view3dscene
+    VRML file on stdin, this file must be already uncompressed
+    (so you may need to pipe your files through <tt>gunzip -c</tt>).
+    TODO: this is intended to be fixed, although honestly it has rather low
+    priority now.</p>
+
+    <p><i>A personal feeling about this feature from the author (Kambi):</i>
+    I honestly dislike the tendency to compress the files with gzip
+    and then change the extension  back to normal <tt>.wrl</tt>.
+    It's handled by our engine, but only because so many people do it.
+    I agree that it's often sensible to compress VRML files
+    by gzip (especially since before X3D, there was no binary encoding for VRML files).
+    But when you do it, it's also sensible to leave the extension as <tt>.wrl.gz</tt>,
+    instead of forcing it back into <tt>.wrl</tt>, hiding the fact that contents
+    are compressed by gzip. Reason: while many VRML browsers detect the fact that
+    file is compressed by gzip, many other programs, that look only at file
+    extension, like text editors, do not recognize that it's gzip data.
+    So they treat <tt>.wrl</tt> file as a stream of unknown binary data.
+    Programs that analyze only file contents, like Unix <tt>file</tt>, see that it's
+    a gzip data, but then they don't report that it's VRML file (since this would
+    require decompressing).</p>
+
+    <p>Also note that WWW servers, like Apache, when queried by modern WWW browser,
+    can compress your VRML files on the fly. So, assuming that VRML browsers
+    (that automatically fetch URLs) will be also intelligent, the compression
+    is done magically over HTTP protocol, and you don't have to actually compress
+    VRML files to save bandwidth.</p>
+
+<h3><a name="section_ext_cameras_alt_orient">2.24. Fields <tt>direction</tt> and <tt>up</tt> and <tt>gravityUp</tt> for <tt>PerspectiveCamera</tt>, <tt>OrthographicCamera</tt> and <tt>Viewpoint</tt> nodes</a></h3>
+
+    Standard VRML way of specifying camera orientation
+    (look direction and up vector) is to use <tt>orientation</tt> field
+    that says how to rotate standard look direction vector (&lt;0,0,-1&gt;)
+    and standard up vector (&lt;0,1,0&gt;). While I agree that this
+    way of specifying camera orientation has some advantages
+    (e.g. we don't have the problem with the uncertainty
+    "<i>Is look direction vector length meaningful ?</i>")
+    I think that this is very uncomfortable for humans.
+
+    <p>Reasoning:
+    <ol>
+      <li>It's very difficult to write such <tt>orientation</tt> field
+        by human, without some calculator. When you set up
+        your camera, you're thinking about "<i>In what direction it looks ?</i>"
+        and "<i>Where is my head ?</i>", i.e. you're thinking
+        about look and up vectors.
+
+      <li>Converting between <tt>orientation</tt> and look and up
+        vectors is trivial for computers but quite hard for humans
+        without a calculator (especially if real-world values are
+        involved, that usually don't look like "nice numbers").
+        Which means that when I look at source code of your VRML
+        camera node and I see your <tt>orientation</tt> field
+        &mdash; well, I still have no idea how your camera is oriented.
+        I have to fire up some calculating program, or one
+        of programs that view VRML (like view3dscene).
+        This is not some terrible disadvantage, but still it matters
+        for me.
+
+      <li><tt>orientation</tt> is written with respect to standard
+        look (&lt;0,0,-1&gt;) and up (&lt;0,1,0&gt;) vectors.
+        So if I want to imagine camera orientation in my head &mdash;
+        I have to remember these standard vectors.
+
+      <li>4th component of orientation is in radians, that
+        are not nice for humans (when specified as floating point
+        constants, like in VRMLs, as opposed to multiplies of &pi;,
+        like usually in mathematics). E.g. what's more obvious for you:
+        "<i>1.5707963268 radians</i>" or "<i>90 degrees</i>" ? Again, these are equal
+        for computer, but not readily equal for human
+        (actually, "<i>1.5707963268 radians</i>" is not precisely equal to
+        "<i>90 degrees</i>").
+    </ol>
+
+    <p>Also, VRML 2.0 spec says that the gravity upward vector should
+    be taken as +Y vector transformed by whatever transformation is applied
+    to <tt>Viewpoint</tt> node. This also causes similar problems,
+    since e.g. to have gravity upward vector in +Z you have to apply
+    rotation to your <tt>Viewpoint</tt> node.
+
+    <p>So I decided to create new fields for <tt>PerspectiveCamera</tt>,
+    <tt>OrthographicCamera</tt> and <tt>Viewpoint</tt>
+    nodes to allow alternative way to specify
+    an orientation:
+    <pre class="vrml_extension_spec"><b>PerspectiveCamera / OrthographicCamera / Viewpoint {</b>
+  ... all normal *Viewpoint fields ...
+  MFVec3f    [in,out]      <b>direction   []        </b>
+  MFVec3f    [in,out]      <b>up          []        </b>
+  SFVec3f    [in,out]      <b>gravityUp   0 1 0     </b>
+<b>}</b>
+</pre>
+    <p>If at least one vector in <tt>direction</tt> field
+    is specified, then this is taken as camera look vector.
+    Analogous, if at least one vector in <tt>up</tt> field
+    is specified, then this is taken as camera up vector.
+    This means that if you specify some vectors for
+    <tt>direction</tt> and <tt>up</tt> then the value of
+    <tt>orientation</tt> field is ignored.
+    <tt>direction</tt> and <tt>up</tt> fields should have
+    either none or exactly one element.
+
+    <p>As usual, <tt>direction</tt> and <tt>up</tt> vectors
+    can't be parallel and can't be zero.
+    They don't have to be orthogonal &mdash; <tt>up</tt> vector will be
+    always silently corrected to be orthogonal to <tt>direction</tt>.
+    Lengths of these vectors are always ignored.
+    <!--
+    (m.in. dlatego że w standardowym VRMLu nie można przy
+    pomocy <tt>orientation</tt> ustalać długości tych wektorów, ale także dlatego
+    że tak jest wygodniej, zazwyczaj byłoby to raczej uciążliwe niż
+    funkcjonalne gdyby w jakiś sposób robić coś inaczej w zależnosci od
+    długości tych wektorow; także dlatego że jest w VRMLowej kamerze
+    pole <tt>focalDistance</tt> slużące własnie do robienia rzeczy które
+    móglbyś chcieć zrobić na podstawie dlugości wektora <tt>direction</tt>).
+    -->
+
+    <p>As for gravity: VRML 2.0 spec says to take standard +Y vector
+    and transform it by whatever transformation was applied to
+    <tt>Viewpoint</tt> node. So we modify this to say
+    <i>take <tt>gravityUp</tt> vector
+    and transform it by whatever transformation was applied to
+    <tt>Viewpoint</tt> node</i>. Since the default value for
+    <tt>gravityUp</tt> vector is just +Y, so things work 100% conforming
+    to VRML spec if you don't specify <tt>gravityUp</tt> field.
+
+    <p>In <a href="http://castle-engine.sourceforge.net/view3dscene.php">view3dscene <i>(online docs)</i></a>    "<i>Print current camera node</i>" command (key shortcut Ctrl+C)
+    writes camera node in both versions &mdash; one that uses
+    <tt>orientation</tt> field and transformations to get gravity upward vector,
+    and one that uses <tt>direction</tt> and <tt>up</tt> and <tt>gravityUp</tt>
+    fields.
+
+     <!-- funkcje X3DFields.CamDirUp2Orient i CastleVectors.RotatePointAroundAxis -->
+
+<h3><a name="section_ext_material_mirror">2.25. Mirror material (field <tt>mirror</tt> for <tt>Material</tt> node)</a></h3>
+
+    You can mark surfaces as being mirrors by using this field.
+
+    <pre class="vrml_extension_spec"><b>Material {</b>
+  ... all normal Material fields ...
+  MFFloat/SFFloat [in,out]      <b>mirror      0.0       </b>  #&nbsp;[0.0; 1.0]
+<b>}</b>
+</pre>
+    <p>Currently this is respected only by classic ray-tracer
+    in <a href="http://castle-engine.sourceforge.net/view3dscene.php">view3dscene <i>(online docs)</i></a>    and <a href="rayhunter.html">rayhunter</a>.
+    Well, it's also respected by path-tracer, although
+    it's much better to use <a href="#section_ext_material_phong_brdf_fields">
+    fields describing physical properties (Phong's BRDF) for <tt>Material</tt>
+    node</a> when using path-tracer. In the future <tt>mirror</tt> field
+    may be somehow respected with normal OpenGL rendering in
+    <a href="http://castle-engine.sourceforge.net/view3dscene.php">view3dscene <i>(online docs)</i></a> and others.
+
+    <dl class="vrml_ver_differences">
+      <dt>For VRML 1.0</dt>
+      <dd>This field is of <tt>multi-</tt> type
+        (<tt>MFFloat</tt>), just like other <tt>Material</tt>
+        fields in VRML 1.0; this way you can specify many material kinds for one
+        shape node (like <tt>IndexedFaceSet</tt>).</dd>
+      <dt>For VRML 2.0</dt>
+      <dd>This field is of simple <tt>SFFloat</tt> type,
+        just like other <tt>Material</tt> fields in VRML 2.0.</dd>
+    </dl>
+
+    <p>0.0 means no mirror (i.e. normal surface), 1.0 means the
+    perfect mirror (i.e. only reflected color matters).
+    Values between 0.0 and 1.0 mean that surface's color is partially
+    taken from reflected color, partially from surface's own
+    material color.
+
+    <p>Note that this field can be (ab)used to specify completely
+    unrealistic materials. That's because it's not correlated in any
+    way with <tt>shininess</tt> and <tt>specularColor</tt> fields.
+    In the Real World the shininess of material is obviously closely
+    correlated with the ability to reflect environment
+    (after all, almost all shiny materials are also mirrors,
+    unless they have some weird curvature; both shininess and mirroring
+    work by reflecting light rays). However, in classic ray-tracer
+    these things are calculated in different places and differently
+    affect the resulting look (<tt>shininess</tt> and
+    <tt>specularColor</tt> calculate local effect of the lights,
+    and <tt>mirror</tt> calculates how to mix with the reflected color).
+    So the actual "shiny" or "matte" property of material is affected
+    by <tt>shininess</tt> and <tt>specularColor</tt> fields as well as
+    by <tt>mirror</tt> field.
+
+<h3><a name="section_ext_headlight">2.26. Customize headlight (<tt>KambiNavigationInfo.headlightNode</tt>)</a></h3>
+
+    <table align="right" style="clear: right"><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/headlight_per_pixel.png"
+             class="screenshot"
+             title="Spot headlight with per-pixel lighting"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/headlight_per_pixel.png"
+            alt="Spot headlight with per-pixel lighting"
+          /></a></td></tr><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/castle_headlight_1.png"
+             class="screenshot"
+             title="Castle level with sharp spot headlight"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/castle_headlight_1.png"
+            alt="Castle level with sharp spot headlight"
+          /></a></td></tr><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/castle_headlight_2.png"
+             class="screenshot"
+             title="Castle level with smooth spot headlight"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/castle_headlight_2.png"
+            alt="Castle level with smooth spot headlight"
+          /></a></td></tr><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/castle_headlight_3.png"
+             class="screenshot"
+             title="Castle level with smooth spot headlight"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/castle_headlight_3.png"
+            alt="Castle level with smooth spot headlight"
+          /></a></td></tr></table>
+    <p>You can configure the appearance of headlight by the <tt>headlightNode</tt>
+    field of <tt>KambiNavigationInfo</tt> node.
+    <tt>KambiNavigationInfo</tt> is just a replacement of standard
+    <tt>NavigationInfo</tt>, adding some extensions specific to our engine.
+
+    <pre class="vrml_extension_spec"><b>KambiNavigationInfo : NavigationInfo {</b>
+  ... all KambiNavigationInfo fields so far ...
+  SFNode [in,out]      <b>headlightNode              NULL  </b>  #&nbsp;[X3DLightNode]
+<b>}</b>
+</pre>
+    <p><tt>headlightNode</tt> defines the type and properties of the
+    light following the avatar ("head light"). You can put any
+    valid X3D light node here. If you don't give anything here (but still
+    request the headlight by <tt>NavigationInfo.headlight = TRUE</tt>,
+    which is the default) then the default <tt>DirectionalLight</tt>
+    will be used for headlight.
+
+    <ul>
+      <li><p>Almost everything (with the exceptions listed below)
+        works as usual for all the light sources.
+        Changing colors and intensity obviously work.
+        Changing the light type, including making it a spot light
+        or a point light, also works.
+
+        <p>Note that for nice spot headlights, you will usually want to
+        <a href="x3d_implementation_lighting.html#section_per_pixel_lighting">enable per-pixel lighting
+        on everything by View-&gt;Shaders-&gt;Enable For Everything</a>.
+        Otherwise the ugliness of default fixed-function Gouraud shading
+        will be visible in case of spot lights (you will see how
+        the spot shape "crawls" on the triangles,
+        instead of staying in a nice circle).
+        So to see the spot light cone perfectly, and also to see
+        <tt>SpotLight.beamWidth</tt> perfectly,
+        enable per-pixel shader lighting.
+
+        <p>Note that instead of setting headlight to spot, you may also
+        consider cheating: you can create a screen effect that simulates
+        the headlight. See view3dscene <i>"Screen Effects -&gt; Headlight"</i>
+        for demo, and <a href="x3d_extensions_screen_effects.html">screen effects documentation</a> for ways to create
+        this yourself. This is an entirely different beast, more cheating
+        but also potentially more efficient (for starters, you don't have
+        to use per-pixel lighting on everything to make it nicely round).
+
+      <li><p>Your specified <tt>"location"</tt> of the light (if you put here <tt>PointLight</tt>
+        or <tt>SpotLight</tt>) will be ignored.
+        Instead we will synchronize light location in each frame
+        to the player's location
+        (in world coordinates)<!--, TODO: modified by the
+        headlightMove (default zero, see below)-->.
+
+        <p>You can ROUTE your light's location to something, to see it changing.
+        <!-- TODO: test. This is useful to visualize headlight location,
+        together with headlightMove. -->
+
+      <li><p>Similarly, your specified <tt>"direction"</tt> of the light
+        (if this is <tt>DirectionalLight</tt> or <tt>SpotLight</tt>)
+        will be ignored. Instead we will keep it synchronized
+        with the player's normalized direction
+        (in world coordinates). You can ROUTE this direction to see it changing.
+
+     <li><p>The <tt>"global"</tt> field doesn't matter.
+       Headlight always shines on everything, ignoring normal VRML/X3D
+       light scope rules.
+
+     <!--
+       TODO: test
+       Even the <a>"shadows" and related fields</a> on the light will work,
+       so the headlight *can* cast a shadow.
+       Yes, this makes sense and is even nicely noticeable in some settings.
+       Try orthographic camera with a shadow-casting spot light,
+       with this you will usually see the shadow.
+
+       TODO: You'll usually want to set headlightTranslation to
+       something small but non-zero, to add some translation
+       (with respect to the camera position) to the headlight.
+       This allows you to move the light source slightly with respect
+       to the camera, which is a nice way of making the shadows from
+       headlight visible. It is also useful to simulate e.g.
+       a torch &mdash; a torch is probably held by a single hand
+       (so it's more to the left or right side) and slightly above the head.
+       Non-zero headlightTranslation allows to trivially simulate this &mdash;
+       a light source that is close, but not precisely at, the player position.
+
+       TODO: also headlightOrientation?
+     -->
+    </ul>
+
+    <p><i>History</i>: We used to configure headlight by different,
+    specialized node. This is still parsed but ignored in new versions:
+
+    <pre class="vrml_extension_spec"><b>KambiHeadLight : X3DChildNode {</b>
+  SFFloat    [in,out]      <b>ambientIntensity      0         </b>  #&nbsp;[0.0, 1.0]
+  SFVec3f    [in,out]      <b>attenuation           1 0 0     </b>  #&nbsp;[0, infinity)
+  SFColor    [in,out]      <b>color                 1 1 1     </b>  #&nbsp;[0, 1]
+  SFFloat    [in,out]      <b>intensity             1         </b>  #&nbsp;[0, 1]
+  SFBool     [in,out]      <b>spot                  FALSE     </b>
+  SFFloat    [in,out]      <b>spotDropOffRate       0         </b>
+  SFFloat    [in,out]      <b>spotCutOffAngle       &pi;/4    </b>
+<b>}</b>
+</pre>
+<h3><a name="section_ext_material_phong_brdf_fields">2.27. Fields describing physical properties (Phong's BRDF) for <tt>Material</tt> node</a></h3>
+
+    In <a href="rayhunter.html">rayhunter's</a>    <i>path-tracer</i> I implemented Phong's BRDF.
+    To flexibly operate on material's properties understood
+    by Phong's BRDF you can use the following <tt>Material</tt> node's
+    fields:
+
+    <pre class="vrml_extension_spec"><b>Material {</b>
+  ... all normal Material fields ...
+  MFColor                          [in,out]      <b>reflSpecular          []        </b>  #&nbsp;specular reflectance
+  MFColor                          [in,out]      <b>reflDiffuse           []        </b>  #&nbsp;diffuse reflectance
+  MFColor                          [in,out]      <b>transSpecular         []        </b>  #&nbsp;specular transmittance
+  MFColor                          [in,out]      <b>transDiffuse          []        </b>  #&nbsp;diffuse transmittance
+  SFFloat (MFFloat in VRML 1.0)    [in,out]      <b>reflSpecularExp       1000000   </b>  #&nbsp;specular reflectance exponent
+  SFFloat (MFFloat in VRML 1.0)    [in,out]      <b>transSpecularExp      1000000   </b>  #&nbsp;specular transmittance exponent
+<b>}</b>
+</pre>
+    <p>Short informal description how these properties work
+    (for precise description see Phong's BRDF equations or source
+    code of my programs):
+    <dl>
+      <dt>reflectance</dt>
+      <dd>tells how the light rays reflect from the surface.</dd>
+
+      <dt>transmittance</dt>
+      <dd>tells how the light rays transmit into the surface
+        (e.g. inside the water or thick glass).</dd>
+
+      <dt>diffuse</dt>
+      <dd>describe the property independent of light rays
+        incoming direction.</dd>
+
+      <dt>specular</dt>
+      <dd>describe the property with respect to the
+        light rays incoming direction (actually, it's the angle
+        between incoming direction and the vector of
+        perfectly reflected/transmitted ray that matters).</dd>
+
+      <dt>specular exponent</dt>
+      <dd>describe the exponent
+        for cosinus function used in equation, they say how much
+        the specular color should be focused around
+        perfectly reflected/transmitted ray.</dd>
+    </dl>
+
+    <p>For VRML 1.0, all these fields have <tt>multi-</tt> type (like other
+    fields of <tt>Material</tt> node) to allow you to specify
+    many material kinds at once. For VRML &gt;= 2.0 (includes X3D)
+    only the four non-exponent fields are of <tt>multi-</tt> type,
+    this is only to allow you to specify zero values there
+    and trigger auto-calculation (see below). Otherwise, you shouldn't
+    place more than one value there for VRML &gt;= 2.0.
+
+    <p>Two <tt>*SpecularExp</tt> fields have default values
+    equal to 1 000 000 = 1 million = practically infinity
+    (bear in mind that they are exponents for cosinus).
+    Other four fields have very special default values.
+    Formally, they are equal to zero-length arrays.
+    If they are left as being zero-length arrays,
+    they will be calculated as follows :
+
+    <ul>
+      <li><b>reflSpecular</b> := vector &lt;mirror, mirror, mirror&gt;
+      <li><b>reflDiffuse</b> := diffuseColor
+      <li><b>transSpecular</b> := vector &lt;transparency, transparency, transparency&gt;
+      <li><b>transDiffuse</b> := diffuseColor * transparency
+    </ul>
+
+    <p>This way you don't have to use any of described here 6 fields.
+    You can use only standard VRML fields (and maybe <tt>mirror</tt> field)
+    and <i>path tracer</i> will use sensible values derived from
+    other <tt>Material</tt> fields.
+    If you will specify all 6 fields described here,
+    then <i>path tracer</i> will completely ignore most other
+    <tt>Material</tt> colors (normal <tt>diffuseColor</tt>,
+    <tt>specularColor</tt> etc. fields
+    will be ignored by path tracer then; only <tt>emissiveColor</tt>
+    will be used, to indicate light sources).
+
+    <p>You can use <a href="http://castle-engine.sourceforge.net/kambi_mgf2inv.php">kambi_mgf2inv <i>(online docs)</i></a>    program to convert MGF files to VRML 1.0 with these six additional
+    <tt>Material</tt> fields. So you can easily test my ray-tracer
+    using your MGF files.
+
+    <p>These fields are used only by <i>path tracer</i> in
+    <a href="rayhunter.html">rayhunter</a> and
+    <a href="http://castle-engine.sourceforge.net/view3dscene.php">view3dscene <i>(online docs)</i></a>.
+
+<h3><a name="section_ext_octree_properties">2.28. Specify octree properties (node <tt>KambiOctreeProperties</tt>, various fields <tt>octreeXxx</tt>)</a></h3>
+
+    <table align="right" style="clear: right"><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/octree_hello_world_shadow.png"
+             class="screenshot"
+             title="Octree visualization"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/octree_hello_world_shadow.png"
+            alt="Octree visualization"
+          /></a></td></tr></table>
+    <p>Like most 3D engines, <i>Castle Game Engine</i> uses a smart
+    tree structure to handle collision detection in arbitrary 3D worlds.
+    The structure used in our engine is the <i>octree</i>, with a couple
+    of special twists to handle dynamic scenes. See
+    <a href="http://castle-engine.sourceforge.net/vrml_engine_doc/output/xsl/html/chapter.octree.html">documentation
+    chapter "octrees" for more explanation</a>.</p>
+
+    <p>There are some limits that determine how fast the octree is constructed,
+    how much memory does it use,
+    and how fast can it answer collision queries. While our programs have
+    sensible and tested defaults hard-coded, it may be useful (or just
+    interesting for programmers) to test other limits &mdash; this is
+    what this extension is for.</p>
+
+    <p><i>In all honesty, I (Michalis) do not
+    expect this extension to be commonly used... It allows you to
+    tweak an important, but internal, part of the engine. For most normal people,
+    this extension will probably look like an uncomprehensible black magic.
+    And that's Ok, as the internal defaults used in our engine really
+    suit (almost?) all practical uses.</i></p>
+
+    <p>If the above paragraph didn't scare you, and you want to know more
+    about octrees in our engine: besides
+    <a href="http://castle-engine.sourceforge.net/vrml_engine_doc/output/xsl/html/chapter.octree.html">documentation
+    chapter "octrees"</a> you can
+    also take a look at the (source code and docs) of the
+    <a href="http://castle-engine.sourceforge.net/apidoc/html/CastleSceneCore.TCastleSceneCore.html#Spatial">TCastleSceneCore.Spatial</a> property.
+
+    <p>A new node:
+
+    <pre class="vrml_extension_spec"><b>KambiOctreeProperties : X3DNode {</b>
+  SFInt32 []            <b>maxDepth              -1    </b>  #&nbsp;must be &gt;= -1
+  SFInt32 []            <b>leafCapacity          -1    </b>  #&nbsp;must be &gt;= -1
+<b>}</b>
+</pre>
+    <p>Limit <tt>-1</tt> means to use the default value hard-coded in the program.
+    Other values force the generation of octree with given limit.
+    For educational purposes, you can make an experiment and try
+    maxDepth = 0: this forces a one-leaf tree, effectively
+    making octree searching work like a normal linear searching.
+    You should see a dramatic loss of game speed on non-trivial models then.</p>
+
+    <p>To affect the scene octrees you can place <tt>KambiOctreeProperties</tt>
+    node inside <tt>KambiNavigationInfo</tt> node. For per-shape
+    octrees, we add new fields to <tt>Shape</tt> node:</p>
+
+    <pre class="vrml_extension_spec"><b>KambiNavigationInfo : NavigationInfo {</b>
+  ... all KambiNavigationInfo fields so far ...
+  SFNode []            <b>octreeRendering            NULL  </b>  #&nbsp;only KambiOctreeProperties node
+  SFNode []            <b>octreeDynamicCollisions    NULL  </b>  #&nbsp;only KambiOctreeProperties node
+  SFNode []            <b>octreeVisibleTriangles     NULL  </b>  #&nbsp;only KambiOctreeProperties node
+  SFNode []            <b>octreeCollidableTriangles  NULL  </b>  #&nbsp;only KambiOctreeProperties node
+<b>}</b>
+</pre>
+    <pre class="vrml_extension_spec"><b>X3DShapeNode (e.g. Shape) {</b>
+  ... all normal X3DShapeNode fields ...
+  SFNode []            <b>octreeTriangles            NULL  </b>  #&nbsp;only KambiOctreeProperties node
+<b>}</b>
+</pre>
+    <p>See the API documentation for classes <tt>TCastleSceneCore</tt> and <tt>TShape</tt>
+    for precise description about what each octree is.
+    In normal simulation of dynamic 3D scenes,
+    we use only <tt>octreeRendering</tt>, <tt>octreeDynamicCollisions</tt> and
+    <tt>Shape.octreeTriangles</tt> octrees. Ray-tracers usually use
+    <tt>octreeVisibleTriangles</tt>.</p>
+
+    <p>We will use scene octree properties from the first bound
+    <tt>NavigationInfo</tt> node (see VRML/X3D specifications
+    about the rules for bindable nodes). If this node is not
+    <tt>KambiNavigationInfo</tt>, or appropriate <tt>octreeXxx</tt> field
+    is <tt>NULL</tt>, or appropriate field within <tt>KambiOctreeProperties</tt>
+    is <tt>-1</tt>, then the default hard-coded limit will be used.
+
+    <p>Currently, it's not perfectly specified what happens to octree limits
+    when you bind other <tt>[Kambi]NavigationInfo</tt> nodes during the game.
+    With current implementation, this <i>will</i> cause the limits to change,
+    but they will be actually applied only when the octree will be rebuild
+    &mdash; which may happen never, or only at some radical rebuild of
+    VRML graph by other events. So if you have multiple
+    <tt>[Kambi]NavigationInfo</tt> nodes in your world, I advice to
+    specify in all of them exactly the same <tt>octreeXxx</tt> fields values.
+
+<h3><a name="section_ext_color_set_interpolator">2.29. Interpolate sets of colors (node <tt>ColorSetInterpolator</tt>)</a></h3>
+
+    <p><a href="x3d_implementation_interpolation.html"><tt>ColorSetInterpolator</tt> docs are at the bottom
+    of "Interpolation component" page</a>.</p>
+
+<h3><a name="section_ext_avalon">2.30. Extensions compatible with Avalon / instant-reality</a></h3>
+
+    <p>We handle some Avalon / instant-reality extensions.
+    See <a href="http://instant-reality.com/">instant-reality</a>
+    and in particular <a href="http://instant-reality.com/documentation/nodetype/">the
+    specifications of Avalon extensions</a>.
+
+    <p>Please note that I implemented this all looking at Avalon
+    specifications, which are quite terse. Please report
+    any incompatibilities.
+
+<h4><a name="section_ext_blending">2.30.1. Blending factors (node <tt>BlendMode</tt> and field <tt>Appearance.blendMode</tt>)</a></h4>
+
+    <table align="right" style="clear: right"><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/blend_mode_demo.png"
+             class="screenshot"
+             title="Various blend modes with transparent teapots"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/blend_mode_demo.png"
+            alt="Various blend modes with transparent teapots"
+          /></a></td></tr></table>
+    <p>We add new field to <tt>Appearance</tt> node: <tt>blendMode</tt> (SFNode,
+    NULL by default, inputOutput). It's allowed to put there <tt>BlendMode</tt>
+    node to specify blending mode done for partially-transparent objects.
+    BlendMode node is not X3D standard, but it's specified by Avalon:
+    <a href="http://www.instantreality.org/documentation/nodetype/BlendMode/">see
+    BlendNode specification</a>.
+
+    <p>From Avalon spec, our engine supports a subset of fields: <tt>srcFactor</tt>,
+    <tt>destFactor</tt>, <tt>color</tt>, <tt>colorTransparency</tt>.
+    Note that some values require newer
+    OpenGL versions, we will eventually fallback on browser-specific blending
+    modes (you can set them explicitly in <a href="http://castle-engine.sourceforge.net/view3dscene.php">view3dscene <i>(online docs)</i></a>).
+
+    <p>For example:
+
+<pre class="vrml_code">
+  appearance Appearance {
+    material Material {
+      transparency 0.5
+    }
+    blendMode BlendMode {
+      srcFactor "src_alpha" # actually this srcFactor is the default
+      destFactor "one"
+    }
+  }
+</pre>
+
+    <p>Example above sets blending to an often-desired equation where the order of rendering
+    doesn't matter. It's very useful for models with complex 3D partially-transparent objects,
+    otherwise traditional approach (src_alpha and one_minus_src_alpha) may cause rendering
+    artifacts.
+
+<h4><a name="section_ext_matrix_transform">2.30.2. Transform by explicit 4x4 matrix (<tt>MatrixTransform</tt> node)</a></h4>
+
+    <p><a href="http://instant-reality.com/documentation/nodetype/MatrixTransform/"><tt>MatrixTransform</tt></a>:
+    supported <tt>matrix</tt> field, and the standard <tt>X3DGroupingNode</tt> fields.
+
+    <p>This is analogous to <tt>Transform</tt> node, but specifies explicit
+    4x4 matrix. Note that VRML 1.0 also had <tt>MatrixTransform</tt> node
+    (we also handle it), although specified a little differently.
+    Later VRML 97 and X3D removed the <tt>MatrixTransform</tt> node
+    from official specification &mdash; this extension fills the gap.
+
+    <p>Note that this node was removed from specifications for a good
+    reason. Our engine can invert your matrix internally (this is needed for some
+    things, like bump mapping), but still it's
+    difficult to extract particular features (like scaling factor)
+    from such matrix. Currently our engine
+    extracts scaling factors by very naive
+    method. (Although this is planned to be fixed using
+    <a href="http://tog.acm.org/GraphicsGems/gemsii/unmatrix.c">unmatrix.c algorithm</a>.)
+    The bottom line is: <i>You are well advised to try
+    to express all transformations using stardard <tt>Transform</tt> node</i>.
+
+    <p>This node may be useful
+    when you really have no choice (for example, when converting from
+    Collada files that have transformation written as explicit 4x4 matrix,
+    it's natural to convert it to VRML <tt>MatrixTransform</tt>).
+
+<h4><a name="section_ext_logger">2.30.3. Events logger (<tt>Logger</tt> node)</a></h4>
+
+    <p>Logger, extremely useful debugger when playing with
+    VRML / X3D routes and events. This is based on,
+    and should be quite compatible,
+    with <a href="http://instant-reality.com/documentation/nodetype/Logger/">Avalon <tt>Logger</tt> node</a>.
+    (Except our interpretation of <tt>logFile</tt>, which is probably
+    quite different, see below.)</p>
+
+    <pre class="vrml_extension_spec"><b>Logger : X3DChildNode {</b>
+  SFNode     [in,out]      <b>metadata    NULL      </b>  #&nbsp;[X3DMetadataObject]
+  SFInt32    [in,out]      <b>level       1         </b>
+  SFString   []            <b>logFile     ""        </b>
+  SFBool     [in,out]      <b>enabled     TRUE      </b>
+  XFAny      [in]          <b>write                 </b>
+<b>}</b>
+</pre>
+    <table align="right" style="clear: right"><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/logger.png"
+             class="screenshot"
+             title="Logger node demo"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/logger.png"
+            alt="Logger node demo"
+          /></a></td></tr></table>
+    <p>The idea is simple: whatever is sent to <tt>write</tt>
+    input event is logged on the console. <tt>write</tt> event has special type,
+    called <tt>XFAny</tt> (also following Avalon) that allows to receive <i>any</i>
+    VRML field type.</p>
+
+    <p>Other properties allow to control logging better.
+    When <tt>enabled</tt> is false, nothing is logged.
+    <tt>level</tt> controls the amount of logged info:
+    <ol>
+      <li>nothing,
+      <li>log sending field name, type, timestamp,
+      <li>additionally log received value,
+      <li>additionally log sending node name, type.
+    </ol>
+
+    <p><tt>logFile</tt>, when non-empty, specifies the filename to
+    write log information to. (When <tt>logFile</tt> is empty, it's
+    all simply dumped on standard output, i.e. usually console.)
+    As a security measure (you really do not want to allow an author
+    of X3D file to overwrite arbitrary files without asking user),
+    in my implementation only the basename of the <tt>logFile</tt> matters,
+    the file is always saved into current directory. Moreover, filename
+    is like <tt>view3dscene_logger_XXX_%d.log</tt>, where "view3dscene"
+    is the name of the program, "XXX" is the name specified in <tt>logFile</tt>,
+    and "%d" is just next free number. This way logger output file
+    is predictable, and should never overwrite your data.
+
+    <p>These security measures were added by my implementation &mdash;
+    Avalon spec simply says that <tt>logFile</tt> is the name of the file,
+    I don't know how they handled security problems with logFile.
+
+<h4><a name="section_ext_teapot">2.30.4. Teapot primitive (<tt>Teapot</tt> node)</a></h4>
+
+    <table align="right" style="clear: right"><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/teapot_demo.png"
+             class="screenshot"
+             title="Teapot node demo"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/teapot_demo.png"
+            alt="Teapot node demo"
+          /></a></td></tr></table>
+    <p>A teapot. Useful non-trivial shape for testing various display modes,
+    shaders and such.
+
+    <p><i>Compatibility with
+    <a href="http://instant-reality.com/documentation/nodetype/Teapot/">Avalon Teapot</a></i>:
+    we support <tt>size</tt> and <tt>solid</tt> fields from Avalon.
+    The geometry orientation and dimensions is the same (although our actual mesh
+    tries to be a little better :) ).
+    Fields <tt>texCoord</tt> and <tt>manifold</tt> are our own (Kambi engine)
+    extensions.</p>
+
+    <pre class="vrml_extension_spec"><b>Teapot : X3DGeometryNode {</b>
+  SFNode     [in,out]      <b>metadata    NULL      </b>  #&nbsp;[X3DMetadataObject]
+  SFVec3f    []            <b>size        3 3 3     </b>
+  SFBool     []            <b>solid       TRUE      </b>
+  SFBool     []            <b>manifold    FALSE     </b>
+  SFNode     [in,out]      <b>texCoord    NULL      </b>  #&nbsp;[TextureCoordinateGenerator, ProjectedTextureCoordinate, MultiGeneratedTextureCoordinate]
+<b>}</b>
+</pre>
+    <p>The <tt>"size"</tt> field allows you to scale
+    the teapot, much like the standard <tt>Box</tt> node. The default
+    size (3, 3, 3) means that the longest size of teapot bounding box
+    is 3.0 (all other sizes are actually slightly smaller).
+    Changing size scales the teapot (assuming that size = 3 means "default size").</p>
+
+    <p>The <tt>"texCoord"</tt> field may contain a texture-generating node.
+    Very useful to quickly test various texture coordinate generators
+    (e.g. for cube env mapping) on teapot.
+    When <tt>texCoord</tt> is not present but texture coordinates
+    are required (because appearance specifies a texture),
+    we will generate default texture coords (using the same
+    alrgorithm as for <tt>IndexedFaceSet</tt>).</p>
+
+    <p>The <tt>"solid"</tt> field has standard meaning: if true (default),
+    it's assumed
+    that teapot will never be seen from the inside (and backface culling
+    is used to speed up rendering).</p>
+
+    <p>The <tt>"manifold"</tt> field allows you to force teapot geometry
+    to be correctly closed (2-manifold, where each edge has exactly
+    2 neighboring faces). This is useful if you want to use shadow volumes
+    to cast shadow of this teapot.</p>
+
+    <p>For the sake of VRML / X3D standards, I do not really advice
+    using this node... VRML developers should spend their time better
+    than to implement such nodes of little practical use :),
+    and it's possible to make the same thing with a PROTO.
+    But it's useful for testing purposes.</p>
+
+<h4><a name="section_ext_rendered_texture">2.30.5. Texture automatically rendered from a viewpoint (<tt>RenderedTexture</tt> node)</a></h4>
+
+    <table align="right" style="clear: right"><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/rendered_texture.png"
+             class="screenshot"
+             title="RenderedTexture demo"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/rendered_texture.png"
+            alt="RenderedTexture demo"
+          /></a></td></tr><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/rendered_texture_with_background.png"
+             class="screenshot"
+             title="RenderedTexture with background and mirrors thrown in"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/rendered_texture_with_background.png"
+            alt="RenderedTexture with background and mirrors thrown in"
+          /></a></td></tr></table>
+    <p>Texture rendered from a specified viewpoint in the 3D scene.
+    This can be used for a wide range of graphic effects,
+    the most straighforward use is to make something like a "security camera"
+    or a "portal", through which a player can peek what happens at the other
+    place in 3D world.</p>
+
+    <p>This is mostly compatible with
+    <a href="http://instant-reality.com/documentation/nodetype/RenderedTexture/">Avalon RenderedTexture</a>
+    specification. We do not support all Avalon fields,
+    but the basic fields and usage remain the same.
+    This is also <a href="http://xj3d.org/extensions/render_texture.html">implemented in Xj3D</a>,
+    in a compatible way.</p>
+
+    <pre class="vrml_extension_spec"><b>RenderedTexture : X3DTextureNode {</b>
+  SFNode     [in,out]      <b>metadata              NULL           </b>  #&nbsp;[X3DMetadataObject]
+  MFInt32    [in,out]      <b>dimensions            128 128 4 1 1  </b>
+  SFString   [in,out]      <b>update                "NONE"         </b>  #&nbsp;["NONE"|"NEXT_FRAME_ONLY"|"ALWAYS"]
+  SFNode     [in,out]      <b>viewpoint             NULL           </b>  #&nbsp;[X3DViewpointNode] (VRML 1.0 camera nodes also allowed)
+  SFNode     []            <b>textureProperties     NULL           </b>  #&nbsp;[TextureProperties]
+  SFBool     []            <b>repeatS               TRUE           </b>
+  SFBool     []            <b>repeatT               TRUE           </b>
+  SFBool     []            <b>repeatR               TRUE           </b>
+  MFBool     [in,out]      <b>depthMap              []             </b>
+  SFMatrix4f [out]         <b>viewing                              </b>
+  SFMatrix4f [out]         <b>projection                           </b>
+  SFBool     [out]         <b>rendering                            </b>
+<b>}</b>
+</pre>
+    <p>First two numbers in <tt>"dimensions"</tt> field specify
+    the width and the height of the texture. (Our
+    current implementation ignores the rest of <tt>dimensions</tt> field.)</p>
+
+    <p><tt>"update"</tt> is the standard field for automatically generated
+    textures (works the same as for <tt>GeneratedCubeMapTexture</tt> or <tt>GeneratedShadowMap</tt>).
+    It says when to actually generate the texture:
+    "NONE" means never,
+    "ALWAYS" means every frame (for fully dynamic scenes),
+    "NEXT_FRAME_ONLY" says to update at the next frame (and
+    afterwards change back to "NONE").</p>
+
+    <p><tt>"viewpoint"</tt> allows you to explicitly specify viewpoint
+    node from which to render to texture. Default <tt>NULL</tt> value
+    means to render from the current camera (this is equivalent to
+    specifying viewpoint node that is currently bound). Yes, you can easily
+    see recursive texture using this, just look at
+    the textured object. It's quite fun :) (It's not a problem for rendering
+    speed &mdash; we always render texture only once in a frame.)
+    You can of course specify other viewpoint
+    node, to make rendering from there.</p>
+
+    <p><tt>"textureProperties"</tt> is the standard field of all texture nodes.
+    You can place there a <tt>TextureProperties</tt> node
+    to specify magnification, minification filters
+    (note that mipmaps, if required, will always be correctly automatically
+    updated for <tt>RenderedTexture</tt>), anisotropy and such.</p>
+
+    <p><tt>"repeatS"</tt>, <tt>"repeatT"</tt>, <tt>"repeatR"</tt>
+    are also standard for texture nodes,
+    specify whether texture repeats or clamps. For <tt>RenderedTexture</tt>,
+    you may often want to set them to <tt>FALSE</tt>. <tt>"repeatR"</tt>
+    is for 3D textures, useless for now.</p>
+
+    <p><tt>"depthMap"</tt>, if it is <tt>TRUE</tt>, then the generated texture
+    will contain the depth buffer of the image (instead of the color buffer
+    as usual). (Our current implementation only looks at the first item of
+    <tt>MFBool</tt> field <tt>depthMap</tt>.)</p>
+
+    <p><tt>"rendering"</tt> output event sends a <tt>TRUE</tt> value right
+    before rendering to the texture, and sends <tt>FALSE</tt> after.
+    It can be useful to e.g. ROUTE this to a <tt>ClipPlane.enabled</tt> field.
+    This is our (Kambi engine) extension, not present in other implementations.
+    In the future, <tt>"scene"</tt> field will be implemented, this will
+    allow more flexibility, but for now the simple <tt>"rendering"</tt> event
+    may be useful.</p>
+
+    <p><tt>"viewing"</tt> and <tt>"projection"</tt> output events are
+    also send right before rendering, they contain the modelview (camera)
+    and projection matrices.</p>
+
+    <p>TODO: <tt>"scene"</tt> should also be supported.
+    <tt>"background"</tt> and <tt>"fog"</tt> also. And the default
+    background / fog behavior should change? To match the Xj3D,
+    by default no background / fog means that we don't use them,
+    currently we just use the current background / fog.
+
+<h4><a name="section_ext_plane">2.30.6. Plane (<tt>Plane</tt> node)</a></h4>
+
+    <p><a href="http://www.instantreality.org/documentation/nodetype/Plane/">Avalon Plane node</a>.
+    You should instead use <tt>Rectangle2D</tt> node from X3D 3.2 when possible,
+    this is implemented only for compatibility.</p>
+
+    <p>Our current implementation doesn't support anything more than
+    <tt>size</tt> and <tt>solid</tt> fields. So it's really equivalent
+    to <tt>Rectangle2D</tt> inside our engine, the only difference
+    being that <tt>Plane.solid</tt> is <tt>TRUE</tt> by default
+    (for <tt>Rectangle2D</tt> spec says it's <tt>FALSE</tt> by default).</p>
+
+<h4><a name="section_ext_toggler">2.30.7. Boolean value toggler (<tt>Toggler</tt> node)</a></h4>
+
+    <p><a href="http://www.instantreality.org/documentation/nodetype/Toggler/">Avalon Toggler node</a>.
+    A simple event utility for setting/observing a boolean value in various
+    ways. Something like a standard X3D <tt>BooleanToggle</tt> on steroids.
+    We support this node fully, according to instantreality specs.</p>
+
+    <pre class="vrml_extension_spec"><b>Toggler  : X3DChildNode {</b>
+  SFNode     [in,out]      <b>metadata    NULL      </b>  #&nbsp;[X3DMetadataObject]
+  SFBool     [in,out]      <b>status      FALSE     </b>
+  SFBool     [in,out]      <b>notStatus   TRUE      </b>
+  XFAny      [in]          <b>toggle                </b>  #&nbsp;the type/value send here is ignored
+  XFAny      [in]          <b>set                   </b>  #&nbsp;the type/value send here is ignored
+  XFAny      [in]          <b>reset                 </b>  #&nbsp;the type/value send here is ignored
+  SFBool     [out]         <b>changed               </b>  #&nbsp;always sends TRUE
+  SFBool     [out]         <b>on                    </b>  #&nbsp;always sends TRUE
+  SFBool     [out]         <b>off                   </b>  #&nbsp;always sends TRUE
+  SFBool     [in,out]      <b>enabled     TRUE      </b>
+<b>}</b>
+</pre>
+    <p><tt>"status"</tt> is the boolean value stored.
+    <tt>"notStatus"</tt> is always the negated value of <tt>"status"</tt>.
+    You can set either of them (by sending
+    <tt>"set_status"</tt> or <tt>"set_notStatus"</tt>). Changing any of them
+    causes both output events to be send. That is, <tt>"status_changed"</tt>
+    receives the new boolean value stored, <tt>"notStatus_changed"</tt>
+    received the negation of the new value stored.</p>
+
+    <p>The input events <tt>"toggle"</tt>, <tt>"set"</tt> and <tt>"reset"</tt>
+    provide altenative ways to change the stored boolean value.
+    They accept any VRML/X3D type/value as input
+    (this is called <tt>XFAny</tt> by Avalon), and the value send
+    is actually completely ignored.
+    <tt>"toggle"</tt> always toggles (negates) the stored value,
+    <tt>"set"</tt> changes the stored value to <tt>TRUE</tt>,
+    <tt>"reset"</tt> changes the stored value to <tt>FALSE</tt>.</p>
+
+    <p>The output events <tt>"changed"</tt>, <tt>"on"</tt>, <tt>"off"</tt> provide
+    altenative ways to observe the stored boolean value.
+    They always generate a boolean <tt>TRUE</tt> value when specific
+    thing happens. <tt>"changed"</tt> event is generated when the value
+    changes, <tt>"on"</tt> event is generated when the value changes to <tt>TRUE</tt>,
+    <tt>"off"</tt> event is generated when the value changes to <tt>FALSE</tt>.</p>
+
+    <p><tt>"enabled"</tt> allows to disable input/output events handling.
+    When <tt>enabled = FALSE</tt> then
+    sending input events to above fields has no effect (stored boolean value
+    doesn't change), and no output events are generated.</p>
+
+<h4><a name="section_ext_vector_interpolator">2.30.8. Interpolate sets of floats (node <tt>VectorInterpolator</tt>)</a></h4>
+
+    <p><a href="x3d_implementation_interpolation.html"><tt>VectorInterpolator</tt> docs are at the bottom
+    of "Interpolation component" page</a>.</p>
+
+<h3><a name="section_ext_bitmanagement">2.31. Extensions compatible with BitManagement / BS Contact</a></h3>
+
+  <p>We have a (very crude) implementation of some BitManagement
+  specific extensions:</p>
+  <ul>
+    <li><tt>Circle</tt> (treat as standard <tt>Circle2D</tt>)</li>
+    <li><tt>Layer2D</tt>, <tt>Layer3D</tt>, <tt>OrderedGroup</tt> (treat as standard <tt>Group</tt>)</li>
+    <li><tt>MouseSensor</tt> (does nothing, we merely parse it Ok)</li>
+  </ul>
+
+<h3><a name="section_exts_vrml1">2.32. VRML 1.0-specific extensions</a></h3>
+
+  <p><a href="x3d_extensions_vrml1.html">VRML 1.0-specific extensions are described here</a>.</p>
+
+</td><td class="layout">
+  <div class="sidebar">
+    <div class="sidebar_title"><a href="vrml_x3d.html">VRML / X3D support</a></div><ul><li><a href="demo_models.html">Demo models</a></li><li>Extensions<ul><li><a href="compositing_shaders.html">Compositing Shaders</a></li><li><a href="x3d_extensions_screen_effects.html">Screen Effects</a></li><li><a href="x3d_extensions_shadow_maps.html">Shadow Maps</a></li><li><a href="x3d_extensions_vrml1.html">(Old) VRML 1.0</a></li></ul></li><li><a href="x3d_implementation_status.html">Implementation status</a><ul><li><a href="x3d_implementation_core.html">Core</a></li><li><a href="x3d_implementation_time.html">Time</a></li><li><a href="x3d_implementation_networking.html">Networking</a></li><li><a href="x3d_implementation_grouping.html">Grouping</a></li><li><a href="x3d_implementation_rendering.html">Rendering</a></li><li><a href="x3d_implementation_shape.html">Shape</a></li><li><a href="x3d_implementation_geometry3d.html">Geometry3D</a></li><li><a href="x3d_implementation_geometry2d.html">Geometry2D</a></li><li><a href="x3d_implementation_text.html">Text</a></li><li><a href="x3d_implementation_sound.html">Sound</a></li><li><a href="x3d_implementation_lighting.html">Lighting</a></li><li><a href="x3d_implementation_texturing.html">Texturing</a><ul><li><a href="x3d_implementation_texturing.html#section_multi_texturing">Clarifications to X3D multi-texturing</a></li><li><a href="x3d_implementation_texturing.html#section_dds">DDS (DirectDraw Surface)</a></li></ul></li><li><a href="x3d_implementation_interpolation.html">Interpolation</a></li><li><a href="x3d_implementation_pointingdevicesensor.html">Pointing device sensor</a></li><li><a href="x3d_implementation_keydevicesensor.html">Key device sensor</a></li><li><a href="x3d_implementation_environmentalsensor.html">Environmental sensor</a></li><li><a href="x3d_implementation_navigation.html">Navigation</a></li><li><a href="x3d_implementation_environmentaleffects.html">Environmental effects</a></li><li><a href="x3d_implementation_hanim.html">H-Anim</a></li><li><a href="x3d_implementation_nurbs.html">NURBS</a><ul><li><a href="x3d_implementation_nurbs.html#section_homogeneous_coordinates">Control points are in homogeneous coordinates</a></li></ul></li><li><a href="x3d_implementation_scripting.html">Scripting</a></li><li><a href="x3d_implementation_eventutilities.html">Event utilities</a></li><li><a href="x3d_implementation_shaders.html">Programmable shaders</a></li><li><a href="x3d_implementation_cadgeometry.html">CAD geometry</a></li><li><a href="x3d_implementation_texturing3d.html">Texturing3D</a></li><li><a href="x3d_implementation_cubemaptexturing.html">Cube map environmental texturing</a></li></ul></li><li><a href="nist_vrml_test_suite.html">NIST conformace test suite</a></li><li><a href="castle_script.html">CastleScript language reference</a></li><li><a href="kanim_format.html">Kanim (precalculated animations) file format</a></li><li><a href="x3d_time_origin_considered_uncomfortable.html">VRML / X3D time origin considered uncomfortable</a></li></ul></div></td></tr></table><script type="text/javascript">
+  jQuery('a.screenshot').colorbox({opacity: 0.9, rel:'screenshot', maxWidth:'90%', maxHeight:'90%'});
+</script>
+  
+<hr>
+
+<div class="page_footer">
+
+    <address>
+    By Michalis Kamburelis, as part of
+    <a href="http://castle-engine.sourceforge.net/">Castle Game Engine</a>.
+    </address>
+    
+  <table><tr>
+
+    <td><a href="http://sourceforge.net/projects/castle-engine">Hosted by SourceForge.net</a></td>
+
+    <td><span class="page_copyright">Copyright <a href="http://michalis.ii.uni.wroc.pl/~michalis/">Michalis Kamburelis</a>.
+This page is considered part of documentation of my programs,
+and you are free to modify and further distribute it on terms of
+<a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License</a>.
+</span></td>
+
+    
+  </tr></table>
+
+  
+</div>
+
+</body>
+</html>
+

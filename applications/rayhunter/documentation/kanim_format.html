@@ -1,0 +1,322 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+
+<html lang="en">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta name="Author" content="Michalis Kamburelis">
+
+<meta name="Language" content="English">
+
+<title>Kanim file format</title>
+
+
+<!--
+  This is unclean, but it's more comfortable to keep below CSS
+  directly inside HTML page. This is in kambi_common.php,
+  that should be useful for both michalis.ii and castle-engine.sf.net webpages,
+  and must be suitable also for offline documentation in castle-engine programs.
+-->
+<!-- link type="text/css" rel="stylesheet" media="all"  href="kambi-php-lib/kambi_common.css" -->
+
+<style type="text/css"><!--
+body { background: white; font-family: sans-serif; }
+
+dt { font-weight: bold; }
+div.page_footer { }
+span.page_copyright { font-size: smaller }
+
+span.version_number { font-size: small }
+
+div.quick_links_bottom_line { text-align: left; }
+
+.rss_link {
+  float: right;
+  background: red;
+  padding: 0.3em;
+  border: thin outset black;
+}
+
+.rss_link a {
+  color: white;
+  font-weight: bold
+}
+--></style>
+
+
+<link rel="alternate" type="application/rss+xml"
+  title="Castle Game Engine - News Feed"
+  href="http://castle-engine.sourceforge.net/news_feed.php">
+
+<link type="text/css" rel="stylesheet" media="all" href="castle-engine.css">
+<link type="text/css" rel="stylesheet" href="colorbox/example3/colorbox.css">
+
+<script type="text/javascript" src="castle-engine.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="colorbox/jquery.colorbox-min.js"></script>
+
+<style type="text/css"><!--
+/**
+ * GeSHi Dynamically Generated Stylesheet
+ * --------------------------------------
+ * Dynamically generated stylesheet for delphi
+ * CSS class: sourcecode, CSS id: 
+ * GeSHi (C) 2004 - 2007 Nigel McNie, 2007 - 2008 Benny Baumann
+ * (http://qbnz.com/highlighter/ and http://geshi.org/)
+ * --------------------------------------
+ */
+.delphi.sourcecode .de1, .delphi.sourcecode .de2 {font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;}
+.delphi.sourcecode  {font-family:monospace;}
+.delphi.sourcecode .imp {font-weight: bold; color: red;}
+.delphi.sourcecode li, .delphi.sourcecode .li1 {font-weight: normal; vertical-align:top;}
+.delphi.sourcecode .ln {width:1px;text-align:right;margin:0;padding:0 2px;vertical-align:top;}
+.delphi.sourcecode .li2 {font-weight: bold; vertical-align:top;}
+.delphi.sourcecode .kw1 {color: #000000; font-weight: bold;}
+.delphi.sourcecode .kw2 {color: #000000; font-weight: bold;}
+.delphi.sourcecode .kw3 {color: #000066;}
+.delphi.sourcecode .kw4 {color: #000066; font-weight: bold;}
+.delphi.sourcecode .co1 {color: #808080; font-style: italic;}
+.delphi.sourcecode .co2 {color: #008000; font-style: italic;}
+.delphi.sourcecode .coMULTI {color: #808080; font-style: italic;}
+.delphi.sourcecode .es0 {color: #ff0000; font-weight: bold;}
+.delphi.sourcecode .br0 {color: #000066;}
+.delphi.sourcecode .sy0 {color: #000066;}
+.delphi.sourcecode .sy1 {color: #000066;}
+.delphi.sourcecode .sy2 {color: #000066;}
+.delphi.sourcecode .sy3 {color: #000066;}
+.delphi.sourcecode .st0 {color: #ff0000;}
+.delphi.sourcecode .nu0 {color: #0000ff;}
+.delphi.sourcecode .me1 {color: #006600;}
+.delphi.sourcecode .re0 {color: #0000cc;}
+.delphi.sourcecode .re1 {color: #ff0000;}
+.delphi.sourcecode .ln-xtra, .delphi.sourcecode li.ln-xtra, .delphi.sourcecode div.ln-xtra {background-color: #ffc;}
+.delphi.sourcecode span.xtra { display:block; }
+ -->
+</style>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    (function() {
+        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+        s.type = 'text/javascript';
+        s.async = true;
+        s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+        t.parentNode.insertBefore(s, t);
+    })();
+/* ]]> */
+</script><script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+  </head>
+<body>
+
+
+  <div class="header">
+    <!--img class="header_icon" src="images/header_icon.png" alt="Castle Game Engine icon" /-->
+    <div class="header_title"><a href="http://castle-engine.sourceforge.net/index.php">Castle Game Engine</a></div>
+    
+    <table class="header_menu">
+      <tr>
+        <td colspan="15" class="higher higher_left">&larr; Users</td>
+        <td colspan="6" class="higher higher_right">Developers &rarr;</td>
+      </tr>
+      <tr><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/index.php">Intro</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/news.php">News</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/view3dscene.php" title="VRML / X3D browser, and a viewer for other 3D model formats">view3dscene</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/castle.php" title="First-person perspective game, in a dark fantasy setting">The Castle</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/all_programs.php" title="All the games and tools using our 3D engine">All Programs</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/forum.php" title="Ask for help, report bugs, discuss features">Forum</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/donate.php">Donate</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/engine.php" title="Sources and documentation for developers">Engine</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="vrml_x3d.html" title="Our extensions and status of VRML/X3D implementation" id="current">VRML/X3D</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/blender.php" title="Customized Blender X3D exporter">Blender</a></td><td class="lower_separator"><div>&nbsp;</div></td>
+      </tr>
+    </table>
+  </div><table class="layout" cellspacing="0">
+      <col class="content_column">
+      <col class="sidebar_column">
+      <tr><td class="layout content">
+<h1>Kanim file format</h1>
+<p>Contents:
+<div class="table_of_contents"><ol>
+<li><a href="#section_what">What it is</a>
+</li>
+<li><a href="#section_specification">Exact format specification</a>
+</li>
+<li><a href="#section_shortcomings">Shortcomings of this format</a>
+</li>
+</ol>
+</div>
+<h2><a name="section_what">What it is</a></h2>
+
+<p>Files with extension *.kanim represent <i>"Castle Game Engine's animations"</i>.
+These are XML files that describe precalculated animation as a sequence of files.
+Animation shows the transition from the first model to the last.
+Where models are structurally equal, intermediate frames are
+created by linear interpolation to show smooth changes.</p>
+
+<p><b>Since animation by VRML/X3D events and interpolators is implemented
+in our engine now, Kanim format becomes obsolete.</b>
+It's useful only if your favorite 3D modeler cannot export VRML/X3D
+animation with interpolators, but it can export static VRML/X3D files.</p>
+
+<p><a href="http://castle-engine.sourceforge.net/blender.php">Blender exporter for this format is available <i>(online docs)</i></a>,
+since Blender cannot export animations with interpolators to VRML.</p>
+
+<p>On the positive side, there is at least one open-source
+program that <i>can</i> create animations with interpolators:
+<a href="http://vrml.cip.ica.uni-stuttgart.de/dune/">White Dune</a>.
+<i>White dune</i> has even an exporter to Kanim format,
+given a VRML animation by interpolators it generates a Kanim file
+and corresponding VRML files for each frame.</p>
+
+<p>If you work with 3D modeler that can export proper VRML animation
+with interpolators, then you don't need to use Kanim format.
+Our engine handles events and interpolators perfectly.
+Internally, they may even be converted (after loading) to precalculated
+animations.</p>
+
+<p>There's also a crude converter from kanim format to VRML/X3D
+interpolators in our engine examples (see <tt>examples/vrml/tools/kanim_to_interpolators</tt>).
+It's a little crude (works only when you animate only a single mesh),
+but may be enough for simple uses. So this is one way to generate an animated
+VRML/X3D file from Blender: export from Blender to kanim, then convert
+kanim to VRML/X3D.</p>
+
+<p>For more technical insight, see
+<a href="http://castle-engine.sourceforge.net/vrml_engine_doc/output/xsl/html/chapter.animation.html">description
+of animation handling in our VRML engine documentation</a>.</p>
+
+<hr /> <h2><a name="section_specification">Exact format specification</a></h2>
+
+<p>File format is simple:
+
+<pre>
+
+&lt;?xml version="1.0"?&gt;
+&lt;animation              // Root node is always "animation".
+                        // All it's attributes are optional
+                        // (default values are shown below).
+                        // Some of it's attributes should be treated like a
+                        // "hint for the renderer". General programs like
+                        // view3dscene may honor them,
+                        // but more specialized programs (like "The Castle"
+                        // game) may ignore them, since "they know better".
+
+  scenes_per_time="30"  // Suggested number of scenes per time to be generated.
+                        // This is a hint for the renderer &mdash; by default it's
+                        // 30, but it may be ignored. Larger values make
+                        // animation smoother, but also much more memory consuming.
+                        // Special value 0 is allowed here, and means
+                        // that animation will simply show each &lt;frame&gt;,
+                        // suddenly changing into the next &lt;frame&gt;,
+                        // without any smoothing of transitions with
+                        // intermediate scenes.
+
+  equality_epsilon="0.001"
+                        // Epsilon to use when comparing animation frames
+                        // and deciding which parts didn't move at all between
+                        // two adjacent frames. You can set this even to literal
+                        // "0.0", but this may cause a lot of memory to be wasted
+                        // when loading large animation. It's better to set
+                        // this to some very small value &mdash; so small that you're
+                        // sure that user will not notice such small move
+                        // anyway.
+
+  loop="false"          // Should the animation loop ? This is a hint for
+                        // the renderer, and may be ignored. Allowed values
+                        // are "false" and "true", not case-sensitive.
+                        // When this animation is used for creature/item in game,
+                        // this is <b>ignored</b>.
+
+  backwards="false"     // Should the animation go backwards after going
+                        // forward ? Allowed values
+                        // are "false" and "true", not case-sensitive.
+                        // When this animation is used for creature/item in game,
+                        // this is <b>not ignored</b>.
+&gt;
+
+  // A number of &lt;frame&gt; nodes should follow. At least one is required.
+  // Note that exactly one &lt;frame&gt; node will actually define a still scene,
+  // you need at least 2 frames if you want a real animation.
+
+  &lt;frame
+
+    file_name="file_1.wrl" // This is a required attribute, and specifies
+                           // the filename from which to load this
+                           // animation frame. Any 3D file format is allowed here:
+                           // most of all, VRML/X3D, but also
+                           // <a href="http://castle-engine.sourceforge.net/view3dscene.php#section_features">other formats understood by view3dscene and our engine <i>(online docs)</i></a>.
+
+    time="0.0"             // This is a required attribute specifying a
+                           // time of this frame. For now, all frames
+                           // must be specified in the strictly increasing order
+                           // of their "time".
+                           // This is understood to be in seconds.
+  /&gt;
+
+  // For example, assume that the second &lt;frame&gt; node follows.
+  // So this defines an animation that changes from
+  // file_1.wrl and file_2.wrl in exactly 1 second.
+
+  &lt;frame file_name="file_2.wrl" time="1.0" /&gt;
+
+&lt;/animation&gt;
+</pre>
+
+<hr/> <h2><a name="section_shortcomings">Shortcomings of this format</a></h2>
+
+<p>As I mentioned above, kanim format is obsolete.
+Some things that cannot be achieved using kanim (and probably never
+will be, as we would advice everyone to use VRML/X3D interpolators
+for all your needs):</p>
+
+<ul>
+  <li><p>Our collision detection uses the first (or both first and last)
+    frame. Octrees are not updated between frames.
+    So collision detection, mouse picking,
+    ray-tracer look only at the 1st animation frame,
+    because our octree represents only this frame.</p>
+
+    <p>Use instead VRML/X3D interpolators, when octree is properly managed.</p>
+  </li>
+
+  <li><p>Background animations do not work (we use MainScene.Background always).</p>
+
+    <p>Use instead VRML/X3D interpolators, when background is fast updated.
+    Note that you can use our
+    <a href="x3d_implementation_interpolation.html">ColorSetInterpolator (extension to the interpolation component)</a> to animate sets of colors like
+    <tt>skyColor</tt>, <tt>groundColor</tt>.
+    See our <a href="demo_models.html">VRML/X3D demo models</a>    (look inside <tt>background/background_animate*</tt>) for demos.</p>
+  </li>
+
+  <li><p>Some view3dscene features, like saving to VRML/X3D and
+    "Remove Selected Geometry/Face", only work on the 1st animation frame.</p></li>
+</ul>
+
+
+</td><td class="layout">
+  <div class="sidebar">
+    <div class="sidebar_title"><a href="vrml_x3d.html">VRML / X3D support</a></div><ul><li><a href="demo_models.html">Demo models</a></li><li><a href="x3d_extensions.html">Extensions</a><ul><li><a href="compositing_shaders.html">Compositing Shaders</a></li><li><a href="x3d_extensions_screen_effects.html">Screen Effects</a></li><li><a href="x3d_extensions_shadow_maps.html">Shadow Maps</a></li><li><a href="x3d_extensions_vrml1.html">(Old) VRML 1.0</a></li></ul></li><li><a href="x3d_implementation_status.html">Implementation status</a><ul><li><a href="x3d_implementation_core.html">Core</a></li><li><a href="x3d_implementation_time.html">Time</a></li><li><a href="x3d_implementation_networking.html">Networking</a></li><li><a href="x3d_implementation_grouping.html">Grouping</a></li><li><a href="x3d_implementation_rendering.html">Rendering</a></li><li><a href="x3d_implementation_shape.html">Shape</a></li><li><a href="x3d_implementation_geometry3d.html">Geometry3D</a></li><li><a href="x3d_implementation_geometry2d.html">Geometry2D</a></li><li><a href="x3d_implementation_text.html">Text</a></li><li><a href="x3d_implementation_sound.html">Sound</a></li><li><a href="x3d_implementation_lighting.html">Lighting</a></li><li><a href="x3d_implementation_texturing.html">Texturing</a><ul><li><a href="x3d_implementation_texturing.html#section_multi_texturing">Clarifications to X3D multi-texturing</a></li><li><a href="x3d_implementation_texturing.html#section_dds">DDS (DirectDraw Surface)</a></li></ul></li><li><a href="x3d_implementation_interpolation.html">Interpolation</a></li><li><a href="x3d_implementation_pointingdevicesensor.html">Pointing device sensor</a></li><li><a href="x3d_implementation_keydevicesensor.html">Key device sensor</a></li><li><a href="x3d_implementation_environmentalsensor.html">Environmental sensor</a></li><li><a href="x3d_implementation_navigation.html">Navigation</a></li><li><a href="x3d_implementation_environmentaleffects.html">Environmental effects</a></li><li><a href="x3d_implementation_hanim.html">H-Anim</a></li><li><a href="x3d_implementation_nurbs.html">NURBS</a><ul><li><a href="x3d_implementation_nurbs.html#section_homogeneous_coordinates">Control points are in homogeneous coordinates</a></li></ul></li><li><a href="x3d_implementation_scripting.html">Scripting</a></li><li><a href="x3d_implementation_eventutilities.html">Event utilities</a></li><li><a href="x3d_implementation_shaders.html">Programmable shaders</a></li><li><a href="x3d_implementation_cadgeometry.html">CAD geometry</a></li><li><a href="x3d_implementation_texturing3d.html">Texturing3D</a></li><li><a href="x3d_implementation_cubemaptexturing.html">Cube map environmental texturing</a></li></ul></li><li><a href="nist_vrml_test_suite.html">NIST conformace test suite</a></li><li><a href="castle_script.html">CastleScript language reference</a></li><li>Kanim (precalculated animations) file format</li><li><a href="x3d_time_origin_considered_uncomfortable.html">VRML / X3D time origin considered uncomfortable</a></li></ul></div></td></tr></table><script type="text/javascript">
+  jQuery('a.screenshot').colorbox({opacity: 0.9, rel:'screenshot', maxWidth:'90%', maxHeight:'90%'});
+</script>
+  
+<hr>
+
+<div class="page_footer">
+
+    <address>
+    By Michalis Kamburelis, as part of
+    <a href="http://castle-engine.sourceforge.net/">Castle Game Engine</a>.
+    </address>
+    
+  <table><tr>
+
+    <td><a href="http://sourceforge.net/projects/castle-engine">Hosted by SourceForge.net</a></td>
+
+    <td><span class="page_copyright">Copyright <a href="http://michalis.ii.uni.wroc.pl/~michalis/">Michalis Kamburelis</a>.
+This page is considered part of documentation of my programs,
+and you are free to modify and further distribute it on terms of
+<a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License</a>.
+</span></td>
+
+    
+  </tr></table>
+
+  
+</div>
+
+</body>
+</html>
+
