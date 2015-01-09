@@ -28,7 +28,7 @@
 					// Create database-entry
 					$conn = require '../php/db_connect.php';
 				
-					$sql = "INSERT INTO models (name, description, classification) VALUES ('$name','$text', '$cat')";
+					$sql = "INSERT INTO models (name, description, classification, size) VALUES ('$name','$text', '$cat', '$file_size')";
 				
 					$conn->query($sql);
 					$last_id = $conn->lastInsertId();
