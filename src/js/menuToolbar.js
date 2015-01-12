@@ -6,12 +6,18 @@
 
 /**
  * Initialize the combo box for navigation modes in toolbar
+ * Subscribes for "ShowInfo" event
  */
-function initNavigationMode() {
+function initToolbar() {
   document.getElementById('optionExamine').setAttribute("selected", "selected");
+  
+  // Subscribe for "ShowInfo" messages in ROLE 
+  if (isInRole) {
+    subscribeIWC("ShowInfo", receiveShowInfo);
+  }
 }
 /// Call initialize for navigation mode when DOM loaded
-document.addEventListener('DOMContentLoaded', initNavigationMode, false);
+document.addEventListener('DOMContentLoaded', initToolbar, false);
 
 /**
  * Button "Show All" functionality
@@ -66,15 +72,52 @@ function x3dSynchronize() {
 }
 
 /**
- * Attached to "btnInfo" (Show info / Hide info)
- * Will turn the statistics view on and off based on current status
- * Will turn the metadata_overlay on and off accordingly
+ * Gets the URL parameter value for a given name
+ *@param name Name of a URL parameter
  */
-function showInfo() {
+function getURLParameter(name) {
+  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
+}
+
+/**
+ * @return true, if the page is a widget in ROLE. false, otherwise
+ */
+function isInRole() {
+  return getURLParameter("widget") === "true";
+}
+
+/**
+ * Attached to "btnInfo" (Show info / Hide info)
+ * Informs other viewer to show or hide info and also does so locally
+ */
+function btnShowInfo() {
+  var show = document.getElementById('btnInfo').innerHTML === "Show info";
+  if (isInRole()) {
+    var msgContent = {'show': show};
+    publishIWC("ShowInfo", msgContent);
+    console.log("menuToolbar.js: publishIWC 'ShowInfo'");
+  }
+  showInfo(show);
+}
+
+/**
+ * Receiver function for "ShowInfo" event in ROLE IWC
+ * @param msg Message containing 'show' property, which tells whether to show (true) or hide (false) info boxes
+ */
+function receiveShowInfo(msg) {
+  showInfo(msg.show);
+}
+
+/**
+ * Will turn the statistics view on and off based on parameter
+ * Will turn the metadata_overlay on and off accordingly
+ * @param show True, if data is to be shown. False, otherwise
+ */
+function showInfo(show) {
   var x3dom = document.getElementById('viewer_object');
   var btn = document.getElementById('btnInfo');
   var metadata_overlay = document.getElementById('metadata_overlay');
-  if (btn.innerHTML === "Show info") {
+  if (show) {
     x3dom.runtime.statistics(true);
     btn.innerHTML = "Hide info";
     metadata_overlay.style.display = "block";
