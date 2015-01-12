@@ -38,7 +38,10 @@ function initCopy() {
   var client = new ZeroClipboard();
   client.on( "copy", function (event) {
     var clipboard = event.clipboardData;
-    clipboard.setData( "text/plain", window.location.href );
+    var url = window.location.href;
+    url = url.replace("&widget=true", "&widget=false");
+    url = url.replace("?widget=true", "?widget=false");
+    clipboard.setData( "text/plain", url);
   });
   // Glue button to client. The copy event is fired when button is clicked
   client.clip( document.getElementById("btnCopy") );
