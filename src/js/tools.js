@@ -17,8 +17,8 @@ get_location = {
 }
 
 /**
- * Get the querry string to access url parameters
- * @return object containing all querry variables
+ * Get the query string to access url parameters
+ * @return object containing all query variables
  */
 function getQueryString() {
   // This function is anonymous, is executed immediately and 
@@ -45,3 +45,19 @@ function getQueryString() {
 
 ///initialized QueryString by default
 var QueryString = getQueryString();
+
+/**
+ * Gets the URL parameter value for a given name
+ *@param name Name of a URL parameter
+ */
+function getURLParameter(name) {
+  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
+}
+
+/**
+ * Used in menuToolbar.js
+ * @return true, if the page is a widget in ROLE. false, otherwise
+ */
+function isInRole() {
+  return getURLParameter("widget") === "true";
+}
