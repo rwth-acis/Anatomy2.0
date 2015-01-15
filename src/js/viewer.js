@@ -17,6 +17,10 @@ var lastData;
 
 var x3dRoot;
 
+// Saves whether info should be displayed when synchronizing after unsynchronizing
+// from other widgets, also used in menuToolbar.js
+var displayInfo;
+
 /**
  * Sets up the X3D viewport and subscribes to
  * mouse callbacks for propagating changes.
