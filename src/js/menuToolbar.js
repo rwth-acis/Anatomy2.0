@@ -12,7 +12,7 @@ function initToolbar() {
   document.getElementById('optionExamine').setAttribute("selected", "selected");
   
   // Subscribe for "ShowInfo" messages in ROLE 
-  if (isInRole) {
+  if (isInRole()) {
     subscribeIWC("ShowInfo", receiveShowInfo);
   }
 }
@@ -69,21 +69,6 @@ function x3dSynchronize() {
     synchronizePositionAndOrientation();
   }
   isSynchronized = !isSynchronized;
-}
-
-/**
- * Gets the URL parameter value for a given name
- *@param name Name of a URL parameter
- */
-function getURLParameter(name) {
-  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
-}
-
-/**
- * @return true, if the page is a widget in ROLE. false, otherwise
- */
-function isInRole() {
-  return getURLParameter("widget") === "true";
 }
 
 /**
