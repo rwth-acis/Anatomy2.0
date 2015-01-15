@@ -38,9 +38,10 @@
         if($i > 2 && $i % 2) {
           $html .= '</div><div class="row">';
         }
-        $html .= 
-        "<div class='col-md-6 overview-entry' name='table-entry' id='table_entry$i'>
-          <a href='model_viewer.php?id=$entry->id' id='a_img$i'>
+        // id and name used in overview-widget.js for highlighting
+        $html .= "<div class='col-md-6 overview-entry' name='table-entry' id='table_entry$i'>";
+        // id used to derive model id (from database) connected to clicked link
+        $html .= "  <a href='model_viewer.php?id=$entry->id' id='a_img$i'>
             <img src='../../$entry->preview_url' alt=$entry->name class='img-responsive img-fit'>
             <h3>$entry->name</h3>
           </a>
