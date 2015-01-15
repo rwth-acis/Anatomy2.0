@@ -13,7 +13,8 @@ describe('The toolbar', function() {
   };
   
   beforeEach(function() {
-    loadFixtures('btnSynchronize.html', 'viewModeSelect.html');
+    loadFixtures('btnInfo.html', 'btnSynchronize.html', 'viewModeSelect.html', 
+        'metadataOverlay.html', 'viewerObject.html');
   });
 
   afterEach(function() {
@@ -25,28 +26,36 @@ describe('The toolbar', function() {
   });
 
   describe('un/synchronize button', function() {
-    it('unsynchronizes the model when clicked', function() {
+    it('unsynchronizes the viewer widget when clicked', function() {
       spyOn(window, 'savePositionAndOrientation');
       spyOn(window, 'synchronizePositionAndOrientation');
+      spyOn(window, 'saveInfoState');
+      spyOn(window, 'synchronizeInfoState');
 
       $('#btnSynchronize').click();
       expect(savePositionAndOrientation).toHaveBeenCalled();
       expect(synchronizePositionAndOrientation).not.toHaveBeenCalled();
+      expect(saveInfoState).toHaveBeenCalled();
+      expect(synchronizeInfoState).not.toHaveBeenCalled();
       expect($('#btnSynchronize').html()).toEqual('Synchronize');
       expect(isSynchronized).not.toBeTruthy();
     }); 
     
-    it('synchronizes the model when clicked again', function() {
+    it('synchronizes the viewer widget when clicked again', function() {
       isSynchronized = false;
       spyOn(window, 'savePositionAndOrientation');
       spyOn(window, 'synchronizePositionAndOrientation');
+      spyOn(window, 'saveInfoState');
+      spyOn(window, 'synchronizeInfoState');
 
       $('#btnSynchronize').click();
       expect(savePositionAndOrientation).not.toHaveBeenCalled();
       expect(synchronizePositionAndOrientation).toHaveBeenCalled();
+      expect(saveInfoState).not.toHaveBeenCalled();
+      expect(synchronizeInfoState).toHaveBeenCalled();
       expect($('#btnSynchronize').html()).toEqual('Unsynchronize');
       expect(isSynchronized).toBeTruthy();
     }); 
   });
-
+  
 });
