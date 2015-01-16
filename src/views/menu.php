@@ -31,14 +31,3 @@ if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
   );  
 }
 ?>
-<?php  ?>
-    
-  <!-- Search durrently not implemented -->
-  <!--
-  <div id="wrap">
-    <form action="" autocomplete="on">
-      <input id="search" name="search" type="text" placeholder="Which model ?">
-      <input id="search_submit" value="search" type="submit">
-    </form>
-  </div>
-  -->

@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" charset="utf8"/>
     <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <script type='text/javascript' src='../js/menu.js'></script>
     <!-- Init communication with wrapper -->
     <script type='text/javascript' src='../js/init-subsite.js'></script>
     <?php
@@ -19,12 +20,9 @@
   <body>
     <?php
       include("menu.php");
+      include("search.html");
     ?>  
 
-    <!--<div class="row">
-      <h2>Models</h2>
-    </div>-->
-    
     <!-- Build model table -->
     <div id="table-container">
     <?php
