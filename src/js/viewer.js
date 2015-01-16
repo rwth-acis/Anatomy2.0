@@ -34,6 +34,19 @@ function initializeModelViewer() {
     log('Enabled publishing!');
   });
 
+  window.addEventListener( "keypress", onKeyDown, false );
+}
+function onKeyDown(e) {
+  if(e.keyCode == 107) { // K 
+    var debugTextStyle = document.getElementById('debugText').style;
+    if(debugTextStyle.display == 'none') {
+      debugTextStyle.display = 'inline';
+    }
+    else {
+      debugTextStyle.display = 'none';
+    }
+  }
+
 }
 
 function onUserConnected(message) {
@@ -76,6 +89,7 @@ function onRemoteUpdate(extras) {
     canSend = false;
 
     setView(x3dRoot.runtime, extras, finishedSettingView);
+    setViewMode(extras.viewMode);
     lastTimestamp = newTimestamp;
   }
 
@@ -99,6 +113,8 @@ function onLocalUpdate() {
 
   //also specifiy what model was moved (included in uri)
   data.selectedModel = window.location.search;
+
+  data.viewMode = getViewMode();
 
   publishIWC("ViewpointUpdate", data);
   log('Published message!');
@@ -163,6 +179,7 @@ function synchronizePositionAndOrientation() {
   if(lastData != null) {
     processingMessage = true;
     setView(x3dRoot.runtime, lastData, function() {});
+    setViewMode(lastData.viewMode);
     processingMessage = false;
   }
 }

@@ -27,9 +27,9 @@
 
   <body>
     <?php include("menu.php"); ?>
-  
+
     <?php include("toolbar.html"); ?>
-    
+
     <div class="row" style="position:relative; padding-left:5%; padding-right:5%">
       <p id='debugText'></p>
       <x3d id='viewer_object' showStat="false">

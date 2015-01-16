@@ -21,6 +21,14 @@ function x3dChangeView() {
   document.getElementById('navType').setAttribute("type", select.options[select.selectedIndex].value);
 }
 
+function getViewMode() {
+  var select = document.getElementById('viewModeSelect');
+  return select.options[select.selectedIndex].value;
+}
+function setViewMode(mode) {
+  document.getElementById('navType').setAttribute(mode);
+}
+
 /**
  * Initializes the copy to clipboard functionality
  */

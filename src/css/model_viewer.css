@@ -5,6 +5,15 @@ body {
     font-size: 12px;
 }
 
+p {
+  font-family       : Arial, Sans-Serif;
+  font-weight       : bold;
+  font-size         : 12px;
+  text-transform    : uppercase;
+
+  color             : #C8C8C8;
+}
+
 #viewer_object {
     width: 90%;
     height: 90%;
@@ -21,8 +30,8 @@ body {
   color 		: #C8C8C8;
 
   position 		: absolute;
-  top 	 		: 30px; 
-  left 	 		: 2px; 
+  top 	 		: 16px;
+  left 	 		: 24px;
 
   padding		: 5px;
 
@@ -34,4 +43,18 @@ body {
 
   cursor 		: help;
   display: none
+}
+
+#debugText {
+  font-size         : 10px;
+  background-color  : #323232;
+  color             : #FFF;
+
+  position          : absolute;
+  bottom            : 0px;
+  left              : 24px;
+  right             : 24px;
+
+  z-index           : 1000;
+  display           : none;
 }
