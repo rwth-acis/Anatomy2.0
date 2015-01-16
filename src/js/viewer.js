@@ -33,7 +33,17 @@ function initializeModelViewer() {
     x3dRoot.removeEventListener('touchstart', arguments.callee);
     log('Enabled publishing!');
   });
+
 }
+
+function onUserConnected(message) {
+  var data            = getView(x3dRoot.runtime);
+  data["timestamp"]   = new Date();
+  lastTimestamp       = data["timestamp"];
+  data.selectedModel  = window.location.search;
+  publishIWC("ViewpointUpdate", data);
+}
+subscribeIWC("UserConnected", onUserConnected);
 
 /**
  * Event handler for getting a new iwc message with a new viewpoint we should rotate to
@@ -42,6 +52,7 @@ function initializeModelViewer() {
 function onRemoteUpdate(extras) {
   // Don't synchronize if the viewpoint is from another model
   if(extras.selectedModel != window.location.search){
+    window.location.assign(extras.selectedModel);
     return;
   }
 
@@ -63,7 +74,7 @@ function onRemoteUpdate(extras) {
   if(lastTimestamp == null || newTimestamp > lastTimestamp) {
     //disable sending position updates until we receive no more update
     canSend = false;
-      
+
     setView(x3dRoot.runtime, extras, finishedSettingView);
     lastTimestamp = newTimestamp;
   }
@@ -98,13 +109,13 @@ function onLocalUpdate() {
  * with the other widgets.
  * @param evt viewpoint changed event
  */
-function viewpointChanged(evt) {    
+function viewpointChanged(evt) {
 
   // Prevent widgets from sending updates while applying a received viewpoint msg
   // If we set the position because we received a message we do not want to send it back
   if(!evt || processingMessage || !canSend) {
     log("Bypassing send!");
-    
+
     return;
   }
 
@@ -118,7 +129,7 @@ function viewpointChanged(evt) {
   if(typeof sendTimeout != 'undefined'){
     clearTimeout(sendTimeout);
   }
-  sendTimeout = setTimeout(function(){ 
+  sendTimeout = setTimeout(function(){
     //disable sending
     clearTimeout(updateInterval);
     updateInterval = null;
@@ -162,7 +173,7 @@ function savePositionAndOrientation() {
   posAndOrient = getView(x3dRoot.runtime);
 }
 
-/**  
+/**
  * Callback function for the setView function,
  * so we get notified when the interpolation is finished.
  */
@@ -171,9 +182,9 @@ function finishedSettingView(){
   if(typeof enableSendingTimeout != 'undefined'){
     clearTimeout(enableSendingTimeout);
   }
-  enableSendingTimeout = setTimeout(function(){ 
+  enableSendingTimeout = setTimeout(function(){
     //disable sending
-    canSend = true; 
+    canSend = true;
     log("finished updating");
   } , 50);
 }
