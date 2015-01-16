@@ -46,7 +46,6 @@ function x3dSynchronize() {
   var btn = document.getElementById('btnSynchronize');
   if (isSynchronized) {
     btn.innerHTML ="Synchronize";
-    savePositionAndOrientation();
   }
   else {
     btn.innerHTML ="Unsynchronize";

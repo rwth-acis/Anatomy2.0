@@ -161,7 +161,9 @@ function receiveModelSelectedByOverview(msgContent){
  */
 function synchronizePositionAndOrientation() {
   if(lastData != null) {
+    processingMessage = true;
     setView(x3dRoot.runtime, lastData, function() {});
+    processingMessage = false;
   }
 }
 
