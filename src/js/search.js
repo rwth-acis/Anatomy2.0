@@ -20,6 +20,8 @@ function showModels(str) {
   // Display the result which is sent by the script on the server after 
   // it is finished
   xmlhttp.onreadystatechange = function() {
+      // Check if the data transfer has been completed the connection to the server
+      // is successful (HTTP status code 200 OK)
       if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
           document.getElementById("table-container").innerHTML = xmlhttp.responseText;
       }

@@ -11,11 +11,12 @@
  * @return string/html         HTML table containing the models which should be displayed
  */
 function createModelsTable($result) {
+    $columns = 2;               //number of columns
     $i = 1;
     $html = '<div class="row">';
 
     while($entry = mysql_fetch_object($result)) {
-        if($i > 2 && $i % 2) {
+        if($i > $columns && $i % $columns) {
           $html .= '</div><div class="row">';
         }
         // id and name used in overview-widget.js for highlighting
