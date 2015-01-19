@@ -1,33 +1,33 @@
-
 <?php
 // Hide the menu in ROLE environment
 if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
 {
   print("
-  <link rel='stylesheet' type='text/css' href='../css/style.css'>
-
-  <div class='container'>
-    <header>
-      <div class='row'>
-        <div class='col-md-12'> 
-          <ul id='menu'>
-            <li><a href='welcome.php'><h1><strong>HENM</strong></h1></a></li>
-            <li><a href='overview.php' style='padding-left:20px'>Models</a></li>
-            <li><a href='role.php' style='padding-left:20px'>Role</a></li>
-            <li><a href='upload.php' style='padding-left:20px'>Upload</a></li>
-          </ul>
-        </div>
-      </div>    
-      <div class='row'>
-        <div class='col-md-12' style='position:relative; right:20px'>   
-          <ul id='color'>
-            <li class='color color-red'></li>
-            <li class='color color-yellow'></li>
-            <li class='color color-blue'></li>
-          </ul>
-        </div>  
+  <div class='navbar navbar-inverse'>
+    <div class='container'>
+      <div class='navbar-header'>
+        <!-- Button for smallest screens -->
+        <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'><span class='icon-bar'></span><span class='icon-bar'></span><span class='icon-bar'></span></button>
+        <a class='navbar-brand' href='welcome.php'>
+          <img src='../images/logo.png' alt='HENM: 3D Models'>
+        </a>
       </div>
-    </header>"
+      <div class='navbar-collapse collapse'>
+        <ul class='nav navbar-nav pull-right mainNav'>
+          <li class='active'><a href='welcome.php'>Home</a></li>
+          <li><a href='courses.php'>Courses</a></li>
+          <li><a href='models.html'>Models</a></li>
+          <li><a href='role.php'>ROLE</a></li>
+          <li><a href='upload.php'>Upload</a></li>
+          <li><a href='help.html'>Help</a></li>
+          <li><a href='login.php'>Login</a></li>
+        </ul>
+
+      </div>
+      <!--/.nav-collapse -->
+    </div>
+  </div> 
+  </br></br>"
   );  
 }
 ?>
