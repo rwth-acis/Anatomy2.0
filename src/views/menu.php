@@ -3,7 +3,7 @@
 // Hide the menu in ROLE environment
 if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
 {
-  print("
+?>
   <link rel='stylesheet' type='text/css' href='../css/style.css'>
 
   <div class='container'>
@@ -15,6 +15,7 @@ if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
             <li><a href='overview.php' style='padding-left:20px'>Models</a></li>
             <li><a href='role.php' style='padding-left:20px'>Role</a></li>
             <li><a href='upload.php' style='padding-left:20px'>Upload</a></li>
+            <li><a href='login.php' style='padding-left:20px'>Login</a></li>
           </ul>
         </div>
       </div>    
@@ -27,11 +28,10 @@ if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
           </ul>
         </div>  
       </div>
-    </header>"
-  );  
+    </header>
+<?php
 }
 ?>
-<?php  ?>
     
   <!-- Search durrently not implemented -->
   <!--
