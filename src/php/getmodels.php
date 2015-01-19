@@ -20,8 +20,8 @@ foreach( $searchstr as $word) {
 // Remove last 'OR'
 $whereClause = substr($whereClause, 0, -2);
 
-$query = "SELECT * FROM models WHERE" . $whereClause;
-$result = mysql_query($query);
+$query = $db->query("SELECT * FROM models WHERE" . $whereClause);
+$result = $query->fetchAll();
 
 // Create table structure and display it on the page
 $html = createModelsTable($result);

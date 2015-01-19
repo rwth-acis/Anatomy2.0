@@ -25,6 +25,7 @@
     <script src="../../js/init-wrapper.js"></script>
     <script src="../../js/init-subsite.js"></script>
     <script src="../../js/x3d-extensions.js"></script>
+    <script src="../../js/search.js"></script>
 
     <!-- Helper for Specs: -->
     <script src="spec/SpecHelper.js"></script>
@@ -36,6 +37,7 @@
     <script src="spec/MenuToolbarSpec.js"></script>
     <script src="spec/Init-WrapperSpec.js"></script>
     <script src="spec/Init-SubsiteSpec.js"></script>
+    <script src="spec/SearchSpec.js"></script>
 
   </head>
 

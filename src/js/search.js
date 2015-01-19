@@ -5,13 +5,14 @@
  * @param  {string} str Search string entered by the user
  */
 function showModels(str) {
+  var xmlhttp;
   if (window.XMLHttpRequest) {
       // code for IE7+, Firefox, Chrome, Opera, Safari
       xmlhttp = new XMLHttpRequest();
-  }/* else {
+  } else {
       // code for IE6, IE5
       xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-  }*/
+  }
 
   // Send request to run the script to the server 
   xmlhttp.open("GET","../php/getmodels.php?q="+str,true);

@@ -29,8 +29,8 @@
       include '../php/db_connect.php';
       include '../php/tools.php';
 
-      $query  = "SELECT * FROM models";
-      $result = mysql_query($query);
+      $query  = $db->query("SELECT * FROM models");
+      $result = $query->fetchAll();
       
       $html = createModelsTable($result);
       echo $html;
