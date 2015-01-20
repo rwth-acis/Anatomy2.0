@@ -33,6 +33,8 @@
 <body>
   <?php include("menu.php"); ?> 
 
+  <!-- Button to create a new course -->
+  <p><a class="btn btn-primary btn-lg" href="addcourse.php" role="button">Add a new course</a></p>
 
   <!-- Build course table -->
     <div id="table-container">
