@@ -22,7 +22,7 @@ if (isset($_POST['login_email']) && isset($_POST['login_password'])) {
   if($user) {
 		if ($user['confirmed']) {
       // Now that user is logged in, we can personalize web page. Store data using session
-			session_start();
+      session_start();
 			$_SESSION['user_id'] = $user['id'];
 			$_SESSION['user_email'] = $user['email'];
 			$result = array('result'=>'ok','email'=>$email);

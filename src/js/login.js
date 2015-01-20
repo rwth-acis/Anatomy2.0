@@ -19,7 +19,8 @@ function onClickLogin() {
       // The data we receive from server is JSON encoded, so we have to decode first
       data = JSON.parse(data);
       if (data.result == 'ok') {
-        document.getElementById('login_status').innerHTML = "You are now logged in as " + email;
+        // Reload page to refresh all data
+        window.location.reload(false);
       }
       else {
         document.getElementById('login_status').innerHTML = data.result;
@@ -29,6 +30,7 @@ function onClickLogin() {
     });
   }
 }
+
 
 /*
  // JQuery code for further functionality taken from "https://github.com/MichaelZelensky/php_login"
