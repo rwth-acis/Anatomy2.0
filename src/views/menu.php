@@ -14,7 +14,7 @@ if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
       </div>
       <div class='navbar-collapse collapse'>
         <ul class='nav navbar-nav pull-right mainNav'>
-          <li class='active'><a href='welcome.php'>Home</a></li>
+          <li><a href='welcome.php'>Home</a></li>
           <li><a href='courses.php'>Courses</a></li>
           <li><a href='models.html'>Models</a></li>
           <li><a href='role.php'>ROLE</a></li>

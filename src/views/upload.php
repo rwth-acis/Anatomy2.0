@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" charset="utf8"/>
     <!-- Additional styles -->
     <link rel='stylesheet' type='text/css' href='../css/bootstrap.min.css'>
-    <!--<link rel='stylesheet' type='text/css' href='../css/style.css'> -->
+    <link rel='stylesheet' type='text/css' href='../css/style.css'>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> 
 	<script src="../js/jquery.form.min.js"></script> 	
 	<script src="../js/script.js"></script> 	
@@ -37,9 +37,20 @@
   </head>
   <body>
     <?php include("menu.php"); ?> 
-	
+
+  <header id="head" class="secondary">
     <div class="container">
-	    <h1>Upload Model</h1>
+      <div class="row">
+        <div class="col-sm-8">
+          <h1>Upload Model</h1>
+        </div>
+      </div>
+    </div>
+  </header>
+</br></br>
+
+    <div class="container">
+	    
 	    <!--- UPLOAD FORM -->
    		<form role="form" action="../php/upload_script.php" method="post" enctype="multipart/form-data" id="UploadForm">
         <div class="form-group">
