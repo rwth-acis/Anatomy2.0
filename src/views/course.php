@@ -41,14 +41,25 @@
 -->          
           <?php
             include '../php/db_connect.php';
+            include '../php/tools.php';
+            
             $arg    = $_GET["id"];
-            $query  = "SELECT * FROM courses WHERE id = $arg";
-            $result = mysql_query($query);
-            $entry  = mysql_fetch_object($result);
+            $query  = $db->query("SELECT * FROM courses WHERE id = $arg");
+            $entry = $query->fetchObject();
             echo "<p><b>$entry->name</b></p>
             <img src=$entry->img_url alt=$entry->name class='img-responsive img-fit'>
             <a href=$entry->role_url>Go to ROLE space</a>
             <p><b>Description:</b> $entry->description</p>";
+      
+            $query = $db->query("SELECT * 
+                                 FROM course_models
+                                 INNER JOIN models ON course_models.model_id = models.id
+                                 WHERE course_models.course_id = $arg");
+            $result = $query->fetchAll();
+
+            $html = createTable($result,"model");
+            echo $html;
+            
           ?>
     </div>
   </body>
