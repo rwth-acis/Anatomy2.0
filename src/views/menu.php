@@ -16,7 +16,7 @@ if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
         <ul class='nav navbar-nav pull-right mainNav'>
           <li><a href='welcome.php'>Home</a></li>
           <li><a href='courses.php'>Courses</a></li>
-          <li><a href='models.html'>Models</a></li>
+          <li><a href='overview.php'>Models</a></li>
           <li><a href='role.php'>ROLE</a></li>
           <li><a href='upload.php'>Upload</a></li>
           <li><a href='help.html'>Help</a></li>

@@ -34,12 +34,6 @@
 <body>
   <?php include("menu.php"); ?>
 
-  <!-- Header -->
-  <hr>
-  <header id="head">
-    
-  </header>
-  <!-- /Header -->
 
 
   <div id="courses">
@@ -48,28 +42,34 @@
       <div class="row">
         <div class="col-md-4">
           <div class="featured-box">
+            <a href="courses.php">
             <i class="fa fa-file fa-2x"></i>
             <div class="text">
               <h3>Courses</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              <p>Check for the the list of all the courses available here.</p>
+            </a>  
             </div>
           </div>
         </div>
         <div class="col-md-4">
           <div class="featured-box">
+            <a href="overview.php">
             <i class="fa fa-play fa-2x"></i>
             <div class="text">
               <h3>Models</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              <p>An extensive list of all the models present in our database.</p>
+              </a>
             </div>
           </div>
         </div>
         <div class="col-md-4">
           <div class="featured-box">
+            <a href="role.php">
             <i class="fa fa-tachometer fa-2x"></i>
             <div class="text">
               <h3>Role</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              <p>Head to the Role learning environment and setup your own space.</p>
+              </a>
             </div>
           </div>
         </div>
@@ -77,28 +77,34 @@
       <div class="row">
         <div class="col-md-4">
           <div class="featured-box">
+            <a href="login.php">
             <i class="fa fa-sign-in fa-2x"></i>
             <div class="text">
               <h3>Login</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              <p>Want to create a course room ? Simply login in and get started.</p>
+              </a>
             </div>
           </div>
         </div>
         <div class="col-md-4">
           <div class="featured-box">
+            <a href="upload.php">
             <i class="fa fa-upload fa-2x"></i>
             <div class="text">
               <h3>Upload</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              <p>Upload models to our vast database and collaboratively view them.</p>
+              </a>
             </div>
           </div>
         </div>
         <div class="col-md-4">
           <div class="featured-box">
+            <a href="help.html">
             <i class="fa fa-info fa-2x"></i>
             <div class="text">
               <h3>Help</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              <p>Still need some help. Just follow the simple intructions and get started. </p>
+              </a>
             </div>
           </div>
         </div>
@@ -106,6 +112,8 @@
 
     </div>
   </div>
+  <!-- Spacing for footer -->
+</br></br></br></br></br></br></br></br>
   <!-- container -->
   <?php include("footer.html"); ?>
 
