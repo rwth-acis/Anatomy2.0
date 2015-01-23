@@ -1,5 +1,10 @@
 //This is the function that closes the pop-up
-function endBlackout(){
+function endBlackout() {
+  var list = document.getElementsByClassName("img-responsive");
+  for(var i=0;i<list.length;i++) {
+    list[i].removeEventListener("click", toggleHighlightModel);
+  }
+
   document.getElementById("blackout").style.display = "none";
   document.getElementById("modelbox").style.display = "none";
 
@@ -9,11 +14,16 @@ function endBlackout(){
 }
 
 //This is the function that starts the pop-up
-function startBlackout(){
+function startBlackout() {
   var modelbox = document.getElementById("modelbox");
   document.getElementById("blackout").style.display = "block";
   modelbox.style.display = "block";
   expand(modelbox);
+
+  var list = document.getElementsByClassName("img-responsive");
+  for(var i=0;i<list.length;i++) {
+    list[i].addEventListener("click", toggleHighlightModel);
+  }
 }
 
 //Sets the buttons to trigger the blackout on clicks
@@ -24,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 
 
-function expand(target){
+function expand(target) {
   var pxPerStep = 50;
   var width = target.offsetWidth;
   var left = target.offsetLeft;
@@ -44,4 +54,17 @@ function expand(target){
         clearInterval(loopTimer);
     }
   },10);
+}
+/**
+ * Highlights the clicked element or removes the highlight
+ * @param  {event} event The click event
+ */
+function toggleHighlightModel(event) {
+  // Look if the clicked element has the class 'div-hightlight' and add or remove respectively
+  var index = (' ' + event.target.className + ' ').indexOf(' div-highlight ');
+  if(index > -1) {
+    event.target.className += event.target.className.substr(index);
+  } else { 
+    event.target.className += ' div-highlight'; 
+  }
 }

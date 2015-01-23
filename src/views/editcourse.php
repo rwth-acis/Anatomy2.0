@@ -13,8 +13,6 @@
   <link rel="stylesheet" href="../css/bootstrap-theme.css" media="screen">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/editcourse.css">
-  <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
-  <script src="../js/editcourse.js"></script>
 
   <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!--[if lt IE 9]>
@@ -31,6 +29,7 @@
            print("<script type='text/javascript' src='../js/overview-widget.js'> </script>");
        }
     ?>-->
+  <script src="../js/editcourse.js"></script>
 
 </head>
 <body>
@@ -53,7 +52,7 @@
       $query  = $db->query("SELECT * FROM models");
       $result = $query->fetchAll();
 
-      $html = createTable($result,"model");
+      $html = createTable($result,"modelselection");
       echo $html;
 
     ?>
