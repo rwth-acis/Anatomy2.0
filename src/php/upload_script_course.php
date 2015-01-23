@@ -29,4 +29,4 @@ header("Location: ../views/success-course-upload.php?id=$last_id");
 
 
 echo 'Successfully added course';
-	
+?>

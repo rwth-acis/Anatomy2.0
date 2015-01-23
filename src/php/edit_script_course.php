@@ -23,9 +23,7 @@ $sql = "UPDATE courses SET name='$name', description='$text', role_url='$role_li
 
 $conn->query($sql);
 
-$last_id = $conn->lastInsertId();
-
-header("Location: ../views/success-course-upload.php?id=$last_id");
+header("Location: ../views/success-course-upload.php?id=$id");
 
 
 echo 'Successfully added course';
