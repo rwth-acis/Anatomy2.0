@@ -51,12 +51,14 @@ function onRemoteHighlight(msg) {
  */
 function clickOnLink(evt){
   //get original href
-  var id = evt.target.id;
-  var href = evt.target.linkedModel;
+  var id = evt.currentTarget.id;
+  var href = evt.currentTarget.linkedModel;
+
+  console.info("overviewwidget: ", id);
   if(href === undefined){
     //user clicked on element in <a> instead of a text in <a>
-    href = evt.target.parentNode.linkedModel;
-    id = evt.target.parentNode.id;
+    href = evt.currentTarget.parentNode.linkedModel;
+    id = evt.currentTarget.parentNode.id;
   }
   // The link has an id of the form a_img<db_id>. This will extract the database id.
   id = id.substr(5);
