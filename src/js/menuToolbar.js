@@ -63,21 +63,24 @@ function x3dSynchronize() {
   if (isSynchronized) {
     btn.innerHTML ="Synchronize";
     savePositionAndOrientation();
+    saveInfoState();
   }
   else {
     btn.innerHTML ="Unsynchronize";
     synchronizePositionAndOrientation();
+    synchronizeInfoState();
   }
   isSynchronized = !isSynchronized;
 }
 
 /**
  * Attached to "btnInfo" (Show info / Hide info)
- * Informs other viewer to show or hide info and also does so locally
+ * Informs other viewer to show or hide info - if synchronized - and also does 
+ * so locally
  */
 function btnShowInfo() {
   var show = document.getElementById('btnInfo').innerHTML === "Show info";
-  if (isInRole()) {
+  if (isInRole() && isSynchronized) {
     var msgContent = {'show': show};
     publishIWC("ShowInfo", msgContent);
     console.log("menuToolbar.js: publishIWC 'ShowInfo'");
@@ -90,7 +93,13 @@ function btnShowInfo() {
  * @param msg Message containing 'show' property, which tells whether to show (true) or hide (false) info boxes
  */
 function receiveShowInfo(msg) {
-  showInfo(msg.show);
+  // Shows/hides info only if the viewer widget is synchronized with others and 
+  // saves the state otherwise
+  if(isSynchronized) {
+    showInfo(msg.show);
+  } else {
+    displayInfo = msg.show;
+  }
 }
 
 /**
@@ -112,4 +121,21 @@ function showInfo(show) {
     btn.innerHTML = "Show info";
     metadata_overlay.style.display = "none";
   }
+}
+
+/**
+ * Saves the state of the statistics view, i.e. proves whether the 
+ * metadata_overlay is switched on or off
+ */
+function saveInfoState() {
+  var metadata_overlay = document.getElementById('metadata_overlay');
+  displayInfo = (metadata_overlay.style.display === "block");
+}
+
+/**
+ * Re-synchronize with last state of statistics view sent from other widgets
+ */
+function synchronizeInfoState() {
+  showInfo(displayInfo);
+  displayInfo = undefined;
 }
