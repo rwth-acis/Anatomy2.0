@@ -49,7 +49,8 @@
             echo "<p><b>$entry->name</b></p>
             <img src=$entry->img_url alt=$entry->name class='img-responsive img-fit'>
             <a href=$entry->role_url>Go to ROLE space</a>
-            <p><b>Description:</b> $entry->description</p>";
+            <p><b>Description:</b> $entry->description</p>
+	    <a href=editcourse.php?id=$arg>Edit your course(TODO: hide if not logged in as creator)</a>";
       
             $query = $db->query("SELECT * 
                                  FROM course_models
