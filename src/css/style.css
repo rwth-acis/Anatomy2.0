@@ -521,6 +521,10 @@ footer {
     background: #ECECEC;
 }
 
+.footer, .push {
+height: 15em;
+}
+
 .footer1 {
   background: #fff;
   padding: 30px 0 0 0;
