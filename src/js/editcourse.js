@@ -1,9 +1,13 @@
+var selectedModels = {};
+var course = QueryString.id;            // the edited course's id
+
 //This is the function that closes the pop-up
 function endBlackout() {
   var list = document.getElementsByClassName("img-responsive");
   for(var i=0;i<list.length;i++) {
-    list[i].removeEventListener("click", toggleHighlightModel);
+    list[i].removeEventListener("click", toggleSelectModel);
   }
+  selectedModels = {};
 
   document.getElementById("blackout").style.display = "none";
   document.getElementById("modelbox").style.display = "none";
@@ -22,22 +26,54 @@ function startBlackout() {
 
   var list = document.getElementsByClassName("img-responsive");
   for(var i=0;i<list.length;i++) {
-    list[i].addEventListener("click", toggleHighlightModel);
+    list[i].addEventListener("click", toggleSelectModel);
+  }
+}
+
+/**
+ * Sends an AJAX request to the server to save the models which were selected
+ */
+function addModels() {
+  var xmlhttp;
+  if (window.XMLHttpRequest) {
+      // code for IE7+, Firefox, Chrome, Opera, Safari
+      xmlhttp = new XMLHttpRequest();
+  } else {
+      // code for IE6, IE5
+      xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+  }
+
+  // Send request with data to run the script on the server 
+  xmlhttp.open("POST","../php/addmodels.php");
+  xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+  xmlhttp.send("course="+course+"&models="+JSON.stringify(selectedModels));
+
+  // Display the result which is sent by the script on the server after 
+  // it is finished
+  xmlhttp.onreadystatechange = function() {
+      // Check if the data transfer has been completed the connection to the server
+      // is successful (HTTP status code 200 OK)
+      if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        // Display all models associated with the course
+        document.getElementById("model_table").innerHTML = xmlhttp.responseText;
+        endBlackout();
+      }
   }
 }
 
 //Sets the buttons to trigger the blackout on clicks
 document.addEventListener("DOMContentLoaded", function(){
-  document.getElementById("addcourse").addEventListener("click", startBlackout);  // open if btn is pressed
+  document.getElementById("openbox").addEventListener("click", startBlackout);  // open if btn is pressed
   document.getElementById("blackout").addEventListener("click", endBlackout);     // close if click outside of popup
   document.getElementById("closebox").addEventListener("click", endBlackout);     // close if close btn clicked
+  document.getElementById("addmodels").addEventListener("click", addModels);     // close and add models if button clicked
 });
 
 
-function expand(target) {
+function expand(element) {
   var pxPerStep = 50;
-  var width = target.offsetWidth;
-  var left = target.offsetLeft;
+  var width = element.offsetWidth;
+  var left = element.offsetLeft;
   var windowWidth = window.outerWidth;
 
   var loopTimer = setInterval(function() {
@@ -45,26 +81,34 @@ function expand(target) {
     if(width+pxPerStep < 0.8*windowWidth){
         width += pxPerStep;
         left -= pxPerStep/2
-        target.style.width = width+"px";
-        target.style.left = left+"px";
+        element.style.width = width+"px";
+        element.style.left = left+"px";
     } else {
         var diff = 0.8*windowWidth-width;
-        target.style.width = width+diff+"px";
-        target.style.left = left-diff/2+"px";
+        element.style.width = width+diff+"px";
+        element.style.left = left-diff/2+"px";
         clearInterval(loopTimer);
     }
   },10);
 }
+
 /**
- * Highlights the clicked element or removes the highlight
+ * Selects the clicked element or removes it from the list
  * @param  {event} event The click event
  */
-function toggleHighlightModel(event) {
-  // Look if the clicked element has the class 'div-hightlight' and add or remove respectively
-  var index = (' ' + event.target.className + ' ').indexOf(' div-highlight ');
-  if(index > -1) {
-    event.target.className += event.target.className.substr(index);
+function toggleSelectModel(event) {
+    var element = event.target;
+  // Look if the clicked element is already selected
+  if(selectedModels[element.id]) {
+    delete selectedModels[element.id];
+
+    // Remove highlight
+    var index = (' ' + element.className + ' ').indexOf(' div-highlight ');
+    element.className = element.className.substr(0,index-1);
   } else { 
-    event.target.className += ' div-highlight'; 
+    selectedModels[element.id] = element.id; 
+
+    // Highlight model
+    element.className += ' div-highlight'; 
   }
 }

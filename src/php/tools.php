@@ -48,7 +48,7 @@ function getModelStructure($entry, $i, $showLink) {
                             <img src='../../$entry[preview_url]' alt=$entry[name] class='img-responsive img-fit'>
                             <h3>$entry[name]</h3>
                           </a>"
-                       : "<img src='../../$entry[preview_url]' alt=$entry[name] class='img-responsive img-fit'>
+                       : "<img src='../../$entry[preview_url]' alt=$entry[name] id='$entry[id]' class='img-responsive img-fit'>
                           <h3>$entry[name]</h3>";
     return $html."<p><b>Model Name:</b> $entry[name]</p>
             <p><b>Category:</b> $entry[classification]</p>
