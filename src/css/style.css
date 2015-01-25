@@ -354,11 +354,11 @@ span.text-content span {
 #text-over{
   z-index:100;
   position:absolute;    
-  color:white;
-  font-size:24px;
-  font-weight:bold;
-  left:45px;
-  top:30px;
+  color:black;
+  font-weight: bold;
+  font-size:14px;
+  left:0px;
+  top:150px;
 }
 
 

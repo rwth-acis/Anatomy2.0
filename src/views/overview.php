@@ -40,7 +40,7 @@
           <div class="search_box">
             <form>
               <input type="text" class="text-box" placeholder="Search..."><input type="submit" value="">
-            </form>
+            </form> 
         </div>
         <br>      
       </div>
@@ -51,7 +51,7 @@
   <section class="container">
     <br><br><br>
     <div class="container">
-       <?php
+      <?php
       include '../php/db_connect.php';
       $query  = "SELECT * FROM models";
       $result = mysql_query($query);
@@ -61,7 +61,7 @@
       {
         $html .= 
         "<li><a href='model_viewer.php?id=$entry->id' id='a_img$i'><img id='image-over' src='../../$entry->preview_url' alt=$entry->name width='150' height='150' />
-              <span class='text-content'><span><br>Size: $entry->size<br> Category: $entry->classification</span></span></a>
+              <span class='text-content'><span>Name: $entry->name<br>Size: $entry->size<br> Category: $entry->classification</span></span></a>
               <p id='text-over'>$entry->name</p>
           </li>";
 
@@ -72,8 +72,8 @@
       echo $html;
 
   ?>   
-    </div>
-    
+    </div>     
+
   </section>
   <!-- /container -->
   <?php include("footer.html"); ?>
