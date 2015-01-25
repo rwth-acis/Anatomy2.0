@@ -23,11 +23,12 @@ function createTable($result, $type) {
         $html .= "<div class='col-md-6 overview-entry' name='table-entry' id='table_entry$i'>";
         
         if(substr($type,0,1) == "m") {
-            $html .= $type == 'model' ? getModelStructure($entry,$i,true) : getModelStructure($entry,$i,false);
+            $html .= getModelStructure($entry,$i,$type);
         } else {
             $html .= getCourseStructure($entry,$i);
         }
 
+        $html .= "</div>";
         $i++;
     }
 
@@ -39,23 +40,37 @@ function createTable($result, $type) {
  * Creates the html structure of one model entry with the given data
  * @param  object $entry Model data from database
  * @param  number $i     Number of entry
- * @param  boolean $showLink     Let the image and name link to the viewer
+ * @param  string $type     Modify the entry according to the purpose (normal, selection, deletion)
  * @return string/html        HTML containing the model information
  */
-function getModelStructure($entry, $i, $showLink) {
-    // id used to derive model id (from database) connected to clicked link
-    $html = $showLink ? "<a href='model_viewer.php?id=$entry[id]' id='a_img$i'>
-                            <img src='../../$entry[preview_url]' alt=$entry[name] class='img-responsive img-fit'>
-                            <h3>$entry[name]</h3>
-                          </a>"
-                       : "<img src='../../$entry[preview_url]' alt=$entry[name] id='$entry[id]' class='img-responsive img-fit'>
-                          <h3>$entry[name]</h3>";
+function getModelStructure($entry, $i, $type) {
+
+    $html = "";
+    switch ($type) {
+        case 'model':
+            $html .= "<a href='model_viewer.php?id=$entry[id]' id='a_img$i'>
+                        <img src='../../$entry[preview_url]' alt=$entry[name] class='img-responsive img-fit'>
+                        <h3>$entry[name]</h3>
+                      </a>";
+            break;
+        
+        case 'modelselection':
+            $html .= "<img src='../../$entry[preview_url]' alt=$entry[name] id='$entry[id]' class='img-responsive img-fit'>
+                      <h3>$entry[name]</h3>";
+            break;
+
+        default:
+            $html .= "<img src='../../$entry[preview_url]' alt=$entry[name] class='img-responsive img-fit'>
+                      <h3>$entry[name]</h3>
+                      <div class='delete' id='$entry[id]'></div>";
+            break;
+    }
+
     return $html."<p><b>Model Name:</b> $entry[name]</p>
             <p><b>Category:</b> $entry[classification]</p>
             <p><b>Size:</b> $entry[size]</p>
             <p><b>Upload Date:</b> $entry[upload_date]</p>
-            <p><b>Description:</b> $entry[description]</p>
-        </div>";
+            <p><b>Description:</b> $entry[description]</p>";
 }
 
 /**
@@ -69,7 +84,6 @@ function getCourseStructure($entry, $i) {
     return "<a href='course.php?id=$entry[id]' id='a_img$i'>
             <img src=$entry[img_url] alt=$entry[name] class='img-responsive img-fit'>
             <h3>$entry[name]</h3>
-            </a>
-        </div>";
+            </a>";
 }
 ?>

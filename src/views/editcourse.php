@@ -89,7 +89,7 @@
                              WHERE course_models.course_id = $arg");
         $result = $query->fetchAll();
 
-        $html = createTable($result,"model");
+        $html = createTable($result,"modeldeletion");
         echo $html;
       ?>
       </div>
@@ -101,16 +101,10 @@
     <!-- Show models in a popup -->
     <div id="modelbox">
       <div id="closebox">close</div>
-      <?php 
-
-        $query  = $db->query("SELECT * FROM models");
-        $result = $query->fetchAll();
-
-        $html = createTable($result,"modelselection");
-        echo $html;
-
-      ?>
       <input type="button" id="addmodels" value="Add models to course" />
+      <div id="modelselection">
+      <!-- Models will be inserted here -->
+      </div>
     </div>
   
     

@@ -8,7 +8,7 @@ function endBlackout() {
     list[i].removeEventListener("click", toggleSelectModel);
   }
   selectedModels = {};
-
+  
   document.getElementById("blackout").style.display = "none";
   document.getElementById("modelbox").style.display = "none";
 
@@ -21,12 +21,43 @@ function endBlackout() {
 function startBlackout() {
   var modelbox = document.getElementById("modelbox");
   document.getElementById("blackout").style.display = "block";
-  modelbox.style.display = "block";
-  expand(modelbox);
+  getModels();
+}
 
-  var list = document.getElementsByClassName("img-responsive");
-  for(var i=0;i<list.length;i++) {
-    list[i].addEventListener("click", toggleSelectModel);
+/**
+ * Sends an AJAX request to the server to get the models of the course
+ */
+function getModels() {
+  var xmlhttp;
+  if (window.XMLHttpRequest) {
+      // code for IE7+, Firefox, Chrome, Opera, Safari
+      xmlhttp = new XMLHttpRequest();
+  } else {
+      // code for IE6, IE5
+      xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+  }
+
+  // Send request with data to run the script on the server 
+  xmlhttp.open("POST","../php/getcoursemodels.php");
+  xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+  xmlhttp.send("course="+course);
+
+  // Display the result which is sent by the script on the server after 
+  // it is finished
+  xmlhttp.onreadystatechange = function() {
+      // Check if the data transfer has been completed the connection to the server
+      // is successful (HTTP status code 200 OK)
+      if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        modelbox.style.display = "block";
+        expand(modelbox);
+        // Display all models associated with the course
+        document.getElementById("modelselection").innerHTML = xmlhttp.responseText;
+        // Add event listener to each model
+        var list = document.getElementsByClassName("img-responsive");
+        for(var i=0;i<list.length;i++) {
+            list[i].addEventListener("click", toggleSelectModel);
+        }
+      }
   }
 }
 
@@ -56,7 +87,43 @@ function addModels() {
       if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
         // Display all models associated with the course
         document.getElementById("model_table").innerHTML = xmlhttp.responseText;
+        // Add event listener to each model
+        addDeleteListener();
         endBlackout();
+      }
+  }
+}
+
+/**
+ * Sends an AJAX request to the server to delete the model which was clicked
+ * from the course
+ */
+function deleteModel(event) {
+  var xmlhttp;
+  console.log(event.target.id);
+  if (window.XMLHttpRequest) {
+      // code for IE7+, Firefox, Chrome, Opera, Safari
+      xmlhttp = new XMLHttpRequest();
+  } else {
+      // code for IE6, IE5
+      xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+  }
+
+  // Send request with data to run the script on the server 
+  xmlhttp.open("POST","../php/deletemodel.php");
+  xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+  xmlhttp.send("course="+course+"&model="+event.target.id);
+
+  // Display the result which is sent by the script on the server after 
+  // it is finished
+  xmlhttp.onreadystatechange = function() {
+      // Check if the data transfer has been completed the connection to the server
+      // is successful (HTTP status code 200 OK)
+      if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        // Display all models associated with the course
+        document.getElementById("model_table").innerHTML = xmlhttp.responseText;
+        // Add event listener to each model
+        addDeleteListener();
       }
   }
 }
@@ -67,8 +134,18 @@ document.addEventListener("DOMContentLoaded", function(){
   document.getElementById("blackout").addEventListener("click", endBlackout);     // close if click outside of popup
   document.getElementById("closebox").addEventListener("click", endBlackout);     // close if close btn clicked
   document.getElementById("addmodels").addEventListener("click", addModels);     // close and add models if button clicked
+  addDeleteListener();
 });
 
+/**
+ * Adds the event listener deleteModel to each displayed model
+ */
+function addDeleteListener() {
+  var list = document.getElementsByClassName("delete");
+  for(var i=0;i<list.length;i++) {
+    list[i].addEventListener("click", deleteModel);
+  }
+}
 
 function expand(element) {
   var pxPerStep = 50;

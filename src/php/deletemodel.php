@@ -1,24 +1,16 @@
 <?php
 /** 
- * @file addmodels.php
- * Script for adding selected models to the course
+ * @file deletemodel.php
+ * Script for deleting the clicked models from the course
  */
 include 'db_connect.php';
 include 'tools.php';
 
 $course = $_POST["course"];
-$models = json_decode($_POST["models"],true);
+$model = $_POST["model"];
 
-$tuples = "";
-foreach ($models as $modelid) {
-    $tuples.=" ($course,$modelid),";
-}
-
-// remove last comma
-$tuples = substr_replace($tuples, "", -1);
-
-// Insert models into database
-$query = $db->query("INSERT INTO course_models (course_id,model_id) VALUES".$tuples);
+// Delete model in database
+$query = $db->query("DELETE FROM course_models WHERE course_id = $course AND model_id = $model");
 
 // Get all models associated with the course
 $query = $db->query("SELECT * 
