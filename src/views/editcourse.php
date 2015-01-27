@@ -34,7 +34,21 @@
   </head>
 
   <body>
-    <?php include("menu.php"); ?>
+    <?php 
+      include("menu.php"); 
+      include "../php/db_connect.php";
+
+      if (isset($_SESSION['user_id'])) {
+        $query  = $db->query("SELECT * FROM courses WHERE id = $_GET[id]");
+        $entry = $query->fetchObject();
+      }
+
+      // If the user is not logged in or he is not the creator, redirect him to the login page
+      if(!isset($entry->creator) || $entry->creator != $_SESSION['user_id']) { 
+        header("Location: login.php");
+        exit();
+      }
+    ?>
   
     <div class="container">
     <?php 
