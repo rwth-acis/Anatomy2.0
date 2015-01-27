@@ -28,6 +28,7 @@
     <script src="../../js/init-subsite.js"></script>
     <script src="../../js/editcourse.js"></script>
     <script src="../../js/x3d-extensions.js"></script>
+    <script src="../../js/search.js"></script>
 
     <!-- Helper for Specs: -->
     <script src="spec/SpecHelper.js"></script>
@@ -40,7 +41,7 @@
     <script src="spec/Init-WrapperSpec.js"></script>
     <script src="spec/Init-SubsiteSpec.js"></script>
     <script src="spec/EditCourseSpec.js"></script>
-
+    <script src="spec/SearchSpec.js"></script>
   </head>
 
   <body>

@@ -35,17 +35,16 @@
 
 </head>
 <body>
-  <?php include("menu.php"); ?> 
+  <?php
+    include("menu.php");
+  ?>  
 
   <header id="head" class="secondary">
     <div class="container">
       <div class="row">
           <h1>3D Models</h1>  
-          <div class="search_box">
-            <form>
-              <input type="text" class="text-box" placeholder="Search..."><input type="submit" value="">
-            </form>
-        </div>
+    
+          <?php include("search.html"); ?>
         <br>      
       </div>
     </div>
@@ -57,22 +56,12 @@
     <div class="container">
        <?php
       include '../php/db_connect.php';
-      $query  = "SELECT * FROM models";
-      $result = mysql_query($query);
-      $i = 1;
-      $html = '<ul class="img-list">';
-      while($entry = mysql_fetch_object($result))
-      {
-        $html .= 
-        "<li><a href='model_viewer.php?id=$entry->id' id='a_img$i'><img id='image-over' src='../../$entry->preview_url' alt=$entry->name width='150' height='150' />
-              <span class='text-content'><span><br>Size: $entry->size<br> Category: $entry->classification</span></span></a>
-              <p id='text-over'>$entry->name</p>
-          </li>";
+      include '../php/tools.php';
 
-        $i++;
-      }
-      $html .= '</ul>';
-
+      $query  = $db->query("SELECT * FROM models");
+      $result = $query->fetchAll();
+      
+      $html = createTable($result, 'model');
       echo $html;
 
   ?>   
@@ -91,6 +80,8 @@
   <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
   <script src="../js/jquery.cslider.js"></script>
   <script src="../js/custom.js"></script>
+  <script type='text/javascript' src='../js/search.js'></script>
+  <script type='text/javascript' src='../js/ajax.js'></script>
 
 </body>
 </html>

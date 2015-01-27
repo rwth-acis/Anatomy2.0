@@ -6,21 +6,19 @@
 
 /**
  * Creates the html table structure from the given result from the database
- * Used in courses.php and course.php
+ * Used in courses.php, course.php, overview.php and getmodels.php
  * @param  resource $result Identifier for the result set from the database
  * @return string/html         HTML table containing the models which should be displayed
  */
 function createTable($result, $type) {
     $columns = 2;               //number of columns
     $i = 1;
-    $html = "<div class='row'>";
+    $html = '<ul class="img-list">';
 
     foreach ($result as $entry) {
-        if($i > $columns && $i % $columns) {
-          $html .= "</div><div class='row'>";
-        }
-        // id and name used in overview-widget.js for highlighting
-        $html .= "<div class='col-md-6 overview-entry' name='table-entry' id='table_entry$i'>";
+        // Highlighting commented to test layout
+        // // id and name used in overview-widget.js for highlighting
+        // $html .= "<div class='col-md-6 overview-entry' name='table-entry' id='table_entry$i'>";
         
         if(substr($type,0,1) == "m") {
             $html .= getModelStructure($entry,$i,$type);
@@ -28,11 +26,11 @@ function createTable($result, $type) {
             $html .= getCourseStructure($entry,$i);
         }
 
-        $html .= "</div>";
+        // $html .= "</div>";
         $i++;
     }
 
-    $html .= '</div>';
+    $html .= '</ul>';
     return $html;
 }
 
@@ -48,29 +46,32 @@ function getModelStructure($entry, $i, $type) {
     $html = "";
     switch ($type) {
         case 'model':
-            $html .= "<a href='model_viewer.php?id=$entry[id]' id='a_img$i'>
-                        <img src='../../$entry[preview_url]' alt=$entry[name] class='img-responsive img-fit'>
-                        <h3>$entry[name]</h3>
-                      </a>";
-            break;
+            $html .= 
+          "<li><a href='model_viewer.php?id=$entry[id]' id='a_img$i'><img id='image-over' src='../../$entry[preview_url]' alt=$entry[name] width='150' height='150' />
+              <span class='text-content'><span><br>Size: $entry[size]<br> Category: $entry[classification]</span></span></a>
+              <p id='text-over'>$entry[name]</p>
+              </li>";
+	    break;
         
         case 'modelselection':
-            $html .= "<img src='../../$entry[preview_url]' alt=$entry[name] id='$entry[id]' class='img-responsive img-fit'>
-                      <h3>$entry[name]</h3>";
+	    //id nicht mehr image-over
+            $html .= "<li><img id='$entry[id]' src='../../$entry[preview_url]' alt=$entry[name] width='150' height='150' />
+              <span class='text-content'><span><br>Size: $entry[size]<br> Category: $entry[classification]</span></span>
+              <p id='text-over'>$entry[name]</p>
+              </li>";
             break;
 
         default:
-            $html .= "<img src='../../$entry[preview_url]' alt=$entry[name] class='img-responsive img-fit'>
-                      <h3>$entry[name]</h3>
-                      <div class='delete' id='$entry[id]'></div>";
+            $html .= 
+          "<li><a href='model_viewer.php?id=$entry[id]' id='a_img$i'><img id='image-over' src='../../$entry[preview_url]' alt=$entry[name] width='150' height='150' />
+              <span class='text-content'><span><br>Size: $entry[size]<br> Category: $entry[classification]</span></span></a>
+              <p id='text-over'>$entry[name]</p>
+	      <div class='delete' id='$entry[id]'></div>
+              </li>";
             break;
     }
 
-    return $html."<p><b>Model Name:</b> $entry[name]</p>
-            <p><b>Category:</b> $entry[classification]</p>
-            <p><b>Size:</b> $entry[size]</p>
-            <p><b>Upload Date:</b> $entry[upload_date]</p>
-            <p><b>Description:</b> $entry[description]</p>";
+    return $html;
 }
 
 /**
@@ -81,9 +82,9 @@ function getModelStructure($entry, $i, $type) {
  */
 function getCourseStructure($entry, $i) {
     // id used to derive course id (from database) connected to clicked link
-    return "<a href='course.php?id=$entry[id]' id='a_img$i'>
+    return "<li><a href='course.php?id=$entry[id]' id='a_img$i'>
             <img src=$entry[img_url] alt=$entry[name] class='img-responsive img-fit'>
             <h3>$entry[name]</h3>
-            </a>";
+            </a></li>";
 }
 ?>

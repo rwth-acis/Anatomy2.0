@@ -1,5 +1,6 @@
 <?php
 require_once "Generic_Tests_DatabaseTestCase.php";
+require_once "../../php/tools.php";
 
 /**
  * Tests the models database
@@ -44,6 +45,25 @@ class DBTest extends Generic_Tests_DatabaseTestCase {
         $this->assertEquals(1, count($result));
         $this->assertEquals("models/3/3.x3d", $result[0]);
 
+    }
+
+    public function testDisplayModels() {
+        $arg = 3;
+        $query  = $this->getConnection()->getConnection()->query(
+            "SELECT * FROM models_test WHERE id = $arg");
+        $result = $query->fetchAll();
+        
+        $html = createModelsTable($result);
+        $this->assertEquals($html, "<div class='row'><div class='col-md-6 overview-entry' name='table-entry' id='table_entry1'><a href='model_viewer.php?id=3' id='a_img1'>
+            <img src='../../models/3/preview/3.png' alt=Helmet class='img-responsive img-fit'>
+            <h3>Helmet</h3>
+          </a>
+          <p><b>Model Name:</b> Helmet</p>
+            <p><b>Category:</b> Archeology</p>
+            <p><b>Size:</b> 13.9 MB</p>
+            <p><b>Upload Date:</b> 2014-11-27 00:00:00</p>
+            <p><b>Description:</b> Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+        </div></div>");
     }
 }
 ?>
