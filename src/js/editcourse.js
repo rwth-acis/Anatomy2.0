@@ -30,10 +30,10 @@ function startBlackout() {
 /**
  * Sends an AJAX request to the server to get the models of the course
  */
-function getModels() {
+function getModels(callback) {
   // Send request with data to run the script on the server 
   ajax.post("../php/getcoursemodels.php", {"course": course}, 
-    function(response) {
+    function getModelsCallback(response) {
         var modelbox = document.getElementById("modelbox");
         modelbox.style.display = "block";
         expand(modelbox);
@@ -46,7 +46,7 @@ function getModels() {
         for(var i=0;i<list.length;i++) {
             list[i].addEventListener("click", toggleSelectModel);
         }
-    });
+  });
 }
 
 /**
@@ -61,7 +61,7 @@ function addModels() {
         addDeleteListener();
         endBlackout();
       }
-      );
+  );
 }
 
 /**
