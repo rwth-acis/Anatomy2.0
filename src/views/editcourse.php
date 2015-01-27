@@ -27,6 +27,7 @@
     <!-- The library for the copy to clipboard feature in the toolbar -->
     <script type="text/javascript" src="../js/ZeroClipboard.js"></script>
     
+    <script src="../js/ajax.js"></script>
     <script src="../js/editcourse.js"></script>
     <script src="../js/tools.js"></script>
 
@@ -78,7 +79,7 @@
     ?>
     
       <!-- Buttons to create add and upload models -->
-      <input type="button" id="openbox" value="Add models" />
+      <input type="button" id="openbox" value="Add models" onclick="startBlackout()" />
       <p><a class="btn btn-primary btn-lg" href="upload.php" target="blank" role="button">Upload models</a></p>
       
       <div id="model_table">
@@ -96,12 +97,12 @@
     </div>
 
     <!-- Darken background when model select window appears -->
-    <div id="blackout"></div>
+    <div id="blackout" onclick="endBlackout()"></div>
 
-    <!-- Show models in a popup -->
+    <!-- Show models in a pop-up -->
     <div id="modelbox">
-      <div id="closebox">close</div>
-      <input type="button" id="addmodels" value="Add models to course" />
+      <div id="closebox" onclick="endBlackout()">close</div>
+      <input type="button" id="addmodels" value="Add models to course" onclick="addModels()" />
       <div id="modelselection">
       <!-- Models will be inserted here -->
       </div>
