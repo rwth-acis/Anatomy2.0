@@ -19,7 +19,7 @@ if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
           <li><a href='overview.php'>Models</a></li>
           <li><a href='role.php'>ROLE</a></li>
           <li><a href='upload.php'>Upload</a></li>
-          <li><a href='help.html'>Help</a></li>
+          <li><a href='help.php'>Help</a></li>
           <li><a href='login.php'>Login</a></li>
         </ul>
 

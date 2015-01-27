@@ -23,31 +23,8 @@
 </head>
 
 <body>
-    <!-- Fixed navbar -->
-    <div class="navbar navbar-inverse">
-        <div class="container">
-            <div class="navbar-header">
-                <!-- Button for smallest screens -->
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-                <a class="navbar-brand" href="welcome.php">
-                    <img src="../images/logo.png" alt="HENM: 3D Models"></a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav pull-right mainNav">
-                    <li><a href="welcome.php">Home</a></li>
-                    <li><a href="courses.php">Courses</a></li>
-                    <li><a href="overview.php">Models</a></li>
-                    <li><a href="role.php">ROLE</a></li>
-                    <li><a href="upload.php">Upload</a></li>
-                    <li><a href="help.html">Help</a></li>
-                    <li><a href="login.php">Login</a></li>
-                </ul>
-            </div>
-            <!--/.nav-collapse -->
-        </div>
-    </div>
-    <!-- /.navbar -->
-</br></br>
+    <?php include("menu.php"); ?> 
+
     <header id="head" class="secondary">
         <div class="container">
             <div class="row">
@@ -162,43 +139,9 @@
         </div>
     </section>
     <!-- /container -->
+    <?php include("footer.html"); ?>
+
     
-    <footer id="footer">
-        <div class="container">
-            <div class="clear"></div>
-            <!--CLEAR FLOATS-->
-        </div>
-        <div class="footer2">
-            <div class="container">
-                <div class="row">
-
-                    <div class="col-md-6 panel">
-                        <div class="panel-body">
-                            <p class="simplenav">
-                                <a href="welcome.php">Home</a> | 
-                                <a href="courses.php">Courses</a> |
-                                <a href="overview.php">Models</a> |
-                                <a href="role.php">Role</a> |
-                                <a href="upload.php">Upload</a> |
-                                <a href="help.html">Help</a>
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6 panel">
-                        <div class="panel-body">
-                            <p class="text-right">
-                                HENM LAB 2014/15: 3D Models
-                            </p>
-                            <p class="text-right">Reach us at: <a href="mailto:henm1415g2@dbis.rwth-aachen.de">henm1415g2@dbis.rwth-aachen.de</a></p>
-                        </div>
-                    </div>
-
-                </div>
-                <!-- /row of panels -->
-            </div>
-        </div>
-    </footer>
 
     <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
 
