@@ -11,7 +11,15 @@
 	<script src="../js/script.js"></script> 	
   </head>
   <body>
-    <?php include("menu.php"); ?> 
+    <?php 
+      include("menu.php"); 
+      // If the user is not logged in, redirect him to the login page
+      if (!isset($_SESSION['user_id'])) { 
+        header("Location: login.php");
+        exit();
+      }
+
+    ?> 
 	
     <div class="container">
 	    <h1>Create a New Course</h1>
