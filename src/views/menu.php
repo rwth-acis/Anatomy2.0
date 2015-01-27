@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 // Hide the menu in ROLE environment
 if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
 {
@@ -43,7 +45,7 @@ if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
       <!--/.nav-collapse -->
     </div>
   </div> 
-  </br></br>"
+  </br></br>
 
 <?php
   }
