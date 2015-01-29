@@ -354,11 +354,11 @@ span.text-content span {
 #text-over{
   z-index:100;
   position:absolute;    
-  color:white;
-  font-size:24px;
-  font-weight:bold;
-  left:45px;
-  top:30px;
+  color:black;
+  font-weight: bold;
+  font-size:14px;
+  left:0px;
+  top:150px;
 }
 
 
@@ -519,6 +519,10 @@ img.pull-left {
 footer {
     border-top: 1px solid #e5e5e5;
     background: #ECECEC;
+}
+
+.footer, .push {
+height: 15em;
 }
 
 .footer1 {

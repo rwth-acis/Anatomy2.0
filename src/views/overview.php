@@ -24,14 +24,14 @@
   <![endif]-->
 
   <!-- Init communication with wrapper -->
-    <script type='text/javascript' src='../js/init-subsite.js'></script>
-    <?php
-       //Decide if this site is inside a separate widget
-       if(isset($_GET["widget"]) && $_GET["widget"] == "true")
-       {
-           print("<script type='text/javascript' src='../js/overview-widget.js'> </script>");
-       }
-    ?>
+  <script type='text/javascript' src='../js/init-subsite.js'></script>
+  <?php
+    //Decide if this site is inside a separate widget
+    if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+    {
+      print("<script type='text/javascript' src='../js/overview-widget.js'> </script>");
+    }
+  ?>
 
 </head>
 <body>
@@ -42,9 +42,15 @@
   <header id="head" class="secondary">
     <div class="container">
       <div class="row">
-          <h1>3D Models</h1>  
-    
-          <?php include("search.html"); ?>
+        <h1>3D Models</h1>  
+        <?php include("search.html"); ?>
+        <!--
+        <div class="search_box">
+          <form>
+            <input type="text" class="text-box" placeholder="Search..."><input type="submit" value="">
+          </form> 
+        </div>
+        -->
         <br>      
       </div>
     </div>
@@ -54,7 +60,7 @@
   <section class="container">
     <br><br><br>
     <div class="container">
-       <?php
+      <?php
       include '../php/db_connect.php';
       include '../php/tools.php';
 
@@ -63,18 +69,14 @@
       
       $html = createTable($result, 'model');
       echo $html;
-
-  ?>   
-    </div>
-    
+      ?>   
+    </div>   
   </section>
   <!-- /container -->
-  <?php include("footer.html"); ?>
   
+  <?php include("footer.html"); ?>  
 
   <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
-
-
   <script src="../js/modernizr-latest.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
   <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
