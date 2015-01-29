@@ -5,7 +5,8 @@
   $email = $_POST['register_email'];
   $pw = md5($_POST['register_pw']);
   
-  $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+  // Use only when debugging
+  //$db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
   
   $sql = "INSERT INTO users (email, pass) VALUES ('$email','$pw')";
   
@@ -13,9 +14,14 @@
   // SQL injection attacks). Returns a PDOStatement
   $sth = $db->prepare($sql);
   // Executes the select statement on DB
-  $sth->execute();
+  $success = $sth->execute();
   
-  $result = array('email'=>$email, 'pw'=>$pw, 'sql'=>$sql);		
+  if ($success) {
+    $result = array('result'=>'ok', 'sql'=>$sql);		
+  }
+  else {
+    $result = array('result'=>'error', 'sql'=>$sql);		
+  }
 
   // JSON encode the return value to be transmitted to client again
   echo json_encode($result);

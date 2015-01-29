@@ -13,6 +13,8 @@
 	<link rel="stylesheet" href="../css/bootstrap-theme.css" media="screen">
 	<link rel="stylesheet" type="text/css" href="../css/da-slider.css" />
 	<link rel="stylesheet" href="../css/style.css">
+  <!-- Styles form validation -->
+  <link rel='stylesheet' type='text/css' href='../css/upload.css'>
 
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!--[if lt IE 9]>
@@ -42,12 +44,14 @@
 				<h3 class="text-center">Register</h3>
         <div id="login">
           <form id="form_login">
-            <input type="text" id="email" placeholder="Email"/>
-            <input type="password" id="password" placeholder="Password"/>
-            <input type="password" id="password_conf" placeholder="Confirm password"/>
+            <input type="text" id="email" placeholder="Email" data-parsley-required="true" data-parsley-type="email"/>
+            <input type="password" id="password" placeholder="Password" data-parsley-required="true" data-parsley-minlength="7"/>
+            <input type="password" id="password_conf" placeholder="Confirm password" data-parsley-required="true" data-parsley-minlength="7" data-parsley-equalto="#password"/>
             <input type="button" id="btn_register" name="login" class="login login-submit" value="Create account">
             <img src="../images/ajax-loader.gif" style="display:none" id="register_loader">
           </form>
+        </div>
+        <div id="error">
         </div>
       </div>
     </div>
@@ -63,6 +67,7 @@
 	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 	<script src="../js/jquery.cslider.js"></script>
 	<script src="../js/custom.js"></script>
-
+  <!-- Form validation with Parsley -->
+  <script src="../js/parsley.min.js"></script> 
 </body>
 </html>

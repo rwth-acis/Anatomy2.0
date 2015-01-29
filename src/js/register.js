@@ -10,6 +10,9 @@ function initRegister() {
   btn = document.getElementById('btn_register');
   
   btn.addEventListener('click', onRegisterClicked, false);
+  
+  // Activate input validation (this is JQuery code)
+  $('#form_login').parsley().validate();
 }
 
 /**
@@ -27,11 +30,13 @@ function onRegisterClicked() {
   ajax.post("../php/register.php", {register_email:email, register_pw:password}, function(msg) {
     console.log(msg);
     msg = JSON.parse(msg);
-    console.log(msg.email);
-    console.log(msg.pw);
-    console.log(msg.sql);
-    document.getElementById('register_loader').style.display = "none";
-    //window.location.href = "register_success.php";
+    if (msg.result === "ok") {
+      window.location.href = "register_success.php";
+    }
+    else {
+      document.getElementById('error').innerHTML = "TODO: ERROR MESSAGE";
+    }
+    document.getElementById('register_loader').style.display = "none";    
   });
 }
 
