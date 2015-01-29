@@ -19,10 +19,6 @@
 	<script src="assets/js/html5shiv.js"></script>
 	<script src="assets/js/respond.min.js"></script>
 	<![endif]-->
-
-	<script src="../js/ajax.js" type="text/javascript"></script>
-	<script src="../js/login.js" type="text/javascript"></script>
-
 </head>
 <body>
   <?php
@@ -33,43 +29,35 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-8">
-					<h1>Login</h1>
+					<h1>Create lecturer account</h1>
 				</div>
 			</div>
 		</div>
 	</header>
-</br></br>
-	<!-- container -->
+  </br></br>
 
 	<section class="container">
 		<div class="row flat">
 			<div class="login-card">
-				<h3 class="text-center">Login</h3>
-  
-  <?php if (isset($_SESSION['user_id'])) { ?>
-  <div id="login_status">You are logged in as <?php echo($_SESSION['user_email']) ?>.</div>
-  <?php } else { ?>
-  <div id="login">
-    <form id="form_login">
-      <input type="text" id="login_email" placeholder="User-email"/>
-      <input type="password" id="login_password" placeholder="Password"/>
-      <input type="button" id="form_login_submit" name="login" class="login login-submit" value="Login" onClick="onClickLogin()">
-      <img src="../images/ajax-loader.gif" style="display:none" id="login_loader">
-      <div class="login-help">     
-          <a href="register.php"><p>Create account</p></a>
+				<h3 class="text-center">Register</h3>
+        <div id="login">
+          <form id="form_login">
+            <input type="text" id="email" placeholder="Email"/>
+            <input type="password" id="password" placeholder="Password"/>
+            <input type="password" id="password_conf" placeholder="Confirm password"/>
+            <input type="button" id="btn_register" name="login" class="login login-submit" value="Create account">
+            <img src="../images/ajax-loader.gif" style="display:none" id="register_loader">
+          </form>
         </div>
-    </form>
-  </div>
-  <div id="login_status"></div>
-  <?php } ?>
-
-          </div>
+      </div>
+    </div>
+	</section>
 
 	<?php include("footer.html"); ?>
 
-	</section>
-
 	<!-- JavaScript libs are placed at the end of the document so the pages load faster -->
+	<script src="../js/ajax.js" type="text/javascript"></script>
+	<script src="../js/login.js" type="text/javascript"></script>
 	<script src="../js/modernizr-latest.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
