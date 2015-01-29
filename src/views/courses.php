@@ -34,8 +34,10 @@
   <?php include("menu.php"); ?> 
 
   <!-- Button to create a new course -->
+  <?php if (isset($_SESSION['user_id'])) { ?>
   <p><a class="btn btn-primary btn-lg" href="addcourse.php" role="button">Add a new course</a></p>
-
+  <?php } ?>
+  
   <!-- Build course table -->
     <div id="table-container">
     <?php

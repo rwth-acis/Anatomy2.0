@@ -49,8 +49,12 @@
         echo "<p><b>$entry->name</b></p>
         <img src=$entry->img_url alt=$entry->name class='img-responsive img-fit'>
         <a href=$entry->role_url>Go to ROLE space</a>
-        <p><b>Description:</b> $entry->description</p>
-  <a href=editcourse.php?id=$arg>Edit your course(TODO: hide if not logged in as creator)</a>";
+        <p><b>Description:</b> $entry->description</p>";
+
+        // Show the link to edit the page only when the user who created it is logged in
+        if (isset($_SESSION['user_id']) && $entry->creator == $_SESSION['user_id']) { 
+          echo "<a href=editcourse.php?id=$arg>Edit your course</a>";
+        }
       ?>
     </div>
     <?php

@@ -1,7 +1,3 @@
-<?php
-  session_start();
-?>
-
 <!DOCTYPE html>	
 <html>
   <head>
@@ -16,7 +12,14 @@
     <link rel='stylesheet' type='text/css' href='../css/upload.css'>
   </head>
   <body>
-    <?php include("menu.php"); ?> 
+    <?php 
+      include("menu.php");
+      // If the user is not logged in, redirect him to the login page
+      if(!isset($_SESSION['user_id'])) { 
+        header("Location: login.php");
+        exit();
+      }
+    ?> 
 
     <header id="head" class="secondary">
       <div class="container">
