@@ -19,10 +19,6 @@
 	<script src="assets/js/html5shiv.js"></script>
 	<script src="assets/js/respond.min.js"></script>
 	<![endif]-->
-
-	<script src="../js/ajax.js" type="text/javascript"></script>
-	<script src="../js/login.js" type="text/javascript"></script>
-
 </head>
 <body>
   <?php
@@ -33,41 +29,29 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-8">
-					<h1>Login</h1>
+					<h1>Create lecturer account</h1>
 				</div>
 			</div>
 		</div>
 	</header>
-</br></br>
-	<!-- container -->
+  </br></br>
 
+  <!-- User information text -->
 	<section class="container">
 		<div class="row flat">
 			<div class="login-card">
-				<h3 class="text-center">Login</h3>
-  
-  <?php if (isset($_SESSION['user_id'])) { ?>
-  <div id="login_status">You are logged in as <?php echo($_SESSION['user_email']) ?>.</div>
-  <?php } else { ?>
-  <div id="login">
-    <form id="form_login">
-      <input type="text" id="login_email" placeholder="User-email"/>
-      <input type="password" id="login_password" placeholder="Password"/>
-      <input type="button" id="form_login_submit" name="login" class="login login-submit" value="Login" onClick="onClickLogin()">
-      <img src="../images/ajax-loader.gif" style="display:none" id="login_loader">
-      <div class="login-help">     
-        <a href="register.php"><p>Create account</p></a>
+				<h3 class="text-center">Your account has been successfully created</h3>
+        <b>Please contact</b> a 3DModels administrator of your university. The administrator will
+        enable your account. Afterwards, you can login with lecturer rights.
+        <br> <br>
+        <b>Why is a confirmation needed?</b> <br>
+        Your account enables functionality that is restricted to be used by lecturers only. The administrator therefore makes sure, that
+        only lecturers have an account.
       </div>
-    </form>
-  </div>
-  <div id="login_status"></div>
-  <?php } ?>
-
-          </div>
+    </div>
+	</section>
 
 	<?php include("footer.html"); ?>
-
-	</section>
 
 	<!-- JavaScript libs are placed at the end of the document so the pages load faster -->
 	<script src="../js/modernizr-latest.js"></script>
