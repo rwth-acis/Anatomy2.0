@@ -39,6 +39,7 @@
   </br></br>
 
 	<section class="container">
+    <!-- User input elements -->
 		<div class="row flat">
 			<div class="login-card">
 				<h3 class="text-center">Register</h3>
@@ -55,6 +56,7 @@
         </div>
       </div>
     </div>
+    <!-- Some user information text -->
     <div class="login-card">
       <b>What is the purpose of a 3DModels account?</b> <br>
       The account is required only for creating your own courses, uploading models and presenting models in <i>lecturer mode</i>.
@@ -65,8 +67,10 @@
 	<?php include("footer.html"); ?>
 
 	<!-- JavaScript libs are placed at the end of the document so the pages load faster -->
+  <!-- Registration functionality -->
 	<script src="../js/ajax.js" type="text/javascript"></script>
 	<script src="../js/register.js" type="text/javascript"></script>
+  <!-- Styling and JQuery -->
 	<script src="../js/modernizr-latest.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>

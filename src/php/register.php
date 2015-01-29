@@ -16,6 +16,7 @@
   // Executes the select statement on DB
   $success = $sth->execute();
   
+  // Create result to transmit to client. SQL is sent only for debugging
   if ($success) {
     $result = array('result'=>'ok', 'sql'=>$sql);		
   }
