@@ -34,7 +34,7 @@ function onRegisterClicked() {
       window.location.href = "register_success.php";
     }
     else {
-      document.getElementById('error').innerHTML = "TODO: ERROR MESSAGE";
+      document.getElementById('error').innerHTML = "An account for this email address already exists.";
     }
     document.getElementById('register_loader').style.display = "none";    
   });

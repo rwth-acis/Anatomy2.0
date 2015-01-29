@@ -39,8 +39,13 @@
 	<section class="container">
 		<div class="row flat">
 			<div class="login-card">
-				<h3 class="text-center">Registration successful</h3>
-        TODO: Admin has to confirm
+				<h3 class="text-center">Your account has been successfully created</h3>
+        <b>Please contact</b> a 3DModels administrator of your university. The administrator will
+        enable your account. Afterwards, you can login with lecturer rights.
+        <br> <br>
+        <b>Why is a confirmation needed?</b> <br>
+        Your account enables functionality that is restricted to be used by lecturers only. The administrator therefore makes sure, that
+        only lecturers have an account.
       </div>
     </div>
 	</section>

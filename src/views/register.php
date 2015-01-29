@@ -55,8 +55,13 @@
         </div>
       </div>
     </div>
+    <div class="login-card">
+      <b>What is the purpose of a 3DModels account?</b> <br>
+      The account is required only for creating your own courses, uploading models and presenting models in <i>lecturer mode</i>.
+      <b>As a student, you do not need to register.</b>
+    </div> 
 	</section>
-
+  
 	<?php include("footer.html"); ?>
 
 	<!-- JavaScript libs are placed at the end of the document so the pages load faster -->
