@@ -1,9 +1,5 @@
 <?php
-session_start();
-
-// Hide the menu in ROLE environment
-if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
-{
+  session_start();
 ?>
   <link rel='stylesheet' type='text/css' href='../css/style.css'>
   <!-- Ajax helper script for menu_logged_in.js / menu_logged_out.js -->
@@ -35,7 +31,7 @@ if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
           <!-- Button will show "login" or "logout" based on current login status of user.
             If user_id is set, the user is currently logged in -->
           <li>
-            <a href='#' style='padding-left:20px' id='menu_login'>
+            <a href='#' id='menu_login'>
             <?php if (isset($_SESSION['user_id'])) { echo ("Logout"); } else { echo("Login"); } ?>
                   </a>
           </li>
@@ -44,7 +40,3 @@ if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
     </div>
   </div> 
   </br></br>
-
-<?php
-  }
-?>
