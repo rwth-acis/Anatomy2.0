@@ -55,8 +55,8 @@ function getModelStructure($entry, $i, $type) {
         
         case 'modelselection':
 	    //id nicht mehr image-over
-            $html .= "<li><img id='$entry[id]' src='../../$entry[preview_url]' alt=$entry[name] width='150' height='150' />
-              <span class='text-content'><span>Name: $entry[name]<br>Size: $entry[size]<br> Category: $entry[classification]</span></span>
+            $html .= "<li><img src='../../$entry[preview_url]' alt=$entry[name] width='150' height='150' />
+              <span class='text-content'><span id='$entry[id]'>Name: $entry[name]<br>Size: $entry[size]<br> Category: $entry[classification]</span></span>
               <p id='text-over'>$entry[name]</p>
               </li>";
             break;

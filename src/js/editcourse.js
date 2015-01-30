@@ -42,7 +42,7 @@ function getModels(callback) {
         document.getElementById("modelselection").innerHTML = response;
 
         // Add event listener to each model
-        var list = document.getElementsByClassName("img-responsive");
+        var list = document.getElementsByClassName("text-content");
         for(var i=0;i<list.length;i++) {
             list[i].addEventListener("click", toggleSelectModel);
         }
@@ -129,7 +129,7 @@ function expand(element) {
  * @param  {event} event The click event
  */
 function toggleSelectModel(event) {
-    var element = event.target;
+  var element = event.target;
   // Look if the clicked element is already selected
   if(selectedModels[element.id]) {
     delete selectedModels[element.id];
