@@ -120,15 +120,15 @@
                 <div class="panel">
                     <h4>Important Links</h4>
                     <ul class="list-unstyled list-spaces">
-                        <li><a href="">Courses</a><br>
+                        <li><a href="courses.php">Courses</a><br>
                             <span class="small text-muted">A list of all the courses available</span></li>
-                        <li><a href="">Models</a><br>
+                        <li><a href="overview.php">Models</a><br>
                             <span class="small text-muted">An extensive list of all the models present in our database</span></li>
-                        <li><a href="">Role</a><br>
+                        <li><a href="role.php">Role</a><br>
                             <span class="small text-muted">Head to the Role learning environment and setup your own space.</span></li>
-                        <li><a href="">Upload</a><br>
+                        <li><a href="upload.php">Upload</a><br>
                             <span class="small text-muted">Upload models to our vast database and collaboratively view them.</span></li>
-                        <li><a href="">Login</a><br>
+                        <li><a href="login.php">Login</a><br>
                             <span class="small text-muted">Want to create a course room ? Simply login in and get started.</span></li>
                     </ul>
                 </div>

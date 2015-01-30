@@ -99,7 +99,7 @@
         </div>
         <div class="col-md-4">
           <div class="featured-box">
-            <a href="help.html">
+            <a href="help.php">
             <i class="fa fa-info fa-2x"></i>
             <div class="text">
               <h3>Help</h3>
