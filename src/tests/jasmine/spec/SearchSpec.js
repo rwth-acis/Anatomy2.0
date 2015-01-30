@@ -24,7 +24,7 @@ describe('The search', function() {
     spyOn(XMLHttpRequest.prototype, 'send');
 
     showModels("hello");
-    expect(XMLHttpRequest.prototype.open).toHaveBeenCalledWith("GET","../php/getmodels.php?q=hello",true);
+    expect(XMLHttpRequest.prototype.open).toHaveBeenCalledWith("POST","../php/getmodels.php",true);
     expect(XMLHttpRequest.prototype.send).toHaveBeenCalled();
   });
 
