@@ -23,7 +23,7 @@
 		
 		if (in_array($file_ext, $allowed)){
 			if ($file_error === 0){
-				if ($file_size <= 52428800){
+				if ($file_size <= 104828800){
 					
 					// Create database-entry
 					$conn = require '../php/db_connect.php';

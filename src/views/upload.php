@@ -59,7 +59,7 @@
           <p class="help-block">
           <ul>
             <li>File Format: *.x3d</li>
-            <li>File Size: 50MB</li>
+            <li>File Size: 100MB</li>
           </ul>
           </p>
         </div>
