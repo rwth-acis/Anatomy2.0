@@ -29,6 +29,7 @@
     
     <script src="../js/ajax.js"></script>
     <script src="../js/editcourse.js"></script>
+    <script src="../js/search.js"></script>
     <script src="../js/tools.js"></script>
 
   </head>
@@ -117,7 +118,8 @@
     <div id="modelbox">
       <div id="closebox" onclick="endBlackout()">close</div>
       <input type="button" id="addmodels" value="Add models to course" onclick="addModels()" />
-      <div id="modelselection">
+      <?php include("search.html"); ?>
+      <div id="result-container">
       <!-- Models will be inserted here -->
       </div>
     </div>

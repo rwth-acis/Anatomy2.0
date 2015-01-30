@@ -39,7 +39,7 @@ function getModels(callback) {
         expand(modelbox);
 
         // Display all models associated with the course
-        document.getElementById("modelselection").innerHTML = response;
+        document.getElementById("result-container").innerHTML = response;
 
         // Add event listener to each model
         var list = document.getElementsByClassName("img-responsive");
