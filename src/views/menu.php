@@ -15,19 +15,43 @@
     <div class='container'>
       <div class='navbar-header'>
         <!-- Button for smallest screens -->
-        <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'><span class='icon-bar'></span><span class='icon-bar'></span><span class='icon-bar'></span></button>
+<?php
+  //Decide if this site is inside a separate widget
+  if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+  {
+    //we have to link to the widget versions:
+    print("<button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'><span class='icon-bar'></span><span class='icon-bar'></span><span class='icon-bar'></span></button>
+        <a class='navbar-brand' href='welcome.php?widget=true'>
+          <img src='../images/logo.png' alt='HENM: 3D Models'>
+        </a>
+      </div>
+      <div class='navbar-collapse collapse'>
+        <ul class='nav navbar-nav pull-right mainNav'>
+	  <li><a href='welcome.php?widget=true'>Home</a></li>
+          <li><a href='courses.php?widget=true'>Courses</a></li>
+          <li><a href='overview.php?widget=true'>Models</a></li>
+          <li><a href='role.php?widget=true'>ROLE</a></li>
+          <li><a href='upload.php?widget=true'>Upload</a></li>
+          <li><a href='help.php?widget=true'>Help</a></li>");
+  }
+  else
+  {
+    //we have to link to the non-widget versions:
+    print("<button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'><span class='icon-bar'></span><span class='icon-bar'></span><span class='icon-bar'></span></button>
         <a class='navbar-brand' href='welcome.php'>
           <img src='../images/logo.png' alt='HENM: 3D Models'>
         </a>
       </div>
       <div class='navbar-collapse collapse'>
         <ul class='nav navbar-nav pull-right mainNav'>
-          <li><a href='welcome.php'>Home</a></li>
+	  <li><a href='welcome.php'>Home</a></li>
           <li><a href='courses.php'>Courses</a></li>
           <li><a href='overview.php'>Models</a></li>
           <li><a href='role.php'>ROLE</a></li>
           <li><a href='upload.php'>Upload</a></li>
-          <li><a href='help.php'>Help</a></li>
+          <li><a href='help.php'>Help</a></li>");
+  }
+?>          
           <!-- Button will show "login" or "logout" based on current login status of user.
             If user_id is set, the user is currently logged in -->
           <li>

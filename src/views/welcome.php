@@ -21,15 +21,7 @@
   <![endif]-->
 
   <!-- Init communication with wrapper -->
-    <script type='text/javascript' src='../js/init-subsite.js'></script>
-    <?php
-       //Decide if this site is inside a separate widget
-       if(isset($_GET["widget"]) && $_GET["widget"] == "true")
-       {
-           print("<script type='text/javascript' src='../js/overview-widget.js'> </script>");
-       }
-    ?>
-
+  <script type='text/javascript' src='../js/init-subsite.js'></script>
 </head>
 <body>
   <?php include("menu.php"); ?>
@@ -42,7 +34,19 @@
       <div class="row">
         <div class="col-md-4">
           <div class="featured-box">
-            <a href="courses.php">
+	    <?php
+	       //Decide if this site is inside a separate widget
+	       if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+	       {
+	         //we have to link to the widget versions:
+	         print("<a href='courses.php?widget=true'>");
+	       }
+	       else
+	       {
+  	         //we have to link to the non-widget versions:
+	         print("<a href='courses.php'>");
+	       }
+	    ?>            
             <i class="fa fa-file fa-2x"></i>
             <div class="text">
               <h3>Courses</h3>
@@ -53,7 +57,19 @@
         </div>
         <div class="col-md-4">
           <div class="featured-box">
-            <a href="overview.php">
+	    <?php
+	       //Decide if this site is inside a separate widget
+	       if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+	       {
+	         //we have to link to the widget versions:
+	         print("<a href='overview.php?widget=true'>");
+	       }
+	       else
+	       {
+  	         //we have to link to the non-widget versions:
+	         print("<a href='overview.php'>");
+	       }
+	    ?>
             <i class="fa fa-play fa-2x"></i>
             <div class="text">
               <h3>Models</h3>
@@ -64,7 +80,19 @@
         </div>
         <div class="col-md-4">
           <div class="featured-box">
-            <a href="role.php">
+	    <?php
+	       //Decide if this site is inside a separate widget
+	       if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+	       {
+	         //we have to link to the widget versions:
+	         print("<a href='role.php?widget=true'>");
+	       }
+	       else
+	       {
+  	         //we have to link to the non-widget versions:
+	         print("<a href='role.php'>");
+	       }
+	    ?>
             <i class="fa fa-tachometer fa-2x"></i>
             <div class="text">
               <h3>Role</h3>
@@ -77,7 +105,19 @@
       <div class="row">
         <div class="col-md-4">
           <div class="featured-box">
-            <a href="login.php">
+	    <?php
+	       //Decide if this site is inside a separate widget
+	       if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+	       {
+	         //we have to link to the widget versions:
+	         print("<a href='login.php?widget=true'>");
+	       }
+	       else
+	       {
+  	         //we have to link to the non-widget versions:
+	         print("<a href='login.php'>");
+	       }
+	    ?>
             <i class="fa fa-sign-in fa-2x"></i>
             <div class="text">
               <h3>Login</h3>
@@ -88,7 +128,19 @@
         </div>
         <div class="col-md-4">
           <div class="featured-box">
-            <a href="upload.php">
+	    <?php
+	       //Decide if this site is inside a separate widget
+	       if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+	       {
+	         //we have to link to the widget versions:
+	         print("<a href='upload.php?widget=true'>");
+	       }
+	       else
+	       {
+  	         //we have to link to the non-widget versions:
+	         print("<a href='upload.php'>");
+	       }
+	    ?>
             <i class="fa fa-upload fa-2x"></i>
             <div class="text">
               <h3>Upload</h3>
@@ -99,7 +151,19 @@
         </div>
         <div class="col-md-4">
           <div class="featured-box">
-            <a href="help.php">
+	    <?php
+	       //Decide if this site is inside a separate widget
+	       if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+	       {
+	         //we have to link to the widget versions:
+	         print("<a href='help.php?widget=true'>");
+	       }
+	       else
+	       {
+  	         //we have to link to the non-widget versions:
+	         print("<a href='help.php'>");
+	       }
+	    ?>
             <i class="fa fa-info fa-2x"></i>
             <div class="text">
               <h3>Help</h3>

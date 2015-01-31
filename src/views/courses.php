@@ -63,5 +63,13 @@
   <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
   <script src="../js/custom.js"></script>
 
+  <?php
+     //Decide if this site is inside a separate widget
+     if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+     {
+         print("<script type='text/javascript' src='../js/courses-widget.js'> </script>");
+     }
+ ?>          
+
 </body>
 </html>

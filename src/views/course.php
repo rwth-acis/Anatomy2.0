@@ -31,14 +31,13 @@
     <?php include("menu.php"); ?>
   
     <div class="row" style="position:relative; padding-left:5%; padding-right:5%">
-<!--          <?php
-             //Decide if this site is inside a separate widget
-             if(isset($_GET["widget"]) && $_GET["widget"] == "true")
-             {
-                 print("<script type='text/javascript' src='../js/model-viewer-widget.js'> </script>");
-             }
-          ?>
--->          
+      <?php
+         //Decide if this site is inside a separate widget
+         if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+         {
+             print("<script type='text/javascript' src='../js/overview-widget.js'> </script>");
+         }
+         ?>          
       <?php
         include '../php/db_connect.php';
         include '../php/tools.php';
