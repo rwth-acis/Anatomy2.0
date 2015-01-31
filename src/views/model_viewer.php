@@ -34,7 +34,7 @@
   <body>
     <?php include("menu.php"); ?>
   
-    <?php include("toolbar.html"); ?>
+    <?php include("toolbar.php"); ?>
     
     <div class="row" style="position:relative; padding-left:5%; padding-right:5%">
       <p id='debugText'></p>

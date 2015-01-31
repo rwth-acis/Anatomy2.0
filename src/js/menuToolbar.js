@@ -9,7 +9,7 @@
  * Subscribes for "ShowInfo" event
  */
 function initToolbar() {
-  document.getElementById('optionExamine').setAttribute("selected", "selected");
+  //document.getElementById('optionExamine').setAttribute("selected", "selected");
   
   // Subscribe for "ShowInfo" messages in ROLE 
   if (isInRole()) {
