@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!-- Functionality of menu toolbar -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script type="text/javascript" src="../js/menuToolbar.js"></script>
@@ -19,7 +23,7 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li role="presentation" class="dropdown navbar-li">
+        <!-- li role="presentation" class="dropdown navbar-li">
           <select id="viewModeSelect" onChange="x3dChangeView()" class="form-control navbar-select">
             <option>Walk</option>
             <option id="optionExamine">Examine</option>
@@ -29,11 +33,15 @@
             <option>Turntable</option>
             <option>Game</option>
           </select> 
-        </li>     
+        </li -->     
         <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="showAll()">Show all</button></li>
         <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="x3dSynchronize()" id="btnSynchronize">Unsynchronize</button></li>
         <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" id="btnCopy">Copy Link</button></li>
         <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="btnShowInfo()" id="btnInfo">Show info</button></li>
+        <?php if (isset($_SESSION['user_id'])) { ?>
+          <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="toggleLecturerMode()" id="btnLecturerMode">Enable Lecturer Mode</button></li>
+        <?php } ?>
+
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

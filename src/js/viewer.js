@@ -21,6 +21,21 @@ var x3dRoot;
 // from other widgets, also used in menuToolbar.js
 var displayInfo;
 
+var remoteLecturer  = false;
+var lecturerMode    = false;
+
+/**
+ * Function for initial state sync from other clients.
+ */
+function onUserConnected() {
+  if (lecturerMode) {
+    var data = new Object();
+    data['enabled'] = true;
+    publishIWC("LecturerModeUpdate", data);
+  }
+}
+subscribeIWC("UserConnectionUpdate", onUserConnected);
+
 /**
  * Sets up the X3D viewport and subscribes to
  * mouse callbacks for propagating changes.
@@ -96,6 +111,10 @@ function onLocalUpdate() {
     return;
   }
 
+  if(remoteLecturer) {
+    return;
+  }
+
   // Setup the data to be sent to others.
   var data = getView(x3dRoot.runtime);
   data["timestamp"] = new Date();
@@ -120,6 +139,10 @@ function viewpointChanged(evt) {
   if(!evt || processingMessage || !canSend) {
     log("Bypassing send!");
     
+    return;
+  }
+
+  if(remoteLecturer) {
     return;
   }
 
@@ -185,4 +208,66 @@ function finishedSettingView(){
     canSend = true; 
     log("finished updating");
   } , 50);
+}
+
+/**
+ * Listens to remote lecturers that might enable or disable
+ * the lecture mode.
+ */
+function onRemoteLecturerMode(extras) {
+  remoteLecturer = extras.enabled;
+
+  if(remoteLecturer)  
+    document.getElementById('navType').setAttribute("type", "None");
+  else
+    document.getElementById('navType').setAttribute("type", "Examine");
+
+  var btn = document.getElementById('btnLecturerMode');
+  if(btn != null) {
+    if(remoteLecturer) {
+      btn.innerHTML ="Other Lecturer Has Control!";
+      btn.disabled = true;
+    }
+    else {
+      btn.innerHTML ="Enable Lecturer Mode";
+      btn.disabled = false;
+    }
+  }
+}
+subscribeIWC("LecturerModeUpdate", onRemoteLecturerMode);
+/**
+ * Enables / disables the lecturer mode.
+ */
+function toggleLecturerMode() {
+  lecturerMode = !lecturerMode;
+
+  var data = new Object();
+  data['enabled'] = lecturerMode;
+  publishIWC("LecturerModeUpdate", data);
+
+  var btn = document.getElementById('btnLecturerMode');
+  if (lecturerMode) {
+    btn.innerHTML ="Disable Lecturer Mode";
+  }
+  else {
+    btn.innerHTML ="Enable Lecturer Mode";
+  }
+}
+/**
+ * Makes sure lecturer mode is released before leaving room.
+ */
+window.onbeforeunload = function(){
+  // Release lecturer mode when leaving.
+  if(lecturerMode) {
+    toggleLecturerMode();
+    sleep(2000);
+  }
+}
+
+/**
+ * Propagate connection status for this client to other clients
+ * on load to receive current state from them.
+ */
+document.onload = function(e) {
+  publishIWC("UserConnectionUpdate", new Object());
 }
