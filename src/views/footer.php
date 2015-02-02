@@ -6,16 +6,27 @@
     <div class="footer2">
       <div class="container">
         <div class="row">
-
           <div class="col-md-6 panel">
             <div class="panel-body">
               <p class="simplenav">
+              <?php
+                //Decide if this site is inside a separate widget
+                if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+                {
+              ?>
+                <a href="welcome.php?widget=true">Home</a> | 
+                <a href="courses.php?widget=true">Courses</a> |
+                <a href="overview.php?widget=true">Models</a> |
+                <a href="upload.php?widget=true">Upload</a> |
+                <a href="help.php?widget=true">Help</a>
+              <?php } else { ?>
                 <a href="welcome.php">Home</a> | 
                 <a href="courses.php">Courses</a> |
                 <a href="overview.php">Models</a> |
                 <a href="role.php">Role</a> |
                 <a href="upload.php">Upload</a> |
                 <a href="help.php">Help</a>
+              <?php } ?>
               </p>
             </div>
           </div>

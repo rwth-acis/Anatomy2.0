@@ -8,6 +8,7 @@
   <?php if (isset($_SESSION['user_id'])) { ?>
     <script src="../js/menu_logged_in.js" type="text/javascript"></script>
   <?php } else { ?>
+    <script src="../js/tools.js" type="text/javascript"></script>
     <script src="../js/menu_logged_out.js" type="text/javascript"></script>
   <?php } ?>
   
@@ -30,7 +31,6 @@
 	  <li><a href='welcome.php?widget=true'>Home</a></li>
           <li><a href='courses.php?widget=true'>Courses</a></li>
           <li><a href='overview.php?widget=true'>Models</a></li>
-          <li><a href='role.php?widget=true'>ROLE</a></li>
           <li><a href='upload.php?widget=true'>Upload</a></li>
           <li><a href='help.php?widget=true'>Help</a></li>");
   }

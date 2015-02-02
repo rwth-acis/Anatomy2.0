@@ -78,29 +78,25 @@
             </div>
           </div>
         </div>
+        <?php
+          //Decide if this site is inside a separate widget
+          if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
+          {
+        ?>
         <div class="col-md-4">
           <div class="featured-box">
-	    <?php
-	       //Decide if this site is inside a separate widget
-	       if(isset($_GET["widget"]) && $_GET["widget"] == "true")
-	       {
-	         //we have to link to the widget versions:
-	         print("<a href='role.php?widget=true'>");
-	       }
-	       else
-	       {
-  	         //we have to link to the non-widget versions:
-	         print("<a href='role.php'>");
-	       }
-	    ?>
-            <i class="fa fa-tachometer fa-2x"></i>
-            <div class="text">
-              <h3>Role</h3>
-              <p>Head to the Role learning environment and setup your own space.</p>
-              </a>
-            </div>
+            <a href='role.php'>
+              <i class="fa fa-tachometer fa-2x"></i>
+              <div class="text">
+                  <h3>Role</h3>
+                  <p>Head to the Role learning environment and setup your own space.</p>
+              </div>
+            </a>
           </div>
         </div>
+        <?php
+          }
+        ?>
       </div>
       <div class="row">
         <div class="col-md-4">
@@ -179,7 +175,7 @@
   <!-- Spacing for footer -->
 </br></br></br></br></br></br></br></br>
   <!-- container -->
-  <?php include("footer.html"); ?>
+  <?php include("footer.php"); ?>
 
   <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
   <script src="../js/modernizr-latest.js"></script>
