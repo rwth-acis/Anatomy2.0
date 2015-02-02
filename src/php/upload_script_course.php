@@ -9,7 +9,7 @@
 $name = $_POST['name'];
 $text = $_POST['text'];
 $role_link = $_POST['roleLink'];
-$preview_img_link = $_POST['previewImgLink'];
+$preview_img_link = $_POST['previewImgLink'] != "" ? $_POST['previewImgLink'] : "https://www.symplicity.com/assets/Icon_-_Product_Features_-_Tutor_New.jpg";
 
 //TODO: get id of currently logged in user
 $creator=17;
