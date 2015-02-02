@@ -31,14 +31,7 @@
     <?php include("menu.php"); ?>
   
     <div class="row" style="position:relative; padding-left:5%; padding-right:5%">
-<!--          <?php
-             //Decide if this site is inside a separate widget
-             if(isset($_GET["widget"]) && $_GET["widget"] == "true")
-             {
-                 print("<script type='text/javascript' src='../js/model-viewer-widget.js'> </script>");
-             }
-          ?>
--->          
+   
       <?php
         include '../php/db_connect.php';
         include '../php/tools.php';
@@ -47,9 +40,14 @@
         $query  = $db->query("SELECT * FROM courses WHERE id = $arg");
         $entry = $query->fetchObject();
         echo "<p><b>$entry->name</b></p>
-        <img src=$entry->img_url alt=$entry->name class='img-responsive img-fit'>
-        <a href=$entry->role_url>Go to ROLE space</a>
-        <p><b>Description:</b> $entry->description</p>";
+        <img src=$entry->img_url alt=$entry->name class='img-responsive img-fit'>";
+
+        //Decide if this site is inside a separate widget
+        if(!isset($_GET["widget"]))
+        {
+          echo "<a href=$entry->role_url>Go to ROLE space</a>";
+        }
+        echo "<p><b>Description:</b> $entry->description</p>";
 
         // Show the link to edit the page only when the user who created it is logged in
         if (isset($_SESSION['user_id']) && $entry->creator == $_SESSION['user_id']) { 

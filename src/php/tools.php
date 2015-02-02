@@ -81,8 +81,12 @@ function getModelStructure($entry, $i, $type) {
  * @return string/html        HTML containing the course information
  */
 function getCourseStructure($entry, $i) {
+    $html = "";
+    // Decide if we are in ROLE space
+    if(isset($_GET['widget']) && $_GET['widget'] == 'true') {$html = "&widget=true";}
+
     // id used to derive course id (from database) connected to clicked link
-    return "<li><a href='course.php?id=$entry[id]' id='a_img$i'>
+    return "<li><a href='course.php?id=$entry[id]".$html."' id='a_img$i'>
             <img src=$entry[img_url] alt=$entry[name] class='img-responsive img-fit'>
             <h3>$entry[name]</h3>
             </a></li>";
