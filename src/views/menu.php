@@ -45,6 +45,10 @@ if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
   </div> 
   </br></br>
 
+  <!-- Allows opening dropdown menu if screen size is small -->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
 <?php
   }
 ?>
