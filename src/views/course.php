@@ -74,9 +74,6 @@
         </div>	
         <div class='col-md-8'>
           <div><h3>Models</h3></div>
-          <button class='btn btn-success' type='button'>Add</button>
-          <button class='btn btn-success' type='button'>Upload</button>
-        
           <br><br>
       
   <?php
