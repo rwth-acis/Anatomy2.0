@@ -53,10 +53,11 @@
           <div class='featured-box'>
             <img src=<?php echo "$entry->img_url"?> ><br><br>
             <div>
-                <a href=editcourse.php?id=<?php echo "$arg"?>>
-                <button class='btn btn-primary btn-lg btn-block' type='button'>Edit</button>
-                </a>
-                <?php if(!(isset($_GET["widget"]) && $_GET["widget"] == "true")) { ?>
+                <?php if(isset($_SESSION["user_id"]) && $entry->creator == $_SESSION['user_id']) { ?>
+                  <a href=editcourse.php?id=<?php echo "$arg"; ?>>
+                  <button class='btn btn-primary btn-lg btn-block' type='button'>Edit</button>
+                  </a>
+                <?php } if(!(isset($_GET["widget"]) && $_GET["widget"] == "true")) { ?>
                   <a href=<?php echo "$entry->role_url"; ?>>
                   <button class='btn btn-primary btn-lg btn-block' type='button'>Role Link OTTO</button>
                   </a>
