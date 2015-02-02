@@ -36,12 +36,19 @@
 
   <body>
     <?php 
+      //Decide if this site is inside a separate widget
+      if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+      {
+          print("<script type='text/javascript' src='../js/model-viewer-widget.js'> </script>");
+      }
       include("menu.php"); 
       include "../php/db_connect.php";
+      include '../php/tools.php';
 
       if (isset($_SESSION['user_id'])) {
         $query  = $db->query("SELECT * FROM courses WHERE id = $_GET[id]");
         $entry = $query->fetchObject();
+        $arg = $_GET["id"];
       }
 
       // If the user is not logged in or he is not the creator, redirect him to the login page
@@ -50,52 +57,58 @@
         exit();
       }
     ?>
-  
-    <div class="container">
-    <?php 
-      //Decide if this site is inside a separate widget
-      if(isset($_GET["widget"]) && $_GET["widget"] == "true")
-      {
-          print("<script type='text/javascript' src='../js/model-viewer-widget.js'> </script>");
-      }
-      include '../php/db_connect.php';
-      include '../php/tools.php';
     
-      $arg    = $_GET["id"];
-      $query  = $db->query("SELECT * FROM courses WHERE id = $arg");
-      $entry = $query->fetchObject();
-      
-      ?>
-      <h1>Edit Your Course</h1>
-      <!--- UPLOAD FORM -->
-        <form role="form" action="../php/edit_script_course.php" method="post" enctype="multipart/form-data" id="UploadForm">
+    <header id='head' class='secondary'>
+    <div class='container'>
+      <div class='row'>
+          <h1>Edit Your Course</h1>
+      </div>
+    </div>
+    </header>
+
+    <div id='courses'>
+      <section class='container'>
+        <br><br>
+      <div class='container'>
+        <div class='row'>
+          <div class='col-md-4'>
+            <br><br>
+            <form role="form" action="../php/edit_script_course.php" method="post" enctype="multipart/form-data" id="UploadForm">
               <div class="form-group">
-    <!-- hidden field for course id -->
-    <input type="hidden" name="targetId" value="<?php echo $arg; ?>">
-    <label for="targetName">Your Course Name</label>
-    <input type="text" class="form-control" rows="1" name="name" id="targetName" value="<?php echo htmlentities($entry->name); ?>" required>
+                <input type="hidden" name="targetId" value="<?php echo $arg; ?>">
+                <label for="targetName">Your Course Name</label>
+                <input type="text" class="form-control" rows="1" name="name" id="targetName" value="<?php echo htmlentities($entry->name); ?>" required>
               </div>
-              <div class="form-group">
-    <label for="targetText">Description of your Course</label>
-    <textarea class="form-control" rows="3" name="text" id="targetText"><?php echo htmlentities($entry->description) ?></textarea>
-              </div>
-              <div class="form-group">
-    <label for="targetText">Link to your course space in ROLE</label>
-    <textarea class="form-control" rows="1" name="roleLink" id="targetRole"><?php echo $entry->role_url; ?></textarea>
-              </div>
-              <div class="form-group">
-    <label for="targetText">Link to the Preview Image of your Course</label>
-    <textarea class="form-control" rows="1" name="previewImgLink" id="targetImgLink"><?php echo $entry->img_url; ?></textarea>
+            
+              <div class='featured-box'>
+                <div class="form-group">
+                  <label for="targetText">Link to the Preview Image of your Course</label>
+                  <textarea class="form-control" rows="1" name="previewImgLink" id="targetImgLink"><?php echo $entry->img_url; ?></textarea>
+                </div>
+                <br>
+                <div class="form-group">
+                  <label for="targetText">Link to your course space in ROLE</label>
+                  <input type="text" class="form-control" rows="1" name="roleLink" id="targetRole" value="<?php echo $entry->role_url; ?>">
+                </div> </br>
+
+                <div class="form-group">
+                  <label for="targetText">Description of your Course</label>
+                  <textarea class="form-control" rows="3" name="text" id="targetText"><?php echo htmlentities($entry->description) ?></textarea>
+                </div>
               </div>
               <button type="submit" class="btn btn-default" id="SubmitButton" value="Upload">Submit</button>
-      </form>
-      <div id="output"></div>
+            </form>
+            <br>
+          </div> 
 
-      
-      <!-- Buttons to create add and upload models -->
-      <input type="button" id="openbox" value="Add models" onclick="startBlackout()" />
-      <p><a class="btn btn-primary btn-lg" href="upload.php" target="blank" role="button">Upload models</a></p>
-      
+          <div class='col-md-8'>
+            <div><h3>Models</h3></div>
+            <!-- Buttons to create add and upload models -->
+            <button class='btn btn-success' type='button' id="openbox" onclick="startBlackout()">Add</button>
+            <a href="upload.php" target="blank"><button class='btn btn-success' type='button'>Upload</button></a>
+          
+            <br><br>
+        
       <div id="model_table">
       <?php 
         $query = $db->query("SELECT * 
@@ -108,6 +121,15 @@
         echo $html;
       ?>
       </div>
+           
+          </div>
+        </div>
+      </div>  
+      </section>
+    </div>
+    <!-- container -->
+
+      
     </div>
 
     <!-- Darken background when model select window appears -->
@@ -116,7 +138,7 @@
     <!-- Show models in a pop-up -->
     <div id="modelbox">
       <div id="closebox" onclick="endBlackout()">close</div>
-      <input type="button" id="addmodels" value="Add models to course" onclick="addModels()" />
+      <button class='btn btn-success' type='button' id="addmodels" onclick="addModels()">Add models to course</button>
       <?php include("search.html"); ?>
       <div id="result-container">
       <!-- Models will be inserted here -->
