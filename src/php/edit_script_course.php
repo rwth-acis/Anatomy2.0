@@ -7,10 +7,10 @@
 */
 //Get input data from form
 $id = $_POST['targetId'];
-$name = $_POST['name'];
-$text = $_POST['text'];
+$name = mysql_escape_string($_POST['name']);
+$text = mysql_escape_string($_POST['text']);
 $role_link = $_POST['roleLink'];
-$preview_img_link = $_POST['previewImgLink'];
+$preview_img_link = $_POST['previewImgLink'] != "" ? $_POST['previewImgLink'] : "https://www.symplicity.com/assets/Icon_-_Product_Features_-_Tutor_New.jpg";
 
 //Creator stays the same
 	
@@ -23,9 +23,9 @@ $sql = "UPDATE courses SET name='$name', description='$text', role_url='$role_li
 
 $conn->query($sql);
 
-header("Location: ../views/success-course-upload.php?id=$id");
+$html = "";
+if(isset($_GET['widget']) && $_GET['widget'] == 'true') {$html = "&widget=true";}
 
+header("Location: ../views/course.php?id=$id$html");
 
-echo 'Successfully added course';
-	
 ?>

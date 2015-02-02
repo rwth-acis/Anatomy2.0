@@ -65,34 +65,33 @@
       $query  = $db->query("SELECT * FROM courses WHERE id = $arg");
       $entry = $query->fetchObject();
       
-      echo 
-      "<h1>Edit Your Course</h1>
+      ?>
+      <h1>Edit Your Course</h1>
       <!--- UPLOAD FORM -->
-        <form role='form' action='../php/edit_script_course.php' method='post' enctype='multipart/form-data' id='UploadForm'>
-              <div class='form-group'>
+        <form role="form" action="../php/edit_script_course.php" method="post" enctype="multipart/form-data" id="UploadForm">
+              <div class="form-group">
     <!-- hidden field for course id -->
-    <input type='hidden' name='targetId' value='$arg'>
-    <label for='targetName'>Your Course Name</label>
-    <input type='text' class='form-control' rows='1' name='name' id='targetName' value='$entry->name' required>
+    <input type="hidden" name="targetId" value="<?php echo $arg; ?>">
+    <label for="targetName">Your Course Name</label>
+    <input type="text" class="form-control" rows="1" name="name" id="targetName" value="<?php echo htmlentities($entry->name); ?>" required>
               </div>
-              <div class='form-group'>
-    <label for='targetText'>Description of your Course</label>
-    <textarea class='form-control' rows='3' name='text' id='targetText' required>$entry->description</textarea>
+              <div class="form-group">
+    <label for="targetText">Description of your Course</label>
+    <textarea class="form-control" rows="3" name="text" id="targetText"><?php echo htmlentities($entry->description) ?></textarea>
               </div>
-              <div class='form-group'>
-    <label for='targetText'>Link to your course space in ROLE</label>
-    <textarea class='form-control' rows='1' name='roleLink' id='targetRole' required>$entry->role_url</textarea>
+              <div class="form-group">
+    <label for="targetText">Link to your course space in ROLE</label>
+    <textarea class="form-control" rows="1" name="roleLink" id="targetRole"><?php echo $entry->role_url; ?></textarea>
               </div>
-              <div class='form-group'>
-    <label for='targetText'>Link to the Preview Image of your Course</label>
-    <textarea class='form-control' rows='1' name='previewImgLink' id='targetImgLink' required>$entry->img_url</textarea>
+              <div class="form-group">
+    <label for="targetText">Link to the Preview Image of your Course</label>
+    <textarea class="form-control" rows="1" name="previewImgLink" id="targetImgLink"><?php echo $entry->img_url; ?></textarea>
               </div>
-              <button type='submit' class='btn btn-default' id='SubmitButton' value='Upload'>Submit</button>
+              <button type="submit" class="btn btn-default" id="SubmitButton" value="Upload">Submit</button>
       </form>
-      <div id='output'></div>";
+      <div id="output"></div>
 
-    ?>
-    
+      
       <!-- Buttons to create add and upload models -->
       <input type="button" id="openbox" value="Add models" onclick="startBlackout()" />
       <p><a class="btn btn-primary btn-lg" href="upload.php" target="blank" role="button">Upload models</a></p>
