@@ -5,14 +5,16 @@
 * Adss new course to the course database on the server
 * adds metadata about it database.
 */
+session_start();
+
 //Get input data from form
 $name = $_POST['name'];
 $text = $_POST['text'];
 $role_link = $_POST['roleLink'];
 $preview_img_link = $_POST['previewImgLink'] != "" ? $_POST['previewImgLink'] : "https://www.symplicity.com/assets/Icon_-_Product_Features_-_Tutor_New.jpg";
 
-//TODO: get id of currently logged in user
-$creator=17;
+// Get id of currently logged in user
+$creator = $_SESSION["user_id"];
 	
 // Create database-entry
 $conn = require '../php/db_connect.php';
