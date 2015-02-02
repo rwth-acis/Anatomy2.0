@@ -19,14 +19,13 @@ $conn = require '../php/db_connect.php';
 
 $sql = "INSERT INTO courses (name, description, creator, role_url, img_url) VALUES ('$name','$text', $creator, '$role_link', '$preview_img_link')";
 
-echo "sqlquery: $sql";
-
 $conn->query($sql);
 
 $last_id = $conn->lastInsertId();
 
-header("Location: ../views/success-course-upload.php?id=$last_id");
+$html = "";
+if(isset($_GET['widget']) && $_GET['widget'] == 'true') {$html = "&widget=true";}
 
-
-echo 'Successfully added course';
+echo '<div class="alert alert-success" role="alert">Your Course has been added successfully</div>
+        <a href="course.php?id='.$last_id.$html.'">See your Course Page</a>';
 ?>
