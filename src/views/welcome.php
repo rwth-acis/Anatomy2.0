@@ -26,6 +26,7 @@
        //Decide if this site is inside a separate widget
        if(isset($_GET["widget"]) && $_GET["widget"] == "true")
        {
+           $widget = true;
            print("<script type='text/javascript' src='../js/overview-widget.js'> </script>");
        }
     ?>
@@ -42,7 +43,7 @@
       <div class="row">
         <div class="col-md-4">
           <div class="featured-box">
-            <a href="courses.php">
+            <a href="courses.php<?php if(isset($widget)) {echo '?widget=true';} ?>">
             <i class="fa fa-file fa-2x"></i>
             <div class="text">
               <h3>Courses</h3>

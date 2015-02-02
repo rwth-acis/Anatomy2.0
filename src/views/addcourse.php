@@ -31,15 +31,15 @@
         </div>
         <div class="form-group">
         <label for="targetText">Description of your Course</label>
-          <textarea class="form-control" rows="3" name="text" id="targetText" placeholder="Enter course description" required></textarea>
+          <textarea class="form-control" rows="3" name="text" id="targetText" placeholder="Enter course description"></textarea>
         </div>
         <div class="form-group">
         <label for="targetText">Link to your course space in ROLE</label>
-          <textarea class="form-control" rows="1" name="roleLink" id="targetRole" placeholder="Enter ROLE space link" required></textarea>
+          <textarea class="form-control" rows="1" name="roleLink" id="targetRole" placeholder="Enter ROLE space link"></textarea>
         </div>
         <div class="form-group">
         <label for="targetText">Link to the Preview Image of your Course</label>
-          <textarea class="form-control" rows="1" name="previewImgLink" id="targetImgLink" placeholder="Enter preview image link" required></textarea>
+          <textarea class="form-control" rows="1" name="previewImgLink" id="targetImgLink" placeholder="Enter preview image link"></textarea>
         </div>
         <button type="submit" class="btn btn-default" id="SubmitButton" value="Upload">Submit</button>
       </form>

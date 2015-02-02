@@ -5,28 +5,29 @@
 * Adss new course to the course database on the server
 * adds metadata about it database.
 */
-//Get input data from form
-$name = $_POST['name'];
-$text = $_POST['text'];
-$role_link = $_POST['roleLink'];
-$preview_img_link = $_POST['previewImgLink'];
+session_start();
 
-//TODO: get id of currently logged in user
-$creator=17;
+//Get input data from form
+$name = mysql_real_escape_string($_POST['name']);
+$text = mysql_real_escape_string($_POST['text']);
+$role_link = $_POST['roleLink'];
+$preview_img_link = $_POST['previewImgLink'] != "" ? $_POST['previewImgLink'] : "https://www.symplicity.com/assets/Icon_-_Product_Features_-_Tutor_New.jpg";
+
+// Get id of currently logged in user
+$creator = $_SESSION["user_id"];
 	
 // Create database-entry
 $conn = require '../php/db_connect.php';
 
 $sql = "INSERT INTO courses (name, description, creator, role_url, img_url) VALUES ('$name','$text', $creator, '$role_link', '$preview_img_link')";
 
-echo "sqlquery: $sql";
-
 $conn->query($sql);
 
 $last_id = $conn->lastInsertId();
 
-header("Location: ../views/success-course-upload.php?id=$last_id");
+$html = "";
+if(isset($_GET['widget']) && $_GET['widget'] == 'true') {$html = "&widget=true";}
 
-
-echo 'Successfully added course';
+echo '<div class="alert alert-success" role="alert">Your Course has been added successfully</div>
+        <a href="course.php?id='.$last_id.$html.'">See your Course Page</a>';
 ?>

@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Collaborative Viewing of 3D Models </title>
-	<link rel="stylesheet" media="screen" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
-	<link rel="stylesheet" href="../css/bootstrap.min.css">
-	<link rel="stylesheet" href="../css/font-awesome.min.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Collaborative Viewing of 3D Models </title>
+  <link rel="stylesheet" media="screen" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+  <link rel="stylesheet" href="../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/font-awesome.min.css">
 
-	<!-- Custom styles-->
-	
-	<link rel="stylesheet" href="../css/bootstrap-theme.css" media="screen">
-	<link rel="stylesheet" type="text/css" href="../css/da-slider.css" />
-	<link rel="stylesheet" href="../css/style.css">
+  <!-- Custom styles-->
+  
+  <link rel="stylesheet" href="../css/bootstrap-theme.css" media="screen">
+  <link rel="stylesheet" type="text/css" href="../css/da-slider.css" />
+  <link rel="stylesheet" href="../css/style.css">
 
-	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-	<!--[if lt IE 9]>
-	<script src="assets/js/html5shiv.js"></script>
-	<script src="assets/js/respond.min.js"></script>
-	<![endif]-->
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+  <script src="assets/js/html5shiv.js"></script>
+  <script src="assets/js/respond.min.js"></script>
+  <![endif]-->
 
 </head>
 
@@ -33,78 +33,77 @@
        $arg    = $_GET["id"];
        $query  = $db->query("SELECT * FROM courses WHERE id = $arg");
        $entry = $query->fetchObject();
-	
-       $html="<header id='head' class='secondary'>
-		<div class='container'>
-			<div class='row'>
-					<h1>$entry->name</h1>
-			</div>
-		</div>
+    ?>
+  <header id='head' class='secondary'>
+    <div class='container'>
+      <div class='row'>
+          <h1><?php echo "$entry->name";?></h1>
+      </div>
+    </div>
 
-	</header>
-	<div id='courses'>
-		<section class='container'>
-			<br><br>
-		<div class='container'>
-			<div class='row'>
-				<div class='col-md-4'>
-					<h3>$entry->name</h3>
-					
-					<div class='featured-box'>
-						<img src=$entry->img_url ><br><br>
-						<div>
-						    <a href=editcourse.php?id=$arg>
-						    <button class='btn btn-primary btn-lg btn-block' type='button'>Edit</button>
-						    </a>
-						    <a href=$entry->role_url>
-						    <button class='btn btn-primary btn-lg btn-block' type='button'>Role Link</button>
-						    </a>
-							</div> </br>
+  </header>
+  <div id='courses'>
+    <section class='container'>
+      <br><br>
+    <div class='container'>
+      <div class='row'>
+        <div class='col-md-4'>
+          <h3><?php echo "$entry->name"; ?></h3>
+          
+          <div class='featured-box'>
+            <img src=<?php echo "$entry->img_url"?> ><br><br>
+            <div>
+                <a href=editcourse.php?id=<?php echo "$arg"?>>
+                <button class='btn btn-primary btn-lg btn-block' type='button'>Edit</button>
+                </a>
+                <?php if(!(isset($_GET["widget"]) && $_GET["widget"] == "true")) { ?>
+                  <a href=<?php echo "$entry->role_url"; ?>>
+                  <button class='btn btn-primary btn-lg btn-block' type='button'>Role Link OTTO</button>
+                  </a>
+                <?php } ?>
+              </div> </br>
 
-						<div>
-							<p>
-							$entry->description
-							</p>
-						</div>
-					</div>
-					
-				</div>	
-				<div class='col-md-8'>
-					<div><h3>Models</h3></div>
-					<button class='btn btn-success' type='button'>Add</button>
-					<button class='btn btn-success' type='button'>Upload</button>
-				
-					<br><br>";
-	echo $html;
-	?>	
-			
-	<?php
-	//create model overview in course
-	$query = $db->query("SELECT * FROM course_models
-				INNER JOIN models ON course_models.model_id = models.id
-				WHERE course_models.course_id = $arg");
-	$result = $query->fetchAll();
+            <div>
+              <p>
+              <?php echo "$entry->description"; ?>
+              </p>
+            </div>
+          </div>
+          
+        </div>	
+        <div class='col-md-8'>
+          <div><h3>Models</h3></div>
+          <button class='btn btn-success' type='button'>Add</button>
+          <button class='btn btn-success' type='button'>Upload</button>
+        
+          <br><br>
+      
+  <?php
+  //create model overview in course
+  $query = $db->query("SELECT * FROM course_models
+        INNER JOIN models ON course_models.model_id = models.id
+        WHERE course_models.course_id = $arg");
+  $result = $query->fetchAll();
 
-	$html = createTable($result,'model');
-	
-				 
-	$html .= "		</div>
-			</div>
-		</div>	
-		</section>
-	</div>";
-	
-	echo $html;
-	?>
-	<!-- container -->
-	
-	<?php include("footer.html"); ?>
-
-
-	<!-- JavaScript libs are placed at the end of the document so the pages load faster -->
+  $html = createTable($result,'model');
+  
+  echo $html;
+  ?>
+         
+        </div>
+      </div>
+    </div>	
+    </section>
+  </div>
+  <!-- container -->
+  
+  <?php include("footer.html"); ?>
 
 
-	<script src="../js/modernizr-latest.js"></script>
+  <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
+
+
+  <script src="../js/modernizr-latest.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
   <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
   <script src="../js/jquery.cslider.js"></script>

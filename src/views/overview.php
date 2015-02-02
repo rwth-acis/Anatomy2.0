@@ -40,14 +40,6 @@
       <div class="row">
         <h1>3D Models</h1>  
         <?php include("search.html"); ?>
-        <!--
-        <div class="search_box">
-          <form>
-            <input type="text" class="text-box" placeholder="Search..."><input type="submit" value="">
-          </form> 
-        </div>
-        -->
-        <br>      
       </div>
     </div>
   </header>
@@ -55,7 +47,7 @@
   <!-- container -->
   <section class="container">
     <br><br><br>
-    <div class="container">
+    <div class="container" id="result-container">
       <?php
       include '../php/db_connect.php';
       include '../php/tools.php';

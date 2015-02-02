@@ -6,6 +6,6 @@
  */
 function showModels(str) {
   ajax.post("../php/getmodels.php", {q: str}, function(response) {
-    document.getElementsByClassName("container")[3].innerHTML = response;
+    document.getElementById("result-container").innerHTML = response;
   });
 }

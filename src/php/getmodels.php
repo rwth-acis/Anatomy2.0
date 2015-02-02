@@ -13,8 +13,7 @@ $searchstr = explode(" ", trim($_POST['q']));
 $whereClause = '';
 foreach( $searchstr as $word) {
    $whereClause .= " name LIKE '%".$word."%'
-                    OR classification LIKE '%".$word."%'
-                    OR description LIKE '%".$word."%' OR";
+                    OR classification LIKE '%".$word."%' OR";
 }
 
 // Remove last 'OR'
