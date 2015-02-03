@@ -24,7 +24,7 @@
     <div class="container">
 	    <h1>Create a New Course</h1>
 	    <!--- UPLOAD FORM -->
-   		<form role="form" action="../php/upload_script_course.php" method="post" enctype="multipart/form-data" id="UploadForm">
+   		<form role="form" action="../php/upload_script_course.php<?php if(isset($_GET['widget']) && $_GET['widget']) {echo '?widget=true';} ?>" method="post" enctype="multipart/form-data" id="UploadForm">
         <div class="form-group">
           <label for="targetName">Your Course Name</label>
           <input type="text" class="form-control" rows="1" name="name" id="targetName" placeholder="Enter your course name" required>
