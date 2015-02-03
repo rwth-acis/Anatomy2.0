@@ -73,7 +73,7 @@
         <div class='row'>
           <div class='col-md-4'>
             <br><br>
-            <form role="form" action="../php/edit_script_course.php" method="post" enctype="multipart/form-data" id="UploadForm">
+            <form role="form" action="../php/edit_script_course.php<?php if(isset($_GET['widget']) && $_GET['widget'] == true) {echo '?widget=true';} ?>" method="post" enctype="multipart/form-data" id="UploadForm">              
               <div class="form-group">
                 <input type="hidden" name="targetId" value="<?php echo $arg; ?>">
                 <label for="targetName">Your Course Name</label>
@@ -146,6 +146,6 @@
     </div>
   
     
-    <?php include("footer.html");?>
+    <?php include("footer.php");?>
   </body>
 </html>
