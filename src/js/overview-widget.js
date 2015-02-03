@@ -75,13 +75,13 @@ function clickOnLink(evt){
  */
 function highlightModel(id) {
   // Remove the highlighting from currently selected model (by removing it from all divs)
-  var divs = document.getElementsByName('table-entry');
+  var divs = document.getElementsByName('image-over');
   console.log(divs);
   for (var i = 0; i < divs.length; ++i) {
-    divs[i].className = divs[i].className.replace( /(?:^|\s)div-highlight(?!\S)/ , '' )
+    divs[i].className = divs[i].className.replace( /(?:^|\s)highlight-model(?!\S)/ , '' )
   }
   // Get the div element on the overview page for the given model id
-  var div = document.getElementById('table_entry' + id);
+  var div = document.getElementById('image-over' + id);
   // Highlight the div element by changing the css style
-  div.className = div.className + ' div-highlight';  
+  div.className = div.className + ' highlight-model';  
 }
