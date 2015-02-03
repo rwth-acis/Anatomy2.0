@@ -6,7 +6,7 @@ describe('The edit page', function() {
   course = 1;
 
   beforeEach(function() {
-    loadFixtures("btnOpenbox.html", "editPage.html", "imgResponsive.html");
+    loadFixtures("btnOpenbox.html", "editPage.html", "imgResponsive.html", "search.html");
   });
 
   // Tests for startBlackout

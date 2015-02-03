@@ -17,6 +17,9 @@ function endBlackout() {
   // Reset width and put box in the center of the window 
   document.getElementById("modelbox").style.width = 0;
   document.getElementById("modelbox").style.left = "50%";
+
+  // Reset content of search field
+  document.getElementById("search").value = "";
 }
 
 /**
@@ -42,10 +45,7 @@ function getModels(callback) {
         document.getElementById("result-container").innerHTML = response;
 
         // Add event listener to each model
-        var list = document.getElementsByClassName("text-content");
-        for(var i=0;i<list.length;i++) {
-            list[i].addEventListener("click", toggleSelectModel);
-        }
+        addSelectListener();
   });
 }
 
@@ -95,6 +95,15 @@ function addDeleteListener() {
 }
 
 /**
+ * Adds the event listener toggleSelectModel to each displayed model
+ */
+function addSelectListener() {
+  var list = document.getElementsByClassName("text-content");
+  for(var i=0;i<list.length;i++) {
+      list[i].addEventListener("click", toggleSelectModel);
+  }
+}
+/**
  * Animates the pop-up: starts in the center with full height and expands
  * horizontally to 80% screen width
  * @param  {DOM object} element The element to expand
@@ -103,8 +112,8 @@ function expand(element) {
   var pxPerStep = 50;
   var width = element.offsetWidth;
   var left = element.offsetLeft;
-  var windowWidth = window.outerWidth;
-
+  var windowWidth = window.innerWidth;
+  console.log(window);
   // Trigger every 10 ms
   var loopTimer = setInterval(function() {
     // We want a width of 80% of the screen

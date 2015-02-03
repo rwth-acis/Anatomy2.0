@@ -23,6 +23,6 @@ $query = $db->query("SELECT * FROM models WHERE" . $whereClause);
 $result = $query->fetchAll();
 
 // Create table structure and display it on the page
-$html = createTable($result, "model");
+$html = createTable($result, $_POST["type"]);
 echo $html;
 ?>
