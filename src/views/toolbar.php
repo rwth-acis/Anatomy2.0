@@ -1,5 +1,9 @@
 <?php
-session_start();
+  // If outside ROLE environment, menu.php will start a session. 
+  // So start session only if inside ROLE.
+  if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
+    session_start();
+  }
 ?>
 
 <!-- Functionality of menu toolbar -->
