@@ -112,7 +112,7 @@ function expand(element) {
   var pxPerStep = 50;
   var width = element.offsetWidth;
   var left = element.offsetLeft;
-  var windowWidth = window.outerWidth;
+  var windowWidth = window.innerWidth;
   console.log(window);
   // Trigger every 10 ms
   var loopTimer = setInterval(function() {
