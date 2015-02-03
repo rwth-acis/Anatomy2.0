@@ -42,7 +42,8 @@
         <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="x3dSynchronize()" id="btnSynchronize">Unsynchronize</button></li>
         <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" id="btnCopy">Copy Link</button></li>
         <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="btnShowInfo()" id="btnInfo">Show info</button></li>
-        <?php if (isset($_SESSION['user_id'])) { ?>
+        <!-- Show lecturer mode button only if user logged in (as lecturer) and in ROLE environment -->
+        <?php if (isset($_SESSION['user_id']) && (isset($_GET["widget"]) && $_GET["widget"] == "true")) { ?>
           <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="toggleLecturerMode()" id="btnLecturerMode">Enable Lecturer Mode</button></li>
         <?php } ?>
 
