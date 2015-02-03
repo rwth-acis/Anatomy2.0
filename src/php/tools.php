@@ -47,7 +47,8 @@ function getModelStructure($entry, $i, $type) {
     switch ($type) {
         case 'model':
             $html .= 
-          "<li><a href='model_viewer.php?id=$entry[id]' id='a_img$i'><img id='image-over' src='../../$entry[preview_url]' alt=$entry[name] width='150' height='150' />
+          "<li>
+              <a href='model_viewer.php?id=$entry[id]' id='a_img$entry[id]'><img id='image-over$entry[id]' name='image-over' src='../../$entry[preview_url]' alt=$entry[name] width='150' height='150' />
               <span class='text-content'><span>Name: $entry[name]<br>Size: $entry[size]<br> Category: $entry[classification]</span></span></a>
               <p id='text-over'>$entry[name]</p>
               </li>";
@@ -63,7 +64,7 @@ function getModelStructure($entry, $i, $type) {
 
         default:
             $html .= 
-          "<li><a href='model_viewer.php?id=$entry[id]' id='a_img$i'><img id='image-over' src='../../$entry[preview_url]' alt=$entry[name] width='150' height='150' />
+          "<li><a href='model_viewer.php?id=$entry[id]' id='a_img$i'><img id='image-over$entry[id]' name='image-over' src='../../$entry[preview_url]' alt=$entry[name] width='150' height='150' />
               <span class='text-content'><span>Name: $entry[name]<br>Size: $entry[size]<br> Category: $entry[classification]</span></span></a>
               <p id='text-over'>$entry[name]</p>
 	      <div class='delete' id='$entry[id]'></div>

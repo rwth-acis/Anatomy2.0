@@ -675,8 +675,9 @@ footer ul li {
   max-height: 100%;
 }
  
-.div-highlight {
+.highlight-model {
   background-color: GreenYellow;
+  padding: 5px;
 }
 
 .overview-entry {
