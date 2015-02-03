@@ -21,10 +21,6 @@ describe('The toolbar', function() {
     isSynchronized = true;
   });
 
-  it('sets the viewer mode to "Examine" at the beginning', function() {
-    expect($('#optionExamine').attr('selected')).toBeTruthy();
-  });
-
   describe('un/synchronize button', function() {
     it('unsynchronizes the viewer widget when clicked', function() {
       spyOn(window, 'savePositionAndOrientation');
