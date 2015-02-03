@@ -44,7 +44,13 @@
 					
 					
 					if (move_uploaded_file($file_tmp, $file_destination)){
-						header("Location: ../views/success.php?id=$last_id");
+            // If this script is initiated from within ROLE, keep the "widget=true" parameter
+            if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
+              header("Location: ../views/success.php?id=$last_id&widget=true");
+            }
+            else {
+              header("Location: ../views/success.php?id=$last_id");
+            }
 						
 						// Create preview-image
 						$view3dscene_url = '../../applications/view3dscene/view3dscene';	
