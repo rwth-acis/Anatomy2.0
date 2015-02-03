@@ -19,7 +19,11 @@ function initMenu() {
  */
 function onMenuLoginClicked() {
   login = document.getElementById('menu_login');
-  window.location.href = "login.php";
+  var append = "";
+  if (getURLParameter("widget") == "true") {
+    append = "?widget=true";
+  }
+  window.location.href = "login.php" + append;
 }
 
 /// Call initialize for menu when DOM loaded

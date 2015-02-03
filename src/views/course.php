@@ -59,7 +59,7 @@
                   </a>
                 <?php } if(!(isset($_GET["widget"]) && $_GET["widget"] == "true")) { ?>
                   <a href=<?php echo "$entry->role_url"; ?>>
-                  <button class='btn btn-primary btn-lg btn-block' type='button'>Role Link OTTO</button>
+                  <button class='btn btn-primary btn-lg btn-block' type='button'>Role Link</button>
                   </a>
                 <?php } ?>
               </div> </br>
@@ -95,7 +95,7 @@
   </div>
   <!-- container -->
   
-  <?php include("footer.html"); ?>
+  <?php include("footer.php"); ?>
 
 
   <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
@@ -116,7 +116,13 @@
   <script type="text/javascript" src="../js/tools.js"></script>
   <!-- The library for the copy to clipboard feature in the toolbar -->
   <script type="text/javascript" src="../js/ZeroClipboard.js"></script>
-
+  <?php
+    //Decide if this site is inside a separate widget
+    if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+    {
+        print("<script type='text/javascript' src='../js/overview-widget.js'> </script>");
+    }
+  ?>
 
 </body>
 </html>

@@ -1,7 +1,3 @@
-<?php
-  session_start();
-?>
-
 <!DOCTYPE html>
 <html>
   <head>
@@ -32,7 +28,13 @@
   </head>
 
   <body>
-    <?php include("menu.php"); ?>
+    <?php 
+      // Hide the menu in ROLE environment. Outside ROLE the menu must be displayed.
+      if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
+      {
+        include("menu.php"); 
+      }
+    ?>
   
     <?php include("toolbar.php"); ?>
     

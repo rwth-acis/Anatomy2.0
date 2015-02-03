@@ -29,8 +29,6 @@
            print("<script type='text/javascript' src='../js/overview-widget.js'> </script>");
        }
     ?>
-
-
 </head>
 
 <body>
@@ -75,7 +73,7 @@
         </div>
     </section>
     <!-- /container -->
-    <?php include("footer.html"); ?>
+    <?php include("footer.php"); ?>
 
     
 

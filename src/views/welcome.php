@@ -21,16 +21,7 @@
   <![endif]-->
 
   <!-- Init communication with wrapper -->
-    <script type='text/javascript' src='../js/init-subsite.js'></script>
-    <?php
-       //Decide if this site is inside a separate widget
-       if(isset($_GET["widget"]) && $_GET["widget"] == "true")
-       {
-           $widget = true;
-           print("<script type='text/javascript' src='../js/overview-widget.js'> </script>");
-       }
-    ?>
-
+  <script type='text/javascript' src='../js/init-subsite.js'></script>
 </head>
 <body>
   <?php include("menu.php"); ?>
@@ -43,7 +34,19 @@
       <div class="row">
         <div class="col-md-4">
           <div class="featured-box">
-            <a href="courses.php<?php if(isset($widget)) {echo '?widget=true';} ?>">
+	    <?php
+	       //Decide if this site is inside a separate widget
+	       if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+	       {
+	         //we have to link to the widget versions:
+	         print("<a href='courses.php?widget=true'>");
+	       }
+	       else
+	       {
+  	         //we have to link to the non-widget versions:
+	         print("<a href='courses.php'>");
+	       }
+	    ?>    
             <i class="fa fa-file fa-2x"></i>
             <div class="text">
               <h3>Courses</h3>
@@ -54,7 +57,19 @@
         </div>
         <div class="col-md-4">
           <div class="featured-box">
-            <a href="overview.php">
+	    <?php
+	       //Decide if this site is inside a separate widget
+	       if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+	       {
+	         //we have to link to the widget versions:
+	         print("<a href='overview.php?widget=true'>");
+	       }
+	       else
+	       {
+  	         //we have to link to the non-widget versions:
+	         print("<a href='overview.php'>");
+	       }
+	    ?>
             <i class="fa fa-play fa-2x"></i>
             <div class="text">
               <h3>Models</h3>
@@ -63,22 +78,42 @@
             </div>
           </div>
         </div>
+        <?php
+          //Decide if this site is inside a separate widget
+          if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
+          {
+        ?>
         <div class="col-md-4">
           <div class="featured-box">
-            <a href="role.php">
-            <i class="fa fa-tachometer fa-2x"></i>
-            <div class="text">
-              <h3>Role</h3>
-              <p>Head to the Role learning environment and setup your own space.</p>
-              </a>
-            </div>
+            <a href='role.php'>
+              <i class="fa fa-tachometer fa-2x"></i>
+              <div class="text">
+                  <h3>Role</h3>
+                  <p>Head to the Role learning environment and setup your own space.</p>
+              </div>
+            </a>
           </div>
         </div>
+        <?php
+          }
+        ?>
       </div>
       <div class="row">
         <div class="col-md-4">
           <div class="featured-box">
-            <a href="login.php">
+	    <?php
+	       //Decide if this site is inside a separate widget
+	       if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+	       {
+	         //we have to link to the widget versions:
+	         print("<a href='login.php?widget=true'>");
+	       }
+	       else
+	       {
+  	         //we have to link to the non-widget versions:
+	         print("<a href='login.php'>");
+	       }
+	    ?>
             <i class="fa fa-sign-in fa-2x"></i>
             <div class="text">
               <h3>Login</h3>
@@ -89,7 +124,19 @@
         </div>
         <div class="col-md-4">
           <div class="featured-box">
-            <a href="upload.php">
+	    <?php
+	       //Decide if this site is inside a separate widget
+	       if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+	       {
+	         //we have to link to the widget versions:
+	         print("<a href='upload.php?widget=true'>");
+	       }
+	       else
+	       {
+  	         //we have to link to the non-widget versions:
+	         print("<a href='upload.php'>");
+	       }
+	    ?>
             <i class="fa fa-upload fa-2x"></i>
             <div class="text">
               <h3>Upload</h3>
@@ -100,7 +147,19 @@
         </div>
         <div class="col-md-4">
           <div class="featured-box">
-            <a href="help.html">
+	    <?php
+	       //Decide if this site is inside a separate widget
+	       if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+	       {
+	         //we have to link to the widget versions:
+	         print("<a href='help.php?widget=true'>");
+	       }
+	       else
+	       {
+  	         //we have to link to the non-widget versions:
+	         print("<a href='help.php'>");
+	       }
+	    ?>
             <i class="fa fa-info fa-2x"></i>
             <div class="text">
               <h3>Help</h3>
@@ -116,13 +175,12 @@
   <!-- Spacing for footer -->
 </br></br></br></br></br></br></br></br>
   <!-- container -->
-  <?php include("footer.html"); ?>
+  <?php include("footer.php"); ?>
 
   <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
   <script src="../js/modernizr-latest.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
   <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-  <script src="../js/jquery.cslider.js"></script>
   <script src="../js/custom.js"></script>
 </body>
 </html>
