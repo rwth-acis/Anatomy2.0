@@ -5,7 +5,12 @@
  * @param  {string} str Search string entered by the user
  */
 function showModels(str) {
-  ajax.post("../php/getmodels.php", {q: str}, function(response) {
+  // Find out which page we are visiting to display the models correctly
+  var type = (window.location.pathname.indexOf("editcourse.php") != -1) ? "modelselection" : "models";
+
+  ajax.post("../php/getmodels.php", {q: str, type: type}, function(response) {
     document.getElementById("result-container").innerHTML = response;
+    if(type === "modelselection") { addSelectListener(); }
   });
+
 }
