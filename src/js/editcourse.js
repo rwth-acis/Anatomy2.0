@@ -138,18 +138,21 @@ function expand(element) {
  * @param  {event} event The click event
  */
 function toggleSelectModel(event) {
-  var element = event.target.parentElement.parentElement;
+  var element = event.target.parentElement.previousElementSibling;
+  // The link has an id of the form image-over<db_id>. This will extract the database id.
+  var id = element.id.substr(10);
+
   // Look if the clicked element is already selected
-  if(selectedModels[element.id]) {
-    delete selectedModels[element.id];
+  if(selectedModels[id]) {
+    delete selectedModels[id];
 
     // Remove highlight
-    var index = (' ' + element.className + ' ').indexOf('div-highlight ');
+    var index = (' ' + element.className + ' ').indexOf('highlight-model ');
     element.className = element.className.substr(0,index-1);
   } else { 
-    selectedModels[element.id] = element.id; 
+    selectedModels[element.id] = id; 
 
     // Highlight model
-    element.className += 'div-highlight'; 
+    element.className += 'highlight-model'; 
   }
 }

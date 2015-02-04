@@ -6,7 +6,7 @@
  */
 function showModels(str) {
   // Find out which page we are visiting to display the models correctly
-  var type = (window.location.pathname.indexOf("editcourse.php") != -1) ? "modelselection" : "models";
+  var type = (window.location.pathname.indexOf("editcourse.php") != -1) ? "modelselection" : "model";
 
   ajax.post("../php/getmodels.php", {q: str, type: type}, function(response) {
     document.getElementById("result-container").innerHTML = response;
