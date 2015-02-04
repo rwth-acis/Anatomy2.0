@@ -4,7 +4,7 @@
  * Used in menu.php
  * @param  {string} str Search string entered by the user
  */
-// Save the selected model's id if one exists, -1 otherwise (ids start at 0)
+// Save the selected model's id if one exists, -1 otherwise (ids start with image-over)
 var selectedModel = -1;
 
 function showModels(str) {
@@ -26,6 +26,12 @@ function showModels(str) {
         // Apply highlighting
         element = document.getElementById(selectedModel);
         if(element) { element.className += 'highlight-model' };
+    } else {
+        // Highlight previously selected models
+        for(var item in selectedModels) {
+            element = $("#result-container #image-over"+item)[0];
+            if(element) {element.className += 'highlight-model';};
+        }
     }
   });
 
