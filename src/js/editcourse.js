@@ -138,18 +138,18 @@ function expand(element) {
  * @param  {event} event The click event
  */
 function toggleSelectModel(event) {
-  var element = event.target;
+  var element = event.target.parentElement.parentElement;
   // Look if the clicked element is already selected
   if(selectedModels[element.id]) {
     delete selectedModels[element.id];
 
     // Remove highlight
-    var index = (' ' + element.className + ' ').indexOf(' div-highlight ');
+    var index = (' ' + element.className + ' ').indexOf('div-highlight ');
     element.className = element.className.substr(0,index-1);
   } else { 
     selectedModels[element.id] = element.id; 
 
     // Highlight model
-    element.className += ' div-highlight'; 
+    element.className += 'div-highlight'; 
   }
 }
