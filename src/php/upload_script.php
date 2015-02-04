@@ -20,7 +20,14 @@
 		$name = $_POST['name'];
 		$text = $_POST['text'];
 		$cat = $_POST['cat'];
-		
+    $widgetParameter = "";
+    
+    // If this script is initiated from within ROLE, keep the "widget=true" parameter
+    if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
+      // will be added in all "header(..)" calls
+      $widgetParameter = "&widget=true";
+    }
+
 		if (in_array($file_ext, $allowed)){
 			if ($file_error === 0){
 				if ($file_size <= 104828800){
@@ -28,7 +35,7 @@
 					// Create database-entry
 					$conn = require '../php/db_connect.php';
 				
-					$sql = "INSERT INTO models (name, description, classification) VALUES ('$name','$text', '$cat')";
+					$sql = "INSERT INTO models (name, description, classification, size) VALUES ('$name','$text', '$cat', '$file_size')";
 				
 					$conn->query($sql);
 					$last_id = $conn->lastInsertId();
@@ -37,42 +44,57 @@
 				
 					// Copy to model-folder
 					$dirname = $root_url.DIRECTORY_SEPARATOR.$last_id;
-					mkdir($dirname);
-					mkdir($dirname.DIRECTORY_SEPARATOR."preview");
+					$old = umask(0); 
+					mkdir($dirname, 0777);
+					mkdir($dirname.DIRECTORY_SEPARATOR."preview", 0777);
+					umask($old);
 					
 					$file_destination = $dirname.DIRECTORY_SEPARATOR.$last_id.'.x3d';
 					
 					
 					if (move_uploaded_file($file_tmp, $file_destination)){
-            // If this script is initiated from within ROLE, keep the "widget=true" parameter
-            if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
-              header("Location: ../views/success.php?id=$last_id&widget=true");
-            }
-            else {
-              header("Location: ../views/success.php?id=$last_id");
-            }
-						
-						// Create preview-image
-						$view3dscene_url = '../../applications/view3dscene/view3dscene';	
+            
+						// Try to create preview-image automatically
 						$previewimage_url = $root_url.DIRECTORY_SEPARATOR.$last_id.DIRECTORY_SEPARATOR."preview".DIRECTORY_SEPARATOR.$last_id.".png";
-						exec("$view3dscene_url --screenshot 0 $previewimage_url $file_destination");
+						exec("../../applications/auto_preview $file_destination $previewimage_url");
 						
+            header("Location: ../views/success.php?id=$last_id".$widgetParameter);
+            
 					}else{
-						echo 'Upload Failed';
-						
+						$message = 'Upload Failed';
+            header("Location: ../views/error.php?message=$message".$widgetParameter);
 					}
 					
 				}	
 				else{
-					echo 'File to big';
 					
+					$message = 'File to big';
+          header("Location: ../views/error.php?message=$message".$widgetParameter);
 				}
+			}
+			else {
+				$errorMsg = [
+				    0 => "There is no error, the file uploaded with success",
+				    1 => "The uploaded file exceeds the upload_max_filesize directive in php.ini",
+				    2 => "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form",
+				    3 => "The uploaded file was only partially uploaded",
+				    4 => "No file was uploaded",
+				    6 => "Missing a temporary folder"
+				]; 
+				$message = 'Upload error: '.$file_error.': '.$errorMsg[$file_error];
+				header("Location: ../views/error.php?message=$message".$widgetParameter);
 			}
 			
 		}
 		else{
-			echo 'Not allowed file type';
+			$message = 'Not allowed filetype';
+			header("Location: ../views/error.php?message=$message".$widgetParameter);
 		}
 
+	} else {
+		$message = 'Maybe File-API is not supported.';
+		header("Location: ../views/error.php?message=$message".$widgetParameter);
 	}
+	
+?>
 	

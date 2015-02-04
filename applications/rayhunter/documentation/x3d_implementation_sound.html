@@ -1,0 +1,270 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+
+<html lang="en">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta name="Author" content="Michalis Kamburelis">
+
+<meta name="Language" content="English">
+
+<title>Sound component - implementation status - Castle Game Engine</title>
+
+
+<!--
+  This is unclean, but it's more comfortable to keep below CSS
+  directly inside HTML page. This is in kambi_common.php,
+  that should be useful for both michalis.ii and castle-engine.sf.net webpages,
+  and must be suitable also for offline documentation in castle-engine programs.
+-->
+<!-- link type="text/css" rel="stylesheet" media="all"  href="kambi-php-lib/kambi_common.css" -->
+
+<style type="text/css"><!--
+body { background: white; font-family: sans-serif; }
+
+dt { font-weight: bold; }
+div.page_footer { }
+span.page_copyright { font-size: smaller }
+
+span.version_number { font-size: small }
+
+div.quick_links_bottom_line { text-align: left; }
+
+.rss_link {
+  float: right;
+  background: red;
+  padding: 0.3em;
+  border: thin outset black;
+}
+
+.rss_link a {
+  color: white;
+  font-weight: bold
+}
+--></style>
+
+
+<link rel="alternate" type="application/rss+xml"
+  title="Castle Game Engine - News Feed"
+  href="http://castle-engine.sourceforge.net/news_feed.php">
+
+<link type="text/css" rel="stylesheet" media="all" href="castle-engine.css">
+<link type="text/css" rel="stylesheet" href="colorbox/example3/colorbox.css">
+
+<script type="text/javascript" src="castle-engine.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="colorbox/jquery.colorbox-min.js"></script>
+
+<style type="text/css"><!--
+/**
+ * GeSHi Dynamically Generated Stylesheet
+ * --------------------------------------
+ * Dynamically generated stylesheet for delphi
+ * CSS class: sourcecode, CSS id: 
+ * GeSHi (C) 2004 - 2007 Nigel McNie, 2007 - 2008 Benny Baumann
+ * (http://qbnz.com/highlighter/ and http://geshi.org/)
+ * --------------------------------------
+ */
+.delphi.sourcecode .de1, .delphi.sourcecode .de2 {font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;}
+.delphi.sourcecode  {font-family:monospace;}
+.delphi.sourcecode .imp {font-weight: bold; color: red;}
+.delphi.sourcecode li, .delphi.sourcecode .li1 {font-weight: normal; vertical-align:top;}
+.delphi.sourcecode .ln {width:1px;text-align:right;margin:0;padding:0 2px;vertical-align:top;}
+.delphi.sourcecode .li2 {font-weight: bold; vertical-align:top;}
+.delphi.sourcecode .kw1 {color: #000000; font-weight: bold;}
+.delphi.sourcecode .kw2 {color: #000000; font-weight: bold;}
+.delphi.sourcecode .kw3 {color: #000066;}
+.delphi.sourcecode .kw4 {color: #000066; font-weight: bold;}
+.delphi.sourcecode .co1 {color: #808080; font-style: italic;}
+.delphi.sourcecode .co2 {color: #008000; font-style: italic;}
+.delphi.sourcecode .coMULTI {color: #808080; font-style: italic;}
+.delphi.sourcecode .es0 {color: #ff0000; font-weight: bold;}
+.delphi.sourcecode .br0 {color: #000066;}
+.delphi.sourcecode .sy0 {color: #000066;}
+.delphi.sourcecode .sy1 {color: #000066;}
+.delphi.sourcecode .sy2 {color: #000066;}
+.delphi.sourcecode .sy3 {color: #000066;}
+.delphi.sourcecode .st0 {color: #ff0000;}
+.delphi.sourcecode .nu0 {color: #0000ff;}
+.delphi.sourcecode .me1 {color: #006600;}
+.delphi.sourcecode .re0 {color: #0000cc;}
+.delphi.sourcecode .re1 {color: #ff0000;}
+.delphi.sourcecode .ln-xtra, .delphi.sourcecode li.ln-xtra, .delphi.sourcecode div.ln-xtra {background-color: #ffc;}
+.delphi.sourcecode span.xtra { display:block; }
+ -->
+</style>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    (function() {
+        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+        s.type = 'text/javascript';
+        s.async = true;
+        s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+        t.parentNode.insertBefore(s, t);
+    })();
+/* ]]> */
+</script><script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+  </head>
+<body>
+
+
+  <div class="header">
+    <!--img class="header_icon" src="images/header_icon.png" alt="Castle Game Engine icon" /-->
+    <div class="header_title"><a href="http://castle-engine.sourceforge.net/index.php">Castle Game Engine</a></div>
+    
+    <table class="header_menu">
+      <tr>
+        <td colspan="15" class="higher higher_left">&larr; Users</td>
+        <td colspan="6" class="higher higher_right">Developers &rarr;</td>
+      </tr>
+      <tr><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/index.php">Intro</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/news.php">News</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/view3dscene.php" title="VRML / X3D browser, and a viewer for other 3D model formats">view3dscene</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/castle.php" title="First-person perspective game, in a dark fantasy setting">The Castle</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/all_programs.php" title="All the games and tools using our 3D engine">All Programs</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/forum.php" title="Ask for help, report bugs, discuss features">Forum</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/donate.php">Donate</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/engine.php" title="Sources and documentation for developers">Engine</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="vrml_x3d.html" title="Our extensions and status of VRML/X3D implementation" id="current">VRML/X3D</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/blender.php" title="Customized Blender X3D exporter">Blender</a></td><td class="lower_separator"><div>&nbsp;</div></td>
+      </tr>
+    </table>
+  </div><table class="layout" cellspacing="0">
+      <col class="content_column">
+      <col class="sidebar_column">
+      <tr><td class="layout content"><div class="header_breadcrumbs"><a href="http://castle-engine.sourceforge.net/index.php">Home <i>(online docs)</i></a> &#187; <a href="vrml_x3d.html">VRML / X3D support</a> &#187; <a href="x3d_implementation_status.html">Implementation status</a></div><h1>Sound component</h1><div class="x3d_component_intro">
+    <p class="paragraph_first">This component provides sound support.
+    <tt>AudioClip</tt> defines a sound file and allows to start and stop playback.
+    <tt>Sound</tt> positions the sound in 3D world and configures sound
+    parameters. Sounds may be spatialized (3D) or not.</p>
+    <p class="paragraph_last">See also <a href="http://www.web3d.org/files/specifications/19775-1/V3.2/Part01/components/sound.html">X3D specification of Sound component</a>.</p></div><table align="right" style="clear: right"><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/sound.png"
+             class="screenshot"
+             title="Sound demo"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/sound.png"
+            alt="Sound demo"
+          /></a></td></tr></table>
+<p>Contents:
+<div class="table_of_contents"><ol>
+<li><a href="#section_demos">Demos</a>
+</li>
+<li><a href="#section_support">Supported nodes</a>
+</li>
+</ol>
+</div>
+<h2><a name="section_demos">1. Demos</a></h2>
+
+<p>For demos and tests of these features,
+see the <tt>sound</tt> subdirectory inside <a href="demo_models.html">our VRML/X3D demo models</a>.</p>
+
+<h2><a name="section_support">2. Supported nodes</a></h2>
+
+<p><tt><a href="http://www.web3d.org/files/specifications/19775-1/V3.2/Part01/components/sound.html#Sound">Sound</a></tt> defines a sound in the 3D world.
+It contains (in the "<tt>source</tt>" field) an <tt>AudioClip</tt> node.
+Supported fields:</p>
+
+<ul>
+  <li>intensity</li>
+  <li>location (correctly transformed by <tt>Sound</tt> transformation; animating the location field or the transformation of the <tt>Sound</tt> node works perfectly)</li>
+  <li>priority (we have a smart sounds allocator, and the priority really matters when you have many sounds playing at once)</li>
+  <li>source (to indicate AudioClip node)</li>
+  <li>spatialize. Note that <b>multi-channel (e.g. stereo) sounds are never spatialized</b>.</li>
+  <li>minFront and maxFront values are handled.</li>
+</ul>
+
+<p>TODO:</p>
+
+<ul>
+  <li><p>Our sound attenuation model is a little simpler than VRML/X3D requirements.
+    We have an inner sphere, of radius minFront, where sound gain is at maximum.
+    And we have an outer sphere, of radius maxFront, where sound gain drops
+    to zero. Between them sound gain drops linearly.</p>
+
+    <p>Contrast this with VRML/X3D spec, that requires two ellipsoids
+    (not just spheres). In our implementation, the sounds at your back
+    are attenuated just the same as the front sounds.
+    We simply ignore direction, minBack and maxBack fields.</p></li>
+
+  <li><p>It's unclear from the specification whether playing should be limited
+    only to the sounds in the active graph part
+    (the subset of children chosen in LOD / Switch and similar nodes).
+    To be on the safe side, always place your sounds in the active graph part,
+    although our implementation will <i>usually</i> also play sounds in the inactive
+    part (exceptions may happen for complicated situations with PROTOs).</li>
+
+    <!-- Exceptions because TAudioClipNode.BeforeTraverse
+      is not called, see thunder.x3dv for testcase, when it's necessary:
+      moving the Sound out of the PROTO 1st child makes sound not playing. -->
+
+  <li><p>Sounds are not sorted exactly like the specification says.
+    In short, we only look at your given "priority" field,
+    disregarding current sound distance to player and such.</li>
+</ul>
+
+<p><tt><a href="http://www.web3d.org/files/specifications/19775-1/V3.2/Part01/components/sound.html#AudioClip">AudioClip</a></tt> defines the sound file to be played and basic playback
+properties. It also provides events to start/stop playing of the sound.
+Supported fields:</p>
+
+<ul>
+  <li>url (allowed sound file formats are OggVorbis and (uncompressed) WAV).</li>
+  <li>duration_changed</li>
+  <li>loop (we loop without any glitches between)</li>
+  <li>description (is simply ignored, this is valid behavior)</li>
+  <li>pitch (correctly changes both the sound pitch and speed of playing)</li>
+  <li>all time-dependent fields (start/stop/pause/resumeTime, elapsedTime, isActive, isPaused).
+
+    <p>TODO: But we don't really control our position (offset) within the
+    sound. When we detect that we should be playing, but we're not &mdash;
+    we just start playing, always from the beginning.</p>
+</ul>
+
+<p><i>Note about multiple instances:</i> VRML/X3D define the play/stop events
+at the <tt>AudioClip</tt> node (not at higher-level <tt>Sound</tt> node,
+which would be more useful IMO). This means that <tt>USE</tt>ing many times
+the same <tt>AudioClip</tt> or <tt>Sound</tt> nodes doesn't make much sense.
+You can only achieve the same sound, playing simultaneously the same thing,
+from multiple 3D sources. Since such simultaneous sounds are pretty useless,
+we don't even implement them (so don't reUSE <tt>AudioClip</tt> or <tt>Sound</tt> nodes,
+or an arbitrary one will be playing).
+If you want to use the same sound file many times, you will usually
+want to just add many <tt>AudioClip</tt> nodes, and set their <tt>url</tt>
+field to the same value. Our implementation is optimized for this case,
+we have an internal cache that will actually load the sound file only once,
+even when it's referenced by many <tt>AudioClip.url</tt> values.</p>
+
+<p>TODO: There's no streaming implemented yet. So too many and too long
+music files in one world may cause large memory consumption,
+and at the first play of a long sound there may be a noticeable loading delay.</p>
+
+<p>TODO: Only <tt>AudioClip</tt> works as sound source for now.
+You cannot use <tt>MovieTexture</tt> as sound source.</p>
+
+</td><td class="layout">
+  <div class="sidebar">
+    <div class="sidebar_title"><a href="vrml_x3d.html">VRML / X3D support</a></div><ul><li><a href="demo_models.html">Demo models</a></li><li><a href="x3d_extensions.html">Extensions</a><ul><li><a href="compositing_shaders.html">Compositing Shaders</a></li><li><a href="x3d_extensions_screen_effects.html">Screen Effects</a></li><li><a href="x3d_extensions_shadow_maps.html">Shadow Maps</a></li><li><a href="x3d_extensions_vrml1.html">(Old) VRML 1.0</a></li></ul></li><li><a href="x3d_implementation_status.html">Implementation status</a><ul><li><a href="x3d_implementation_core.html">Core</a></li><li><a href="x3d_implementation_time.html">Time</a></li><li><a href="x3d_implementation_networking.html">Networking</a></li><li><a href="x3d_implementation_grouping.html">Grouping</a></li><li><a href="x3d_implementation_rendering.html">Rendering</a></li><li><a href="x3d_implementation_shape.html">Shape</a></li><li><a href="x3d_implementation_geometry3d.html">Geometry3D</a></li><li><a href="x3d_implementation_geometry2d.html">Geometry2D</a></li><li><a href="x3d_implementation_text.html">Text</a></li><li>Sound</li><li><a href="x3d_implementation_lighting.html">Lighting</a></li><li><a href="x3d_implementation_texturing.html">Texturing</a><ul><li><a href="x3d_implementation_texturing.html#section_multi_texturing">Clarifications to X3D multi-texturing</a></li><li><a href="x3d_implementation_texturing.html#section_dds">DDS (DirectDraw Surface)</a></li></ul></li><li><a href="x3d_implementation_interpolation.html">Interpolation</a></li><li><a href="x3d_implementation_pointingdevicesensor.html">Pointing device sensor</a></li><li><a href="x3d_implementation_keydevicesensor.html">Key device sensor</a></li><li><a href="x3d_implementation_environmentalsensor.html">Environmental sensor</a></li><li><a href="x3d_implementation_navigation.html">Navigation</a></li><li><a href="x3d_implementation_environmentaleffects.html">Environmental effects</a></li><li><a href="x3d_implementation_hanim.html">H-Anim</a></li><li><a href="x3d_implementation_nurbs.html">NURBS</a><ul><li><a href="x3d_implementation_nurbs.html#section_homogeneous_coordinates">Control points are in homogeneous coordinates</a></li></ul></li><li><a href="x3d_implementation_scripting.html">Scripting</a></li><li><a href="x3d_implementation_eventutilities.html">Event utilities</a></li><li><a href="x3d_implementation_shaders.html">Programmable shaders</a></li><li><a href="x3d_implementation_cadgeometry.html">CAD geometry</a></li><li><a href="x3d_implementation_texturing3d.html">Texturing3D</a></li><li><a href="x3d_implementation_cubemaptexturing.html">Cube map environmental texturing</a></li></ul></li><li><a href="nist_vrml_test_suite.html">NIST conformace test suite</a></li><li><a href="castle_script.html">CastleScript language reference</a></li><li><a href="kanim_format.html">Kanim (precalculated animations) file format</a></li><li><a href="x3d_time_origin_considered_uncomfortable.html">VRML / X3D time origin considered uncomfortable</a></li></ul></div></td></tr></table><script type="text/javascript">
+  jQuery('a.screenshot').colorbox({opacity: 0.9, rel:'screenshot', maxWidth:'90%', maxHeight:'90%'});
+</script>
+  
+<hr>
+
+<div class="page_footer">
+
+    <address>
+    By Michalis Kamburelis, as part of
+    <a href="http://castle-engine.sourceforge.net/">Castle Game Engine</a>.
+    </address>
+    
+  <table><tr>
+
+    <td><a href="http://sourceforge.net/projects/castle-engine">Hosted by SourceForge.net</a></td>
+
+    <td><span class="page_copyright">Copyright <a href="http://michalis.ii.uni.wroc.pl/~michalis/">Michalis Kamburelis</a>.
+This page is considered part of documentation of my programs,
+and you are free to modify and further distribute it on terms of
+<a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License</a>.
+</span></td>
+
+    
+  </tr></table>
+
+  
+</div>
+
+</body>
+</html>
+

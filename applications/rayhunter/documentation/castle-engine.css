@@ -1,0 +1,427 @@
+/* No body margins, we want our header and sidebar closely at window border.
+   Instead use class "content" to add some nice padding between
+   window border and actual text. */
+body { margin: 0px; padding: 0px; }
+.content { margin: 0px; padding: 0.4em; }
+
+object.movie_thumbnail {
+  width: 200px;
+  height: 167px;
+}
+
+div.thumbs_cell_with_text_or_movie {
+  width: 210px;
+  background: #DDD;
+  margin: 0em;
+  padding: 0.2em;
+  font-size: small;
+  text-align: center;
+}
+
+/* Our <pre> must break, otherwise our right sidebar is shifted and looks bad */
+pre {
+  white-space: pre-wrap;
+}
+
+pre.sourcecode {
+  border: 1px solid #aaaaaa;
+  background-color: #f9f9f9;
+  padding: 0.3em;
+}
+
+a.kscript_func_docs { text-decoration: underline; }
+
+pre.terminal { background-color: #EEE;  padding: 0.3em; }
+tt.terminal { background-color: #EEE; }
+
+tt { background-color: #f0f0f0; }
+/* Override above rule for x3d_component_intro. These <tt> are in practice
+   surrounded by <b> now. */
+div.x3d_component_intro tt { background-color: transparent; }
+
+/* SVN URLs tend to be long, and they look confusing when they are wrapped
+   (in Firefox/Iceweasel) or cannot wrap (in Google Chrome and probably
+   others). */
+pre.small { font-size: xx-small; }
+tt.small { font-size: xx-small; }
+
+pre.plug_declaration { border: thin solid #333; padding: 0.2em; }
+
+span.js_link { text-decoration: underline; color: #00F; cursor: pointer; }
+
+/* Style for note_box and note_title shamelessly stolen from CSS
+   of the Subversion book. (from .sidebar and .sidebar .title) */
+.note_box
+{
+    border-top: dotted 1px black;
+    border-left: dotted 1px black;
+    border-right: solid 2px black;
+    border-bottom: solid 2px black;
+    background: rgb(240,220,170);
+    padding: 0 0.12in;
+    margin: 0.5in;
+}
+
+.note_box .note_title {
+  text-align: center;
+  font-size: 125%;
+}
+
+/* Tables with key controls should be done with
+   <table border="1" class="key_list"> */
+table.key_list { width: 90%; }
+table.key_list th { background: #eeeee0; }
+table.key_list td { background: #ddddd0; width: 50%; }
+
+/* Adapted from my pasdoc.css */
+table.thin_borders { border-collapse: collapse; }
+table.thin_borders td { border: 1pt solid #d3d3d3; padding: 0.3em; }
+table.thin_borders th { border: 1pt solid #d3d3d3; padding: 0.3em; }
+
+dl.command_line_options_list > dt {
+  font-family: monospace;
+  font-weight: bold;
+}
+
+/* Leave default font-family for dt, and default font-weight.
+   Use span with command_line_option class inside dt. */
+dl.command_line_options_list_custom > dt {
+  font-weight: normal;
+}
+span.command_line_option {
+  font-family: monospace;
+  font-weight: bold;
+}
+
+/* div.latest_update_description {
+  margin-left: 3em;
+  border: 1px solid gray;
+  padding: 0.5em;
+} */
+
+pre.vrml_code {
+  border: 1px solid #aaaaaa;
+  background-color: #f9f9f9;
+  padding: 0.3em;
+}
+
+pre.bordered_code {
+  border: 1px solid #aaaaaa;
+  background-color: #f9f9f9;
+  padding: 0.3em;
+}
+
+pre.vrml_extension_spec { }
+
+dl.vrml_ver_differences > dt {
+  font-weight: normal;
+  font-style: italic;
+}
+
+table.program_image_links {
+  width: 100%;
+}
+table.program_image_links_half {
+  width: 50%;
+}
+td.program_image_link img { border: none; }
+td.program_image_link {
+  background: #e8d59a;
+  width: 50%;
+  border: 1px solid black;
+  text-align: center;
+  padding: 0.5em;
+}
+
+table.main_links {
+  width: 100%;
+}
+td.main_link {
+  background: #efdfae;
+  width: 33%;
+  border: 1px solid black;
+  text-align: center;
+  padding: 0.5em;
+  vertical-align: top;
+}
+td.main_link img { border: none; }
+
+.program_image_link_title { font-size: larger; }
+
+a.screenshot       img { border: 2pt solid #EEE; }
+a.screenshot:hover img { border: 2pt solid #888; }
+
+.table_of_contents a       { text-decoration: none; border-bottom: 1px dotted; }
+.table_of_contents a:hover { text-decoration: none; border-bottom: 1px solid;
+  background: #FF8;
+}
+
+/*.table_of_contents {
+  border-top: dotted 1px black;
+  border-left: dotted 1px black;
+  border-right: solid 2px black;
+  border-bottom: solid 2px black;
+  background: rgb(240,220,170);
+  padding: 0 0.12in;
+  margin: 0.5in;
+}
+*/
+
+div.download {
+  display: inline-block;
+  background: #fdff8c url(images/download_box_bg.png) no-repeat;
+  border: medium outset black;
+  padding: 0.5em;
+}
+
+.download_title { font-weight: bold; margin-bottom: 1em; }
+
+div.download table td { text-align: center;
+  padding-left: 1em; padding-right: 1em; }
+div.download table a { display: block; text-decoration: none; color: black;
+  border: thin dashed #CCC; }
+div.download table a img { border: 0px none; }
+
+/* Table like X3D specification, used for multi-texturing clarifications
+   on x3d_implementation_texturing.php */
+table.specification { border-collapse:collapse; }
+table.specification th {
+  border-style:groove;
+  font-weight:bold;
+  border-width:medium;
+  padding:8px;
+  /* white-space:nowrap; */
+}
+table.specification td {
+  border-style:groove;
+  font-weight:normal;
+  border-width:medium;
+  padding:8px;
+  /* white-space:nowrap; */
+}
+
+table.layout { margin: 0px; padding: 0px; border: 0px; width: 100%; }
+/* Don't set padding/margin here,
+   sidebar_column and content_column want different padding/margin. */
+td.layout { border: 0px; vertical-align: top; }
+
+div.sidebar {
+  margin-left: 0.5em;
+  padding: 0.5em;
+}
+
+col.sidebar_column {
+  width: 15em;
+  margin: 0px;
+  padding: 0px;
+  background: #dddddd url(images/sidebar_bg.png) repeat-y;
+}
+
+div.sidebar_title {
+  font-size: medium; font-weight: bold;
+  padding-left: 1em;
+  margin-bottom: 0.1em;
+}
+
+table.nist_test_suite { border-collapse:collapse; border: thin solid #999; }
+table.nist_test_suite td { border: thin solid #999; }
+table.nist_test_suite th { border: thin solid #999; }
+td.pass    { background-color:rgb(50%,100%,50%); }
+td.fail    { background-color:rgb(100%,50%,50%); }
+td.invalid { background-color:rgb(75%,75%,75%); }
+td.testnr  { white-space: nowrap; }
+
+/* view3dscene page stuff */
+hr.ruler_between_sections { width: 100%; }
+dl.params_list dt  {
+  font-weight: normal; font-family: monospace;
+  margin-top: 1em;
+}
+
+/* index page stuff */
+div.main_list_item {
+  font-family: serif;
+  font-weight: bolder;
+  font-size: large;
+
+  background: #ddddd0;
+
+  padding: 0.1em;
+}
+
+/* Don't set it float here, we may want to use it with various float values
+   or without float. */
+div.useful_link {
+  display: inline-block;
+  background: #EEE;
+  /* #ffff91; */
+  border: thin solid black;
+  padding: 0.3em;
+}
+
+div.x3d_component_intro {
+  display: block;
+  border: thin solid #333;
+  background: #fff4d2;
+  padding: 0.3em;
+}
+
+div.x3d_component_intro p.paragraph_first { margin-top: 0px; }
+div.x3d_component_intro p.paragraph_last { margin-bottom: 0px; }
+div.x3d_component_intro p.paragraph_first tt { font-weight: bold; }
+
+/* news --------------------------------------------------------------------- */
+
+table.news_older_newer {
+  width: 100%;
+  border: thin solid #ffeaa9;
+  background: #fff4d2;
+  padding: 0.3em;
+}
+
+td.news_newer { text-align: left; }
+td.news_older { text-align: right; }
+
+span.old_news_date { font-weight: bold; }
+div.old_news_item { border-bottom: medium groove #555; }
+
+span.news_title { font-weight: bold; text-decoration: underline; }
+span.news_date { color: #888; }
+div.news_item span.news_title { font-size: larger; }
+div.news_item { min-width: 920px; } /* needed to fit navigation_controls.png
+  along thumbnails. Possibly, we'll remove this CSS rule later,
+  when news with navigation_controls.png will no longer be on top. */
+
+/* turn off normal link decoration inside news_title */
+span.news_title a { color: black; }
+
+.castle_rss_link {
+  float: right;
+  background: red;
+  padding: 0.3em;
+  border: thin outset black;
+  margin: 1em;
+}
+
+.castle_rss_link a {
+  color: white;
+  font-weight: bold
+}
+
+/* header ------------------------------------------------------------------- */
+
+div.header {
+  background: #ffeaa9 url('images/header-pattern.png') repeat-x;
+}
+
+.header_title {
+  font-size: xx-large; font-weight: bold;
+  padding: 0.2em 0.4em 0em 0.4em;
+}
+.header_title a { text-decoration: none; color: #fffba9; }
+
+.header_menu {
+  border-collapse: collapse;
+  width: 100%;
+}
+.header_menu td.higher { color: #222; }
+.header_menu td.higher_left  { text-align: right; padding-right: 0.4em; border-right: thin solid #222; }
+.header_menu td.higher_right { text-align: left;  padding-left:  0.4em; border-left:  thin solid #222; }
+
+.header_menu td.lower_separator {
+  padding: 0px; margin: 0px;
+  vertical-align: bottom;
+}
+
+.header_menu td.lower_separator div {
+  padding: 0px; margin: 0px;
+  border-bottom: thin solid #222;
+}
+
+.header_menu td.lower {
+  padding: 0px; /* must be 0, otherwise bg of a:hover will not fill the cell */
+  vertical-align: bottom; /* needed when page becomes too narrow to fit all the items without breaking link captions into multiline */
+}
+.header_menu td.lower a         {
+  display: block;
+  text-decoration: none;
+  text-align: center;
+  padding: 0em 0.2em;
+  margin-right: 0em;
+  margin-left: 0em;
+  border-left:  thin solid #222;
+  border-right: thin solid #222;
+  border-top:   thin solid #222;
+  border-bottom: thin solid #222;
+  color: #222;
+}
+.header_menu td.lower a#current { color: black;
+  background: white;
+  border-bottom: 0px none; }
+.header_menu td.lower a:hover   { color: black;
+  /* important, to override a#current */ background: #fff1c7 !important; }
+
+.header_breadcrumbs {
+  color: #222;
+  padding: 0.4em;
+}
+.header_breadcrumbs a       { color: #5EB2E5; }
+.header_breadcrumbs a:hover { color: #39C; }
+
+.header_icon {
+  margin-right: 0.4em;
+  margin-top: 0.4em;
+  /* Instead of float: right, position our image by "position: absolute",
+     this way it doesn't push the table below further down. */
+  position: absolute;
+  right: 0%;
+}
+
+/* --------------------------------------------------------------------------- */
+
+table.donations { border-collapse: collapse; width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+table.donations td {
+  border: medium solid #888;
+  text-align: center;
+  width: 30%;
+}
+
+table.donations td p {
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}
+
+div.quote {
+  margin-left: 1em;
+  background: #FFD;
+  border: dotted 1px black;
+}
+
+/* books (tutorial and such) ------------------------------------------------- */
+
+.book-header {
+  width: 100%;
+  border: thin solid #ffeaa9;
+  background: #fff4d2;
+  padding: 0.3em;
+}
+
+.book-header .book-previous {
+  text-align: left;
+  float: left;
+  width: 40%;
+}
+.book-header .book-next {
+  text-align: right;
+  float: right;
+  width: 40%;
+}
+.book-header .book-title {
+  margin-left: 40%;
+  margin-right: 40%;
+  text-align: center;
+  font-weight: bold;
+}
