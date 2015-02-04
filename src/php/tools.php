@@ -42,16 +42,9 @@ function getModelStructure($entry, $type) {
   
         return round($bytes, $precision) . ' ' . $units[$pow]; 
     };
-    
+
     $html = "";
     switch ($type) {
-        case 'model':
-            $html .= "<li><a href='model_viewer.php?id=$entry[id]' id='a_img$entry[id]'><img id='image-over$entry[id]' name='image-over' src='../../$entry[preview_url]' alt=$entry[name] width='150' height='150' />
-              <span class='text-content'><span>Name: $entry[name]<br>Size: ".$formatBytes($entry["size"])."<br> Category: $entry[classification]</span></span></a>
-              <p id='text-over'>$entry[name]</p>
-              </li>";
-	          break;
-        
         case 'modelselection':
             $html .= "<li><img id='image-over$entry[id]' src='../../$entry[preview_url]' alt=$entry[name] name='image-over' width='150' height='150' style='margin-top:5px;' />
               <span class='text-content'><span>Name: $entry[name]<br>Size: ".$formatBytes($entry["size"])."<br> Category: $entry[classification]</span></span>
@@ -59,13 +52,22 @@ function getModelStructure($entry, $type) {
               </li>";
             break;
 
-        default:
-            $html .= "<li><a href='model_viewer.php?id=$entry[id]' id='a_img$entry[id]'><img id='image-over$entry[id]' name='image-over' src='../../$entry[preview_url]' alt=$entry[name] width='150' height='150' />
-              <span class='text-content'><span>Name: $entry[name]<br>Size: ".$formatBytes($entry["size"])."<br> Category: $entry[classification]</span></span></a>
+        case 'modeldeletion':
+            $html .= "<li><img id='image-over$entry[id]' name='image-over' src='../../$entry[preview_url]' alt=$entry[name] width='150' height='150' />
+              <span class='text-content'><span>Name: $entry[name]<br>Size: ".$formatBytes($entry["size"])."<br> Category: $entry[classification]</span></span>
               <p id='text-over'>$entry[name]</p>
 	            <div class='delete' id='$entry[id]'></div>
               </li>";
             break;
+        
+        // model, "normal" list
+        default:
+            $html .= "<li><a href='model_viewer.php?id=$entry[id]' id='a_img$entry[id]'><img id='image-over$entry[id]' name='image-over' src='../../$entry[preview_url]' alt=$entry[name] width='150' height='150' />
+              <span class='text-content'><span>Name: $entry[name]<br>Size: ".$formatBytes($entry["size"])."<br> Category: $entry[classification]</span></span></a>
+              <p id='text-over'>$entry[name]</p>
+              </li>";
+            break;
+            
     }
 
     return $html;
