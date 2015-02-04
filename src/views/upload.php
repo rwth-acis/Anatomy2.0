@@ -34,7 +34,19 @@
 
     <div class="container">      
       <!--- UPLOAD FORM -->
+  <?php
+    //If this site is viewed in ROLE, keep the "widget=true" parameter
+    if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+    {
+  ?>
+      <form role="form" action="../php/upload_script.php?widget=true" method="post" enctype="multipart/form-data" id="UploadForm">
+  <?php 
+    } else {
+  ?>      
       <form role="form" action="../php/upload_script.php" method="post" enctype="multipart/form-data" id="UploadForm">
+  <?php 
+    }
+  ?>
         <div class="form-group">
           <label for="targetName">Your Model Name</label>
           <input type="text" class="form-control" name="name" id="targetName" placeholder="Enter your model name" data-parsley-trigger="keyup" data-parsley-minlength="5" 

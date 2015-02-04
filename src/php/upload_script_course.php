@@ -28,6 +28,6 @@ $last_id = $conn->lastInsertId();
 $html = "";
 if(isset($_GET['widget']) && $_GET['widget'] == 'true') {$html = "&widget=true";}
 
-echo '<div class="alert alert-success" role="alert">Your Course has been added successfully</div>
-        <a href="course.php?id='.$last_id.$html.'">See your Course Page</a>';
+header("Location: ../views/course.php?id=$last_id$html");
+
 ?>
