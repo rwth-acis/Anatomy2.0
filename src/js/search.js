@@ -11,6 +11,10 @@ function showModels(str) {
   ajax.post("../php/getmodels.php", {q: str, type: type}, function(response) {
     document.getElementById("result-container").innerHTML = response;
     if(type === "modelselection") { addSelectListener(); }
+
+    // If we are inside ROLE, change the list items to open in separate widget
+    // getQueryString doesn't work here somehow
+    if(window.location.search.substring(1) === "widget=true") {initOverviewWidget();}
   });
 
 }
