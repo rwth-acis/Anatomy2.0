@@ -6,7 +6,7 @@ describe('The edit page', function() {
   course = 1;
 
   beforeEach(function() {
-    loadFixtures("btnOpenbox.html", "editPage.html", "imgResponsive.html", "search.html");
+    loadFixtures("btnOpenbox.html", "editPage.html", "model.html", "search.html");
   });
 
   // Tests for startBlackout
@@ -59,22 +59,22 @@ describe('The edit page', function() {
   // Tests for toggleSelectModel
   it("highlights the clicked model in the pop-up", function() {
     expect(selectedModels).toBeEmpty();
-    expect($(".img-responsive")).not.toHaveClass("div-highlight");
-    $(".img-responsive").on("click",toggleSelectModel);
+    expect($("#image-over1")).not.toHaveClass("highlight-model");
+    $(".text-content").on("click",toggleSelectModel);
 
-    $(".img-responsive").click();
-    expect($(".img-responsive")).toHaveClass("div-highlight");
+    $(".text-content > span").click();
+    expect($("#image-over1")).toHaveClass("highlight-model");
     expect(selectedModels).toEqual({1: "1"});
   });
 
   it("removes the highlight when a selected model is clicked again in the pop-up", 
     function() {
       expect(selectedModels).toEqual({1: "1"});
-      $(".img-responsive").addClass("div-highlight");
-      $(".img-responsive").on("click",toggleSelectModel);
+      $("#img-over1").addClass("div-highlight");
+      $(".text-content").on("click",toggleSelectModel);
 
-      $(".img-responsive").click();
-      expect($(".img-responsive")).not.toHaveClass("div-highlight");
+      $(".text-content > span").click();
+      expect($("#img-over1")).not.toHaveClass("div-highlight");
       expect(selectedModels).toBeEmpty();
   });
 

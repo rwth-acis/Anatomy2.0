@@ -150,7 +150,7 @@ function toggleSelectModel(event) {
     var index = (' ' + element.className + ' ').indexOf('highlight-model ');
     element.className = element.className.substr(0,index-1);
   } else { 
-    selectedModels[element.id] = id; 
+    selectedModels[id] = id; 
 
     // Highlight model
     element.className += 'highlight-model'; 
