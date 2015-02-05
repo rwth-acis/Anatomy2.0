@@ -21,8 +21,8 @@ body {
   color 		: #C8C8C8;
 
   position 		: absolute;
-  top 	 		: 30px; 
-  left 	 		: 2px; 
+  top 	 		: 8px;
+  left 	 		: 32px;
 
   padding		: 5px;
 
@@ -33,5 +33,5 @@ body {
   z-index 			: 1000;
 
   cursor 		: help;
-  display: none
+  display: none;
 }

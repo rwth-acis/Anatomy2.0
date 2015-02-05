@@ -30,20 +30,6 @@ describe('The viewer', function() {
     isSynchronized = true;
   });
 
-  it('receives a message that the camera\'s viewpoint of another model\'s ' + 
-     'needs to be updated',
-      function() {
-        var extras = {
-            position: posMat, 
-            orientation: rotMat, 
-            selectedModel: "model1"
-        };
-        spyOn(window, 'setView');
-
-        onRemoteUpdate(extras);
-        expect(setView).not.toHaveBeenCalled();
-  }); 
-
   it('receives a message that it needs to update the camera\'s viewpoint',
       function() {
         var extras = {position: posMat, orientation: rotMat, selectedModel: ""};
@@ -85,8 +71,8 @@ describe('The viewer', function() {
             '"rotMat":{"_00":1,"_01":0,"_02":0,"_03":0,"_10":0,"_11":1,' + 
             '"_12":0,"_13":0,"_20":0,"_21":0,"_22":1,"_23":0,"_30":0,"_31":0,' +
             '"_32":0,"_33":1},' +
-	    '"timestamp":"2013-10-22T22:00:00.000Z",' +
-            '"selectedModel":""}', '*');
+	    '"model":"","timestamp":"2013-10-22T22:00:00.000Z",' +
+            '"selectedModel":"","modelId":""}', '*');
   });
 
   it('does not send its position and orientation when it is currently ' +

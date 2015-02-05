@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="../css/font-awesome.min.css">
 
 	<!-- Custom styles-->
-	
+
 	<link rel="stylesheet" href="../css/bootstrap-theme.css" media="screen">
 	<link rel="stylesheet" type="text/css" href="../css/da-slider.css" />
 	<link rel="stylesheet" href="../css/style.css">
@@ -20,6 +20,8 @@
 	<script src="assets/js/respond.min.js"></script>
 	<![endif]-->
 
+	<script type='text/javascript' src='../js/init-subsite.js'></script>
+
 	<script src="../js/ajax.js" type="text/javascript"></script>
 	<script src="../js/login.js" type="text/javascript"></script>
 
@@ -27,25 +29,35 @@
 <body>
   <?php
     include("menu.php");
-  ?> 
+  ?>
 
-	<header id="head" class="secondary">
-		<div class="container">
-			<div class="row">
-				<div class="col-sm-8">
-					<h1>Login</h1>
+	<?php
+		//Decide if this site is inside a separate widget
+		if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
+
+		}
+		else {
+			echo '
+			<header id="head" class="secondary">
+				<div class="container">
+					<div class="row">
+						<div class="col-sm-8">
+							<h1>Login</h1>
+						</div>
+					</div>
 				</div>
-			</div>
-		</div>
-	</header>
-</br></br>
+			</header>
+		</br></br>';
+		}
+	?>
+
 	<!-- container -->
 
 	<section class="container">
 		<div class="row flat">
 			<div class="login-card">
 				<h3 class="text-center">Login</h3>
-  
+
   <?php if (isset($_SESSION['user_id'])) { ?>
   <div id="login_status">You are logged in as <?php echo($_SESSION['user_email']) ?>.</div>
   <?php } else { ?>
@@ -55,7 +67,7 @@
       <input type="password" id="login_password" placeholder="Password"/>
       <input type="button" id="form_login_submit" name="login" class="login login-submit" value="Login" onClick="onClickLogin()">
       <img src="../images/ajax-loader.gif" style="display:none" id="login_loader">
-      <div class="login-help">     
+      <div class="login-help">
         <a href="register.php"><p>Create account</p></a>
       </div>
     </form>
@@ -73,8 +85,6 @@
 
 	<!-- JavaScript libs are placed at the end of the document so the pages load faster -->
 	<script src="../js/modernizr-latest.js"></script>
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 	<script src="../js/custom.js"></script>
 
 </body>

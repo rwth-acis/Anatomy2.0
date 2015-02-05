@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../css/font-awesome.min.css">
 
     <!-- Custom styles-->
-    
+
     <link rel="stylesheet" href="../css/bootstrap-theme.css" media="screen">
     <link rel="stylesheet" type="text/css" href="../css/da-slider.css" />
     <link rel="stylesheet" href="../css/style.css">
@@ -32,7 +32,7 @@
 </head>
 
 <body>
-    <?php include("menu.php"); ?> 
+    <?php include("menu.php"); ?>
 
     <header id="head" class="secondary">
         <div class="container">
@@ -55,7 +55,7 @@
                     <img src="../images/role-full.jpg" alt="" class="img-rounded pull-right" width="300">
                     <p>Setting up the environment for collaborative viewing is really
     easy. If you do it for the first time, you can follow these steps:</p>
-                
+
                 <ol>
                   <li>Create a ROLE space <a href="http://role-sandbox.eu/">here</a></li>
                   <li>Log in (e.g. with your Google account)</li>
@@ -76,15 +76,15 @@
     <!-- /container -->
     <?php include("footer.php"); ?>
 
-    
+
 
     <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
 
 
     <script src="../js/modernizr-latest.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-    <script src="../js/jquery.cslider.js"></script>
+    <!-- script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script-->
+    <!-- script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script-->
+    <!-- script src="../js/jquery.cslider.js"></script -->
     <script src="../js/custom.js"></script>
 
 </body>

@@ -1,4 +1,5 @@
 jQuery(document).ready(function ($) {
+    /*
     //da slider
     $('#da-slider').cslider({
         autoplay: true,
@@ -11,6 +12,8 @@ jQuery(document).ready(function ($) {
     });
     // fancybox
     $(".fancybox").fancybox();
+    */
+
     //isotope
     if ($('.isotopeWrapper').length) {
         var $container = $('.isotopeWrapper');
@@ -29,9 +32,9 @@ jQuery(document).ready(function ($) {
             }, "slow");
             return false;
         });
-        $('.navbar-inverse').on('click', 'li a', function () {
+        /*$('.navbar-inverse').on('click', 'li a', function () {
             $('.navbar-inverse .in').addClass('collapse').removeClass('in').css('height', '1px');
-        });
+        });*/
         $('#filter a').click(function () {
             $('#filter a').removeClass('current');
             $(this).addClass('current');

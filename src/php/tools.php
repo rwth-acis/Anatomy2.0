@@ -46,28 +46,28 @@ function getModelStructure($entry, $type) {
     $html = "";
     switch ($type) {
         case 'modelselection':
-            $html .= "<li><img id='image-over$entry[id]' src='../../$entry[preview_url]' alt=$entry[name] name='image-over' width='150' height='150' style='margin-top:5px;' />
+            $html .= "<li><img id='image-over$entry[id]' src='../../$entry[preview_url]' alt=$entry[name] name='image-over' width='160' height='160' style='margin-top:5px;' />
               <span class='text-content'><span>Name: $entry[name]<br>Size: ".$formatBytes($entry["size"])."<br> Category: $entry[classification]</span></span>
               <p id='text-over' style='margin-left:5px;'>$entry[name]</p>
               </li>";
             break;
 
         case 'modeldeletion':
-            $html .= "<li><img id='image-over$entry[id]' name='image-over' src='../../$entry[preview_url]' alt=$entry[name] width='150' height='150' />
+            $html .= "<li><img id='image-over$entry[id]' name='image-over' src='../../$entry[preview_url]' alt=$entry[name] width='160' height='160' />
               <span class='text-content'><span>Name: $entry[name]<br>Size: ".$formatBytes($entry["size"])."<br> Category: $entry[classification]</span></span>
               <p id='text-over'>$entry[name]</p>
 	            <div class='delete' id='$entry[id]'></div>
               </li>";
             break;
-        
+
         // model, "normal" list
         default:
-            $html .= "<li><a href='model_viewer.php?id=$entry[id]' id='a_img$entry[id]'><img id='image-over$entry[id]' name='image-over' src='../../$entry[preview_url]' alt=$entry[name] width='150' height='150' />
+            $html .= "<li><a href='model_viewer.php?id=$entry[id]' id='a_img$entry[id]'><img id='image-over$entry[id]' name='image-over' src='../../$entry[preview_url]' alt=$entry[name] width='160' height='160' />
               <span class='text-content'><span>Name: $entry[name]<br>Size: ".$formatBytes($entry["size"])."<br> Category: $entry[classification]</span></span></a>
               <p id='text-over'>$entry[name]</p>
               </li>";
             break;
-            
+
     }
 
     return $html;
@@ -86,7 +86,7 @@ function getCourseStructure($entry) {
     // id used to derive course id (from database) connected to clicked link
     return "<li><a href='course.php?id=$entry[id]".$html."' id='a_img$entry[id]'>
             <img src=$entry[img_url] alt=$entry[name] class='img-responsive img-fit'>
-            <h3>$entry[name]</h3>
+            <p style='font-weight: bold;'>$entry[name]</p>
             </a></li>";
 }
 ?>

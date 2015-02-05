@@ -216,15 +216,15 @@ label {
 }
 
 .login-card h1 {
-  color: #111; 
-  font-family: 'Open Sans Condensed', 
-  sans-serif; 
-  font-size: 30px; 
-  font-weight: 700; 
-  line-height: 64px; 
-  margin: 0 0 0; 
-  padding: 20px 30px; 
-  text-align: center; 
+  color: #111;
+  font-family: 'Open Sans Condensed',
+  sans-serif;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 64px;
+  margin: 0 0 0;
+  padding: 20px 30px;
+  text-align: center;
   text-transform: uppercase;
 }
 
@@ -269,7 +269,7 @@ label {
 .login-submit {
   border: 0px;
   color: #fff;
-  text-shadow: 0 1px rgba(0,0,0,0.1); 
+  text-shadow: 0 1px rgba(0,0,0,0.1);
   background-color: #357ae8;
 }
 
@@ -310,13 +310,13 @@ ul.img-list {
   padding: 0;
   text-align: center;
 }
- 
+
 ul.img-list li {
   display: inline-block;
-  height: 150px;
+  height: 160px;
   margin: 0 1em 1em 0;
   position: relative;
-  width: 150px;
+  width: 160px;
 }
 
 span.text-content {
@@ -324,18 +324,18 @@ span.text-content {
   color: white;
   cursor: pointer;
   display: table;
-  height: 150px;
+  height: 160px;
   left: 0;
   position: absolute;
   top: 0;
-  width: 150px;
+  width: 160px;
   opacity: 0;
 
 }
 
 ul.img-list li:hover span.text-content {
   opacity: 1;
-} 
+}
 span.text-content span {
   display: table-cell;
   text-align: center;
@@ -346,19 +346,19 @@ span.text-content span {
   padding-right: 73px;
 }
 
-#image-over{   
+#image-over{
   position:absolute;
   left:0;
   top:0;
 }
 #text-over{
   z-index:100;
-  position:absolute;    
+  position:absolute;
   color:black;
   font-weight: bold;
   font-size:14px;
   left:0px;
-  top:150px;
+  top:160px;
 }
 
 
@@ -482,11 +482,11 @@ img.pull-left {
   padding: 20px;
   border: solid 1px #ddd;
   background: rgb(240, 240, 240);
-  margin-bottom: 20px;  
+  margin-bottom: 20px;
 }
 
 .featured-box .text {
-  padding-left: 80px;  
+  padding-left: 80px;
 }
 
 .featured-box h3 {
@@ -674,9 +674,9 @@ footer ul li {
   max-width: 100%;
   max-height: 100%;
 }
- 
+
 .highlight-model {
-  background-color: GreenYellow;
+  background-color: #8afb67;
   padding: 5px;
 }
 
@@ -752,5 +752,3 @@ footer ul li {
     font-weight: 400;
   }
 }
-
-

@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="../css/font-awesome.min.css">
 
   <!-- Custom styles-->
-  
+
   <link rel="stylesheet" href="../css/bootstrap-theme.css" media="screen">
   <link rel="stylesheet" type="text/css" href="../css/da-slider.css" />
   <link rel="stylesheet" href="../css/style.css">
@@ -29,7 +29,7 @@
        //get data from db
        include '../php/db_connect.php';
        include '../php/tools.php';
-       
+
        $arg    = $_GET["id"];
        $query  = $db->query("SELECT * FROM courses WHERE id = $arg");
        $entry = $query->fetchObject();
@@ -49,7 +49,7 @@
       <div class='row'>
         <div class='col-md-4'>
           <h3><?php echo "$entry->name"; ?></h3>
-          
+
           <div class='featured-box'>
             <img src=<?php echo "$entry->img_url"?> ><br><br>
             <div>
@@ -70,12 +70,12 @@
               </p>
             </div>
           </div>
-          
-        </div>	
+
+        </div>
         <div class='col-md-8'>
           <div><h3>Models</h3></div>
           <br><br>
-      
+
   <?php
   //create model overview in course
   $query = $db->query("SELECT * FROM course_models
@@ -84,17 +84,17 @@
   $result = $query->fetchAll();
 
   $html = createTable($result,'model');
-  
+
   echo $html;
   ?>
-         
+
         </div>
       </div>
-    </div>	
+    </div>
     </section>
   </div>
   <!-- container -->
-  
+
   <?php include("footer.php"); ?>
 
 
@@ -102,8 +102,6 @@
 
 
   <script src="../js/modernizr-latest.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-  <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
   <script src="../js/jquery.cslider.js"></script>
   <script src="../js/custom.js"></script>
   <!-- Init communication with wrapper -->

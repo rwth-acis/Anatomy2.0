@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../css/font-awesome.min.css">
 
     <!-- Custom styles-->
-    
+
     <link rel="stylesheet" href="../css/bootstrap-theme.css" media="screen">
     <link rel="stylesheet" type="text/css" href="../css/da-slider.css" />
     <link rel="stylesheet" href="../css/style.css">
@@ -23,17 +23,28 @@
 </head>
 
 <body>
-    <?php include("menu.php"); ?> 
-    
-    <header id="head" class="secondary">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-8">
-                    <h1>Help</h1>
+    <?php include("menu.php"); ?>
+
+    <?php
+      //Decide if this site is inside a separate widget
+      if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
+
+      }
+      else {
+        echo '
+            <header id="head" class="secondary">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h1>Help</h1>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </header>
+            </header>
+        ';
+      }
+    ?>
+
 
     <!-- container -->
     <section class="container">
@@ -69,7 +80,7 @@
                 collaborative viewing is really easy. If
                 you do it for the first time, you can
                 follow these steps:</p>
-                
+
                 <ol>
                   <li>Create a ROLE space <a href="http://role-sandbox.eu/">here</a></li>
                   <li>Log in (e.g. with your Google account)</li>
@@ -101,7 +112,7 @@
 
                 <h3>Upload Your Own Model</h3>
                 <p>
-                    
+
                     It is also possible to upload your 3D
                               model to the database, so you can view
                               it in collaboration with others. You can
@@ -159,14 +170,12 @@
     <!-- /container -->
     <?php include("footer.php"); ?>
 
-    
+
 
     <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
 
 
     <script src="../js/modernizr-latest.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     <script src="../js/custom.js"></script>
 
 </body>

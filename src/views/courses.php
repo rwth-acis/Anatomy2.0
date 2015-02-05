@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="../css/font-awesome.min.css">
 
   <!-- Custom styles-->
-  
+
   <link rel="stylesheet" href="../css/bootstrap-theme.css" media="screen">
   <link rel="stylesheet" href="../css/style.css">
 
@@ -31,13 +31,37 @@
 
 </head>
 <body>
-  <?php include("menu.php"); ?> 
+  <?php include("menu.php"); ?>
+
+  <?php
+    //Decide if this site is inside a separate widget
+    if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
+
+    }
+    else {
+      echo '
+          <header id="head" class="secondary">
+              <div class="container">
+                  <div class="row">
+                      <div class="col-sm-8">
+                          <h1>Courses</h1>
+                      </div>
+                  </div>
+              </div>
+          </header>
+      ';
+    }
+  ?>
 
   <!-- Button to create a new course -->
   <?php if (isset($_SESSION['user_id'])) { ?>
-  <p><a class="btn btn-primary btn-lg" href="addcourse.php" role="button">Add a new course</a></p>
+  <div class="container-fluid">
+    <div class="row">
+      <p><a class="btn btn-primary btn-lg" style="width:100%" href="addcourse.php" role="button">Create New Course</a></p>
+    </div>
+  </div>
   <?php } ?>
-  
+
   <!-- Build course table -->
     <div id="table-container">
     <?php
@@ -46,22 +70,20 @@
 
       $query  = $db->query("SELECT * FROM courses");
       $result = $query->fetchAll();
-      
+
       $html = createTable($result,"course");
       echo $html;
     ?>
     </div>
   <!-- /container -->
-    
+
   <?php include("footer.php");?>
-  
+
 
   <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
 
 
   <script src="../js/modernizr-latest.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-  <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
   <script src="../js/custom.js"></script>
 
   <?php
@@ -70,7 +92,7 @@
      {
          print("<script type='text/javascript' src='../js/courses-widget.js'> </script>");
      }
- ?>          
+ ?>
 
 </body>
 </html>

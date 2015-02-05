@@ -89,20 +89,4 @@ describe('The edit page', function() {
     expect(ajax.post).toHaveBeenCalled();
     expect(ajax.post.calls.mostRecent().args[1]).toEqual({"course": 1, "models": '{"1":"object1","2":"object2"}'});
   });
-
-
-  // Test for callback of getModels()
-  xit("shows a popup when the 'Add models' button is clicked", function() {
-    expect($("#modelbox").css("display")).toEqual("none");
-
-    // Make ajax call manually because the path of the script is different
-    spyOn(window, "getModels").and.callFake(function() {
-        ajax.post("../../php/getcoursemodels.php", {"course": 1}, 
-            getModelsCallback);
-    });
-    spyOn(window, "getModelsCallback");
-
-    $("#openbox").click();
-    expect(getModelsCallback).toHaveBeenCalled();
-  });
 });

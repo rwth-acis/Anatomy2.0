@@ -25,16 +25,34 @@ var remoteLecturer  = false;
 var lecturerMode    = false;
 
 /**
+ * Retrieves URL parameters.
+ */
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+/**
+ * Function for reloading synchronously with other widgets.
+ */
+function onReloadRequest() {
+  window.location.reload(false);
+}
+subscribeIWC("Reload", onReloadRequest);
+/**
  * Function for initial state sync from other clients.
  */
-function onUserConnected() {
+function onUserConnected(extras) {
   if (lecturerMode) {
     var data = new Object();
     data['enabled'] = true;
     publishIWC("LecturerModeUpdate", data);
   }
+  onLocalUpdate();
 }
-subscribeIWC("UserConnectionUpdate", onUserConnected);
+subscribeIWC("UserConnected", onUserConnected);
 
 /**
  * Sets up the X3D viewport and subscribes to
@@ -64,13 +82,14 @@ function initializeModelViewer() {
 }
 
 /**
- * Event handler for getting a new iwc message with a new view matrix and 
+ * Event handler for getting a new iwc message with a new view matrix and
  * updating the local viewer with remote data.
  * @param extras parameters from the iwc message with position and rotation
  */
 function onRemoteUpdate(extras) {
   // Don't synchronize if the viewpoint is from another model
   if(extras.selectedModel != window.location.search){
+    window.location.assign(extras.selectedModel);
     return;
   }
 
@@ -92,7 +111,7 @@ function onRemoteUpdate(extras) {
   if(lastTimestamp == null || newTimestamp > lastTimestamp) {
     //disable sending position updates until we receive no more update
     canSend = false;
-      
+
     setView(x3dRoot.runtime, extras, finishedSettingView);
     lastTimestamp = newTimestamp;
   }
@@ -103,7 +122,7 @@ function onRemoteUpdate(extras) {
 subscribeIWC("ViewpointUpdate", onRemoteUpdate);
 
 /**
- * Propagates local changes via mouse to all remote clients 
+ * Propagates local changes via mouse to all remote clients
  * when synchronization is enabled.
  */
 function onLocalUpdate() {
@@ -117,11 +136,13 @@ function onLocalUpdate() {
 
   // Setup the data to be sent to others.
   var data = getView(x3dRoot.runtime);
+  data["model"] = window.location.search;
   data["timestamp"] = new Date();
   lastTimestamp = data["timestamp"];
 
   //also specifiy what model was moved (included in uri)
   data.selectedModel = window.location.search;
+  data.modelId = getParameterByName('id');
 
   publishIWC("ViewpointUpdate", data);
   log('Published message!');
@@ -132,13 +153,13 @@ function onLocalUpdate() {
  * when synchronization is enabled.
  * @param evt viewpoint changed event
  */
-function viewpointChanged(evt) {    
+function viewpointChanged(evt) {
 
   // Prevent widgets from sending updates while applying a received viewpoint msg
   // If we set the position because we received a message we do not want to send it back
   if(!evt || processingMessage || !canSend) {
     log("Bypassing send!");
-    
+
     return;
   }
 
@@ -156,7 +177,7 @@ function viewpointChanged(evt) {
   if(typeof sendTimeout != 'undefined'){
     clearTimeout(sendTimeout);
   }
-  sendTimeout = setTimeout(function(){ 
+  sendTimeout = setTimeout(function(){
     //disable sending
     clearTimeout(updateInterval);
     updateInterval = null;
@@ -194,7 +215,7 @@ function savePositionAndOrientation() {
   posAndOrient = getView(x3dRoot.runtime);
 }
 
-/**  
+/**
  * Callback function for the setView function,
  * so we get notified when the interpolation is finished.
  */
@@ -203,9 +224,9 @@ function finishedSettingView(){
   if(typeof enableSendingTimeout != 'undefined'){
     clearTimeout(enableSendingTimeout);
   }
-  enableSendingTimeout = setTimeout(function(){ 
+  enableSendingTimeout = setTimeout(function(){
     //disable sending
-    canSend = true; 
+    canSend = true;
     log("finished updating");
   } , 50);
 }
@@ -217,7 +238,7 @@ function finishedSettingView(){
 function onRemoteLecturerMode(extras) {
   remoteLecturer = extras.enabled;
 
-  if(remoteLecturer)  
+  if(remoteLecturer)
     document.getElementById('navType').setAttribute("type", "None");
   else
     document.getElementById('navType').setAttribute("type", "Examine");
@@ -262,12 +283,4 @@ window.onbeforeunload = function(){
     toggleLecturerMode();
     sleep(2000);
   }
-}
-
-/**
- * Propagate connection status for this client to other clients
- * on load to receive current state from them.
- */
-document.onload = function(e) {
-  publishIWC("UserConnectionUpdate", new Object());
 }
