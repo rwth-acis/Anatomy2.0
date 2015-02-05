@@ -26,6 +26,12 @@
       }
     ?>
 
+    <?php
+      if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
+
+      }
+      else {
+        echo '
     <header id="head" class="secondary">
       <div class="container">
         <div class="row">
@@ -36,6 +42,9 @@
       </div>
     </header>
     </br></br>
+      ';
+      }
+    ?>
 
     <div class="container">
       <!--- UPLOAD FORM -->
