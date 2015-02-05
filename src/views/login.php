@@ -20,8 +20,15 @@
 	<script src="assets/js/respond.min.js"></script>
 	<![endif]-->
 
-	<script type='text/javascript' src='../js/init-subsite.js'></script>
 
+	<?php
+	   //Decide if this site is inside a separate widget
+	   if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+	   {
+	       //we have to link to the widget versions:
+	       print("<script type='text/javascript' src='../js/init-subsite.js'></script>");
+	   }
+	?>	
 	<script src="../js/ajax.js" type="text/javascript"></script>
 	<script src="../js/login.js" type="text/javascript"></script>
 
