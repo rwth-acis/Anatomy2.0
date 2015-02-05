@@ -1,0 +1,267 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+
+<html lang="en">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta name="Author" content="Michalis Kamburelis">
+
+<meta name="Language" content="English">
+
+<title>Compositing Shaders</title>
+
+
+<!--
+  This is unclean, but it's more comfortable to keep below CSS
+  directly inside HTML page. This is in kambi_common.php,
+  that should be useful for both michalis.ii and castle-engine.sf.net webpages,
+  and must be suitable also for offline documentation in castle-engine programs.
+-->
+<!-- link type="text/css" rel="stylesheet" media="all"  href="kambi-php-lib/kambi_common.css" -->
+
+<style type="text/css"><!--
+body { background: white; font-family: sans-serif; }
+
+dt { font-weight: bold; }
+div.page_footer { }
+span.page_copyright { font-size: smaller }
+
+span.version_number { font-size: small }
+
+div.quick_links_bottom_line { text-align: left; }
+
+.rss_link {
+  float: right;
+  background: red;
+  padding: 0.3em;
+  border: thin outset black;
+}
+
+.rss_link a {
+  color: white;
+  font-weight: bold
+}
+--></style>
+
+
+<link rel="alternate" type="application/rss+xml"
+  title="Castle Game Engine - News Feed"
+  href="http://castle-engine.sourceforge.net/news_feed.php">
+
+<link type="text/css" rel="stylesheet" media="all" href="castle-engine.css">
+<link type="text/css" rel="stylesheet" href="colorbox/example3/colorbox.css">
+
+<script type="text/javascript" src="castle-engine.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="colorbox/jquery.colorbox-min.js"></script>
+
+<style type="text/css"><!--
+/**
+ * GeSHi Dynamically Generated Stylesheet
+ * --------------------------------------
+ * Dynamically generated stylesheet for delphi
+ * CSS class: sourcecode, CSS id: 
+ * GeSHi (C) 2004 - 2007 Nigel McNie, 2007 - 2008 Benny Baumann
+ * (http://qbnz.com/highlighter/ and http://geshi.org/)
+ * --------------------------------------
+ */
+.delphi.sourcecode .de1, .delphi.sourcecode .de2 {font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;}
+.delphi.sourcecode  {font-family:monospace;}
+.delphi.sourcecode .imp {font-weight: bold; color: red;}
+.delphi.sourcecode li, .delphi.sourcecode .li1 {font-weight: normal; vertical-align:top;}
+.delphi.sourcecode .ln {width:1px;text-align:right;margin:0;padding:0 2px;vertical-align:top;}
+.delphi.sourcecode .li2 {font-weight: bold; vertical-align:top;}
+.delphi.sourcecode .kw1 {color: #000000; font-weight: bold;}
+.delphi.sourcecode .kw2 {color: #000000; font-weight: bold;}
+.delphi.sourcecode .kw3 {color: #000066;}
+.delphi.sourcecode .kw4 {color: #000066; font-weight: bold;}
+.delphi.sourcecode .co1 {color: #808080; font-style: italic;}
+.delphi.sourcecode .co2 {color: #008000; font-style: italic;}
+.delphi.sourcecode .coMULTI {color: #808080; font-style: italic;}
+.delphi.sourcecode .es0 {color: #ff0000; font-weight: bold;}
+.delphi.sourcecode .br0 {color: #000066;}
+.delphi.sourcecode .sy0 {color: #000066;}
+.delphi.sourcecode .sy1 {color: #000066;}
+.delphi.sourcecode .sy2 {color: #000066;}
+.delphi.sourcecode .sy3 {color: #000066;}
+.delphi.sourcecode .st0 {color: #ff0000;}
+.delphi.sourcecode .nu0 {color: #0000ff;}
+.delphi.sourcecode .me1 {color: #006600;}
+.delphi.sourcecode .re0 {color: #0000cc;}
+.delphi.sourcecode .re1 {color: #ff0000;}
+.delphi.sourcecode .ln-xtra, .delphi.sourcecode li.ln-xtra, .delphi.sourcecode div.ln-xtra {background-color: #ffc;}
+.delphi.sourcecode span.xtra { display:block; }
+ -->
+</style>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    (function() {
+        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+        s.type = 'text/javascript';
+        s.async = true;
+        s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+        t.parentNode.insertBefore(s, t);
+    })();
+/* ]]> */
+</script><script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+  </head>
+<body>
+
+
+  <div class="header">
+    <!--img class="header_icon" src="images/header_icon.png" alt="Castle Game Engine icon" /-->
+    <div class="header_title"><a href="http://castle-engine.sourceforge.net/index.php">Castle Game Engine</a></div>
+    
+    <table class="header_menu">
+      <tr>
+        <td colspan="15" class="higher higher_left">&larr; Users</td>
+        <td colspan="6" class="higher higher_right">Developers &rarr;</td>
+      </tr>
+      <tr><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/index.php">Intro</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/news.php">News</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/view3dscene.php" title="VRML / X3D browser, and a viewer for other 3D model formats">view3dscene</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/castle.php" title="First-person perspective game, in a dark fantasy setting">The Castle</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/all_programs.php" title="All the games and tools using our 3D engine">All Programs</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/forum.php" title="Ask for help, report bugs, discuss features">Forum</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/donate.php">Donate</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/engine.php" title="Sources and documentation for developers">Engine</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="vrml_x3d.html" title="Our extensions and status of VRML/X3D implementation" id="current">VRML/X3D</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/blender.php" title="Customized Blender X3D exporter">Blender</a></td><td class="lower_separator"><div>&nbsp;</div></td>
+      </tr>
+    </table>
+  </div><table class="layout" cellspacing="0">
+      <col class="content_column">
+      <col class="sidebar_column">
+      <tr><td class="layout content"><div class="header_breadcrumbs"><a href="http://castle-engine.sourceforge.net/index.php">Home <i>(online docs)</i></a> &#187; <a href="vrml_x3d.html">VRML / X3D support</a> &#187; <a href="x3d_extensions.html">Extensions</a></div><table align="right" style="clear: right"><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/volumetric_animated_fog_all.png"
+             class="screenshot"
+             title="Volumetric fog"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/volumetric_animated_fog_all.png"
+            alt="Volumetric fog"
+          /></a></td></tr><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/volumetric_animated_fog_no_fog.png"
+             class="screenshot"
+             title="Scene for the volumetric fog, here visible with fog turned off"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/volumetric_animated_fog_no_fog.png"
+            alt="Scene for the volumetric fog, here visible with fog turned off"
+          /></a></td></tr><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/volumetric_animated_fog_no_light.png"
+             class="screenshot"
+             title="Volumetric fog, with normal lighting turned off"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/volumetric_animated_fog_no_light.png"
+            alt="Volumetric fog, with normal lighting turned off"
+          /></a></td></tr><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/fancy_light_spot_shape.png"
+             class="screenshot"
+             title="Textured spot light with shadow"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/fancy_light_spot_shape.png"
+            alt="Textured spot light with shadow"
+          /></a></td></tr><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/flowers.png"
+             class="screenshot"
+             title="Flowers bending under the wind, transformed on GPU in object space"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/flowers.png"
+            alt="Flowers bending under the wind, transformed on GPU in object space"
+          /></a></td></tr><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/fresnel_and_toon.png"
+             class="screenshot"
+             title="Toon and Fresnel effects combined"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/fresnel_and_toon.png"
+            alt="Toon and Fresnel effects combined"
+          /></a></td></tr><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/noise.png"
+             class="screenshot"
+             title="3D and 2D smooth noise on GPU, wrapped in ShaderTexture"><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/noise.png"
+            alt="3D and 2D smooth noise on GPU, wrapped in ShaderTexture"
+          /></a></td></tr></table><h1>Compositing Shaders</h1>
+<p>Contents:</p>
+<div class="table_of_contents"><ol>
+<li><a href="#section_intro">Intro</a>
+</li>
+<li><a href="#section_examples">Examples</a>
+</li>
+<li><a href="#section_docs">Documentation</a>
+</li>
+</ol>
+</div><h2><a name="section_intro">1. Intro</a></h2>
+
+<p>You can create pieces of shading language
+code that will be seamlessly integrated with our engine internal shaders.
+This allows you to create a myriad of effects using
+the OpenGL Shading Language (GLSL).
+Contrary to the traditional approach (using <tt>ComposedShader</tt> node,
+see <a href="x3d_implementation_shaders.html">shader component support</a>),
+our system allows you to define effects easily, without the need
+to replicate existing functionality (like lighting and texturing operations),
+and your effects automatically cooperate with each other and with standard
+rendering features.</p>
+
+<h2><a name="section_examples">2. Examples</a></h2>
+
+<p>The examples are available inside
+<a href="demo_models.html">our VRML/X3D demo models</a>.
+Download them, and look inside the subdirectory <tt>compositing_shaders</tt> there.
+Also the <tt>water</tt> subdirectory contains water implementation
+using our effects.</p>
+
+<p>You can open the example models with any of our engine tools, like
+<a href="http://castle-engine.sourceforge.net/view3dscene.php">view3dscene <i>(online docs)</i></a>.</p>
+
+<h2><a name="section_docs">3. Documentation</a></h2>
+
+<ol>
+  <li><a href="http://castle-engine.sourceforge.net/compositing_shaders_doc/html/">"Compositing Shaders in X3D" documentation, HTML version</a>. This is my Ph.D. thesis, enjoy :)</li>
+  <li><a href="http://castle-engine.sourceforge.net/compositing_shaders_doc/compositing_shaders_doc.pdf">"Compositing Shaders in X3D" documentation, PDF version</a>. Exactly the same content as above HTML version, just in PDF &mdash; probably much better for printing.</li>
+  <li><a href="http://castle-engine.sourceforge.net/compositing_shaders_slides.pdf">Slides from my presentation (on TPCG11) about the compositing shaders</a>.</li>
+  <li><a href="http://castle-engine.sourceforge.net/compositing_shaders_sem_dokt_polish.pdf">Slides in Polish from my presentation (on seminar on ii.uni.wroc.pl)</a>. These slides have roughly the same content as above TPCG11 slides, but in Polish.</li>
+  <li>My paper about this idea was also accepted to the <a href="http://www.eguk.org.uk/TPCG11/">Theory and Practice of Computer Graphics 2011 conference</a>. I don't have permission to redistribute it here publicly, but basically it's a shortcut of my Ph.D. thesis. Anyway, you can buy it from <a href="http://diglib.eg.org/EG/DL/LocalChapterEvents/TPCG/TPCG11">EG digital library (along with other papers from TPCG11 proceedings)</a>.</li>
+  <li>Of course, you can also get the sources of above documents:
+    <ul>
+      <li>My Ph.D. thesis sources (in DocBook) can be downloaded from SVN URL:<br/>
+        <tt>http://svn.code.sf.net/p/castle-engine/code/trunk/papers/compositing_shaders_doc/</tt></li>
+      <li>Slides and conference paper (in TeX) are alongside, on SVN URL:<br/>
+        <tt>http://svn.code.sf.net/p/castle-engine/code/trunk/papers/compositing_shaders/</tt></li>
+    </ul>
+  </li>
+</ol>
+
+<p>Finally, if you're interested in more information,
+<a href="mailto:michalis.kambi%20AT%20gmail.com">send me a mail</a>.
+And be sure to investigate the examples mentioned above!</p>
+
+</td><td class="layout">
+  <div class="sidebar">
+    <div class="sidebar_title"><a href="vrml_x3d.html">VRML / X3D support</a></div><ul><li><a href="demo_models.html">Demo models</a></li><li><a href="x3d_extensions.html">Extensions</a><ul><li>Compositing Shaders</li><li><a href="x3d_extensions_screen_effects.html">Screen Effects</a></li><li><a href="x3d_extensions_shadow_maps.html">Shadow Maps</a></li><li><a href="x3d_extensions_vrml1.html">(Old) VRML 1.0</a></li></ul></li><li><a href="x3d_implementation_status.html">Implementation status</a><ul><li><a href="x3d_implementation_core.html">Core</a></li><li><a href="x3d_implementation_time.html">Time</a></li><li><a href="x3d_implementation_networking.html">Networking</a></li><li><a href="x3d_implementation_grouping.html">Grouping</a></li><li><a href="x3d_implementation_rendering.html">Rendering</a></li><li><a href="x3d_implementation_shape.html">Shape</a></li><li><a href="x3d_implementation_geometry3d.html">Geometry3D</a></li><li><a href="x3d_implementation_geometry2d.html">Geometry2D</a></li><li><a href="x3d_implementation_text.html">Text</a></li><li><a href="x3d_implementation_sound.html">Sound</a></li><li><a href="x3d_implementation_lighting.html">Lighting</a></li><li><a href="x3d_implementation_texturing.html">Texturing</a><ul><li><a href="x3d_implementation_texturing.html#section_multi_texturing">Clarifications to X3D multi-texturing</a></li><li><a href="x3d_implementation_texturing.html#section_dds">DDS (DirectDraw Surface)</a></li></ul></li><li><a href="x3d_implementation_interpolation.html">Interpolation</a></li><li><a href="x3d_implementation_pointingdevicesensor.html">Pointing device sensor</a></li><li><a href="x3d_implementation_keydevicesensor.html">Key device sensor</a></li><li><a href="x3d_implementation_environmentalsensor.html">Environmental sensor</a></li><li><a href="x3d_implementation_navigation.html">Navigation</a></li><li><a href="x3d_implementation_environmentaleffects.html">Environmental effects</a></li><li><a href="x3d_implementation_hanim.html">H-Anim</a></li><li><a href="x3d_implementation_nurbs.html">NURBS</a><ul><li><a href="x3d_implementation_nurbs.html#section_homogeneous_coordinates">Control points are in homogeneous coordinates</a></li></ul></li><li><a href="x3d_implementation_scripting.html">Scripting</a></li><li><a href="x3d_implementation_eventutilities.html">Event utilities</a></li><li><a href="x3d_implementation_shaders.html">Programmable shaders</a></li><li><a href="x3d_implementation_cadgeometry.html">CAD geometry</a></li><li><a href="x3d_implementation_texturing3d.html">Texturing3D</a></li><li><a href="x3d_implementation_cubemaptexturing.html">Cube map environmental texturing</a></li></ul></li><li><a href="nist_vrml_test_suite.html">NIST conformace test suite</a></li><li><a href="castle_script.html">CastleScript language reference</a></li><li><a href="kanim_format.html">Kanim (precalculated animations) file format</a></li><li><a href="x3d_time_origin_considered_uncomfortable.html">VRML / X3D time origin considered uncomfortable</a></li></ul></div></td></tr></table><script type="text/javascript">
+  jQuery('a.screenshot').colorbox({opacity: 0.9, rel:'screenshot', maxWidth:'90%', maxHeight:'90%'});
+</script>
+  
+<hr>
+
+<div class="page_footer">
+
+    <address>
+    By Michalis Kamburelis, as part of
+    <a href="http://castle-engine.sourceforge.net/">Castle Game Engine</a>.
+    </address>
+    
+  <table><tr>
+
+    <td><a href="http://sourceforge.net/projects/castle-engine">Hosted by SourceForge.net</a></td>
+
+    <td><span class="page_copyright">Copyright <a href="http://michalis.ii.uni.wroc.pl/~michalis/">Michalis Kamburelis</a>.
+This page is considered part of documentation of my programs,
+and you are free to modify and further distribute it on terms of
+<a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License</a>.
+</span></td>
+
+    
+  </tr></table>
+
+  
+</div>
+
+</body>
+</html>
+

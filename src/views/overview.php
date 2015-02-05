@@ -1,65 +1,82 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Collaborative 3D Model Viewer</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" charset="utf8"/>
-    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="../css/style.css">
-    <!-- Init communication with wrapper -->
-    <script type='text/javascript' src='../js/init-subsite.js'></script>
-    <?php
-       //Decide if this site is inside a separate widget
-       if(isset($_GET["widget"]) && $_GET["widget"] == "true")
-       {
-           print("<script type='text/javascript' src='../js/overview-widget.js'> </script>");
-       }
-    ?>
-  </head>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Collaborative Viewing of 3D Models </title>
+  <link rel="stylesheet" media="screen" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+  <link rel="stylesheet" href="../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/font-awesome.min.css">
 
-  <body>
-    <?php
-      include("menu.php");
-    ?>  
+  <!-- Custom styles-->
 
-    <!--<div class="row">
-      <h2>Models</h2>
-    </div>-->
-    
-    <!-- Build model table -->
-    <div id="table-container">
-    <?php
+  <link rel="stylesheet" href="../css/bootstrap-theme.css" media="screen">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+  <script src="assets/js/html5shiv.js"></script>
+  <script src="assets/js/respond.min.js"></script>
+  <![endif]-->
+
+  <!-- Init communication with wrapper -->
+  <script type='text/javascript' src='../js/init-subsite.js'></script>
+  <?php
+    //Decide if this site is inside a separate widget
+    if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+    {
+      print("<script type='text/javascript' src='../js/overview-widget.js'> </script>");
+    }
+  ?>
+
+</head>
+<body>
+  <?php
+    include("menu.php");
+  ?>
+  <?php
+    //Decide if this site is inside a separate widget
+    if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
+
+    }
+    else {
+      echo '
+      <header id="head" class="secondary">
+        <div class="container">
+          <div class="row">
+            <h1>Models</h1>
+          </div>
+        </div>
+      </header>
+      ';
+    }
+  ?>
+  <?php include("search.html"); ?>
+  <!-- container -->
+  <section class="container">
+    <br><br><br>
+    <div class="container" id="result-container">
+      <?php
       include '../php/db_connect.php';
-      $query  = "SELECT * FROM models";
-      $result = mysql_query($query);
-      $i = 1;
-      $html = '<div class="row">';
-      while($entry = mysql_fetch_object($result))
-      {
-        if($i > 2 && $i % 2) {
-          $html .= '</div><div class="row">';
-        }
-        $html .= 
-        "<div class='col-md-6 overview-entry' name='table-entry' id='table_entry$i'>
-          <a href='model_viewer.php?id=$entry->id' id='a_img$i'>
-            <img src='../../$entry->preview_url' alt=$entry->name class='img-responsive img-fit'>
-            <h3>$entry->name</h3>
-          </a>
-          <p><b>Model Name:</b> $entry->name</p>
-            <p><b>Category:</b> $entry->classification</p>
-            <p><b>Size:</b> $entry->size</p>
-            <p><b>Upload Date:</b> $entry->upload_date</p>
-            <p><b>Description:</b> $entry->description</p>
-        </div>";
+      include '../php/tools.php';
 
-        $i++;
-      }
-      $html .= '</div>';
+      $query  = $db->query("SELECT * FROM models");
+      $result = $query->fetchAll();
 
+      $html = createTable($result, 'model');
       echo $html;
-    ?>
+      ?>
     </div>
+  </section>
+  <!-- /container -->
 
-    <?php include("footer.html"); ?>
+  <?php include("footer.php"); ?>
 
-  </body>
+  <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
+  <script src="../js/modernizr-latest.js"></script>
+  <script src="../js/custom.js"></script>
+  <script type='text/javascript' src='../js/search.js'></script>
+  <script type='text/javascript' src='../js/ajax.js'></script>
+
+</body>
 </html>

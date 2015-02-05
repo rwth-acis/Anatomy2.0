@@ -21,28 +21,34 @@
     <link rel='stylesheet' type='text/css' href='../css/bootstrap.min.css'>
     <link rel='stylesheet' type='text/css' href='../css/style.css'>
 
+    <!-- General functionality (used in menuToolbar.js) -->
+    <script type="text/javascript" src="../js/tools.js"></script>
     <!-- The library for the copy to clipboard feature in the toolbar -->
     <script type="text/javascript" src="../js/ZeroClipboard.js"></script>
   </head>
 
   <body>
-    <?php include("menu.php"); ?>
-  
-    <?php include("toolbar.html"); ?>
-    
+    <?php
+      // Hide the menu in ROLE environment. Outside ROLE the menu must be displayed.
+      if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
+      {
+        include("menu.php");
+      } else {
+        //Decide if this site is inside a separate widget
+        print("<script type='text/javascript' src='../js/model-viewer-widget.js'> </script>");
+      }
+
+     include("toolbar.php");
+    ?>
+
     <div class="row" style="position:relative; padding-left:5%; padding-right:5%">
-      <p id='debugText'></p>
+    <?php if(isset($_GET["id"])) { ?>
+
+      <p id='debugText' style="display:none;"></p>
       <x3d id='viewer_object' showStat="false">
         <scene>
           <navigationInfo headlight="true" type="examine" id="navType"></navigationInfo>
           <background skyColor='1.0 1.0 1.0'> </background>
-          <?php
-             //Decide if this site is inside a separate widget
-             if(isset($_GET["widget"]) && $_GET["widget"] == "true")
-             {
-                 print("<script type='text/javascript' src='../js/model-viewer-widget.js'> </script>");
-             }
-          ?>
           <?php
             include '../php/db_connect.php';
             $arg    = $_GET["id"];
@@ -73,5 +79,8 @@
           </div>";
       ?>
     </div>
+    <?php } else { ?>
+      <p id='debugText'>Please select model!</p>
+    <?php } ?>  <!--- ENDIF around viewer -->
   </body>
 </html>

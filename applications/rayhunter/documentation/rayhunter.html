@@ -1,0 +1,800 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+
+<html lang="en">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta name="Author" content="Michalis Kamburelis">
+
+<meta name="Description" content="rayhunter - simple raytracer. Classic ray tracer and basic Monte Carlo path tracer implemented. Open-source, portable (for Linux, FreeBSD, Mac OS X and Windows).">
+<meta name="Language" content="English">
+
+<title>rayhunter</title>
+
+
+<!--
+  This is unclean, but it's more comfortable to keep below CSS
+  directly inside HTML page. This is in kambi_common.php,
+  that should be useful for both michalis.ii and castle-engine.sf.net webpages,
+  and must be suitable also for offline documentation in castle-engine programs.
+-->
+<!-- link type="text/css" rel="stylesheet" media="all"  href="kambi-php-lib/kambi_common.css" -->
+
+<style type="text/css"><!--
+body { background: white; font-family: sans-serif; }
+
+dt { font-weight: bold; }
+div.page_footer { }
+span.page_copyright { font-size: smaller }
+
+span.version_number { font-size: small }
+
+div.quick_links_bottom_line { text-align: left; }
+
+.rss_link {
+  float: right;
+  background: red;
+  padding: 0.3em;
+  border: thin outset black;
+}
+
+.rss_link a {
+  color: white;
+  font-weight: bold
+}
+--></style>
+
+
+<link rel="alternate" type="application/rss+xml"
+  title="Castle Game Engine - News Feed"
+  href="http://castle-engine.sourceforge.net/news_feed.php">
+
+<link type="text/css" rel="stylesheet" media="all" href="castle-engine.css">
+<link type="text/css" rel="stylesheet" href="colorbox/example3/colorbox.css">
+
+<script type="text/javascript" src="castle-engine.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="colorbox/jquery.colorbox-min.js"></script>
+
+<style type="text/css"><!--
+/**
+ * GeSHi Dynamically Generated Stylesheet
+ * --------------------------------------
+ * Dynamically generated stylesheet for delphi
+ * CSS class: sourcecode, CSS id: 
+ * GeSHi (C) 2004 - 2007 Nigel McNie, 2007 - 2008 Benny Baumann
+ * (http://qbnz.com/highlighter/ and http://geshi.org/)
+ * --------------------------------------
+ */
+.delphi.sourcecode .de1, .delphi.sourcecode .de2 {font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;}
+.delphi.sourcecode  {font-family:monospace;}
+.delphi.sourcecode .imp {font-weight: bold; color: red;}
+.delphi.sourcecode li, .delphi.sourcecode .li1 {font-weight: normal; vertical-align:top;}
+.delphi.sourcecode .ln {width:1px;text-align:right;margin:0;padding:0 2px;vertical-align:top;}
+.delphi.sourcecode .li2 {font-weight: bold; vertical-align:top;}
+.delphi.sourcecode .kw1 {color: #000000; font-weight: bold;}
+.delphi.sourcecode .kw2 {color: #000000; font-weight: bold;}
+.delphi.sourcecode .kw3 {color: #000066;}
+.delphi.sourcecode .kw4 {color: #000066; font-weight: bold;}
+.delphi.sourcecode .co1 {color: #808080; font-style: italic;}
+.delphi.sourcecode .co2 {color: #008000; font-style: italic;}
+.delphi.sourcecode .coMULTI {color: #808080; font-style: italic;}
+.delphi.sourcecode .es0 {color: #ff0000; font-weight: bold;}
+.delphi.sourcecode .br0 {color: #000066;}
+.delphi.sourcecode .sy0 {color: #000066;}
+.delphi.sourcecode .sy1 {color: #000066;}
+.delphi.sourcecode .sy2 {color: #000066;}
+.delphi.sourcecode .sy3 {color: #000066;}
+.delphi.sourcecode .st0 {color: #ff0000;}
+.delphi.sourcecode .nu0 {color: #0000ff;}
+.delphi.sourcecode .me1 {color: #006600;}
+.delphi.sourcecode .re0 {color: #0000cc;}
+.delphi.sourcecode .re1 {color: #ff0000;}
+.delphi.sourcecode .ln-xtra, .delphi.sourcecode li.ln-xtra, .delphi.sourcecode div.ln-xtra {background-color: #ffc;}
+.delphi.sourcecode span.xtra { display:block; }
+ -->
+</style>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    (function() {
+        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+        s.type = 'text/javascript';
+        s.async = true;
+        s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+        t.parentNode.insertBefore(s, t);
+    })();
+/* ]]> */
+</script><script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+  </head>
+<body>
+
+
+  <div class="header">
+    <!--img class="header_icon" src="images/header_icon.png" alt="Castle Game Engine icon" /-->
+    <div class="header_title"><a href="http://castle-engine.sourceforge.net/index.php">Castle Game Engine</a></div>
+    
+    <table class="header_menu">
+      <tr>
+        <td colspan="15" class="higher higher_left">&larr; Users</td>
+        <td colspan="6" class="higher higher_right">Developers &rarr;</td>
+      </tr>
+      <tr><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/index.php">Intro</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/news.php">News</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/view3dscene.php" title="VRML / X3D browser, and a viewer for other 3D model formats">view3dscene</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/castle.php" title="First-person perspective game, in a dark fantasy setting">The Castle</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/all_programs.php" title="All the games and tools using our 3D engine" id="current">All Programs</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/forum.php" title="Ask for help, report bugs, discuss features">Forum</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/donate.php">Donate</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/engine.php" title="Sources and documentation for developers">Engine</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="vrml_x3d.html" title="Our extensions and status of VRML/X3D implementation">VRML/X3D</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/blender.php" title="Customized Blender X3D exporter">Blender</a></td><td class="lower_separator"><div>&nbsp;</div></td>
+      </tr>
+    </table>
+  </div><div class="content">
+<h1>rayhunter <span class="version_number">(version&nbsp;1.3.4)</span></h1><table align="right" style="clear: right"><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/graz-wlight-1-classic-filt.png"
+             class="screenshot"
+             title=""><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/graz-wlight-1-classic-filt.png"
+            alt=""
+          /></a></td></tr><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/sibenik-wlight-1-classic-filt.png"
+             class="screenshot"
+             title=""><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/sibenik-wlight-1-classic-filt.png"
+            alt=""
+          /></a></td></tr><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/forest.png"
+             class="screenshot"
+             title=""><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/forest.png"
+            alt=""
+          /></a></td></tr><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/alien_two_mirrors_2.png"
+             class="screenshot"
+             title=""><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/alien_two_mirrors_2.png"
+            alt=""
+          /></a></td></tr><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/zupa-wlight-path.png"
+             class="screenshot"
+             title=""><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/zupa-wlight-path.png"
+            alt=""
+          /></a></td></tr><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/box-path-samp10x5-depth2-rroul0.5.png"
+             class="screenshot"
+             title=""><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/box-path-samp10x5-depth2-rroul0.5.png"
+            alt=""
+          /></a></td></tr><tr><td>
+          <a href="http://castle-engine.sourceforge.net/images/original_size/graz-wlight-1-path-filt.png"
+             class="screenshot"
+             title=""><img
+            align="right"
+            src="http://castle-engine.sourceforge.net/images/thumb_size/graz-wlight-1-path-filt.png"
+            alt=""
+          /></a></td></tr><tr><td><div class="thumbs_cell_with_text_or_movie">More sample images in <a href="http://castle-engine.sourceforge.net/raytr_gallery.php">rayhunter gallery. <i>(online docs)</i></a></div></td></tr></table>
+<p><tt>rayhunter</tt> is a command-line program that takes
+a 3D model (like a VRML, X3D or Collada file) and renders an image that
+would be visible from given camera looking at given scene.
+Two ray-tracing algorithms
+may be used: deterministic (classic Whitted-style ray-tracer)
+and Monte Carlo path tracing.
+
+<p>You can take a look at the
+<a href="http://castle-engine.sourceforge.net/raytr_gallery.php">gallery of images rendered using rayhunter <i>(online docs)</i></a> as a demonstration of rayhunter's capabilities.
+
+<p>Contents:
+<div class="table_of_contents"><ol>
+<li><a href="#section_download">Download</a>
+</li>
+<li><a href="#section_required_options">Required command-line options</a>
+</li>
+<li><a href="#section_optional_options">Optional command-line options</a>
+</li>
+<li><a href="#section_vrml_interpretation">Some notes about 3d models handling by this ray-tracer</a>
+</li>
+<li><a href="#section_adv_over_view3dscene">Advantages over using ray-tracer built in view3dscene</a>
+</li>
+</ol>
+</div>
+<h2><a name="section_download">Download</a></h2>
+
+<div class="download"><p><a href="http://castle-engine.sourceforge.net/rayhunter.php">Download rayhunter from it's WWW page</a>.</p>
+    <hr/>
+      <div style="float: left"><form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
+">
+<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+<img alt="" border="0" src="https://www.paypalobjects.com/pl_PL/i/scr/pixel.gif" width="1" height="1">
+</form></div>
+      <small>If you like this software, <a href="http://castle-engine.sourceforge.net/donate.php">please consider donating</a>.</small>
+  </div>
+<p>No installation is required. Just download and unpack these archives wherever
+  you want, and run the program inside. The documentation
+  (this web page) is also included inside
+  (look in the <tt>documentation/</tt> subdirectory) for offline viewing.</p>
+<p>This is free/open-source software. Developers can <a href="http://castle-engine.sourceforge.net/all_programs_sources.php">download sources of this program <i>(online docs)</i></a>.
+
+<h2><a name="section_required_options">Required command-line options</a></h2>
+
+<p>Basic syntax to call <tt>rayhunter</tt> is
+
+<p style="font-family: monospace">
+  rayhunter classic &lt;recursion-depth&gt;
+    &lt;image-width&gt; &lt;image-height&gt;
+    &lt;input-filename&gt; &lt;output-filename&gt;
+
+<p>or
+
+<p style="font-family: monospace">
+  rayhunter path &lt;recursion-depth&gt;
+    &lt;non-primary-samples-count&gt; &lt;image-width&gt; &lt;image-height&gt;
+    &lt;input-filename&gt; &lt;output-filename&gt;
+
+<p>
+<ul>
+  <li><p>First option, <tt>classic</tt> or <tt>path</tt>,
+    says which ray-tracing algorithm to use.
+
+    <dl>
+      <dt><tt>classic</tt></dt>
+
+      <dd><p>This is normal Whitted-style deterministic ray-tracer.
+        All normal VRML lights are handled (point, spot, directional,
+        including the headlight).
+        No area lights, so no soft shadows.
+        Algorithm sends one primary ray for each pixel.
+        Ray-tracing is recursive, where the ray casts on some
+        surface we check rays to light sources and eventually
+        we recursively check refracted ray (when <tt>Material</tt>
+        has <tt>transparency</tt> &gt; 0) and reflected ray
+        (when <tt>Material</tt> has <tt>mirror</tt> &gt; 0).
+        Wikipedia has <a href="http://en.wikipedia.org/wiki/Ray-tracing">
+        a nice article about ray-tracing</a> that describes
+        Whitted-style ray-tracing.</dd>
+
+      <dt><tt>path</tt></dt>
+
+      <dd><p>This is path tracer. Every surface with non-zero
+        <tt>emissiveColor</tt> is a light emitter. For each
+        pixel many random paths are checked and final pixel color
+        is the average color from all paths.
+
+        <p>Actually <tt>rayhunter</tt> for every pixel
+        checks <tt>&lt;primary-samples-count&gt;</tt> of primary
+        rays, and then each primary ray that hits something splits into
+        <tt>&lt;non-primary-samples-count&gt;</tt>.
+        So in total we check <tt>&lt;primary-samples-count&gt;</tt> *
+        <tt>&lt;non-primary-samples-count&gt;</tt> paths.
+        This is a sensible optimization, because usually there
+        is no need to take many <tt>&lt;primary-samples-count&gt;</tt>,
+        since all primary rays hit more-or-less the same thing,
+        since they have very similar direction.
+
+        <p><tt>&lt;non-primary-samples-count&gt;</tt> is
+        set using the 3rd required command-line option,
+        and <tt>&lt;primary-samples-count&gt;</tt> is set
+        using optional option <tt>--primary-samples-count</tt>
+        (by default it's 1).
+      </dd>
+    </dl>
+
+  <li><p><tt>&lt;recursion-depth&gt;</tt>
+
+    <p>This is interpreted differently by different ray-tracing algorithms:
+    <ul>
+      <li>For <b>classic</b> ray-tracer this is <i>maximum</i> allowed
+        recursion depth. If you will give here too small value,
+        then some optical effects will not be visible.
+        For normal scenes (without too complex mirror and transparent
+        surfaces' setting) values 2 or 3 are appropriate.
+
+	<p>0 means that each object will have only his own color.
+        1 means that light rays can light the surface,
+        and ray may be once reflected or refracted.
+        Greater values allow rays to be reflected and/or refracted
+        more times along the way.
+
+      <li>For <b>path tracer</b> this is <i>minimal</i> path length.
+        I.e. Russian-roulette will <i>not</i> be used to decide
+        about the termination until the path will reach this length.
+        (Of course, some paths may still be shorter than this
+        minimal length, because the ray will not hit anything in the scene.)
+        E.g. if you will set this to 3, and Russian-roulette parameter
+        (see <tt>--r-roul-continue</tt> option) will be 0.5
+        (the default value), then 1/2 of all paths will have length 3,
+        1/4 of all paths will have length 4,
+        1/8 of all paths will have length 5 etc.
+
+	<p>Russian-roulette makes sure that the result
+        is <i>unbiased</i>, i.e. the expected value is the correct result
+        (i.e. the perfect beautiful realistic image).
+        However, Russian-roulette introduces also a large variance,
+        visible as a <i>noise</i> on the image.
+
+	<p>That's where forcing some minimal path length helps.
+        Sensible values for this are 1 or 2. Of course, the greater
+        the better, but it will also slow down the rendering.
+        0 means that Russian-roulette will always be used to decide
+        about path termination (expect a lot of noise on the image!).
+    </ul>
+
+  <li><p><tt>&lt;non-primary-samples-count&gt;</tt>
+
+    <p>Only for <i>path tracer</i>. Together with
+    <tt>&lt;primary-samples-count&gt;</tt>, this specifies
+    how many paths will be checked at each pixel.
+    Various scenes may require different numbers here to look
+    nice &mdash; you can start with 10, then 100, then even 1000.
+    But beware &mdash; this value directly affects rendering speed.
+
+  <li><p><tt>&lt;image-width&gt; &lt;image-height&gt;</tt>
+
+    <p>Width and height of resulting image.
+
+  <li><p><tt>&lt;input-filename&gt;</tt>
+
+    <p>3d model filename.
+
+    <p>Anything that my code can read (see
+    <a href="http://castle-engine.sourceforge.net/view3dscene.php">view3dscene docs <i>(online docs)</i></a>)
+    is accepted here. VRML / X3D are the best formats,
+    we also read Collada and 3DS lights, for all other formats: only
+    the headlight will shine over the scene.
+
+    <p><tt>-</tt> (single dash) as a filename means stdin.
+
+    <!--p><b>Notes about rendering 3DS models:</b>
+    There is no good specification how lights in 3DS files should
+    be read and interpreted, and I don't own the proprietary program
+    to check how 3DS are supposed to be rendered.
+    My test renderings with 3DS models look sensible, but I can't
+    guarantee anything. If you can provide or point me to some exact
+    spec about how the lights and materials in 3DS are supposed
+    to be interpreted then post to
+    < ?php echo MAILING_LIST_LINK; ? -->
+
+  <li><p><tt>&lt;output-filename&gt;</tt>
+
+    <p>Filename where to write final image. Image format will
+    be automatically derived from filename extension,
+    known image formats and extensions are
+    <ul>
+      <li><tt>rgbe</tt> (or <tt>pic</tt>)
+      <li><tt>png</tt>
+      <li><tt>jpg</tt> (or <tt>jpeg</tt>)
+      <li><tt>ppm</tt>
+      <li><tt>bmp</tt>
+    </ul>
+
+    <p>If you will use <tt>--write-partial-image</tt> features
+    (see below), then partial images will be also written to this file.
+    Moreover, if you will use <tt>--first-row</tt> features (see below),
+    then initial image contents will be read from this file.
+
+    <p><b>Notes about RGBE format:</b>
+    This format was developed by Greg Ward, and is used e.g. by
+    <a href="http://floyd.lbl.gov/radiance/">Radiance</a>.
+    Colors in RGBE images are written with a very good precision,
+    while not wasting a lot of disk space. Good precision means
+    that you may be able to expose in the image some details that
+    were not initially visible for the human eye, e.g. by brightening
+    some areas. Also color components are not clamped to [0; 1] range &mdash;
+    each component can be any large number. This means that even if resulting
+    image is too bright, and some areas look just like white stains,
+    you can always correct the image by darkening it or applying gamma
+    correction etc.
+
+    <p>You can process RGBE images using
+    <a href="http://floyd.lbl.gov/radiance/">Radiance</a> programs.
+    Also my <a href="http://castle-engine.sourceforge.net/glviewimage.php">glViewImage <i>(online docs)</i></a>    can be used to view RGBE images.
+</ul>
+
+<h2><a name="section_optional_options">Optional command-line options</a></h2>
+
+<p>Options below may be placed anywhere at command-line
+(before, between or after required options listed above).
+
+<dl class="command_line_options_list_custom">
+  <dt><span class="command_line_option">--camera-pos &lt;float&gt; &lt;float&gt; &lt;float&gt;</span>
+      (short form <span class="command_line_option">-p</span>)<br>
+      <span class="command_line_option">--camera-dir &lt;float&gt; &lt;float&gt; &lt;float&gt;</span>
+      (short form <span class="command_line_option">-d</span>)<br>
+      <span class="command_line_option">--camera-up &lt;float&gt; &lt;float&gt; &lt;float&gt;</span>
+      (short form <span class="command_line_option">-u</span>)
+  </dt>
+
+  <dd><p>These options set camera position, looking direction and up vector.
+    <tt>--camera-up-z</tt> is shortcut for <tt>--camera-up 0 0 1</tt>.
+
+    <p>Initial camera settings are determined by
+
+    <ol>
+      <li>These command-line parameters.
+
+      <li>First <tt>*Camera</tt> or <tt>*Viewpoint</tt> node in VRML file.
+        Remember that placement of camera node in VRML file is important --
+        camera's properties are modified by current transformation
+        of camera node.
+
+      <li>Default values (default VRML 1.0 perspective camera) :
+        <ul>
+          <li><tt>camera-pos = 0 0 1</tt>,
+          <li><tt>camera-dir = 0 0 -1</tt>,
+          <li><tt>camera-up = 0 1 0</tt>,
+        </ul>
+    </ol>
+
+    <p>Things above are given in descending priority.
+    E.g. if you will use <tt>--camera-pos 1 2 3</tt> parameter then
+    starting camera position will be always <tt>1 2 3</tt>.
+    If you don't use <tt>--camera-pos</tt> parameter then program will try to find
+    camera node in VRML file. If such node is present &mdash; we will use camera
+    position specified there. If not &mdash; we will use default camera position
+    (i.e. <tt>0 0 1</tt>).
+
+    <p>Notes:
+    <ul>
+      <li>If <tt>camera-dir</tt> and <tt>camera-up</tt>
+        will not be orthogonal
+        <!--
+        (bez względu na to jaką metodą zostały uzyskane - z parametru,
+        z wartości zapisanej w VRMLu czy z wartości domyślnej)
+        -->
+        vector <tt>up</tt> will be corrected.
+        <tt>camera-dir</tt> and <tt>camera-up</tt> vectors must not be
+        parallel. In particular, they must not be zero-vectors.
+        Lengths of <tt>camera-dir</tt> and <tt>camera-up</tt> are not important,
+        <tt>dir</tt> vector is always scaled based on <tt>camera-radius</tt> when
+        program starts.
+      <li>Besides VRML/X3D, also Collada and 3DS can include camera information,
+        so we can use it. Other 3D formats don't support camera information.
+    </ul>
+
+    <p>Note that you can use <a href="http://castle-engine.sourceforge.net/view3dscene.php">view3dscene <i>(online docs)</i></a>    to comfortably determine good values for these options &mdash;
+    see <i>Console -> Print rayhunter command-line to render this view</i>
+    menu item in view3dscene.</dd>
+
+  <dt><span class="command_line_option">--view-angle-x &lt;float&gt;</span></dt>
+
+  <dd><p>Use perspective projection,
+    with given field of view angle in horizontal direction. In degrees.
+    Default is 60 degrees. Note: vertical angle will be automatically
+    determined based on horizontal view angle and window width/height
+    (unless you specify <tt>force-view-angle-y</tt>, see below).
+
+  <dt><span class="command_line_option">--force-view-angle-y &lt;float&gt;</span></dt>
+
+  <dd><p>Use perspective projection,
+    with given field of view angle in vertical direction.
+    Normally camera vertical angle will be automatically
+    derived from <tt>--view-angle-x</tt> and requested
+    output <tt>&lt;image-width&gt;</tt> and <tt>&lt;image-height&gt;</tt>.
+    You can use this parameter to force some other non-proportional
+    camera vertical angle.</dd>
+
+  <dt><span class="command_line_option">--ortho &lt;float&gt; &lt;float&gt; &lt;float&gt; &lt;float&gt;</span></dt>
+
+  <dd><p>Use orthographic projection, with given left, bottom, right, top
+    dimensions. This makes previous <tt>--view-angle-x</tt> and
+    <tt>--force-view-angle-y</tt> ignored (they are not sensible in orthographic
+    projection). Note that order of arguments follows the
+    X3D OrthoViewpoint specificication (and differs from typical OpenGL,
+    like used by glOrtho).</p></dd>
+
+  <dt><span class="command_line_option">--scene-bg-color &lt;red&gt; &lt;green&gt; &lt;blue&gt;</span></dt>
+
+  <dd><p>Sets scene background color. Each RGB color component is a float
+    in the range [0; 1]. By default background is black.</dd>
+
+  <dt><span class="command_line_option">--write-partial-rows &lt;rows&gt; &lt;log-rows-file&gt;</span></dt>
+
+  <dd><p>Always after generating <tt>&lt;rows&gt;</tt> rows,
+    rayhunter will write the (partially finished) output image
+    (to <tt>&lt;output-filename&gt;</tt>, i.e. to the same file where
+    final image is supposed to be written). Additionally, each time
+    when writing such partial image, rayhunter will write a file
+    <tt>&lt;log-rows-file&gt;</tt> that will contain a single integer &mdash;
+    the number of already finished rows.
+
+    <p>This option has a couple of uses.
+    <ol>
+      <li>First of all, obviously, it lets you view unfinished
+        results of <tt>rayhunter</tt>, if you're not patient.
+
+      <li>This allows you to interrupt <tt>rayhunter</tt> process
+        at any time and you will remain with a partially completed image.
+        Then you can run <tt>rayhunter</tt> once again
+        with <tt>--first-row</tt> option
+        to finish rendering the image. You can look at
+        <tt>&lt;log-rows-file&gt;</tt> to know how many rows are already finished.
+
+        <p>E.g. you can use such script:
+<pre>
+  rayhunter ... --first-row `cat rows.log` --write-partial-rows 10 rows.log
+</pre>
+        This way after doing every 10 rows, <tt>rayhunter</tt>
+        will save it's partially
+        finished work. And if you will interrupt, kill etc.
+        <tt>rayhunter</tt> process,
+        you will be able to just run this script once again and
+        <tt>rayhunter</tt> will start rendering roughly at the point where it finished.
+
+      <li>If you want to render the image on more than one computer
+        at the same time, you can easily run <tt>rayhunter</tt> on every computer
+        with different <tt>--first-row</tt> argument and with appropriately
+        small <tt>&lt;rows&gt;</tt> value for <tt>--write-partial-rows</tt>.
+        When all processes will finish their work, you will only have
+        to combine resulting images into one.
+    </ol>
+
+    <p>Note that very small <tt>&lt;rows&gt;</tt> value can slow down the
+    rendering process. But usually it's not a significant slowdown,
+    after all usually ray-tracing takes a lot of time and wasting
+    a couple of additional seconds is not a problem.
+
+    <p>Give value of 0 for <tt>&lt;rows&gt;</tt> to disable writing
+    partial image and <tt>&lt;log-rows-file&gt;</tt> file.
+    This is the default behavior.
+
+    <p><i>Note about writing partial image:</i> when writing
+    partial image, any errors during write are <i>reported as warnings
+    and then ignored</i>. This is handy is you will view the image
+    with some other program while rayhunter process is running:
+    there's always a small chance that rayhunter will write the partial
+    image exactly when another program is trying to read it.
+    Depending on your OS, in such case writing of the partial image file
+    may fail. That's why errors when writing partial image are ignored
+    and rayhunter will just proceed with rendering.</dd>
+
+  <dt><span class="command_line_option">--r-roul-continue &lt;float&gt;</span></dt>
+
+  <dd><p>This option is meaningful only when you use <i>path tracer</i>.
+    Argument is a float number in range [0; 1].
+    At each point on the path, if the specified <tt>&lt;recursion-depth&gt;</tt>
+    is exceeded, Russian-roulette is used to determine whether the
+    path should terminate here. If random number from [0; 1] range
+    is larger than argument given to this option, the path will terminate.
+    In other words, argument for this option is the "continuation probability"
+    &mdash; larger argument means that average path will be longer.
+
+    <p>Usually too small values will produce a lot of noise,
+    and too large values will make long rendering time.
+
+    <p>However, note that there are some sensible scenarios
+    when argument 1 for this option is sensible:
+    if your scene is very very simple and you want all paths
+    to terminate in a "natural" way (when ray will not hit anything
+    in the scene). This will give you very accurate result
+    (although <i>some</i> noise on the image will still be present,
+    since the ray directions are still random), although
+    rendering time will be <i>really long</i> even for simplest scenes.
+
+    <p>When argument for this option is exactly 0,
+    Russian-roulette will always lose. In other words,
+    Russian-roulette will not be used at all. In this case
+    <tt>&lt;recursion-depth&gt;</tt> value will work like
+    for classic ray-tracer. But the result will always be biased,
+    i.e. (slightly) incorrect, usually darker than it should be.
+
+    <p>Default value is 0.5.</dd>
+
+  <dt><span class="command_line_option">--primary-samples-count &lt;count&gt;</span></dt>
+
+  <dd><p>This option is meaningful only when you use <i>path tracer</i>.
+    By default this is 1. Generally there is no sense in incrementing
+    this too much. You can use here 10 or something like that to
+    have anti-aliased image. If you want to just increment
+    number of paths, usually it's wiser to increment
+    <tt>&lt;non-primary-samples-count&gt;</tt>, this way you will
+    slow down rendering by a little lesser factor.</dd>
+
+  <dt><span class="command_line_option">--direct-illum-samples-count &lt;count&gt;</span></dt>
+
+  <dd><p>This option is meaningful only when you use <i>path tracer</i>.
+    At each path point, the specified number of random rays directed
+    towards light sources are checked. By default this is 1. You can
+    increase this,
+    which can bring good results if your scene has a complex light
+    setting (many light sources, in different places etc.)
+    Remember that you can also just increase number of paths
+    (i.e. <tt>&lt;non-primary-samples-count&gt;</tt>),
+    as this will also produce more checks for rays to light sources.
+
+    <p>For educational purposed you can also set this to 0
+    &mdash; then you will get a naive path tracer
+    that just hopes to hit some light sources with random rays.
+    <!-- tzn. bezpośrednie oświetlenie będzie liczone tak samo jak pośrednie. -->
+    You will then need many many paths, even for simplest models,
+    to get nice renderings.
+
+  <dt><span class="command_line_option">--first-row &lt;first-row-num&gt;</span></dt>
+
+  <dd><p>If you will use this option with non-zero argument then
+    <tt>&lt;output-filename&gt;</tt> must already exist.
+    <tt>rayhunter</tt> will load the initial image from this file.
+    Then the image will be resized, if needed,
+    to <tt>&lt;image-width&gt;</tt> and <tt>&lt;image-height&gt;</tt>.
+    Then <tt>rayhunter</tt> will start rendering,
+    but not from the beginning: from the given <tt>&lt;first-row-num&gt;</tt>
+    row number. Rendering results will be written on the image.
+
+    <p>This way you can tell <tt>rayhunter</tt> to resume rendering
+    that is already partially done. This is particularly handy
+    in connection with <tt>--write-partial-rows</tt> option, see there for
+    description.
+
+    <p>Argument 0 (the default) for this options means that
+    rendering should proceed normally, from the beginning of the image.
+
+  <dt><span class="command_line_option">--detail-quadric-slices &lt;integer&gt;</span><br>
+      <span class="command_line_option">--detail-quadric-stacks &lt;integer&gt;</span><br>
+      <span class="command_line_option">--detail-rect-divisions &lt;integer&gt;</span></dt>
+
+  <dd><p>These options control the triangulation.
+    view3dscene has exactly the same options, and they are documented
+    in detail in <a href="http://castle-engine.sourceforge.net/view3dscene.php#command_line_options_detail">view3dscene <tt>--detail-*</tt> options documentation <i>(online docs)</i></a>.
+
+    <p>Notes specific to <tt>rayhunter</tt>: note that <tt>rayhunter</tt>
+    never does so-called <i>over-triangulating</i>.
+    This also means that option <tt>--detail-rect-divisions</tt>
+    is useless. It was added here only for completeness.
+  </dd>
+
+  <dt><span class="command_line_option">--octree-max-depth &lt;integer&gt;</span><br>
+      <span class="command_line_option">--octree-leaf-capacity &lt;integer&gt;</span></dt>
+
+  <dd><p>These parameters control octree generation.
+    By default
+    <tt>--octree-max-depth</tt>=10 and
+    <tt>--octree-leaf-capacity</tt>=20.
+    You can also specify octree propeties inside VRML/X3D file:
+    use <tt>KambiNavigationInfo.octreeVisibleTriangles</tt>
+    (see <a href="x3d_extensions.html#section_ext_octree_properties">octree properties extension</a>).
+
+    </dd>
+</dl>
+
+<p>See also <a href="common_options.html">notes about command-line options for all my programs</a>.
+
+<h2><a name="section_vrml_interpretation">Some notes about 3d models handling by this ray-tracer</a></h2>
+
+<ul>
+  <li><p><i>Only for <tt>classic</tt> ray-tracer :</i><br>
+    Implemented light model is as close as possible to the
+    <a href="http://www.web3d.org/x3d/specifications/vrml/ISO-IEC-14772-VRML97/part1/concepts.html#4.14">
+    light model outlined in VRML 97 specification</a>.
+    Some modifications were needed because I have recursive
+    ray-tracing (while VRML 97 specifies only local
+    light model). Also VRML 1.0 models require different treating
+    in some cases (e.g. <tt>SpotLight</tt> focus is specified using a different
+    way and <tt>ambientIntensity</tt> is not available in standard VRML 1.0).
+
+    <p>We handle all VRML light nodes &mdash; <tt>DirectionalLight</tt>,
+    <tt>SpotLight</tt> and <tt>PointLight</tt>. Also the headlight
+    is used, configurable by <tt>NavigationInfo.headlight</tt>
+    and <a href="x3d_extensions.html#section_ext_headlight">KambiNavigationInfo.headlightNode</a>.
+
+    <p>For <tt>&lt;recursion-depth&gt;</tt> equal zero we use only
+    <tt>diffuse</tt> material color. According to VRML 97 light model,
+    <tt>emission</tt> color would be more correct but in 99% of real
+    cases <tt>emission</tt> color is just black so the whole rendered
+    image would be black. That's why I decided to use <tt>diffuse</tt>
+    color instead of <tt>emission</tt>. Everyone understands that setting
+    <tt>&lt;recursion-depth&gt;</tt> to zero is only for testing purposes
+    anyway.
+
+  <li><p><i>Mostly for <tt>classic</tt> ray-tracer :</i><br>
+    <a href="x3d_extensions.html#section_ext_material_mirror">Use <tt>mirror</tt> field of <tt>Material</tt> node to create mirrors</a>.
+
+  <li><p><i>Only for <tt>path</tt> tracer :</i><br>
+    We don't use point and directional lights,
+    so VRML <tt>DirectionalLight</tt>, <tt>SpotLight</tt> and
+    <tt>PointLight</tt> nodes are completely ignored.
+    Only the surface lights are used. Every object with
+    a non-black <tt>emissiveColor</tt> is a light source.
+
+    <p>Implemented BRDF is Phong's BRDF.
+    See <a href="x3d_extensions.html#section_ext_material_phong_brdf_fields">fields describing physical properties (Phong's BRDF) for <tt>Material</tt>node</a>.
+
+  <li><p>Some things not handled (yet): textures, interpolating
+    normal vectors (i.e. we're of course calculating pixel color
+    at every surface point separately, but our surfaces are flat
+    with regards to normal vectors).
+
+  <li><p>This concerns actually most 3d engines, including
+    ray-tracer algorithms inside <tt>rayhunter</tt>
+    and real-time OpenGL rendering inside
+    <a href="http://castle-engine.sourceforge.net/view3dscene.php">view3dscene <i>(online docs)</i></a>:
+    3d model's geometry must be correct. Which means that:
+    <ul>
+      <li><p>No T-Intersections allowed. Otherwise you may see cracks.
+
+      <li><p>If two faces cross each other, the intersection may
+        be a line, not a plane. I.e. they
+        shouldn't be coplanar in such case. Otherwise
+        they will fight which one is nearer than the other
+        and which one casts the shadow over the other.
+
+        <p>Actually <tt>rayhunter</tt> should be able to handle such
+        bad case of coplanar surfaces (i.e. result will look OK
+        as long as surfaces have the same material), but there
+        is never 100% warranty for such things (because it involves
+        floating-point errors).
+        <!-- ale nie ma to 100% gwarancji i nie może mieć
+        (bo nigdy dokładnie nie wiadomo - czy rzeczywiście na tym wielokącie
+        te dwa trójkąty nie zasłaniają się wzajemnie czy też raczej twórcy sceny
+        chodziło o to że jeden wielokąt jest bardzo minimalnie nad drugim ?)
+        -->
+    </ul>
+</ul>
+
+<h2><a name="section_adv_over_view3dscene">Advantages over using ray-tracer built in view3dscene</a></h2>
+
+<p>The same ray-tracer code as is used by <tt>rayhunter</tt>
+is also used inside
+<a href="http://castle-engine.sourceforge.net/view3dscene.php">view3dscene <i>(online docs)</i></a>.
+While using ray-tracer from
+<a href="http://castle-engine.sourceforge.net/view3dscene.php">view3dscene <i>(online docs)</i></a> is more comfortable, using command-line <tt>rayhunter</tt> has also
+some advantages:
+
+<ul>
+  <li><p>The obvious advantage is that you can use <tt>rayhunter</tt>
+    in batch mode,from scripts etc.
+
+  <li><p><tt>rayhunter</tt> can produce images in RGBE format.
+
+  <li>You can use options <tt>--first-row</tt> and
+    <tt>--write-partial-rows</tt> to be able to kill rayhunter process
+    at any time and then later resume rendering from last point.
+    You can also use the same options to render various parts of
+    the image simultaneously on multiple systems.
+    These advantages may be crucial if you want to do some serious
+    rendering using path tracer, since they may take a lot of time.
+
+  <li><p>Options <tt>--r-roul-continue</tt>,
+    <tt>--direct-illum-samples-count</tt>,
+    <tt>--primary-samples-count</tt> that allow you to better control
+    path tracing are not available in <tt>view3dscene</tt>.
+
+  <li><tt>rayhunter</tt> may work a little faster since it doesn't
+    display the image while rendering. Although using
+    <tt>--write-partial-rows</tt> you can force <tt>rayhunter</tt>
+    to write partial result from time to time.
+</ul>
+
+</div><script type="text/javascript">
+  jQuery('a.screenshot').colorbox({opacity: 0.9, rel:'screenshot', maxWidth:'90%', maxHeight:'90%'});
+</script>
+  
+<hr>
+
+<div class="page_footer">
+
+    <address>
+    By Michalis Kamburelis, as part of
+    <a href="http://castle-engine.sourceforge.net/">Castle Game Engine</a>.
+    </address>
+    
+  <table><tr>
+
+    <td><a href="http://sourceforge.net/projects/castle-engine">Hosted by SourceForge.net</a></td>
+
+    <td><span class="page_copyright">Copyright <a href="http://michalis.ii.uni.wroc.pl/~michalis/">Michalis Kamburelis</a>.
+This page is considered part of documentation of my programs,
+and you are free to modify and further distribute it on terms of
+<a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License</a>.
+</span></td>
+
+    
+  </tr></table>
+
+  
+</div>
+
+</body>
+</html>
+

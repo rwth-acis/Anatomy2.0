@@ -1,0 +1,257 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+
+<html lang="en">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta name="Author" content="Michalis Kamburelis">
+
+<meta name="Language" content="English">
+
+<title>Standard command-line options</title>
+
+
+<!--
+  This is unclean, but it's more comfortable to keep below CSS
+  directly inside HTML page. This is in kambi_common.php,
+  that should be useful for both michalis.ii and castle-engine.sf.net webpages,
+  and must be suitable also for offline documentation in castle-engine programs.
+-->
+<!-- link type="text/css" rel="stylesheet" media="all"  href="kambi-php-lib/kambi_common.css" -->
+
+<style type="text/css"><!--
+body { background: white; font-family: sans-serif; }
+
+dt { font-weight: bold; }
+div.page_footer { }
+span.page_copyright { font-size: smaller }
+
+span.version_number { font-size: small }
+
+div.quick_links_bottom_line { text-align: left; }
+
+.rss_link {
+  float: right;
+  background: red;
+  padding: 0.3em;
+  border: thin outset black;
+}
+
+.rss_link a {
+  color: white;
+  font-weight: bold
+}
+--></style>
+
+
+<link rel="alternate" type="application/rss+xml"
+  title="Castle Game Engine - News Feed"
+  href="http://castle-engine.sourceforge.net/news_feed.php">
+
+<link type="text/css" rel="stylesheet" media="all" href="castle-engine.css">
+<link type="text/css" rel="stylesheet" href="colorbox/example3/colorbox.css">
+
+<script type="text/javascript" src="castle-engine.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="colorbox/jquery.colorbox-min.js"></script>
+
+<style type="text/css"><!--
+/**
+ * GeSHi Dynamically Generated Stylesheet
+ * --------------------------------------
+ * Dynamically generated stylesheet for delphi
+ * CSS class: sourcecode, CSS id: 
+ * GeSHi (C) 2004 - 2007 Nigel McNie, 2007 - 2008 Benny Baumann
+ * (http://qbnz.com/highlighter/ and http://geshi.org/)
+ * --------------------------------------
+ */
+.delphi.sourcecode .de1, .delphi.sourcecode .de2 {font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;}
+.delphi.sourcecode  {font-family:monospace;}
+.delphi.sourcecode .imp {font-weight: bold; color: red;}
+.delphi.sourcecode li, .delphi.sourcecode .li1 {font-weight: normal; vertical-align:top;}
+.delphi.sourcecode .ln {width:1px;text-align:right;margin:0;padding:0 2px;vertical-align:top;}
+.delphi.sourcecode .li2 {font-weight: bold; vertical-align:top;}
+.delphi.sourcecode .kw1 {color: #000000; font-weight: bold;}
+.delphi.sourcecode .kw2 {color: #000000; font-weight: bold;}
+.delphi.sourcecode .kw3 {color: #000066;}
+.delphi.sourcecode .kw4 {color: #000066; font-weight: bold;}
+.delphi.sourcecode .co1 {color: #808080; font-style: italic;}
+.delphi.sourcecode .co2 {color: #008000; font-style: italic;}
+.delphi.sourcecode .coMULTI {color: #808080; font-style: italic;}
+.delphi.sourcecode .es0 {color: #ff0000; font-weight: bold;}
+.delphi.sourcecode .br0 {color: #000066;}
+.delphi.sourcecode .sy0 {color: #000066;}
+.delphi.sourcecode .sy1 {color: #000066;}
+.delphi.sourcecode .sy2 {color: #000066;}
+.delphi.sourcecode .sy3 {color: #000066;}
+.delphi.sourcecode .st0 {color: #ff0000;}
+.delphi.sourcecode .nu0 {color: #0000ff;}
+.delphi.sourcecode .me1 {color: #006600;}
+.delphi.sourcecode .re0 {color: #0000cc;}
+.delphi.sourcecode .re1 {color: #ff0000;}
+.delphi.sourcecode .ln-xtra, .delphi.sourcecode li.ln-xtra, .delphi.sourcecode div.ln-xtra {background-color: #ffc;}
+.delphi.sourcecode span.xtra { display:block; }
+ -->
+</style>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    (function() {
+        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+        s.type = 'text/javascript';
+        s.async = true;
+        s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+        t.parentNode.insertBefore(s, t);
+    })();
+/* ]]> */
+</script><script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+  </head>
+<body>
+
+
+  <div class="header">
+    <!--img class="header_icon" src="images/header_icon.png" alt="Castle Game Engine icon" /-->
+    <div class="header_title"><a href="http://castle-engine.sourceforge.net/index.php">Castle Game Engine</a></div>
+    
+    <table class="header_menu">
+      <tr>
+        <td colspan="15" class="higher higher_left">&larr; Users</td>
+        <td colspan="6" class="higher higher_right">Developers &rarr;</td>
+      </tr>
+      <tr><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/index.php">Intro</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/news.php">News</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/view3dscene.php" title="VRML / X3D browser, and a viewer for other 3D model formats">view3dscene</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/castle.php" title="First-person perspective game, in a dark fantasy setting">The Castle</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/all_programs.php" title="All the games and tools using our 3D engine" id="current">All Programs</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/forum.php" title="Ask for help, report bugs, discuss features">Forum</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/donate.php">Donate</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/engine.php" title="Sources and documentation for developers">Engine</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="vrml_x3d.html" title="Our extensions and status of VRML/X3D implementation">VRML/X3D</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/blender.php" title="Customized Blender X3D exporter">Blender</a></td><td class="lower_separator"><div>&nbsp;</div></td>
+      </tr>
+    </table>
+  </div><div class="content">
+<h2>Standard command-line options</h2>
+
+<p>This page describes just some usual conventions used when interpreting
+command-line options by my programs (actually, these conventions are widely
+known and used by most good programs in the world) :
+<ul>
+  <li><p>Long options start with <tt>--</tt> (two dashes), like
+    <tt>--long-option</tt>. Short options start with <tt>-</tt> (one dash)
+    and consist of one letter, like <tt>-p</tt>. The advantage of the long form
+    is that you can easily remember it, the advantage of the short form is
+    that you have less typing. Many options have both forms : long and
+    short and you can use whichever you want.
+
+  <li><p>All my programs should accept option <tt>--help</tt>
+    (short form <tt>-h</tt>). Using this option instructs the program
+    to print some short usage instructions and a short description of
+    available options.
+
+  <li><p>All my programs should accept option <tt>--version</tt>
+    (short form <tt>-v</tt>). Using this option instructs the program
+    to print version number. Here's a description of
+    <a href="http://castle-engine.sourceforge.net/versioning.php">versioning scheme used in all my programs <i>(online docs)</i></a>.
+    Version number is always printed on standard output, never in some
+    message box or something that; this allows to use calls like
+    <tt>program_name --version</tt> in batch scripts, makefiles etc.
+
+    <p><i>Note for Windows users of my programs that don't create a console</i>
+    (e.g. <a href="http://castle-engine.sourceforge.net/malfunction.php">malfunction <i>(online docs)</i></a>,
+    <a href="http://castle-engine.sourceforge.net/kambi_lines.php">kambi_lines <i>(online docs)</i></a> or
+    <a href="http://castle-engine.sourceforge.net/glviewimage.php">glViewImage <i>(online docs)</i></a>):
+    when Windows program does not explicitly create a console,
+    it usually has no standard output available.
+    You must explicitly redirect it's stdout when using option <tt>--version</tt>.
+
+  <li><p>If option requires one argument, you can give it as<br>
+    <tt>--long-option=argument</tt> (with '=') or<br>
+    <tt>--long-option argument</tt> (passing argument as separate parameter) or<br>
+    <tt>-p=argument</tt> (same as the first one, but using short form) or<br>
+    <tt>-p argument</tt> (same as the second one, but using short form).
+
+    <p>E.g. following methods of running
+    <a href="http://castle-engine.sourceforge.net/view3dscene.php">view3dscene <i>(online docs)</i></a>    are equivalent:
+<pre>
+  view3dscene --navigation=Examine scene.wrl
+  view3dscene --navigation Examine scene.wrl
+</pre>
+
+    <p>If option <i>allows</i> but <i>not requires</i> an argument,
+    you have to use <tt>--long-option=argument</tt> or
+    <tt>-p=argument</tt> if you want to give an argument.
+
+  <li><p>Short options can be <i>combined</i>. This means that you
+    can put more than one short option in a one parameter, e.g.
+<pre>
+  program -abc
+</pre>
+    means the same as
+<pre>
+  program -a -b -c
+</pre>
+
+    <p>Note that only the last option in such "combined parameter" may
+    take an argument, e.g.
+<pre>
+  program -de=50
+</pre>
+    means the same as
+<pre>
+  program -d -e=50
+</pre>
+   but if you want to give an argument for <tt>-d</tt> and <tt>-e</tt>,
+   you can't combine them : you must use something like
+<pre>
+  program -d=40 -e=50
+</pre>
+
+  <li><p>Special option <tt>--</tt> means "do not interpret following parameters".
+    You can use it if you have files with names beginning with a <tt>'-'</tt>.
+
+    <p>E.g. suppose you have a file named <tt>--file.png</tt> and you want
+    to view it using <a href="http://castle-engine.sourceforge.net/glviewimage.php">glViewImage <i>(online docs)</i></a>.
+    If you call
+    <pre>  glViewImage --file.png</pre>
+    then glViewImage will exit with an error <i>'invalid
+    long option "--file.png"'</i>. Even worse, if you have a file named
+    <tt>--geometry</tt> (<tt>--geometry</tt> not only begins with a dash
+    but it even IS a valid option for glViewImage) and you call
+    <pre>  glViewImage --geometry</pre>
+    then glViewImage will try to interpret the <tt>--geometry</tt> option
+    and will give an error <i>'missing argument for "--geometry"'</i>.
+    So you can force glViewImage to treat <tt>--file.png</tt> or
+    <tt>--geometry</tt> as file names using :
+<pre>
+  glViewImage -- --file.png
+  glViewImage -- --geometry
+</pre>
+
+</ul>
+
+</div><script type="text/javascript">
+  jQuery('a.screenshot').colorbox({opacity: 0.9, rel:'screenshot', maxWidth:'90%', maxHeight:'90%'});
+</script>
+  
+<hr>
+
+<div class="page_footer">
+
+    <address>
+    By Michalis Kamburelis, as part of
+    <a href="http://castle-engine.sourceforge.net/">Castle Game Engine</a>.
+    </address>
+    
+  <table><tr>
+
+    <td><a href="http://sourceforge.net/projects/castle-engine">Hosted by SourceForge.net</a></td>
+
+    <td><span class="page_copyright">Copyright <a href="http://michalis.ii.uni.wroc.pl/~michalis/">Michalis Kamburelis</a>.
+This page is considered part of documentation of my programs,
+and you are free to modify and further distribute it on terms of
+<a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License</a>.
+</span></td>
+
+    
+  </tr></table>
+
+  
+</div>
+
+</body>
+</html>
+

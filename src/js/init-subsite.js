@@ -22,8 +22,12 @@ function receiveMessage(event)
     var msgTopic = event.data.split(" ")[0];
     var msgContent = event.data.slice(msgTopic.length);
     switch(msgTopic){
-        case "EmbeddedInRole": isEmbeddedInRole = true; break;
-        default: 
+        case "EmbeddedInRole":
+          isEmbeddedInRole = true;
+          var data = new Object();
+          publishIWC("UserConnected", data);
+          break;
+        default:
     if(subscribeCallbacks.has(msgTopic)){
         //call callback function
         (subscribeCallbacks.get(msgTopic))(JSON.parse(msgContent));
