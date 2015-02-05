@@ -13,8 +13,8 @@
   <?php } ?>
 
   <!-- Allows opening dropdown menu if screen size is small -->
-  <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 
   <div class='navbar navbar-inverse'>
     <div class='container'>
@@ -26,7 +26,7 @@
   {
     //we have to link to the widget versions:
     print("
-        <button type='button' class='navbar-toggle collapsed' data-toggle='collapse' data-target='#henm-nav-bar'>
+        <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='#henm-nav-bar'>
           <span class='icon-bar'></span>
           <span class='icon-bar'></span>
           <span class='icon-bar'></span>
@@ -47,7 +47,7 @@
   {
     //we have to link to the non-widget versions:
     print("
-        <button type='button' class='navbar-toggle collapsed' data-toggle='collapse' data-target='#henm-nav-bar'>
+        <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='#henm-nav-bar'>
           <span class='icon-bar'></span>
           <span class='icon-bar'></span>
           <span class='icon-bar'></span>

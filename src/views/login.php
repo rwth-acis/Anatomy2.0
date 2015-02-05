@@ -21,7 +21,7 @@
 	<![endif]-->
 
 	<script type='text/javascript' src='../js/init-subsite.js'></script>
-	
+
 	<script src="../js/ajax.js" type="text/javascript"></script>
 	<script src="../js/login.js" type="text/javascript"></script>
 
@@ -83,8 +83,6 @@
 
 	<!-- JavaScript libs are placed at the end of the document so the pages load faster -->
 	<script src="../js/modernizr-latest.js"></script>
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 	<script src="../js/custom.js"></script>
 
 </body>
