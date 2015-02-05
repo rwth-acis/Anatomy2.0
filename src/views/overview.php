@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="../css/font-awesome.min.css">
 
   <!-- Custom styles-->
-  
+
   <link rel="stylesheet" href="../css/bootstrap-theme.css" media="screen">
   <link rel="stylesheet" href="../css/style.css">
 
@@ -33,16 +33,27 @@
 <body>
   <?php
     include("menu.php");
-  ?>  
+  ?>
 
-  <header id="head" class="secondary">
-    <div class="container">
-      <div class="row">
-        <h1>3D Models</h1>  
-        <?php include("search.html"); ?>
-      </div>
-    </div>
-  </header>
+  <?php
+    //Decide if this site is inside a separate widget
+    if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
+
+    }
+    else {
+      echo '
+      <header id="head" class="secondary">
+        <div class="container">
+          <div class="row">
+            <h1>Model Browser</h1>
+          </div>
+        </div>
+      </header>
+      ';
+    }
+  ?>
+
+  <?php include("search.html"); ?>
 
   <!-- container -->
   <section class="container">
@@ -54,15 +65,15 @@
 
       $query  = $db->query("SELECT * FROM models");
       $result = $query->fetchAll();
-      
+
       $html = createTable($result, 'model');
       echo $html;
-      ?>   
-    </div>   
+      ?>
+    </div>
   </section>
   <!-- /container -->
-  
-  <?php include("footer.php"); ?>  
+
+  <?php include("footer.php"); ?>
 
   <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
   <script src="../js/modernizr-latest.js"></script>
