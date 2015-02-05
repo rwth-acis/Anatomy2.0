@@ -7,6 +7,10 @@
 */
 session_start();
 
+//create database connection (needs to be done before mysql_real_escape_string)
+$conn = require '../php/db_connect.php';
+
+
 //Get input data from form
 $name = mysql_real_escape_string($_POST['name']);
 $text = mysql_real_escape_string($_POST['text']);
@@ -17,8 +21,6 @@ $preview_img_link = $_POST['previewImgLink'] != "" ? $_POST['previewImgLink'] : 
 $creator = $_SESSION["user_id"];
 	
 // Create database-entry
-$conn = require '../php/db_connect.php';
-
 $sql = "INSERT INTO courses (name, description, creator, role_url, img_url) VALUES ('$name','$text', $creator, '$role_link', '$preview_img_link')";
 
 $conn->query($sql);

@@ -5,6 +5,10 @@
 * Adss new course to the course database on the server
 * adds metadata about it database.
 */
+
+//create database connection (needs to be done before mysql_real_escape_string)
+$conn = require '../php/db_connect.php';
+
 //Get input data from form
 $id = $_POST['targetId'];
 $name = mysql_escape_string($_POST['name']);
@@ -14,9 +18,7 @@ $preview_img_link = $_POST['previewImgLink'] != "" ? $_POST['previewImgLink'] : 
 
 //Creator stays the same
 	
-// Create database-entry
-$conn = require '../php/db_connect.php';
-
+// modify database-entry
 $sql = "UPDATE courses SET name='$name', description='$text', role_url='$role_link', img_url='$preview_img_link' WHERE id=$id";
 
 //echo "sqlquery: $sql";
