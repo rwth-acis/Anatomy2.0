@@ -11,7 +11,7 @@
     <script src="../js/tools.js" type="text/javascript"></script>
     <script src="../js/menu_logged_out.js" type="text/javascript"></script>
   <?php } ?>
-  
+
   <div class='navbar navbar-inverse'>
     <div class='container'>
       <div class='navbar-header'>
@@ -23,7 +23,7 @@
     //we have to link to the widget versions:
     print("<button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'><span class='icon-bar'></span><span class='icon-bar'></span><span class='icon-bar'></span></button>
         <a class='navbar-brand' href='welcome.php?widget=true'>
-          <img src='../images/logo.png' alt='HENM: 3D Models'>
+          <img src='../images/logo.png' height='30' alt='HENM: 3D Models'>
         </a>
       </div>
       <div class='navbar-collapse collapse'>
@@ -51,7 +51,7 @@
           <li><a href='upload.php'>Upload</a></li>
           <li><a href='help.php'>Help</a></li>");
   }
-?>          
+?>
           <!-- Button will show "login" or "logout" based on current login status of user.
             If user_id is set, the user is currently logged in -->
           <li>
@@ -62,10 +62,9 @@
         </ul>
       </div>
     </div>
-  </div> 
+  </div>
   </br></br>
 
   <!-- Allows opening dropdown menu if screen size is small -->
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
   <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-
