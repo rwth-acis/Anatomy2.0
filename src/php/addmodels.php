@@ -18,7 +18,7 @@ foreach ($models as $modelid) {
 $tuples = substr_replace($tuples, "", -1);
 
 // Insert models into database
-$query = $db->query("INSERT INTO course_models (course_id,model_id) VALUES".$tuples);
+$query = $db->query("INSERT INTO course_models (course_id,model_id) VALUES".$tuples." ON DUPLICATE KEY UPDATE course_id = course_id");
 
 // Get all models associated with the course
 $query = $db->query("SELECT * 
