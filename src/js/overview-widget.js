@@ -27,10 +27,10 @@ function initOverviewWidget(){
       console.log("ID: "+aElememts[i].id);
     }
   }
-  // Subscribes to model select event to be informed if some other overview selects 
+  // Subscribes to model select event to be informed if some other overview selects
   // and highlights a model. The same model should be highlighted here as well.
   subscribeIWC("ModelSelectByOverview", onRemoteHighlight);
-  
+
   console.log("overview-widget: initialized widget");
 }
 //execute init when page is loaded
@@ -71,7 +71,7 @@ function clickOnLink(evt){
 
 /**
  * Highlight a model in the overview page.
- * @param id The id (from the database) of the model to be highlighted. 
+ * @param id The id (from the database) of the model to be highlighted.
  */
 function highlightModel(id) {
   // Remove the highlighting from currently selected model (by removing it from all divs)
@@ -83,5 +83,11 @@ function highlightModel(id) {
   // Get the div element on the overview page for the given model id
   var div = document.getElementById('image-over' + id);
   // Highlight the div element by changing the css style
-  div.className = div.className + ' highlight-model';  
+  div.className = div.className + ' highlight-model';
 }
+
+
+function onRemoteUpdate(extras) {
+  highlightModel(extras.modelId);
+}
+subscribeIWC("ViewpointUpdate", onRemoteUpdate);

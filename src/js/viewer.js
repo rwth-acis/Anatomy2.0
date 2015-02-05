@@ -24,6 +24,15 @@ var displayInfo;
 var remoteLecturer  = false;
 var lecturerMode    = false;
 
+/**
+ * Retrieves URL parameters.
+ */
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
 
 /**
  * Function for reloading synchronously with other widgets.
@@ -35,14 +44,15 @@ subscribeIWC("Reload", onReloadRequest);
 /**
  * Function for initial state sync from other clients.
  */
-function onUserConnected() {
+function onUserConnected(extras) {
   if (lecturerMode) {
     var data = new Object();
     data['enabled'] = true;
     publishIWC("LecturerModeUpdate", data);
   }
+  onLocalUpdate();
 }
-subscribeIWC("UserConnectionUpdate", onUserConnected);
+subscribeIWC("UserConnected", onUserConnected);
 
 /**
  * Sets up the X3D viewport and subscribes to
@@ -79,6 +89,7 @@ function initializeModelViewer() {
 function onRemoteUpdate(extras) {
   // Don't synchronize if the viewpoint is from another model
   if(extras.selectedModel != window.location.search){
+    window.location.assign(extras.selectedModel);
     return;
   }
 
@@ -125,11 +136,13 @@ function onLocalUpdate() {
 
   // Setup the data to be sent to others.
   var data = getView(x3dRoot.runtime);
+  data["model"] = window.location.search;
   data["timestamp"] = new Date();
   lastTimestamp = data["timestamp"];
 
   //also specifiy what model was moved (included in uri)
   data.selectedModel = window.location.search;
+  data.modelId = getParameterByName('id');
 
   publishIWC("ViewpointUpdate", data);
   log('Published message!');
@@ -270,12 +283,4 @@ window.onbeforeunload = function(){
     toggleLecturerMode();
     sleep(2000);
   }
-}
-
-/**
- * Propagate connection status for this client to other clients
- * on load to receive current state from them.
- */
-document.onload = function(e) {
-  publishIWC("UserConnectionUpdate", new Object());
 }
