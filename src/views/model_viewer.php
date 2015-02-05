@@ -28,23 +28,23 @@
   </head>
 
   <body>
-    <?php 
+    <?php
       // Hide the menu in ROLE environment. Outside ROLE the menu must be displayed.
       if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
       {
-        include("menu.php"); 
+        include("menu.php");
       } else {
         //Decide if this site is inside a separate widget
         print("<script type='text/javascript' src='../js/model-viewer-widget.js'> </script>");
       }
-    
-     include("toolbar.php"); 
+
+     include("toolbar.php");
     ?>
 
     <div class="row" style="position:relative; padding-left:5%; padding-right:5%">
     <?php if(isset($_GET["id"])) { ?>
-    
-      <p id='debugText'></p>
+
+      <p id='debugText' style="display:none;"></p>
       <x3d id='viewer_object' showStat="false">
         <scene>
           <navigationInfo headlight="true" type="examine" id="navType"></navigationInfo>
