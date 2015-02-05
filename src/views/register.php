@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="../css/font-awesome.min.css">
 
 	<!-- Custom styles-->
-	
+
 	<link rel="stylesheet" href="../css/bootstrap-theme.css" media="screen">
 	<link rel="stylesheet" type="text/css" href="../css/da-slider.css" />
 	<link rel="stylesheet" href="../css/style.css">
@@ -25,7 +25,7 @@
 <body>
   <?php
     include("menu.php");
-  ?> 
+  ?>
 
 	<header id="head" class="secondary">
 		<div class="container">
@@ -61,9 +61,9 @@
       <b>What is the purpose of a 3DModels account?</b> <br>
       The account is required only for creating your own courses, uploading models and presenting models in <i>lecturer mode</i>.
       <b>As a student, you do not need to register.</b>
-    </div> 
+    </div>
 	</section>
-  
+
 	<?php include("footer.php"); ?>
 
 	<!-- JavaScript libs are placed at the end of the document so the pages load faster -->
@@ -72,10 +72,8 @@
 	<script src="../js/register.js" type="text/javascript"></script>
   <!-- Styling and JQuery -->
 	<script src="../js/modernizr-latest.js"></script>
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 	<script src="../js/custom.js"></script>
   <!-- Form validation with Parsley -->
-  <script src="../js/parsley.min.js"></script> 
+  <script src="../js/parsley.min.js"></script>
 </body>
 </html>
