@@ -32,15 +32,15 @@ function createTable($result, $type) {
  * @return string/html        HTML containing the model information
  */
 function getModelStructure($entry, $type) {
-    $formatBytes = function ($bytes, $precision = 2) { 
-        $units = array('B', 'KB', 'MB', 'GB', 'TB'); 
-  
-        $bytes = max($bytes, 0); 
-        $pow = floor(($bytes ? log($bytes) : 0) / log(1024)); 
-        $pow = min($pow, count($units) - 1); 
+    $formatBytes = function ($bytes, $precision = 2) {
+        $units = array('B', 'KB', 'MB', 'GB', 'TB');
+
+        $bytes = max($bytes, 0);
+        $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+        $pow = min($pow, count($units) - 1);
         $bytes /= pow(1024, $pow);
-  
-        return round($bytes, $precision) . ' ' . $units[$pow]; 
+
+        return round($bytes, $precision) . ' ' . $units[$pow];
     };
 
     $html = "";
@@ -59,7 +59,7 @@ function getModelStructure($entry, $type) {
 	            <div class='delete' id='$entry[id]'></div>
               </li>";
             break;
-        
+
         // model, "normal" list
         default:
             $html .= "<li><a href='model_viewer.php?id=$entry[id]' id='a_img$entry[id]'><img id='image-over$entry[id]' name='image-over' src='../../$entry[preview_url]' alt=$entry[name] width='150' height='150' />
@@ -67,7 +67,7 @@ function getModelStructure($entry, $type) {
               <p id='text-over'>$entry[name]</p>
               </li>";
             break;
-            
+
     }
 
     return $html;
@@ -86,7 +86,7 @@ function getCourseStructure($entry) {
     // id used to derive course id (from database) connected to clicked link
     return "<li><a href='course.php?id=$entry[id]".$html."' id='a_img$entry[id]'>
             <img src=$entry[img_url] alt=$entry[name] class='img-responsive img-fit'>
-            <h3>$entry[name]</h3>
+            <p style='font-weight: bold;'>$entry[name]</p>
             </a></li>";
 }
 ?>

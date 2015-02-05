@@ -1,5 +1,5 @@
 <?php
-  // If outside ROLE environment, menu.php will start a session. 
+  // If outside ROLE environment, menu.php will start a session.
   // So start session only if inside ROLE.
   if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
     session_start();
@@ -22,7 +22,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">3D Models</a>
+      <a class="navbar-brand" href="#">3-D Model Viewer</a>
     </div>
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -36,8 +36,8 @@
             <option>LookAt</option>
             <option>Turntable</option>
             <option>Game</option>
-          </select> 
-        </li -->     
+          </select>
+        </li -->
         <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="showAll()">Show all</button></li>
         <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="x3dSynchronize()" id="btnSynchronize">Unsynchronize</button></li>
         <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" id="btnCopy">Copy Link</button></li>
