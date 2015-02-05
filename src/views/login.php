@@ -20,6 +20,8 @@
 	<script src="assets/js/respond.min.js"></script>
 	<![endif]-->
 
+	<script type='text/javascript' src='../js/init-subsite.js'></script>
+	
 	<script src="../js/ajax.js" type="text/javascript"></script>
 	<script src="../js/login.js" type="text/javascript"></script>
 

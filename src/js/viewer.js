@@ -24,6 +24,14 @@ var displayInfo;
 var remoteLecturer  = false;
 var lecturerMode    = false;
 
+
+/**
+ * Function for reloading synchronously with other widgets.
+ */
+function onReloadRequest() {
+  window.location.reload(false);
+}
+subscribeIWC("Reload", onReloadRequest);
 /**
  * Function for initial state sync from other clients.
  */
@@ -64,7 +72,7 @@ function initializeModelViewer() {
 }
 
 /**
- * Event handler for getting a new iwc message with a new view matrix and 
+ * Event handler for getting a new iwc message with a new view matrix and
  * updating the local viewer with remote data.
  * @param extras parameters from the iwc message with position and rotation
  */
@@ -92,7 +100,7 @@ function onRemoteUpdate(extras) {
   if(lastTimestamp == null || newTimestamp > lastTimestamp) {
     //disable sending position updates until we receive no more update
     canSend = false;
-      
+
     setView(x3dRoot.runtime, extras, finishedSettingView);
     lastTimestamp = newTimestamp;
   }
@@ -103,7 +111,7 @@ function onRemoteUpdate(extras) {
 subscribeIWC("ViewpointUpdate", onRemoteUpdate);
 
 /**
- * Propagates local changes via mouse to all remote clients 
+ * Propagates local changes via mouse to all remote clients
  * when synchronization is enabled.
  */
 function onLocalUpdate() {
@@ -132,13 +140,13 @@ function onLocalUpdate() {
  * when synchronization is enabled.
  * @param evt viewpoint changed event
  */
-function viewpointChanged(evt) {    
+function viewpointChanged(evt) {
 
   // Prevent widgets from sending updates while applying a received viewpoint msg
   // If we set the position because we received a message we do not want to send it back
   if(!evt || processingMessage || !canSend) {
     log("Bypassing send!");
-    
+
     return;
   }
 
@@ -156,7 +164,7 @@ function viewpointChanged(evt) {
   if(typeof sendTimeout != 'undefined'){
     clearTimeout(sendTimeout);
   }
-  sendTimeout = setTimeout(function(){ 
+  sendTimeout = setTimeout(function(){
     //disable sending
     clearTimeout(updateInterval);
     updateInterval = null;
@@ -194,7 +202,7 @@ function savePositionAndOrientation() {
   posAndOrient = getView(x3dRoot.runtime);
 }
 
-/**  
+/**
  * Callback function for the setView function,
  * so we get notified when the interpolation is finished.
  */
@@ -203,9 +211,9 @@ function finishedSettingView(){
   if(typeof enableSendingTimeout != 'undefined'){
     clearTimeout(enableSendingTimeout);
   }
-  enableSendingTimeout = setTimeout(function(){ 
+  enableSendingTimeout = setTimeout(function(){
     //disable sending
-    canSend = true; 
+    canSend = true;
     log("finished updating");
   } , 50);
 }
@@ -217,7 +225,7 @@ function finishedSettingView(){
 function onRemoteLecturerMode(extras) {
   remoteLecturer = extras.enabled;
 
-  if(remoteLecturer)  
+  if(remoteLecturer)
     document.getElementById('navType').setAttribute("type", "None");
   else
     document.getElementById('navType').setAttribute("type", "Examine");

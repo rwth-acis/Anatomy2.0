@@ -21,6 +21,8 @@ function onClickLogin() {
       if (data.result == 'ok') {
         // Reload page to refresh all data
         window.location.reload(false);
+        // Propagate refresh to nearby pages if in role.
+        publishIWC("Reload", new Object());
       }
       else {
         document.getElementById('login_status').innerHTML = data.result;
@@ -69,7 +71,7 @@ $(function(){
 				$this.val(val2);
 			}
 		});
-		
+
 	//login submit
 	$('#form_login_submit').click(function(){
 	});
@@ -151,7 +153,7 @@ $(function(){
 	$('#register_submit').click(function(){
 		if (
 			$('#email_check').html() == check_ok &&
-			$('#repeat_password_check').html() == check_ok 
+			$('#repeat_password_check').html() == check_ok
 		)
     $hugo = $('#register_form').serialize();
     {
