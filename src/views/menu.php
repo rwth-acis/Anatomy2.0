@@ -12,7 +12,9 @@
     <script src="../js/menu_logged_out.js" type="text/javascript"></script>
   <?php } ?>
 
+  <!-- Allows opening dropdown menu if screen size is small -->
   <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
   <div class='navbar navbar-inverse'>
     <div class='container'>
@@ -76,6 +78,3 @@
     </div>
   </div>
   </br></br>
-
-  <!-- Allows opening dropdown menu if screen size is small -->
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
