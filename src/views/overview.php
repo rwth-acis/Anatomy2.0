@@ -34,7 +34,6 @@
   <?php
     include("menu.php");
   ?>
-
   <?php
     //Decide if this site is inside a separate widget
     if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
@@ -45,16 +44,14 @@
       <header id="head" class="secondary">
         <div class="container">
           <div class="row">
-            <h1>Model Browser</h1>
+            <h1>Models</h1>
           </div>
         </div>
       </header>
       ';
     }
   ?>
-
   <?php include("search.html"); ?>
-
   <!-- container -->
   <section class="container">
     <br><br><br>
