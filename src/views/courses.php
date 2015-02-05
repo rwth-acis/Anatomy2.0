@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="../css/font-awesome.min.css">
 
   <!-- Custom styles-->
-  
+
   <link rel="stylesheet" href="../css/bootstrap-theme.css" media="screen">
   <link rel="stylesheet" href="../css/style.css">
 
@@ -31,13 +31,33 @@
 
 </head>
 <body>
-  <?php include("menu.php"); ?> 
+  <?php include("menu.php"); ?>
+
+  <?php
+    //Decide if this site is inside a separate widget
+    if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
+
+    }
+    else {
+      echo '
+          <header id="head" class="secondary">
+              <div class="container">
+                  <div class="row">
+                      <div class="col-sm-8">
+                          <h1>Courses</h1>
+                      </div>
+                  </div>
+              </div>
+          </header>
+      ';
+    }
+  ?>
 
   <!-- Button to create a new course -->
   <?php if (isset($_SESSION['user_id'])) { ?>
-  <p><a class="btn btn-primary btn-lg" href="addcourse.php" role="button">Add a new course</a></p>
+  <p><a class="btn btn-primary btn-lg" href="addcourse.php" role="button">Create a new course</a></p>
   <?php } ?>
-  
+
   <!-- Build course table -->
     <div id="table-container">
     <?php
@@ -46,15 +66,15 @@
 
       $query  = $db->query("SELECT * FROM courses");
       $result = $query->fetchAll();
-      
+
       $html = createTable($result,"course");
       echo $html;
     ?>
     </div>
   <!-- /container -->
-    
+
   <?php include("footer.php");?>
-  
+
 
   <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
 
@@ -70,7 +90,7 @@
      {
          print("<script type='text/javascript' src='../js/courses-widget.js'> </script>");
      }
- ?>          
+ ?>
 
 </body>
 </html>
