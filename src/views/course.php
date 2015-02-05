@@ -54,7 +54,7 @@
             <img src=<?php echo "$entry->img_url"?> ><br><br>
             <div>
                 <?php if(isset($_SESSION["user_id"]) && $entry->creator == $_SESSION['user_id']) { ?>
-                  <a href=editcourse.php?id=<?php echo "$arg"; ?>>
+                  <a href=editcourse.php?id=<?php echo "$arg"; if(isset($_GET["widget"]) && $_GET["widget"] == "true") { echo "&widget=true"; }?>>
                   <button class='btn btn-primary btn-lg btn-block' type='button'>Edit</button>
                   </a>
                 <?php } if(!(isset($_GET["widget"]) && $_GET["widget"] == "true")) { ?>

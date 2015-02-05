@@ -45,7 +45,11 @@
                     <img src="../images/collaborative-logo.png" alt="" class="img-rounded pull-right" width="300">
                     Collaborative 3D Model Viewing allows investigating and learning from a 3D model in a group. You can open a model on different devices and if one person moves the model on his device, the view on all other devices is synchronized. Therefore, you can easily show, explain or discuss parts of the model, no matter if you are explaining something as a teacher, learning in a group over the internet or discussing about an object you don't have physical access to. The project mainly focuses on models from 3D scanned real objects that often are too valuable or not available for investigation by hands. If you want to view a model that is not already in the database, you can also upload it yourself.
                 </p>
-
+            <?php
+              // Explanation and links to ROLE environment are not shown if already inside ROLE environment
+              if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
+              {
+            ?>
                 <h3>Set Up Viewing Environment</h3>
                 <p>
                     <img src="../images/role-full.jpg" alt="" class="img-rounded pull-right" width="300">
@@ -77,8 +81,7 @@
                   <li>Invite others by providing the link to the space (e.g. http://role-sandbox.eu/spaces/spacename)</li>
                   <li>Select a model in the overview</li>
                 </ol>
-
-                </ul>
+            <?php } ?>
 
                 <h3>3D Models</h3>
                 <p>

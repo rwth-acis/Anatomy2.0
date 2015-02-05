@@ -71,6 +71,7 @@
                 </ul>
 
         </div>
+        <div style="padding-bottom:10%"></div>
     </section>
     <!-- /container -->
     <?php include("footer.php"); ?>

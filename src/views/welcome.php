@@ -173,7 +173,7 @@
     </div>
   </div>
   <!-- Spacing for footer -->
-</br></br></br></br></br></br></br></br>
+<div style="padding-bottom:15%"></div>
   <!-- container -->
   <?php include("footer.php"); ?>
 

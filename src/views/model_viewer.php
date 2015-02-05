@@ -33,24 +33,22 @@
       if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
       {
         include("menu.php"); 
+      } else {
+        //Decide if this site is inside a separate widget
+        print("<script type='text/javascript' src='../js/model-viewer-widget.js'> </script>");
       }
-    ?>
-  
-    <?php include("toolbar.php"); ?>
     
+     include("toolbar.php"); 
+    ?>
+
     <div class="row" style="position:relative; padding-left:5%; padding-right:5%">
+    <?php if(isset($_GET["id"])) { ?>
+    
       <p id='debugText'></p>
       <x3d id='viewer_object' showStat="false">
         <scene>
           <navigationInfo headlight="true" type="examine" id="navType"></navigationInfo>
           <background skyColor='1.0 1.0 1.0'> </background>
-          <?php
-             //Decide if this site is inside a separate widget
-             if(isset($_GET["widget"]) && $_GET["widget"] == "true")
-             {
-                 print("<script type='text/javascript' src='../js/model-viewer-widget.js'> </script>");
-             }
-          ?>
           <?php
             include '../php/db_connect.php';
             $arg    = $_GET["id"];
@@ -81,5 +79,8 @@
           </div>";
       ?>
     </div>
+    <?php } else { ?>
+      <p id='debugText'>Please select model!</p>
+    <?php } ?>  <!--- ENDIF around viewer -->
   </body>
 </html>

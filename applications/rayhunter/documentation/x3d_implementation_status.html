@@ -1,0 +1,401 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+
+<html lang="en">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta name="Author" content="Michalis Kamburelis">
+
+<meta name="Language" content="English">
+
+<title>VRML / X3D implementation status</title>
+
+
+<!--
+  This is unclean, but it's more comfortable to keep below CSS
+  directly inside HTML page. This is in kambi_common.php,
+  that should be useful for both michalis.ii and castle-engine.sf.net webpages,
+  and must be suitable also for offline documentation in castle-engine programs.
+-->
+<!-- link type="text/css" rel="stylesheet" media="all"  href="kambi-php-lib/kambi_common.css" -->
+
+<style type="text/css"><!--
+body { background: white; font-family: sans-serif; }
+
+dt { font-weight: bold; }
+div.page_footer { }
+span.page_copyright { font-size: smaller }
+
+span.version_number { font-size: small }
+
+div.quick_links_bottom_line { text-align: left; }
+
+.rss_link {
+  float: right;
+  background: red;
+  padding: 0.3em;
+  border: thin outset black;
+}
+
+.rss_link a {
+  color: white;
+  font-weight: bold
+}
+--></style>
+
+
+<link rel="alternate" type="application/rss+xml"
+  title="Castle Game Engine - News Feed"
+  href="http://castle-engine.sourceforge.net/news_feed.php">
+
+<link type="text/css" rel="stylesheet" media="all" href="castle-engine.css">
+<link type="text/css" rel="stylesheet" href="colorbox/example3/colorbox.css">
+
+<script type="text/javascript" src="castle-engine.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="colorbox/jquery.colorbox-min.js"></script>
+
+<style type="text/css"><!--
+/**
+ * GeSHi Dynamically Generated Stylesheet
+ * --------------------------------------
+ * Dynamically generated stylesheet for delphi
+ * CSS class: sourcecode, CSS id: 
+ * GeSHi (C) 2004 - 2007 Nigel McNie, 2007 - 2008 Benny Baumann
+ * (http://qbnz.com/highlighter/ and http://geshi.org/)
+ * --------------------------------------
+ */
+.delphi.sourcecode .de1, .delphi.sourcecode .de2 {font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;}
+.delphi.sourcecode  {font-family:monospace;}
+.delphi.sourcecode .imp {font-weight: bold; color: red;}
+.delphi.sourcecode li, .delphi.sourcecode .li1 {font-weight: normal; vertical-align:top;}
+.delphi.sourcecode .ln {width:1px;text-align:right;margin:0;padding:0 2px;vertical-align:top;}
+.delphi.sourcecode .li2 {font-weight: bold; vertical-align:top;}
+.delphi.sourcecode .kw1 {color: #000000; font-weight: bold;}
+.delphi.sourcecode .kw2 {color: #000000; font-weight: bold;}
+.delphi.sourcecode .kw3 {color: #000066;}
+.delphi.sourcecode .kw4 {color: #000066; font-weight: bold;}
+.delphi.sourcecode .co1 {color: #808080; font-style: italic;}
+.delphi.sourcecode .co2 {color: #008000; font-style: italic;}
+.delphi.sourcecode .coMULTI {color: #808080; font-style: italic;}
+.delphi.sourcecode .es0 {color: #ff0000; font-weight: bold;}
+.delphi.sourcecode .br0 {color: #000066;}
+.delphi.sourcecode .sy0 {color: #000066;}
+.delphi.sourcecode .sy1 {color: #000066;}
+.delphi.sourcecode .sy2 {color: #000066;}
+.delphi.sourcecode .sy3 {color: #000066;}
+.delphi.sourcecode .st0 {color: #ff0000;}
+.delphi.sourcecode .nu0 {color: #0000ff;}
+.delphi.sourcecode .me1 {color: #006600;}
+.delphi.sourcecode .re0 {color: #0000cc;}
+.delphi.sourcecode .re1 {color: #ff0000;}
+.delphi.sourcecode .ln-xtra, .delphi.sourcecode li.ln-xtra, .delphi.sourcecode div.ln-xtra {background-color: #ffc;}
+.delphi.sourcecode span.xtra { display:block; }
+ -->
+</style>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    (function() {
+        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+        s.type = 'text/javascript';
+        s.async = true;
+        s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+        t.parentNode.insertBefore(s, t);
+    })();
+/* ]]> */
+</script><script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+  </head>
+<body>
+
+
+  <div class="header">
+    <!--img class="header_icon" src="images/header_icon.png" alt="Castle Game Engine icon" /-->
+    <div class="header_title"><a href="http://castle-engine.sourceforge.net/index.php">Castle Game Engine</a></div>
+    
+    <table class="header_menu">
+      <tr>
+        <td colspan="15" class="higher higher_left">&larr; Users</td>
+        <td colspan="6" class="higher higher_right">Developers &rarr;</td>
+      </tr>
+      <tr><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/index.php">Intro</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/news.php">News</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/view3dscene.php" title="VRML / X3D browser, and a viewer for other 3D model formats">view3dscene</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/castle.php" title="First-person perspective game, in a dark fantasy setting">The Castle</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/all_programs.php" title="All the games and tools using our 3D engine">All Programs</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/forum.php" title="Ask for help, report bugs, discuss features">Forum</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/donate.php">Donate</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/engine.php" title="Sources and documentation for developers">Engine</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="vrml_x3d.html" title="Our extensions and status of VRML/X3D implementation" id="current">VRML/X3D</a></td><td class="lower_separator"><div>&nbsp;</div></td><td class="lower"><a href="http://castle-engine.sourceforge.net/blender.php" title="Customized Blender X3D exporter">Blender</a></td><td class="lower_separator"><div>&nbsp;</div></td>
+      </tr>
+    </table>
+  </div><table class="layout" cellspacing="0">
+      <col class="content_column">
+      <col class="sidebar_column">
+      <tr><td class="layout content">
+<h1>VRML / X3D implementation status</h1>
+<p>Implementation status of X3D and VRML languages.
+Here we document what features of the VRML 1.0, VRML 2.0 (aka 97) and X3D 3.x
+specifications are implemented.
+See also <a href="x3d_extensions.html">VRML / X3D extensions</a> to know what is implemented <i>besides the things required by VRML/X3D specifications</i>.
+
+<p>Contents:
+<div class="table_of_contents"><ol>
+<li><a href="#section_x3d">X3D and VRML 2.0 status</a>
+<ol>
+<li><a href="#section_x3d_components">Components supported</a>
+</li>
+<li><a href="#section_x3d_general">General notes</a>
+</li>
+</ol>
+</li>
+<li><a href="#section_vrml_1">VRML 1.0 status</a>
+</li>
+</ol>
+</div>
+<h2><a name="section_x3d">1. X3D and VRML 2.0 status</a></h2>
+
+<h3><a name="section_x3d_components">1.1. Components supported</a></h3>
+
+<p>The table below sums up our X3D component support.
+Since the whole X3D standard is divided into components (and it includes
+also all VRML 2.0 features), this is a concise summary of
+our <i>"VRML / X3D implementation status"</i>. Each component has also
+separate page with details about support (both VRML 97 and X3D features). </p>
+
+<p>A word "practically" below means that the component is not absolutely
+100% supported on given level, but most important
+parts (99% of usage) of given level are covered.</p>
+
+<table class="thin_borders">
+  <tr><th>Component<br/>(click for details)</th>
+      <th>Supported level</th></tr>
+  <tr><td><a href="x3d_implementation_core.html">Core</a>  </td><td><b>2 (all)</b></td></tr>
+  <tr><td><a href="x3d_implementation_time.html">Time</a>  </td><td><b>2 (all)</b></td></tr>
+  <tr><td><a href="x3d_implementation_networking.html">Networking</a>  </td><td><b>1</b> (+ many level 2,3 features: full <tt>Anchor</tt>, <tt>Inline</tt>, <tt>IMPORT/EXPORT</tt>, URLs relative and absolute; missing from levels 2,3: http, <tt>LoadSensor</tt>)</td></tr>
+  <tr><td><a href="x3d_implementation_grouping.html">Grouping</a>  </td><td><b>3 (all)</b></td></tr>
+  <tr><td><a href="x3d_implementation_rendering.html">Rendering</a>  </td><td><b>5 (all)</b></td></tr>
+  <tr><td><a href="x3d_implementation_shape.html">Shape</a>  </td><td><b>2</b></td></tr>
+  <tr><td><a href="x3d_implementation_geometry3d.html">Geometry3D</a>  </td><td><b>4 (all)</b></td></tr>
+  <tr><td><a href="x3d_implementation_geometry2d.html">Geometry2D</a>  </td><td></td></tr>
+  <tr><td><a href="x3d_implementation_text.html">Text</a>  </td><td><b>1 (all)</b> (practically)</td></tr>
+  <tr><td><a href="x3d_implementation_sound.html">Sound</a>  </td><td><b>1 (all)</b> (practically)</td></tr>
+  <tr><td><a href="x3d_implementation_lighting.html">Lighting</a>  </td><td><b>3 (all)</b></td></tr>
+  <tr><td><a href="x3d_implementation_texturing.html">Texturing</a>  </td><td><b>3 (all)</b> (practically: some bits of level 2 nodes are missing)</td></tr>
+  <tr><td><a href="x3d_implementation_interpolation.html">Interpolation</a>  </td><td><b>3</b> (practically)</td></tr>
+  <tr><td><a href="x3d_implementation_pointingdevicesensor.html">Pointing device sensor</a>  </td><td><b>1 (all)</b></td></tr>
+  <tr><td><a href="x3d_implementation_keydevicesensor.html">Key device sensor</a>  </td><td><b>2 (all)</b></td></tr>
+  <tr><td><a href="x3d_implementation_environmentalsensor.html">Environmental sensor</a>  </td><td><b>2</b></td></tr>
+  <tr><td><a href="x3d_implementation_navigation.html">Navigation</a>  </td><td><b>3 (all)</b></td></tr>
+  <tr><td><a href="x3d_implementation_environmentaleffects.html">Environmental effects</a>  </td><td><b>2</b> (and level 4, but without level 3)</td></tr>
+  <tr><td>Geospatial   </td><td>(We only parse geospatial X3D nodes; geospatial VRML 97 nodes are not even parsed)</td></tr>
+  <tr><td><a href="x3d_implementation_hanim.html">H-Anim</a>  </td><td><b>1 (all)</b></td></tr>
+  <tr><td><a href="x3d_implementation_nurbs.html">NURBS</a>  </td><td><b>1</b> (practically: curves, surfaces, interpolators)</td></tr>
+  <tr><td>DIS          </td><td></td></tr>
+  <tr><td><a href="x3d_implementation_scripting.html">Scripting</a>  </td><td><b>1 (all)</b> (practically; although no ECMAScript / Java, only CastleScript / compiled protocols)</td></tr>
+  <tr><td><a href="x3d_implementation_eventutilities.html">Event utilities</a>  </td><td><b>1 (all)</b></td></tr>
+  <tr><td><a href="x3d_implementation_shaders.html">Programmable shaders</a>  </td><td><b>1 (all)</b> (GLSL language)</td></tr>
+  <tr><td><a href="x3d_implementation_cadgeometry.html">CAD geometry</a>  </td><td><b>1</b></td></tr>
+  <tr><td><a href="x3d_implementation_texturing3d.html">Texturing3D</a>  </td><td><b>2 (all)</b></td></tr>
+  <tr><td><a href="x3d_implementation_cubemaptexturing.html">Cube map environmental texturing</a>  </td><td><b>3 (all)</b></td></tr>
+  <tr><td>Layering                 </td><td></td></tr>
+  <tr><td>Layout                   </td><td></td></tr>
+  <tr><td>Rigid body physics       </td><td></td></tr>
+  <tr><td>Picking sensor           </td><td></td></tr>
+  <tr><td>Followers                </td><td></td></tr>
+  <tr><td>Particle systems         </td><td></td></tr>
+</table>
+
+
+<h3><a name="section_x3d_general">1.2. General notes</a></h3>
+
+<p><i>All nodes from all components</i> of X3D 3.3 specification are
+included in the engine.
+The same goes for all the nodes from VRML 2.0 specification
+(it does have some nodes later removed in X3D).
+This doesn't mean that they are meaningfully handled,
+but they <i>are at least parsed correctly</i> (and converting from
+X3D XML to classic VRML preserves them correctly).
+
+<p><i>All field types</i>, including new X3D double-precision and
+matrices, are supported, with the exception of MFImage. MFImage should
+be implemented as soon as I see some usage of this, for now no X3D
+specification nodes actually use this.</p>
+
+<p>We support fully both <i>XML and classic encodings</i>.
+
+<p>Prototypes (both external and not) are 100% done and working :)
+External prototypes recognize URN of standard VRML 97 nodes, i.e.
+<tt>urn:web3d:vrml97:node:Xxx</tt> and standard X3D nodes
+(<tt>urn:web3d:x3d:node:Xxx</tt>), see also our extensions URN
+on <a href="x3d_extensions.html">VRML/X3D extensions</a>.
+
+<p>Events, routes mechanism is implemented since 2008-08-11 :)</p>
+
+<p><i>TODO</i> for all nodes with url fields: for now all URLs
+are interpreted as local file names (absolute or relative).
+So if a VRML file is available on WWW, you should first download it
+(any WWW browser can of course download it and automatically open view3dscene
+for you), remembering to download also any texture/background files
+used.
+(Conceptually, this lack should be mentioned in <tt>Networking</tt>
+component details, but it's so important that I mention it here.)</p>
+
+<p><i>No limits</i>:
+<a href="http://web3d.org/x3d/specifications/vrml/ISO-IEC-14772-VRML97/part1/conformance.html#7.3.3">
+VRML 97 and X3D specifications define various limits</a>
+that must be satisfied by conforming browsers.
+For example, only 500 children per Group
+need to be supported, only SFString with 30,000 characters has to be
+supported etc. Our engine generally doesn't have these limits
+(unless explicitly mentioned below). So any number of children in Group
+node is supported, SFString may be of any length etc.
+VRML/X3D authors are limited only by the amount of memory available
+on user system, performance of OpenGL implementation etc.
+
+<h2><a name="section_vrml_1">2. VRML 1.0 status</a></h2>
+
+<p>We consider VRML 1.0 status as "almost complete".
+All nodes and features are handled, with the exception of:
+
+<ul>
+  <li><p>Handling URLs in fields <tt>WWWInline.name</tt> and
+    <tt>Texture2.filename</tt>. As for now, only local file names are
+    allowed there.
+    <!-- Relative paths are resolved with respect to the path of originating
+         VRML file. -->
+
+  <li><p><tt>AsciiText.width</tt> is ignored.
+
+  <li><p><tt>OrthographicCamera.height</tt> and
+    <tt>PerspectiveCamera.heightAngle</tt> fields work like
+    X3D <tt>OrthoViewpoint.fieldOfView</tt> and
+    <tt>Viewpoint.fieldOfView</tt>. This means that they specify
+    the angle/height along the <i>smaller</i> browser window size &mdash;
+    which is <i>usualy the height</i>, but <i>may be width</i> if you
+    resize the window to be taller and thinner.
+</ul>
+
+<p><b>VRML 1.0 features that will probably never be implemented,
+as they are replaced with much better mechanisms in newer VRML versions:</b>
+
+<ul>
+  <li><p><tt>AsciiText</tt> node's triangles and vertexes are not counted
+    when writing triangles and vertexes counts of the scene.
+    This is actually somewhat Ok, as later VRML specs say explicitly that
+    Text nodes do not participate in collision detection
+    (so they do not have triangles/vertexes for collision detection,
+    only for rendering).
+
+  <li><p>Clicking on <tt>WWWAnchor</tt> doesn't work (use VRML &gt;= 2.0
+    <tt>Anchor</tt> instead, implementing old VRML 1.0 anchor is not worth
+    the trouble and would unnecessarily obfuscate the code).
+
+  <li><p>I'm always rendering the nearest (first) child of VRML 1.0 <tt>LOD</tt>
+    node. Therefore I'm potentially losing some optimization if the scene
+    has reasonably designed <tt>LOD</tt> nodes.</p>
+
+    <p>Reason: this is caused by possible "leaking" of properties
+    in VRML 1.0. Change of LODs choice could potentially change
+    the look of the whole scene (that is, different LOD children may
+    cause the other nodes, following LOD node, to have different meaning).
+    That's why implementing LOD node correctly and fast is very very hard
+    in VRML 1.0.
+    So much that it's not worth the trouble.</p>
+
+    <p>For the same reason, changing VRML 1.0 Switch.whichChoice is not
+    optimized and works slow. Although you will probably not notice this,
+    since there's no event mechanism in pure VRML 1.0.</p>
+
+    <p>Note that VRML &gt;= 2.0 LOD node is working fast and switches
+    between children, according to spec. Also <tt>Switch.whichChoice</tt>
+    changing is optimized and instantly fast in VRML &gt;= 2.0. So just
+    upgrade to VRML 2.0 (aka 97) or X3D if you need these features.
+
+  <li><p>Camera <tt>focalDistance</tt> is also ignored, but this
+    is allowed by specification. And honestly VRML 1.0 specification
+    is so ambiguous about this feature (<i>browser should adjust
+    flying speed to reach that point in a reasonable amount of time</i>,
+    <i>perhaps the browser can use this as a hint</i>...) that
+    I see no reliable way to handle <tt>focalDistance</tt>.
+
+    <p>Fortunately, VRML 2.0 replaced this with <tt>NavigationInfo.speed</tt>
+    feature, with clear meaning (basically, it's just a distance per second),
+    so please use this instead. (For my engine, you can use
+    <tt>NavigationInfo</tt> node even in VRML 1.0 models.)
+
+  <li><p>Extensibility features (<tt>isA</tt> and <tt>fields</tt>) are not handled
+    fully, although you probably will not notice. For built-in nodes,
+    <tt>isA</tt> and <tt>fields</tt> are correctly parsed but ignored.
+    For unknown nodes, they are simply omitted up to the matching
+    closing parenthesis.
+
+    <p>This means that the only case when you will notice something doesn't
+    work is when you use non-standard VRML node but point to a standard
+    node with <tt>isA</tt> declaration. Then my engine will ignore
+    <tt>isA</tt> declaration, while it should use it to interpret your node
+    and (at least partially, when possible) handle it.</p>
+
+    <p>Finishing of handling this VRML 1.0 feature has rather low priority,
+    since this mechanism was completely dropped in later VRML versions.
+    VRML 2.0 and X3D replaced this by fantastic prototypes mechanism,
+    which is basically an extra-powerful and elegant way of doing what
+    VRML 1.0 tried to do with <tt>isA</tt> and <tt>fields</tt> feature
+    (and VRML/X3D prototypes are already handled 100% by our engine).
+
+  <li><p>MFString field with strings not enclosed in double quotes will
+    not be parsed correctly. Moreover, parsing SFStrings not enclosed
+    in double quotes is implemented rather as a "quick &amp; dirty hack"
+    than as a nice solution. Really, it's a weird "feature" of
+    VRML 1.0 (fortunately eliminated in VRML 97) to allow strings not enclosed
+    in double quotes.
+    And I know about only <b>one</b> program that did use it (exporter to VRML 1.0 in Blender versions &lt;= 2.4x)
+    and this program used it only in an SFString field (Texture2.filename).
+    So I doubt I will ever fix this to MFString &mdash;
+    I would consider it a waste of time, since it's really
+    a VRML-1.0-specific totally useless and uncommon syntax feature.
+
+  <li><p>VRML 1.0 specification suggests that to list viewpoints
+    in the menu (like our "Jump to viewpoint") you should
+    place miltiple camera nodes under a Switch.
+
+    <p>We will not implement it &mdash; too much complication
+    (need to look for viewpoints in VRML 1.0 in inactive graph parts).
+    VRML &gt;= 2 simply allows many viewpoints in active graph parts,
+    you should use this.</p>
+  </li>
+</ul>
+
+<p>Note that some unclear parts of VRML 1.0 specification are handled according
+to VRML 97 specification. Also, our ray-tracer uses lighting model
+defined for VRML 97 (since VRML 1.0 didn't define any lighting model
+precisely).
+
+</td><td class="layout">
+  <div class="sidebar">
+    <div class="sidebar_title"><a href="vrml_x3d.html">VRML / X3D support</a></div><ul><li><a href="demo_models.html">Demo models</a></li><li><a href="x3d_extensions.html">Extensions</a><ul><li><a href="compositing_shaders.html">Compositing Shaders</a></li><li><a href="x3d_extensions_screen_effects.html">Screen Effects</a></li><li><a href="x3d_extensions_shadow_maps.html">Shadow Maps</a></li><li><a href="x3d_extensions_vrml1.html">(Old) VRML 1.0</a></li></ul></li><li>Implementation status<ul><li><a href="x3d_implementation_core.html">Core</a></li><li><a href="x3d_implementation_time.html">Time</a></li><li><a href="x3d_implementation_networking.html">Networking</a></li><li><a href="x3d_implementation_grouping.html">Grouping</a></li><li><a href="x3d_implementation_rendering.html">Rendering</a></li><li><a href="x3d_implementation_shape.html">Shape</a></li><li><a href="x3d_implementation_geometry3d.html">Geometry3D</a></li><li><a href="x3d_implementation_geometry2d.html">Geometry2D</a></li><li><a href="x3d_implementation_text.html">Text</a></li><li><a href="x3d_implementation_sound.html">Sound</a></li><li><a href="x3d_implementation_lighting.html">Lighting</a></li><li><a href="x3d_implementation_texturing.html">Texturing</a><ul><li><a href="x3d_implementation_texturing.html#section_multi_texturing">Clarifications to X3D multi-texturing</a></li><li><a href="x3d_implementation_texturing.html#section_dds">DDS (DirectDraw Surface)</a></li></ul></li><li><a href="x3d_implementation_interpolation.html">Interpolation</a></li><li><a href="x3d_implementation_pointingdevicesensor.html">Pointing device sensor</a></li><li><a href="x3d_implementation_keydevicesensor.html">Key device sensor</a></li><li><a href="x3d_implementation_environmentalsensor.html">Environmental sensor</a></li><li><a href="x3d_implementation_navigation.html">Navigation</a></li><li><a href="x3d_implementation_environmentaleffects.html">Environmental effects</a></li><li><a href="x3d_implementation_hanim.html">H-Anim</a></li><li><a href="x3d_implementation_nurbs.html">NURBS</a><ul><li><a href="x3d_implementation_nurbs.html#section_homogeneous_coordinates">Control points are in homogeneous coordinates</a></li></ul></li><li><a href="x3d_implementation_scripting.html">Scripting</a></li><li><a href="x3d_implementation_eventutilities.html">Event utilities</a></li><li><a href="x3d_implementation_shaders.html">Programmable shaders</a></li><li><a href="x3d_implementation_cadgeometry.html">CAD geometry</a></li><li><a href="x3d_implementation_texturing3d.html">Texturing3D</a></li><li><a href="x3d_implementation_cubemaptexturing.html">Cube map environmental texturing</a></li></ul></li><li><a href="nist_vrml_test_suite.html">NIST conformace test suite</a></li><li><a href="castle_script.html">CastleScript language reference</a></li><li><a href="kanim_format.html">Kanim (precalculated animations) file format</a></li><li><a href="x3d_time_origin_considered_uncomfortable.html">VRML / X3D time origin considered uncomfortable</a></li></ul></div></td></tr></table><script type="text/javascript">
+  jQuery('a.screenshot').colorbox({opacity: 0.9, rel:'screenshot', maxWidth:'90%', maxHeight:'90%'});
+</script>
+  
+<hr>
+
+<div class="page_footer">
+
+    <address>
+    By Michalis Kamburelis, as part of
+    <a href="http://castle-engine.sourceforge.net/">Castle Game Engine</a>.
+    </address>
+    
+  <table><tr>
+
+    <td><a href="http://sourceforge.net/projects/castle-engine">Hosted by SourceForge.net</a></td>
+
+    <td><span class="page_copyright">Copyright <a href="http://michalis.ii.uni.wroc.pl/~michalis/">Michalis Kamburelis</a>.
+This page is considered part of documentation of my programs,
+and you are free to modify and further distribute it on terms of
+<a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License</a>.
+</span></td>
+
+    
+  </tr></table>
+
+  
+</div>
+
+</body>
+</html>
+

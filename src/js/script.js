@@ -27,7 +27,7 @@
                         },
                     complete: function(response) { // on complete
                         output.html(response.responseText); //update element with received data
-                        myform.resetForm();  // reset form
+                        // myform.resetForm();  // reset form
                         submitbutton.removeAttr('disabled'); //enable submit button
                         progressbox.slideUp(); // hide progressbar
                     }

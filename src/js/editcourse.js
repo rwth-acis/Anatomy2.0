@@ -17,6 +17,9 @@ function endBlackout() {
   // Reset width and put box in the center of the window 
   document.getElementById("modelbox").style.width = 0;
   document.getElementById("modelbox").style.left = "50%";
+
+  // Reset content of search field
+  document.getElementById("search").value = "";
 }
 
 /**
@@ -42,10 +45,7 @@ function getModels(callback) {
         document.getElementById("result-container").innerHTML = response;
 
         // Add event listener to each model
-        var list = document.getElementsByClassName("text-content");
-        for(var i=0;i<list.length;i++) {
-            list[i].addEventListener("click", toggleSelectModel);
-        }
+        addSelectListener();
   });
 }
 
@@ -95,6 +95,15 @@ function addDeleteListener() {
 }
 
 /**
+ * Adds the event listener toggleSelectModel to each displayed model
+ */
+function addSelectListener() {
+  var list = document.getElementsByClassName("text-content");
+  for(var i=0;i<list.length;i++) {
+      list[i].addEventListener("click", toggleSelectModel);
+  }
+}
+/**
  * Animates the pop-up: starts in the center with full height and expands
  * horizontally to 80% screen width
  * @param  {DOM object} element The element to expand
@@ -103,8 +112,8 @@ function expand(element) {
   var pxPerStep = 50;
   var width = element.offsetWidth;
   var left = element.offsetLeft;
-  var windowWidth = window.outerWidth;
-
+  var windowWidth = window.innerWidth;
+  console.log(window);
   // Trigger every 10 ms
   var loopTimer = setInterval(function() {
     // We want a width of 80% of the screen
@@ -129,18 +138,21 @@ function expand(element) {
  * @param  {event} event The click event
  */
 function toggleSelectModel(event) {
-  var element = event.target;
+  var element = event.target.parentElement.previousElementSibling;
+  // The link has an id of the form image-over<db_id>. This will extract the database id.
+  var id = element.id.substr(10);
+
   // Look if the clicked element is already selected
-  if(selectedModels[element.id]) {
-    delete selectedModels[element.id];
+  if(selectedModels[id]) {
+    delete selectedModels[id];
 
     // Remove highlight
-    var index = (' ' + element.className + ' ').indexOf(' div-highlight ');
+    var index = (' ' + element.className + ' ').indexOf('highlight-model ');
     element.className = element.className.substr(0,index-1);
   } else { 
-    selectedModels[element.id] = element.id; 
+    selectedModels[id] = id; 
 
     // Highlight model
-    element.className += ' div-highlight'; 
+    element.className += 'highlight-model'; 
   }
 }
