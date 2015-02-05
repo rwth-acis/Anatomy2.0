@@ -55,7 +55,11 @@
 
   <!-- Button to create a new course -->
   <?php if (isset($_SESSION['user_id'])) { ?>
-  <p><a class="btn btn-primary btn-lg" href="addcourse.php" role="button">Create a new course</a></p>
+  <div class="container-fluid">
+    <div class="row">
+      <p><a class="btn btn-primary btn-lg" style="width:100%" href="addcourse.php" role="button">Create New Course</a></p>
+    </div>
+  </div>
   <?php } ?>
 
   <!-- Build course table -->
