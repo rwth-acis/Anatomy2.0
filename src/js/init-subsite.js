@@ -18,6 +18,11 @@ function receiveMessage(event)
     //Debug output for message
     // console.info("Subsite: We got a message: ", event.data);
 
+    //ignore message if its empty
+    if(event.data === undefined){
+	return;
+    }
+
     //choose reaction
     var msgTopic = event.data.split(" ")[0];
     var msgContent = event.data.slice(msgTopic.length);
