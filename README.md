@@ -1,47 +1,13 @@
-# 3D MODELS
+Blended Learning with digital 3d models in Anatomy Education – Online pool for 3D Learning Objects in science and education
 
-3D Models is a web-based, mobile-ready application which allows to:
-
-  - choose from a list of three-dimensional models,
-  - (collaboratively) view the chosen model and
-  - update more three-dimensional models.
-
-Collaborative 3D model viewing allows investigating and learning from a 3D model in a group. You can open a model on different devices and if one person moves the model on his device, the view on all other devices is synchronized. Therefore, you can easily show, explain or discuss parts of the model, no matter if you are explaining something as a teacher, learning in a group over the internet or discussing about an object you don't have physical access to. The project mainly focuses on models from 3D scanned real objects that often are too valuable or not available for investigation by hands. If you want to view a model that is not already in the database, you can also upload it yourself.
-
-### ROLE
-The collaborative 3D model viewing is provided in widgets for the Responsive Open Learning Environments ([ROLE]). Here you can create a workspace, setup a learning environment and invite other people to join you. ROLE allows you to combine the Collaborative 3D Model Viewing with many other widgets for collaborative learning.
-
-#### Setup
-Setting up the environment for collaborative viewing is really easy. If you do it for the first time, you can follow these steps:
-
-1. Create a ROLE space [here]
-2. Log in (e.g. with your Google account)
-3. Add the following widgets in the sidebar on the left
- * http://eiche.informatik.rwth-aachen.de/henm1415g2/src/role/overview.xml
- * http://eiche.informatik.rwth-aachen.de/henm1415g2/src/role/model_viewer.xml
-4. Invite others by providing the link to the space (e.g. http://role-sandbox.eu/spaces/spacename)
-5. Select a model in the overview
-
-### Tech
-
-3DModels uses a number of open source projects to work properly:
-
-* Javascript
-* PHP
-* MySQL
-* [Interwidget Communication]
-
-### Development
-
-Want to contribute? Great!
-Shoot us an email, if you encounter any bugs or problems: henm1415g2@dbis.rwth-aachen.de
-
-### Todo's
-
- - Extend functionality
+The aim of the project is to build an online pool of digital 3D models as ubiquitous available teaching and learning material. The models are high-resolution scanned digital copies of various physical objects used for many years in classical anatomy course learning. Due to the delicate nature and fragility of the physical learning objects their use in classical education was limited. The progress in 3D scanning technology in recent years has led to reduced cost and effort in the acquisition and reproduction of physical objects. The project intends to provide high-quality digital copies of a variety of learning objects used in classical anatomy course learning to facilitate learning scenarios outside the dissection hall (eg " bedside teaching" , seminars and POL ). The online pool will be accessible for tutors and students alike in the context of anatomy education at RWTH Aachen University Clinic and is a project of the ETS-Blended Learning program at RWTH Aachen University funded under the Excellence Initiative of the German Science Council.
 
 
+http://dbis.rwth-aachen.de/cms/projects/creating-a-pool-of-digital-3d-models-for-teaching-anatomy-online/view
 
-[ROLE]:http://role-sandbox.eu
-[here]:http://role-sandbox.eu
-[Interwidget Communication]:http://dbis.rwth-aachen.de/cms/projects/the-xmpp-experience/#interwidget-communication
+Links UK 
+http://www.ukaachen.de/kliniken-institute/institut-fuer-neuroanatomie/lehre/digitale-3d-lehrmodelle.html
+
+3D – Modelle
+http://eiche.informatik.rwth-aachen.de/henm1415g2/src/views/overview.php
+
