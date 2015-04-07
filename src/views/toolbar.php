@@ -39,7 +39,14 @@
           </select>
         </li -->
         <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="showAll()">Show all</button></li>
-        <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="x3dSynchronize()" id="btnSynchronize">Unsynchronize</button></li>
+      <?php
+        // If and only if inside ROLE environment, show the synchronize / unsynchronize button
+        if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
+      ?>
+          <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="x3dSynchronize()" id="btnSynchronize">Unsynchronize</button></li>
+      <?php
+          }
+      ?>
         <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" id="btnCopy">Copy Link</button></li>
         <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="btnShowInfo()" id="btnInfo">Show info</button></li>
         <!-- Show lecturer mode button only if user logged in (as lecturer) and in ROLE environment -->
