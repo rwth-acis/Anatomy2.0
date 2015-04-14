@@ -104,8 +104,6 @@
   <script src="../js/modernizr-latest.js"></script>
   <script src="../js/jquery.cslider.js"></script>
   <script src="../js/custom.js"></script>
-  <!-- Init communication with wrapper -->
-  <script type='text/javascript' src='../js/init-subsite.js'> </script>
 
   <script type='text/javascript' src='../js/x3d-extensions.js'> </script>
   <script type='text/javascript' src='../js/viewer.js'> </script>
@@ -119,8 +117,8 @@
     if(isset($_GET["widget"]) && $_GET["widget"] == "true")
     {
         print("<script type='text/javascript' src='../js/overview-widget.js'> </script>");
+        print("<script type='text/javascript' src='../js/init-subsite.js'></script>");
     }
   ?>
-
 </body>
 </html>

@@ -9,8 +9,14 @@
     <script type='text/javascript' src='http://www.x3dom.org/download/x3dom.js'> </script>
 
     <!-- Init communication with wrapper -->
-    <script type='text/javascript' src='../js/init-subsite.js'> </script>
-
+    <?php
+    //Decide if this site is inside a separate widget
+    if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+    {
+      //we have to link to the widget versions:
+      print("<script type='text/javascript' src='../js/init-subsite.js'></script>");
+    }
+    ?>
     <script type='text/javascript' src='../js/x3d-extensions.js'> </script>
     <script type='text/javascript' src='../js/viewer.js'> </script>
     <link type='text/css' rel='stylesheet' href='http://www.x3dom.org/download/x3dom.css'> </link>

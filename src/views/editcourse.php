@@ -8,9 +8,6 @@
     <!-- X3Dom includes -->
     <script type='text/javascript' src='http://www.x3dom.org/download/x3dom.js'> </script>
 
-    <!-- Init communication with wrapper -->
-    <script type='text/javascript' src='../js/init-subsite.js'> </script>
-
     <script type='text/javascript' src='../js/x3d-extensions.js'> </script>
     <script type='text/javascript' src='../js/viewer.js'> </script>
     <link type='text/css' rel='stylesheet' href='http://www.x3dom.org/download/x3dom.css'> </link>
@@ -40,6 +37,7 @@
       if(isset($_GET["widget"]) && $_GET["widget"] == "true")
       {
           print("<script type='text/javascript' src='../js/model-viewer-widget.js'> </script>");
+          print("<script type='text/javascript' src='../js/init-subsite.js'></script>");
       }
       include("menu.php"); 
       include "../php/db_connect.php";
