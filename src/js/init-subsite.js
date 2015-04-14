@@ -71,7 +71,8 @@ function publishIWC(topic, content){
     return;
     }
     //send message to wrapper to send it via iwc
-    roleWrapper.postMessage(topic + " " + JSON.stringify(content), "*");
+    var message = topic + " " + JSON.stringify(content);
+    roleWrapper.postMessage(message, "*");
 }
 
 
