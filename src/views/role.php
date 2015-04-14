@@ -20,13 +20,12 @@
     <script src="../js/respond.min.js"></script>
     <![endif]-->
 
-    <!-- Init communication with wrapper -->
-    <script type='text/javascript' src='../js/init-subsite.js'></script>
     <?php
        //Decide if this site is inside a separate widget
        if(isset($_GET["widget"]) && $_GET["widget"] == "true")
        {
            print("<script type='text/javascript' src='../js/overview-widget.js'> </script>");
+           print("<script type='text/javascript' src='../js/init-subsite.js'></script>");
        }
     ?>
 </head>

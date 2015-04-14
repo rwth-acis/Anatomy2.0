@@ -79,7 +79,30 @@ function initializeModelViewer() {
     x3dRoot.removeEventListener('touchstart', arguments.callee);
     log('Enabled publishing!');
   });
+
+  window.addEventListener( "keypress", onKeyDown, false );
 }
+function onKeyDown(e) {
+  if(e.keyCode == 107) { // K 
+    var debugTextStyle = document.getElementById('debugText').style;
+    if(debugTextStyle.display == 'none') {
+      debugTextStyle.display = 'inline';
+    }
+    else {
+      debugTextStyle.display = 'none';
+    }
+  }
+
+}
+
+function onUserConnected(message) {
+  var data            = getView(x3dRoot.runtime);
+  data["timestamp"]   = new Date();
+  lastTimestamp       = data["timestamp"];
+  data.selectedModel  = window.location.search;
+  publishIWC("ViewpointUpdate", data);
+}
+subscribeIWC("UserConnected", onUserConnected);
 
 /**
  * Event handler for getting a new iwc message with a new view matrix and
@@ -113,6 +136,7 @@ function onRemoteUpdate(extras) {
     canSend = false;
 
     setView(x3dRoot.runtime, extras, finishedSettingView);
+    setViewMode(extras.viewMode);
     lastTimestamp = newTimestamp;
   }
 
@@ -144,6 +168,8 @@ function onLocalUpdate() {
   data.selectedModel = window.location.search;
   data.modelId = getParameterByName('id');
 
+  data.viewMode = getViewMode();
+
   publishIWC("ViewpointUpdate", data);
   log('Published message!');
 }
@@ -159,7 +185,6 @@ function viewpointChanged(evt) {
   // If we set the position because we received a message we do not want to send it back
   if(!evt || processingMessage || !canSend) {
     log("Bypassing send!");
-
     return;
   }
 
@@ -203,7 +228,10 @@ function receiveModelSelectedByOverview(msgContent){
  */
 function synchronizePositionAndOrientation() {
   if(lastData != null) {
+    processingMessage = true;
     setView(x3dRoot.runtime, lastData, function() {});
+    setViewMode(lastData.viewMode);
+    processingMessage = false;
   }
 }
 

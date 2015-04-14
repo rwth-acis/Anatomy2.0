@@ -18,15 +18,21 @@ function receiveMessage(event)
     //Debug output for message
     // console.info("Subsite: We got a message: ", event.data);
 
+    //ignore message if its empty
+    if(event.data === undefined){
+	return;
+    }
+
     //choose reaction
     var msgTopic = event.data.split(" ")[0];
     var msgContent = event.data.slice(msgTopic.length);
     switch(msgTopic){
         case "EmbeddedInRole":
-          isEmbeddedInRole = true;
-          var data = new Object();
-          publishIWC("UserConnected", data);
-          break;
+        isEmbeddedInRole = true;
+
+        var data = {topic: "UserConnected", id: "null"};
+        publishIWC("UserConnected", data);
+        break;
         default:
     if(subscribeCallbacks.has(msgTopic)){
         //call callback function
