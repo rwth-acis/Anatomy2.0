@@ -38,7 +38,8 @@
 	  if(isset($_GET["mail"])) {
   ?> 
   <div id="conf-reg" style="font-size:20px; padding:100px">
-    <p>The account for email <b><?php echo ($_GET["mail"]); ?></b> has been unlocked. The lecturer is informed by mail, that his or her account can be used.</p>
+    <p id="conf-text">A confirmation request was sent for <?php echo($GET[mail]); ?>. This should take only a few seconds.</p>
+    <img src="../images/ajax-loader.gif" id="loader">
   </div>
   <?php 
     }
@@ -50,7 +51,11 @@
   <?php include("footer.php"); ?>
 
   <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
-  <script src="../js/modernizr-latest.js"></script>
-  <script src="../js/custom.js"></script>
+  <!-- Sending the confirmation request on load -->
+	<script src="../js/ajax.js" type="text/javascript"></script>
+	<script src="../js/tools.js" type="text/javascript"></script>
+  <script src="../js/confirm_registration.js" type="text/javascript"></script>
+  <script src="../js/modernizr-latest.js" type="text/javascript"></script>
+  <script src="../js/custom.js" type="text/javascript"></script>
 </body>
 </html>
