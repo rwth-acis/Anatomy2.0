@@ -79,3 +79,6 @@ model-data/*
 !model-data/raptor
 !model-data/helmet-5
 !model-data/knight
+
+#ignore config files
+src/config/database.php

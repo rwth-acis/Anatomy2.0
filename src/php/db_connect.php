@@ -3,10 +3,8 @@
 	 * Connects to the database using predefined settings.
 	 */
 
-	$host = "buche.informatik.rwth-aachen.de";
-	$database = "henm1415g2";
-	$user = "henm1415g2";
-	$password = "pleko1744GRU";
+  // Sets the variables $host, $database, $user, $password
+	require '../config/database.php';
 
 	// mysql_connect - call for compatibility-reasons. The API is deprecated (http://php.net/manual/de/function.mysql-connect.php)
     $connection = mysql_connect($host, $user, $password)
