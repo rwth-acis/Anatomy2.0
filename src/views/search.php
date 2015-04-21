@@ -1,3 +1,4 @@
+<?php
 /**
  * Copyright 2015 Adam Brunnmeier, Dominik Studer, Alexandra Wörner, Frederik Zwilling, Ali Demiralp, Dev Sharma, Luca Liehner, Marco Dung, Georgios Toubekis
  *
@@ -13,35 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- *Example for compare helper:
+ * @file search.php
+ * Search field used on the models overview page (overview.php) and editcourse.php
  */
-
-function getNumberParameters(obj){
-    //get number of properties in QueryString
-    var size = 0
-    var key;
-    for (key in obj) {
-        if (obj.hasOwnProperty(key)){
-	    if(key != ""){
-		size++;
-	    }
-	}
-    }
-    return size;
-}
-
-// beforeEach(function () {
-//   jasmine.addMatchers({
-//     toBePlaying: function () {
-//       return {
-//         compare: function (actual, expected) {
-//           var player = actual;
-
-//           return {
-//             pass: player.currentlyPlayingSong === expected && player.isPlaying
-//           }
-//         }
-//       };
-//     }
-//   });
-// });
+?>
+<div class="search_box">
+  <form autocomplete="on" onsubmit="return false;">
+    <input type="text" class="text-box" id="search" name="search" placeholder="Search..." oninput="showModels(this.value)" onsubmit="showModels(this.value)">
+  </form>
+</div>
