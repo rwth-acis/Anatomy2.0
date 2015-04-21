@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-- phpMyAdmin XML Dump
-- version 4.2.7.1
-- http://www.phpmyadmin.net
--
-- Host: buche.informatik.rwth-aachen.de
-- Erstellungszeit: 02. Jan 2015 um 11:37
-- Server Version: 5.5.40-0ubuntu0.12.04.1
-- PHP-Version: 5.5.15
--->
+ - Copyright 2015 Adam Brunnmeier, Dominik Studer, Alexandra Wörner, Frederik Zwilling, Ali Demiralp, Dev Sharma, Luca Liehner, Marco Dung, Georgios Toubekis
+ -
+ - Licensed under the Apache License, Version 2.0 (the "License");
+ - you may not use this file except in compliance with the License.
+ - You may obtain a copy of the License at
+ -
+ -   http://www.apache.org/licenses/LICENSE-2.0
+ -
+ - Unless required by applicable law or agreed to in writing, software
+ - distributed under the License is distributed on an "AS IS" BASIS,
+ - WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ - See the License for the specific language governing permissions and
+ - limitations under the License.
+ -
+ -
+ - phpMyAdmin XML Dump
+ - version 4.2.7.1
+ - http://www.phpmyadmin.net
+ -
+ - Host: buche.informatik.rwth-aachen.de
+ - Erstellungszeit: 02. Jan 2015 um 11:37
+ - Server Version: 5.5.40-0ubuntu0.12.04.1
+ - PHP-Version: 5.5.15
+ -->
 
 <dataset>
     <table name="models_test">
