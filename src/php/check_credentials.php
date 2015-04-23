@@ -36,7 +36,7 @@ if (isset($_POST['login_email']) && isset($_POST['login_password'])) {
   $sth->execute();
   // As there can be only one row in the result, get the first row
   $user = $sth->fetch();
-  // If user is empty, there email and password did not match anything in DB
+  // If user is empty, the email and password did not match anything in DB
   if($user) {
 		if ($user['confirmed']) {
       // Now that user is logged in, we can personalize web page. Store data using session
