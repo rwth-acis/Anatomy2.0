@@ -1,5 +1,6 @@
 <?php
-  // URL to the root directory of the Anatomy 2.0 web service
+  // URL to the root directory of the Anatomy 2.0 web service.
+  // Make sure NOT to end with a "/".
 	$baseUrl = "";
   
   // Set up an array which contains the mail address, prename and lastname of each admin
