@@ -59,7 +59,7 @@
         <ul class='nav navbar-nav pull-right mainNav'>
 	        <li><a href='welcome.php?widget=true'>Home</a></li>
           <li><a href='courses.php?widget=true'>Courses</a></li>
-          <li><a href='overview.php?widget=true'>Models</a></li>
+          <li><a href='overview.php?widget=true'>Gallery</a></li>
           <li><a href='upload.php?widget=true'>Upload</a></li>
           <li><a href='help.php?widget=true'>Help</a></li>");
   }
@@ -80,7 +80,7 @@
         <ul class='nav navbar-nav pull-right mainNav'>
 	        <li><a href='welcome.php'>Home</a></li>
           <li><a href='courses.php'>Courses</a></li>
-          <li><a href='overview.php'>Models</a></li>
+          <li><a href='overview.php'>Gallery</a></li>
           <li><a href='role.php'>ROLE</a></li>
           <li><a href='upload.php'>Upload</a></li>
           <li><a href='help.php'>Help</a></li>");
