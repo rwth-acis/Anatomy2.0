@@ -69,17 +69,23 @@ class DBTest extends Generic_Tests_DatabaseTestCase {
             "SELECT * FROM models_test WHERE id = $arg");
         $result = $query->fetchAll();
         
-        $html = createModelsTable($result);
-        $this->assertEquals($html, "<div class='row'><div class='col-md-6 overview-entry' name='table-entry' id='table_entry1'><a href='model_viewer.php?id=3' id='a_img1'>
-            <img src='../../models/3/preview/3.png' alt=Helmet class='img-responsive img-fit'>
-            <h3>Helmet</h3>
-          </a>
-          <p><b>Model Name:</b> Helmet</p>
-            <p><b>Category:</b> Archeology</p>
-            <p><b>Size:</b> 13.9 MB</p>
-            <p><b>Upload Date:</b> 2014-11-27 00:00:00</p>
-            <p><b>Description:</b> Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-        </div></div>");
+        $html = createTable($result, 'model');
+        $this->assertEquals($html, 
+          "<ul class=\"img-list\"><li>" .
+            "<a href='model_viewer.php?id=3' id='a_img3'><img id='image-over3' name='image-over' src='../../models/3/preview/3.png' alt=Helmet width='160' height='160' />
+              <span class='text-content'><span>Name: Helmet<br>Size: 13.26 MB<br> Category: Archeology</span></span></a>
+              <p id='text-over'>Helmet</p>
+              </li></ul>");
+            /*"<div class='row'><div class='col-md-6 overview-entry' name='table-entry' id='table_entry1'><a href='model_viewer.php?id=3' id='a_img1'>" .
+              "<img src='../../models/3/preview/3.png' alt=Helmet class='img-responsive img-fit'>" .
+              "<h3>Helmet</h3>" .
+              "</a>" .
+              "<p><b>Model Name:</b> Helmet</p>" .
+              "<p><b>Category:</b> Archeology</p>" .
+              "<p><b>Size:</b> 13.9 MB</p>" .
+              "<p><b>Upload Date:</b> 2014-11-27 00:00:00</p>" .
+              "<p><b>Description:</b> Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>" .
+            "</div></div>" . */
     }
 }
 ?>
