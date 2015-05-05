@@ -63,7 +63,7 @@
       <header id="head" class="secondary">
         <div class="container">
           <div class="row">
-            <h1>Models</h1>
+            <h1>Gallery</h1>
           </div>
         </div>
       </header>

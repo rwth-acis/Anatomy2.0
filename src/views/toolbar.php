@@ -58,7 +58,7 @@
             <option>Game</option>
           </select>
         </li -->
-        <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="showAll()">Show all</button></li>
+        <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="showAll()">Reset view</button></li>
       <?php
         // If and only if inside ROLE environment, show the synchronize / unsynchronize button
         if(isset($_GET["widget"]) && $_GET["widget"] == "true") {

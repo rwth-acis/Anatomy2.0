@@ -71,11 +71,6 @@
         <div class="row">
             <!-- main content -->
             <section class="col-sm-8 maincontent">
-                <h3>What is Collaborative Model Viewing?</h3>
-                <p>
-                    <img src="../images/collaborative-logo.png" alt="" class="img-rounded pull-right" width="300">
-                    Collaborative 3D Model Viewing allows investigating and learning from a 3D model in a group. You can open a model on different devices and if one person moves the model on his device, the view on all other devices is synchronized. Therefore, you can easily show, explain or discuss parts of the model, no matter if you are explaining something as a teacher, learning in a group over the internet or discussing about an object you don't have physical access to. The project mainly focuses on models from 3D scanned real objects that often are too valuable or not available for investigation by hands. If you want to view a model that is not already in the database, you can also upload it yourself.
-                </p>
             <?php
               // Explanation and links to ROLE environment are not shown if already inside ROLE environment
               if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
@@ -161,7 +156,7 @@
                       ?>
                         <li><a href="courses.php?widget=true">Courses</a><br>
                             <span class="small text-muted">A list of all the courses available</span></li>
-                        <li><a href="overview.php?widget=true">Models</a><br>
+                        <li><a href="overview.php?widget=true">Gallery</a><br>
                             <span class="small text-muted">An extensive list of all the models present in our database</span></li>
                         <li><a href="upload.php?widget=true">Upload</a><br>
                             <span class="small text-muted">Upload models to our vast database and collaboratively view them.</span></li>
@@ -170,7 +165,7 @@
                       <?php } else { ?>
                         <li><a href="courses.php">Courses</a><br>
                             <span class="small text-muted">A list of all the courses available</span></li>
-                        <li><a href="overview.php">Models</a><br>
+                        <li><a href="overview.php">Gallery</a><br>
                             <span class="small text-muted">An extensive list of all the models present in our database</span></li>
                         <li><a href="role.php">Role</a><br>
                             <span class="small text-muted">Head to the Role learning environment and setup your own space.</span></li>
