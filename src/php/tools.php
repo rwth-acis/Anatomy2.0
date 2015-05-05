@@ -26,7 +26,7 @@
  */
 function createTable($result, $type) {
     $html = '<ul class="img-list">';
-
+    
     foreach ($result as $entry) {
         if(substr($type,0,1) == "m") {
             $html .= getModelStructure($entry,$type);
@@ -46,14 +46,15 @@ function createTable($result, $type) {
  * @return string/html        HTML containing the model information
  */
 function getModelStructure($entry, $type) {
+
     $formatBytes = function ($bytes, $precision = 2) { 
 				$units = array('B', 'KB', 'MB', 'GB', 'TB'); 
-	
+        
 				$bytes = max($bytes, 0); 
 				$pow = floor(($bytes ? log($bytes) : 0) / log(1024)); 
-				$pow = min($pow, count($units) - 1); 
+        $pow = min($pow, count($units) - 1); 
 				$bytes /= pow(1024, $pow);
-	
+    
 				return round($bytes, $precision) . ' ' . $units[$pow]; 
 	 };
 
