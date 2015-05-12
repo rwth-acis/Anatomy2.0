@@ -9,4 +9,9 @@
   $admin1 = array("", "", "");
   $admin2 = array("", "", "");
   $admins = array($admin1, $admin2);
+  
+  // OpenIDConnect client ID
+  // A new OpenIDConnect client can be created using the instructions on https://github.com/learning-layers/openid-connect-button
+  // The concrete registration of a OpenIdConnect client can be done e.g. on https://api.learning-layers.eu/o/oauth2/
+  $oidcClientId = "";
 ?>
