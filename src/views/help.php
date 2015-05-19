@@ -43,7 +43,10 @@
 </head>
 
 <body>
-    <?php include("menu.php"); ?>
+    <?php 
+      include("menu.php");
+      require '../config/config.php';
+    ?>
 
     <?php
       //Decide if this site is inside a separate widget
@@ -101,8 +104,8 @@
                   <li>Log in (e.g. with your Google account)</li>
                   <li>Add the following widgets in the sidebar on the left</li>
                   <ul>
-                <li>http://eiche.informatik.rwth-aachen.de/henm1415g2/src/role/overview.xml</li>
-                <li>http://eiche.informatik.rwth-aachen.de/henm1415g2/src/role/model_viewer.xml</li>
+                <li><?php echo $baseUrl; ?>/src/role/overview.xml</li>
+                <li><?php echo $baseUrl; ?>/src/role/model_viewer.xml</li>
                   </ul>
                   <li>Invite others by providing the link to the space (e.g. http://role-sandbox.eu/spaces/spacename)</li>
                   <li>Select a model in the overview</li>
