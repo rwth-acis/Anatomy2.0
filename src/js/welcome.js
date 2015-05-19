@@ -17,13 +17,23 @@
  * Callback for OpenID Connect
  */
 
+/**
+ * @param {String} result message returned from LL login server
+ * @returns {undefined}
+ */
 function signinCallback(result) {
-    if(result === "success"){
-        // after successful sign in, display a welcome string for the user
-      var i = oidc_clientid;
-        alert("Hello, " + oidc_userinfo.name + "!");
-    } else {
-        // if sign in was not successful, log the cause of the error on the console
-        alert(result);
-    }
+  if(result === "success"){
+    // after successful sign in, check whether the user is known to our system
+    triggerUserKnownCheck(oidc_userinfo.sub, oidc_userinfo.email);
+  } else {
+    // if sign in was not successful, log the cause of the error on the console
+    console.log(result);
+  }
+}
+
+function triggerUserKnownCheck(sub, email) {
+  ajax.post("../php/checkUserKnown.php", {openIdConnectSub:sub, openIdConnectEmail:email}, function(data) {
+    // DEBUG
+    data = JSON.parse(data);
+  });
 }
