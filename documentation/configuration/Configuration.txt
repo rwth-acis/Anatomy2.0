@@ -2,15 +2,20 @@ CONFIGURATION
 
 When deploying the Anatomy2.0, all config files in the "src/config/" directory have to be filled out. 
 
-1. Copy the file "src/config/config_placeholder.php" and name it "src/config/config.php".
-2. In "src/config/config.php", provide the URL to where the Anatomy2.0 system is deployed.
+1. To configure the database, follow the description in "documentation/configuration/Database.txt".
+2. Copy the file "src/config/config_placeholder.php" and name it "src/config/config.php".
+3. In "src/config/config.php", provide the URL to where the Anatomy2.0 system is deployed.
 E.g. 
   $baseUrl = "http://eiche.informatik.rwth-aachen.de/3dnrt/Anatomy2.0-test";
-3. Configure admins. To found out about the purpose of admins, please read below. Fill an array with email address, firstname and lastname of an admin. Add the variable to the $admins array.
+4. Configure admins. To found out about the purpose of admins, please read below. Fill an array with email address, firstname and lastname of an admin. Add the variable to the $admins array.
 E.g. 
   $admin1 = array("dominik.studer@rwth-aachen.de", "Dominik", "Studer");
   $admins = array($admin1);
-4. To configure the database, follow the description in "documentation/configuration/Database.txt".
+5. Update all widgets in the "src/widgets" folder. Replace "http://eiche.informatik.rwth-aachen.de/3dnrt/Anatomy2.0/" by your base URL. "src" needs the absolute path to the php-file stored in the "src/views" folder.
+E.g. replace
+  src="http://eiche.informatik.rwth-aachen.de/3dnrt/Anatomy2.0/src/views/model_viewer.php?widget=true"
+by
+  src="http://eiche.informatik.rwth-aachen.de/3dnrt/Anatomy2.0-test/src/views/model_viewer.php?widget=true"
 
 
 
