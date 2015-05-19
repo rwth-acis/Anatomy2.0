@@ -1,0 +1,26 @@
+CONFIGURATION
+
+When deploying the Anatomy2.0, all config files in the "src/config/" directory have to be filled out. 
+
+1. Copy the file "src/config/config_placeholder.php" and name it "src/config/config.php".
+2. In "src/config/config.php", provide the URL to where the Anatomy2.0 system is deployed.
+E.g. 
+  $baseUrl = "http://eiche.informatik.rwth-aachen.de/3dnrt/Anatomy2.0-test";
+3. Configure admins. To found out about the purpose of admins, please read below. Fill an array with email address, firstname and lastname of an admin. Add the variable to the $admins array.
+E.g. 
+  $admin1 = array("dominik.studer@rwth-aachen.de", "Dominik", "Studer");
+  $admins = array($admin1);
+4. To configure the database, follow the description in "documentation/configuration/Database.txt".
+
+
+
+PURPOSE OF ADMINISTRATORS
+
+The Anatomy 2.0 system decides between two kinds of users. Users are lecturers or students. The two roles differ only in certain rights, that are granted only to lecturers.
+
+Lecturers can do the following things, that cannot be done by students:
+1. Create courses and update / delete their own courses.
+2. Upload models into the gallery
+3. Enter the "lecturers mode" in course rooms. It is supposed to be used when holding lectures or presentations. It disables other users in the course room from navigating the model.
+
+Some person has to decide, whether a user actually is a lecturer or not. When a user applies for being a lecturer, all admins will get informed via mail. They can then unlock the lecturer account with a single click. This is done by the admins.
