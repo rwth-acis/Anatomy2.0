@@ -42,7 +42,7 @@
       // As there can be only one row in the result, get the first row
       $user = $sth->fetch();
       // If $user is empty, the user is not known
-      if(!$user) {
+      if($user) {
         // CREATE A NEW USER DATABASE ENTRY IF USER WAS NOT KNOWN TO THE SYSTEM
         $sth = $db->prepare($sqlInsert);
         // Executes the select statement on DB

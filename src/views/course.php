@@ -79,7 +79,7 @@
                   </a>
                 <?php } if(!(isset($_GET["widget"]) && $_GET["widget"] == "true")) { ?>
                   <a href=<?php echo "$entry->role_url"; ?>>
-                  <button class='btn btn-primary btn-lg btn-block' type='button'>Role Link</button>
+                  <button class='btn btn-primary btn-lg btn-block' type='button'>Course room</button>
                   </a>
                 <?php } ?>
               </div> </br>

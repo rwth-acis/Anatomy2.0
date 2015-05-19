@@ -19,8 +19,7 @@
  *  Script for verification of login credentials (email + password).
  */
 
-  require '../php/db_connect.php';
-
+  require 'db_connect.php';
   // Use only when debugging
   $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
 
@@ -35,4 +34,3 @@
   $sth->execute();
   // As there can be only one row in the result, get the first row
   $user = $sth->fetch();
-  // If $user is empty, the user is not known
