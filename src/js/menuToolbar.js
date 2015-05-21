@@ -162,3 +162,20 @@ function synchronizeInfoState() {
   showInfo(displayInfo);
   displayInfo = undefined;
 }
+
+/**
+ * 
+ * @returns {undefined}
+ */
+function showHelp() {
+  var btn = document.getElementById('btnHelp');
+  var mainNav = document.getElementById('mainNav');
+  if (btn.innerHTML === "Show help") {
+    mainNav.style.display = "block";
+    btn.innerHTML = "Hide help";
+  }
+  else {
+    mainNav.style.display = "none";
+    btn.innerHTML = "Show help";
+  }
+}
