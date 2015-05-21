@@ -41,16 +41,8 @@ import net.minidev.json.JSONObject;
  * the entire ApiInfo annotation should be removed.
  * 
  */
-@Path("example")
+@Path("3dnrt")
 @Version("0.1")
-@ApiInfo(
-		  title="LAS2peer Template Service",
-		  description="A LAS2peer Template Service for demonstration purposes.",
-		  termsOfServiceUrl="http://your-terms-of-service-url.com",
-		  contact="john.doe@provider.com",
-		  license="your software license name",
-		  licenseUrl="http://your-software-license-url.com"
-		)
 public class ServiceClass extends Service {
 
 	/*
@@ -62,13 +54,6 @@ public class ServiceClass extends Service {
 	private String jdbcUrl;
 	private String jdbcSchema;
 	private DatabaseManager dbm;
-
-	/*
-	 * WebConnector configuration (required by Swagger)
-	 */
-	private String webconnectorProtocol = "http";
-	private String webconnectorIpAdress = "localhost";
-	private String webconnectorPort = "8080";
 	
 	public ServiceClass() {
 		// read and set properties values
@@ -81,241 +66,33 @@ public class ServiceClass extends Service {
 	////////////////////////////////////////////////////////////////////////////////////////
 	//  Service methods.
 	////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Simple function to validate a user login.
-	 * Basically it only serves as a "calling point" and does not really validate a user
-	 * (since this is done previously by LAS2peer itself, the user does not reach this method
-	 * if he or she is not authenticated).
-	 * 
-	 */
-	@GET
-	@Path("validation")
-	@Produces(MediaType.TEXT_PLAIN)
-    @ResourceListApi(description = "User Validation")
-    @ApiResponses(value = {
-    		@ApiResponse(code = 200, message = "Validation Confirmation"),
-    		@ApiResponse(code = 401, message = "Unauthorized")
-    })
-    @Summary("Simple function to validate a user login.")
-	public HttpResponse validateLogin() {
-		String returnString = "";
-		returnString += "You are " + ((UserAgent) getActiveAgent()).getLoginName() + " and your login is valid!";
-		
-		HttpResponse res = new HttpResponse(returnString);
-		res.setStatus(200);
-		return res;
-	}
-	
-	/**
-	 * Example method that returns a phrase containing the received input.
-	 * 
-	 * @param myInput
-	 * 
-	 */
-	@POST
-	@Path("myResourcePath/{input}")
-	@Produces(MediaType.TEXT_PLAIN)
-    @ResourceListApi(description = "Sample Resource")
-    @ApiResponses(value = {
-    		@ApiResponse(code = 200, message = "Input Phrase"),
-    		@ApiResponse(code = 401, message = "Unauthorized")
-    })
-    @Summary("Example method that returns a phrase containing the received input.")
-	public HttpResponse exampleMethod(@PathParam("input") String myInput) {
-		String returnString = "";
-		returnString += "You have entered " + myInput + "!";
-		
-		HttpResponse res = new HttpResponse(returnString);
-		res.setStatus(200);
-		return res;
-		
+
+	private boolean isAnonymous() {
+		return getActiveAgent().getId() == getActiveNode().getAnonymous().getId();
 	}
 
 	/**
-	 * Example method that shows how to retrieve a user email address from a database 
-	 * and return an HTTP response including a JSON object.
-	 * 
-	 * WARNING: THIS METHOD IS ONLY FOR DEMONSTRATIONAL PURPOSES!!! 
-	 * IT WILL REQUIRE RESPECTIVE DATABASE TABLES IN THE BACKEND, WHICH DON'T EXIST IN THE TEMPLATE.
-	 * 
+	 * Method that makes use of the LAS2PEER-openid-user-authentication and
+	 * returns the retrieved values.
+	 *
+	 * @return Response with userid
 	 */
 	@GET
-	@Path("userEmail/{username}")
+	@Path("user")
 	@Produces(MediaType.APPLICATION_JSON)
-    @ResourceListApi(description = "Email Address Administration")
+    @ResourceListApi(description = "User Registration")
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "User Email"),
     		@ApiResponse(code = 401, message = "Unauthorized"),
     		@ApiResponse(code = 404, message = "User not found"),
     		@ApiResponse(code = 500, message = "Internal Server Error")
     })
-    @Summary("Example method that retrieves a user email address from a database."
-    		+ " WARNING: THIS METHOD IS ONLY FOR DEMONSTRATIONAL PURPOSES!!! "
-    		+ "IT WILL REQUIRE RESPECTIVE DATABASE TABLES IN THE BACKEND, WHICH DON'T EXIST IN THE TEMPLATE.")
-	public HttpResponse getUserEmail(@PathParam("username") String username) {
-		String result = "";
-		Connection conn = null;
-		PreparedStatement stmnt = null;
-		ResultSet rs = null;
-		try {
-			// get connection from connection pool
-			conn = dbm.getConnection();
-			
-			// prepare statement
-			stmnt = conn.prepareStatement("SELECT email FROM users WHERE username = ?;");
-			stmnt.setString(1, username);
-			
-			// retrieve result set
-			rs = stmnt.executeQuery();
-			
-			// process result set
-			if (rs.next()) {
-				result = rs.getString(1);
-				
-				// setup resulting JSON Object
-				JSONObject ro = new JSONObject();
-				ro.put("email", result);
-				
-				// return HTTP Response on success
-				HttpResponse r = new HttpResponse(ro.toJSONString());
-				r.setStatus(200);
-				return r;
-				
-			} else {
-				result = "No result for username " + username;
-				
-				// return HTTP Response on error
-				HttpResponse er = new HttpResponse(result);
-				er.setStatus(404);
-				return er;
-			}
-		} catch (Exception e) {
-			// return HTTP Response on error
-			HttpResponse er = new HttpResponse("Internal error: " + e.getMessage());
-			er.setStatus(500);
-			return er;
-		} finally {
-			// free resources
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (Exception e) {
-					Context.logError(this, e.getMessage());
-					
-					// return HTTP Response on error
-					HttpResponse er = new HttpResponse("Internal error: " + e.getMessage());
-					er.setStatus(500);
-					return er;
-				}
-			}
-			if (stmnt != null) {
-				try {
-					stmnt.close();
-				} catch (Exception e) {
-					Context.logError(this, e.getMessage());
-					
-					// return HTTP Response on error
-					HttpResponse er = new HttpResponse("Internal error: " + e.getMessage());
-					er.setStatus(500);
-					return er;
-				}
-			}
-			if (conn != null) {
-				try {
-					conn.close();
-				} catch (Exception e) {
-					Context.logError(this, e.getMessage());
-					
-					// return HTTP Response on error
-					HttpResponse er = new HttpResponse("Internal error: " + e.getMessage());
-					er.setStatus(500);
-					return er;
-				}
-			}
-		}
-	}
-
-	/**
-	 * Example method that shows how to change a user email address in a database.
-	 * 
-	 * WARNING: THIS METHOD IS ONLY FOR DEMONSTRATIONAL PURPOSES!!! 
-	 * IT WILL REQUIRE RESPECTIVE DATABASE TABLES IN THE BACKEND, WHICH DON'T EXIST IN THE TEMPLATE.
-	 * 
-	 */
-	@POST
-	@Path("userEmail/{username}/{email}")
-	@Produces(MediaType.TEXT_PLAIN)
-    @ApiResponses(value = {
-    		@ApiResponse(code = 200, message = "Update Confirmation"),
-    		@ApiResponse(code = 401, message = "Unauthorized"),
-    		@ApiResponse(code = 500, message = "Internal Server Error")
-    })
-    @Summary("Example method that changes a user email address in a database."
-    		+ " WARNING: THIS METHOD IS ONLY FOR DEMONSTRATIONAL PURPOSES!!! "
-    		+ "IT WILL REQUIRE RESPECTIVE DATABASE TABLES IN THE BACKEND, WHICH DON'T EXIST IN THE TEMPLATE.")
-	public HttpResponse setUserEmail(@PathParam("username") String username, @PathParam("email") String email) {
-		
-		String result = "";
-		Connection conn = null;
-		PreparedStatement stmnt = null;
-		ResultSet rs = null;
-		try {
-			conn = dbm.getConnection();
-			stmnt = conn.prepareStatement("UPDATE users SET email = ? WHERE username = ?;");
-			stmnt.setString(1, email);
-			stmnt.setString(2, username);
-			int rows = stmnt.executeUpdate(); // same works for insert
-			result = "Database updated. " + rows + " rows affected";
-			
-			// return 
-			HttpResponse r = new HttpResponse(result);
-			r.setStatus(200);
-			return r;
-			
-		} catch (Exception e) {
-			// return HTTP Response on error
-			HttpResponse er = new HttpResponse("Internal error: " + e.getMessage());
-			er.setStatus(500);
-			return er;
-		} finally {
-			// free resources if exception or not
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (Exception e) {
-					Context.logError(this, e.getMessage());
-					
-					// return HTTP Response on error
-					HttpResponse er = new HttpResponse("Internal error: " + e.getMessage());
-					er.setStatus(500);
-					return er;
-				}
-			}
-			if (stmnt != null) {
-				try {
-					stmnt.close();
-				} catch (Exception e) {
-					Context.logError(this, e.getMessage());
-					
-					// return HTTP Response on error
-					HttpResponse er = new HttpResponse("Internal error: " + e.getMessage());
-					er.setStatus(500);
-					return er;
-				}
-			}
-			if (conn != null) {
-				try {
-					conn.close();
-				} catch (Exception e) {
-					Context.logError(this, e.getMessage());
-					
-					// return HTTP Response on error
-					HttpResponse er = new HttpResponse("Internal error: " + e.getMessage());
-					er.setStatus(500);
-					return er;
-				}
-			}
+    @Summary("Method that retrieves information about a user signed in with OpenId")
+	public HttpResponse getUserProfile() {
+		if (isAnonymous()) {
+			return new HttpResponse("No valid User", 401);
+		} else {
+			return new HttpResponse(((UserAgent)getActiveAgent()).getUserData().toString(), 401);
 		}
 	}
 
@@ -365,60 +142,4 @@ public class ServiceClass extends Service {
 		}
 		return result;
 	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////
-	//  Methods providing a Swagger documentation of the service API.
-	////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Returns a listing of all annotated top level resources
-	 * for purposes of the Swagger documentation.
-	 * 
-	 * Note:
-	 * If you do not intend to use Swagger for the documentation
-	 * of your Service API, this method may be removed.
-	 * 
-	 * @return Listing of all top level resources.
-	 */
-    @GET
-    @Path("api-docs")
-    @Produces(MediaType.APPLICATION_JSON)
-    public HttpResponse getSwaggerResourceListing(){
-      return RESTMapper.getSwaggerResourceListing(this.getClass());
-    }
-
-    /**
-     * Returns the API documentation for a specific annotated top level resource
-     * for purposes of the Swagger documentation.
-     * 
-	 * Note:
-	 * If you do not intend to use Swagger for the documentation
-	 * of your Service API, this method may be removed.
-	 * 
-	 * Trouble shooting:
-	 * Please make sure that the endpoint URL below is  
-	 * correct with respect to your service.
-	 * 
-     * @param tlr A top level resource name.
-     * @return The resource's documentation.
-     */
-    @GET
-    @Path("api-docs/{tlr}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public HttpResponse getSwaggerApiDeclaration(@PathParam("tlr") String tlr){
-    	HttpResponse res;
-    	Class<ServiceClass> c = ServiceClass.class;
-    	if (!c.isAnnotationPresent(Path.class)){
-    		res = new HttpResponse("Swagger API declaration not available. Service path is not defined.");
-    		res.setStatus(404);
-    	} else{
-    		Path path = (Path) c.getAnnotation(Path.class);
-    		String endpoint = webconnectorProtocol + "://" + webconnectorIpAdress + ":"
-    				+ webconnectorPort + path.value() + "/";
-    		System.out.println(endpoint);
-    		res = RESTMapper.getSwaggerApiDeclaration(this.getClass(), tlr, endpoint);
-    	}
-    	return res;
-    }
-
 }
