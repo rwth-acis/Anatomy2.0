@@ -51,6 +51,17 @@
     <script type="text/javascript" src="../js/tools.js"></script>
     <!-- The library for the copy to clipboard feature in the toolbar -->
     <script type="text/javascript" src="../js/ZeroClipboard.js"></script>
+    <!-- Init communication with wrapper -->
+    <script type='text/javascript' src='../js/init-subsite.js'> </script>
+    <!-- JQuery and Turntable.js for navigation info -->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js" ></script>
+    <script type="text/javascript" src="visualizeTurntable.js" ></script>
+
+    <script>
+      var init = function (evt) {
+        document.getElementById('viewer_object').runtime.showAll();
+      };
+    </script>
   </head>
 
   <body>
@@ -64,12 +75,15 @@
         print("<script type='text/javascript' src='../js/model-viewer-widget.js'> </script>");
       }
 
-     include("toolbar.php");
+      include("toolbar.php");
     ?>
 
     <div class="row" style="position:relative; padding-left:5%; padding-right:5%">
-    <?php if(isset($_GET["id"])) { ?>
+    
+    <!-- Creates a panel with information about mouse usage and hotkeys for navigation -->
+    <?php include("nav_info.html"); ?>
 
+    <?php if(isset($_GET["id"])) { ?>
       <p id='debugText' style="display:none;"></p>
       <x3d id='viewer_object' showStat="false">
         <scene>
