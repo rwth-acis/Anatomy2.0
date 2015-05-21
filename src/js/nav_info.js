@@ -87,7 +87,7 @@ function showModeDetails(mode)
   if(mode.buttons != undefined)
      {
        $.each(mode.buttons, function(buttonIndex, button) {
-         $("#buttonTable").append("<tr><td><div class='key'>"+button.key + "</div></td><td>"+button.desc+"</td></tr>");
+         $("#buttonTable").append("<tr><td><div class='key'>" + button.key + "</div></td><td>"+button.desc+"</td></tr>");
         });
      }
 }
