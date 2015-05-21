@@ -2,31 +2,31 @@
 // Script controlling the navigation info 
 var modes = [
            {
-             "name":"Examine",
+             "name":"[E]xamine",
              "option":"examine",
-             "shortcut":"e",
+             "shortcut":["e","E"],
              "mouseWheelScroll":"Zoom",
              "mouseLeft":"Rotate",
              "mouseRight":"Zoom"
            },
            {
-             "name":"Walk",
+             "name":"[W]alk",
              "option":"walk",
-             "shortcut":"w",
+             "shortcut":["w","W"],
              "mouseLeft":"Move forward",
              "mouseRight":"Move backward",
            },
            {
-             "name":"Fly",
+             "name":"[F]ly",
              "option":"fly",
-             "shortcut":"f",
+             "shortcut":["f","F"],
              "mouseLeft":"Move forward",
              "mouseRight":"Move backward",
            },
            {
-             "name":"Helicopter",
+             "name":"[H]elicopter",
              "option":"helicopter",
-             "shortcut":"h",
+             "shortcut":["h", "H"],
              "mouseLeft":"Move forward",
              "buttons":
                  [
@@ -37,24 +37,24 @@ var modes = [
                  ]
            },
            {
-             "name":"Look at",
+             "name":"[L]ook at",
              "option":"lookAt",
-             "shortcut":"l",
+             "shortcut":["l", "L"],
              "mouseLeft":"Move in",
              "mouseRight":"Move out",
            },
            {
-             "name":"Turntable",
+             "name":"Tur[n]table",
              "option":"turntable",
-             "shortcut":"n",
+             "shortcut":["n", "N"],
              "mouseWheelScroll":"Zoom",
              "mouseLeft":"Rotate",
              "mouseRight":"Zoom"
            },
            {
-             "name":"Game", 
+             "name":"[G]ame", 
              "option":"game",
-             "shortcut":"g", 
+             "shortcut":["g", "G"], 
              "mouse":"Rotate view",
              "buttons":
              [
@@ -92,9 +92,6 @@ function showModeDetails(mode)
      }
 }
 
-// Initialize navigation info
-showModeDetails("Walk");
-
 $(document).ready(function(){   
   //Add all modes to dropdown field
   $.each(modes, function(index, value) {   
@@ -125,12 +122,23 @@ $(document).ready(function(){
     
     //...and refresh hints
     $.each(modes, function(index, value) {  
-      if(value.shortcut == key)
-      {
-        $("#viewModeSelect option[value='"+value.option+"']").attr('selected',true);
-        showModeDetails(value);
+      for (var i = 0; i < value.shortcut.length; i++) {
+        if(value.shortcut[i] === key)
+        {
+          var num = getIndex(value.option);
+          document.getElementById('viewModeSelect').selectedIndex = num;
+          document.getElementById('navType').setAttribute("type", value.option);
+          showModeDetails(value);
+        }
       }
     });
+    
+    if(key === " ") {
+      btnShowInfo();
+    }
+    else if (key === "a" || key === "A") {
+      showAll();
+    }
   });
 
   canvas = document.getElementById('turntableVis');
@@ -138,3 +146,12 @@ $(document).ready(function(){
 
   updateArc(0.2, 1.4);
 });
+
+function getIndex(option) {
+  
+  for (i = 0; i < modes.length; i++) {
+    if (modes[i].option == option) {
+      return i;
+    }
+  }
+}
