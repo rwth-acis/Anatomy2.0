@@ -33,12 +33,8 @@
   <body>
     <?php 
       include("menu.php"); 
-      echo'before User';
-      require '../php/getUser.php';
       // If the user is not logged in, redirect him to the login page
-      echo $user['confirmed'];
-      echo $user;
-      if (!isset($user) || ! $user['confirmed'] === 1) { 
+      if (!isset($_SESSION['user_id'])) { 
         header("Location: login.php");
         exit();
       }

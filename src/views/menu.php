@@ -50,6 +50,7 @@
 		<script type="text/javascript" src="../js/jsrsasign/rsapem-1.1.js"></script>
 		<script type="text/javascript" src="../js/jsrsasign/rsasign-1.2.min.js"></script>
 		<script type="text/javascript" src="../js/jsrsasign/x509-1.1.js"></script>
+    <script type="text/javascript" src="../js/welcome.js"></script>
 <!--
 
 //-->

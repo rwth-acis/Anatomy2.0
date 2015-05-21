@@ -220,7 +220,5 @@
   <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
   <script src="../js/modernizr-latest.js"></script>
   <script src="../js/custom.js"></script>
-  <!-- Handles registration of new users into DB -->
-  <script type="text/javascript" src="../js/welcome.js"></script>
 </body>
 </html>

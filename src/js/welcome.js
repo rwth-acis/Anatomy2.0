@@ -17,8 +17,6 @@
  * Callback for OpenID Connect
  */
 
-var user_confirmed;
-
 /**
  * @param {String} result message returned from LL login server
  * @returns {undefined}
@@ -37,6 +35,5 @@ function triggerUserKnownCheck(sub, email) {
   ajax.post("../php/checkUserKnown.php", {openIdConnectSub:sub, openIdConnectEmail:email}, function(data) {
     // DEBUG
     data = JSON.parse(data);
-    user_confirmed = data.confirmed;
   });
 }
