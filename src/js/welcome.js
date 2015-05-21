@@ -23,8 +23,12 @@
  */
 function signinCallback(result) {
   if(result === "success"){
+  	 var token = getURLParameter('access_token');
     // after successful sign in, check whether the user is known to our system
-    triggerUserKnownCheck(oidc_userinfo.sub, oidc_userinfo.email);
+    ajax.post("../php/checkUserKnown.php", {access_token:token}, function(data) {
+    	// DEBUG
+    	data = JSON.parse(data);
+	 });
   } else {
     // if sign in was not successful, log the cause of the error on the console
     console.log(result);
@@ -32,8 +36,5 @@ function signinCallback(result) {
 }
 
 function triggerUserKnownCheck(sub, email) {
-  ajax.post("../php/checkUserKnown.php", {openIdConnectSub:sub, openIdConnectEmail:email}, function(data) {
-    // DEBUG
-    data = JSON.parse(data);
-  });
+
 }

@@ -20,13 +20,14 @@
  */
 
   $confirmed = 0;
-  $openIdConnectSub = filter_input(INPUT_POST, 'openIdConnectSub');
-  $openIdConnectEmail = filter_input(INPUT_POST, 'openIdConnectEmail');
+  $access_token = filter_input(INPUT_POST, 'access_token');
 
-  if (isset($openIdConnectSub) && isset($openIdConnectEmail)) {
+  if (isset($access_token)) {
     if ($openIdConnectEmail !== FALSE && $openIdConnectSub !== FALSE) {
       require '../php/db_connect.php';
-  
+  		require '../php/tools.php'
+  		
+  		TODO httpRequest(...)
       // Use only when debugging
       //$db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
 
