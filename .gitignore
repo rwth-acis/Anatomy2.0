@@ -89,3 +89,7 @@ src/config/config.php
 .buildpath
 .project
 .settings
+
+# ignore server-configuration and info-page
+php.ini
+info.php
