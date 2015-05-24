@@ -35,7 +35,7 @@
 
     <!-- include source files here... -->
     <script src ="http://dbis.rwth-aachen.de/gadgets/iwc/lib/iwc.js" > </script>
-    <script type='text/javascript' src='../js/x3dom.js'> </script>
+    <script type='text/javascript' src='../../js/x3dom.js'> </script>
     <script src="../../js/tools.js"></script>
     <script src="../../js/ajax.js"></script>
     <script src="../../js/viewer.js"></script>
