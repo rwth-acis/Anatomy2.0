@@ -25,35 +25,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Collaborative 3D Model Viewer</title>
 
-    <!-- X3Dom includes -->
-    <script type='text/javascript' src='http://www.x3dom.org/download/x3dom.js'> </script>
-
-    <!-- Init communication with wrapper -->
-    <?php
-    //Decide if this site is inside a separate widget
-    if(isset($_GET["widget"]) && $_GET["widget"] == "true")
-    {
-      //we have to link to the widget versions:
-      print("<script type='text/javascript' src='../js/init-subsite.js'></script>");
-    }
-    ?>
-    <script type='text/javascript' src='../js/x3d-extensions.js'> </script>
-    <script type='text/javascript' src='../js/viewer.js'> </script>
     <link type='text/css' rel='stylesheet' href='http://www.x3dom.org/download/x3dom.css'> </link>
-
     <link rel='stylesheet' type='text/css' href='../css/model_viewer.css'></link>
-
-    <!-- Additional styles -->
     <link rel='stylesheet' type='text/css' href='../css/bootstrap.min.css'>
     <link rel='stylesheet' type='text/css' href='../css/style.css'>
-
-    <!-- General functionality (used in menuToolbar.js) -->
-    <script type="text/javascript" src="../js/tools.js"></script>
-    <!-- The library for the copy to clipboard feature in the toolbar -->
-    <script type="text/javascript" src="../js/ZeroClipboard.js"></script>
-    <!-- JQuery and Turntable.js for navigation info -->
-    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js" ></script>
-    <script type="text/javascript" src="visualizeTurntable.js" ></script>
   </head>
 
   <body>
@@ -114,5 +89,27 @@
     
     <!-- Creates a panel with information about mouse usage and hotkeys for navigation -->
     <?php include("nav_info.html"); ?>
+    
+    
+    <!-- X3Dom includes -->
+    <script type='text/javascript' src='../js/x3dom.js'> </script>
+    <!-- Init communication with wrapper -->
+    <?php
+    //Decide if this site is inside a separate widget
+    if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+    {
+      //we have to link to the widget versions:
+      print("<script type='text/javascript' src='../js/init-subsite.js'></script>");
+    }
+    ?>
+    <script type='text/javascript' src='../js/x3d-extensions.js'> </script>
+    <script type='text/javascript' src='../js/viewer.js'> </script>
+    <!-- General functionality (used in menuToolbar.js) -->
+    <script type="text/javascript" src="../js/tools.js"></script>
+    <!-- The library for the copy to clipboard feature in the toolbar -->
+    <script type="text/javascript" src="../js/ZeroClipboard.js"></script>
+    <!-- JQuery and Turntable.js for navigation info -->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js" ></script>
+    <script type="text/javascript" src="visualizeTurntable.js" ></script>
   </body>
 </html>

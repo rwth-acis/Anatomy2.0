@@ -25,10 +25,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" charset="utf8"/>
     <!-- Additional styles -->
     <link rel='stylesheet' type='text/css' href='../css/bootstrap.min.css'>
-    <!--<link rel='stylesheet' type='text/css' href='../css/style.css'> -->
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> 
-	<script src="../js/jquery.form.min.js"></script> 	
-	<script src="../js/script.js"></script> 	
   </head>
   <body>
     <?php 
@@ -67,6 +63,10 @@
     </div>
     
     <?php include("footer.php");?>
+    
+    <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> 
+    <script src="../js/jquery.form.min.js"></script> 	
+    <script src="../js/script.js"></script> 	
   </body>
-
 </html>

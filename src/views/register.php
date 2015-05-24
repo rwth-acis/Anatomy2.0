@@ -24,23 +24,15 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Collaborative Viewing of 3D Models </title>
+  
 	<link rel="stylesheet" media="screen" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
 	<link rel="stylesheet" href="../css/bootstrap.min.css">
 	<link rel="stylesheet" href="../css/font-awesome.min.css">
-
-	<!-- Custom styles-->
-
 	<link rel="stylesheet" href="../css/bootstrap-theme.css" media="screen">
 	<link rel="stylesheet" type="text/css" href="../css/da-slider.css" />
 	<link rel="stylesheet" href="../css/style.css">
   <!-- Styles form validation -->
   <link rel='stylesheet' type='text/css' href='../css/upload.css'>
-
-	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-	<!--[if lt IE 9]>
-	<script src="assets/js/html5shiv.js"></script>
-	<script src="assets/js/respond.min.js"></script>
-	<![endif]-->
 </head>
 <body>
   <?php
@@ -91,7 +83,6 @@
 	<script src="../js/ajax.js" type="text/javascript"></script>
 	<script src="../js/register.js" type="text/javascript"></script>
   <!-- Styling and JQuery -->
-	<script src="../js/modernizr-latest.js"></script>
 	<script src="../js/custom.js"></script>
   <!-- Form validation with Parsley -->
   <script src="../js/parsley.min.js"></script>
