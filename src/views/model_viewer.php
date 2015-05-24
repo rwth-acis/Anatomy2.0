@@ -26,7 +26,7 @@
     <title>Collaborative 3D Model Viewer</title>
 
     <!-- X3Dom includes -->
-    <script type='text/javascript' src='http://www.x3dom.org/download/x3dom.js'> </script>
+    <script type='text/javascript' src='../js/x3dom.js'> </script>
 
     <!-- Init communication with wrapper -->
     <?php
