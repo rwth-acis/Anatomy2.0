@@ -93,3 +93,7 @@ src/config/config.php
 # ignore server-configuration and info-page
 php.ini
 info.php
+
+# ignore FirePHP-files
+src/php/FirePHP.class.php
+src/php/fb.php
