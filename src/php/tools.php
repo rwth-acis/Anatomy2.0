@@ -130,13 +130,21 @@ function httpRequest($method, $url, $data = false)
     }
 
     // Optional Authentication:
-    curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-    curl_setopt($curl, CURLOPT_USERPWD, "username:password");
+    // curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+    // curl_setopt($curl, CURLOPT_USERPWD, "username:password");
 
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 
-    $result = curl_exec($curl);
+    $res_exec = curl_exec($curl);
+    if($res_exec == FALSE) {
+    	$result->bOk = FALSE;
+    	$result->sMsg = curl_error($curl);
+    } else {
+    	$result->bOk = TRUE;
+    	$result->sMsg = $res_exec;
+    	$result->iStatus = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    }
 
     curl_close($curl);
 
