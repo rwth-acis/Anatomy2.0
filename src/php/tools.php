@@ -137,6 +137,10 @@ function httpRequest($method, $url, $data = false)
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 
     $res_exec = curl_exec($curl);
+    // To avoid warnings:
+    if (!isset($result)) 
+       $result = new stdClass();
+       
     if($res_exec == FALSE) {
     	$result->bOk = FALSE;
     	$result->sMsg = curl_error($curl);

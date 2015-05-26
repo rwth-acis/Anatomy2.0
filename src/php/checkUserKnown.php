@@ -34,7 +34,7 @@
       $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
       
       if($aRes->bOk == FALSE or $aRes->iStatus !== 200) {
-      	error_log('3dnrt/user call unsuccessfull: '.$aRes.sMsg);
+      	error_log('3dnrt/user call unsuccessfull: '.$aRes->sMsg);
       	die('Cannot retrieve User-information!');
       }
       $userProfile = json_decode($aRes->sMsg);
@@ -51,6 +51,8 @@
       // As there can be only one row in the result, get the first row
       $user = $sth->fetch();
       // If $user is empty, the user is not known
+      $sqlInsert="";
+      
       if(!$user) {
         // CREATE A NEW USER DATABASE ENTRY IF USER WAS NOT KNOWN TO THE SYSTEM
 		  $sqlInsert = "INSERT INTO users (email, openIdConnectSub, given_name, family_name) VALUES ('".$userProfile->email."','".$userProfile->sub."','".$userProfile->given_name."','".$userProfile->family_name."')";
