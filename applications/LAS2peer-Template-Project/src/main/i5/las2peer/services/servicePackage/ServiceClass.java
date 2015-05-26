@@ -92,7 +92,7 @@ public class ServiceClass extends Service {
 		if (isAnonymous()) {
 			return new HttpResponse("No valid User", 401);
 		} else {
-			return new HttpResponse(((UserAgent)getActiveAgent()).getUserData().toString(), 401);
+			return new HttpResponse(((UserAgent)getActiveAgent()).getUserData().toString(), 200);
 		}
 	}
 
