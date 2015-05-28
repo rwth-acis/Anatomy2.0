@@ -63,7 +63,9 @@
           <label class="col-sm-2 control-label" for="targetRole">Course room:</label>
           <div class="col-sm-9">
             <input type="text" class="form-control" rows="1"name="roleLink" id="targetRole" placeholder="Enter ROLE space link">
-            <button class="col-sm-1 btn btn-default btn-inline" tpye="button">?</button>
+            <a target="_blank" href="role.php">
+              <input class="col-sm-1 btn btn-default btn-inline" type="button" value="?"/>
+            </a>
           </div>
         </div>
         <div class="form-group">

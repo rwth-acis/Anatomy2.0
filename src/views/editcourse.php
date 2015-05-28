@@ -106,7 +106,9 @@
               <div class="form-group">
                 <label for="targetText">Course room:</label>
                 <input type="text" class="form-control" rows="1" name="roleLink" id="targetRole" value="<?php echo $entry->role_url; ?>">
-                <button class="col-sm-1 btn btn-default btn-inline" tpye="button">?</button>
+                <a target="_blank" href="role.php">
+                  <input class="col-sm-1 btn btn-default btn-inline" tpye="button" value="?"/>
+                </a>
               </div>
               <div class="form-group">
                 <label for="targetContact">Contact:</label>
