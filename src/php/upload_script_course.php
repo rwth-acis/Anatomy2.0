@@ -33,12 +33,13 @@ $role_link = filter_input(INPUT_POST, 'roleLink');
 $contact = filter_input(INPUT_POST, 'contact');
 $dates = filter_input(INPUT_POST, 'dates');
 $links = filter_input(INPUT_POST, 'links');
+$subject_id = filter_input(INPUT_POST, 'subject_id');
 
 // Get id of currently logged in user
 $creator = $_SESSION["user_id"];
 	
 // Create database-entry
-$sql = "INSERT INTO courses (name, description, creator, role_url, contact, dates, links) VALUES ('$name','$text', $creator, '$role_link', '$contact', '$dates', '$links')";
+$sql = "INSERT INTO courses (name, description, creator, role_url, contact, dates, links, subject_id) VALUES ('$name','$text', $creator, '$role_link', '$contact', '$dates', '$links', '$subject_id')";
 
 $conn->query($sql);
 

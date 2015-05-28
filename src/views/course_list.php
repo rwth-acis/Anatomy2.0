@@ -71,7 +71,7 @@
             <div class='featured-box'>
               <img src="<?php echo "$subject->img_url"?>" >
               <?php if(!(isset($_GET["widget"]) && $_GET["widget"] == "true")) { ?>
-                <a href="addcourse.php">
+                <a href="addcourse.php?id=<?php echo $subject->id; ?>">
                   <button class='btn btn-success btn-lg btn-block margin-top' type='button'>Add new course</button>
                 </a>
               <?php } ?>

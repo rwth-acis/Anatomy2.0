@@ -71,7 +71,8 @@
 
       // If the user is not logged in or he is not the creator, redirect him to the login page
       if(!isset($entry->creator) || $entry->creator != $_SESSION['user_id']) { 
-        header("Location: login.php");
+        echo $entry;
+        //header("Location: login.php");
         exit();
       }
     ?>

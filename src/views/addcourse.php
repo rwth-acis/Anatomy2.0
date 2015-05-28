@@ -90,12 +90,16 @@
             <textarea class="form-control" rows="3" name="links" id="targetLinks" placeholder="Enter links to e.g. Campus Office, L2P"></textarea>
           </div>
         </div>
-        <button type="submit" class="btn btn-success  col-xs-6" id="SubmitButton" value="Upload">Save</button>
+        <input hidden id="subject_input" name="subject_id">
+        <button type="submit" class="btn btn-success col-xs-6" id="SubmitButton" value="Upload">Save</button>
       </form>
       <div id="output"></div>
     </div>
     
     <?php include("footer.php");?>
+    
+    <script type="text/javascript" src="../js/tools.js"></script>
+    <script type="text/javascript" src="../js/addCourse.js"></script>
   </body>
 
 </html>
