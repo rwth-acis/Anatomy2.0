@@ -83,8 +83,8 @@
                   <li>Log in (e.g. with your Google account)</li>
                   <li>Add the following widgets in the sidebar on the left</li>
                   <ul>
-                <li><?php echo $baseUrl; ?>/src/role/overview.xml</li>
-                <li><?php echo $baseUrl; ?>/src/role/model_viewer.xml</li>
+                <li><?php echo $baseUrl; ?>/src/widgets/overview.xml</li>
+                <li><?php echo $baseUrl; ?>/src/widgets/model_viewer.xml</li>
                   </ul>
                   <li>Invite others by providing the link to the space (e.g. http://role-sandbox.eu/spaces/spacename)</li>
                   <li>Select a model in the overview</li>
