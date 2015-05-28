@@ -93,7 +93,7 @@
                   foreach ($courses as $course) {
                 ?>
                 <tr>
-                  <td><a href="course.php?id='<?php echo $course["id"]; ?>'"><?php echo $course["name"]; ?></a></td>
+                  <td><a href="course.php?id=<?php echo $course["id"]; ?>"><?php echo $course["name"]; ?></a></td>
                     <td><?php echo $course["given_name"]." ".$course["family_name"]; ?></td>
                     <td><?php echo $course["edit_date"]; ?></td>
                 </tr>
