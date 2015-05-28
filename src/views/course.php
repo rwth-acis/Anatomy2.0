@@ -24,6 +24,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Collaborative Viewing of 3D Models </title>
+  <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" media="screen" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
   <link rel="stylesheet" href="../css/bootstrap.min.css">
   <link rel="stylesheet" href="../css/font-awesome.min.css">
@@ -32,7 +33,6 @@
 
   <link rel="stylesheet" href="../css/bootstrap-theme.css" media="screen">
   <link rel="stylesheet" type="text/css" href="../css/da-slider.css" />
-  <link rel="stylesheet" href="../css/style.css">
 
   <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!--[if lt IE 9]>
@@ -46,53 +46,106 @@
     <?php include("menu.php"); ?>
 
     <?php
-       //get data from db
-       include '../php/db_connect.php';
-       include '../php/tools.php';
+      //get data from db
+      include '../php/db_connect.php';
+      include '../php/tools.php';
 
-       $arg    = $_GET["id"];
-       $query  = $db->query("SELECT * FROM courses WHERE id = $arg");
-       $entry = $query->fetchObject();
+      $arg    = $_GET["id"];
+      $query  = $db->query("SELECT courses.*, users.given_name, users.family_name, users.email FROM courses JOIN users ON courses.creator = users.id WHERE courses.id = $arg");
+      
+      $entry = $query->fetchObject();
+      
+      $is_logged_in = isset($_SESSION["user_id"]) && $entry->creator == $_SESSION['user_id'];
+       
+      function printEditBtn($arg, $class) {
+        $widgetExtension = "";
+        if(isset($_GET["widget"]) && $_GET["widget"] == "true") { 
+          $widgetExtension = "&widget=true"; 
+        }
+        echo "<a href=editcourse.php?id=$arg $widgetExtension>"; 
+        echo "<button class='$class' type='button'>Edit</button>";
+        echo "</a>";
+      }
+       
+      // Taken from https://css-tricks.com/snippets/php/find-urls-in-text-make-links/
+      function replaceLinks($text) {
+        $reg_exUrl = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
+        preg_match_all($reg_exUrl, $text, $matches);
+        $usedPatterns = array();
+        foreach($matches[0] as $pattern){
+            if(!array_key_exists($pattern, $usedPatterns)){
+                $usedPatterns[$pattern]=true;
+                $text = str_replace  ($pattern, "<a href=\"$pattern\" rel=\"nofollow\">$pattern</a>", $text);   
+            }
+        }
+        return $text;
+      }
     ?>
   <header id='head' class='secondary'>
     <div class='container'>
       <div class='row'>
+        <div class ="col-sm-8">
           <h1><?php echo "$entry->name";?></h1>
+        </div>
+        
+        <div class="col-sm-4">
+          <?php 
+            $btn_edit_class = "btn btn-success btn-block btn-lg";
+            printEditBtn($arg, $btn_edit_class." headline-btn");
+          ?>          
+        </div>
       </div>
     </div>
-
   </header>
+  
   <div id='courses'>
     <section class='container'>
       <br><br>
     <div class='container'>
       <div class='row'>
-        <div class='col-md-4'>
-          <h3><?php echo "$entry->name"; ?></h3>
-
-          <div class='featured-box'>
-            <img src=<?php echo "$entry->img_url"?> ><br><br>
-            <div>
-                <?php if(isset($_SESSION["user_id"]) && $entry->creator == $_SESSION['user_id']) { ?>
-                  <a href=editcourse.php?id=<?php echo "$arg"; if(isset($_GET["widget"]) && $_GET["widget"] == "true") { echo "&widget=true"; }?>>
-                  <button class='btn btn-primary btn-lg btn-block' type='button'>Edit</button>
-                  </a>
-                <?php } if(!(isset($_GET["widget"]) && $_GET["widget"] == "true")) { ?>
-                  <a href=<?php echo "$entry->role_url"; ?>>
-                  <button class='btn btn-primary btn-lg btn-block' type='button'>Course room</button>
-                  </a>
-                <?php } ?>
-              </div> </br>
-
-            <div>
-              <p>
-              <?php echo "$entry->description"; ?>
-              </p>
-            </div>
+        <div class='col-md-6'>   
+          <div class="col-sm-12">
+            <?php 
+              printEditBtn($arg, $btn_edit_class." headline-btn-smartphone");
+            ?> 
+          </div>
+          <div class="col-sm-8">            
+            <?php if(!(isset($_GET["widget"]) && $_GET["widget"] == "true")) { ?>
+              <a href=<?php echo "$entry->role_url"; ?>>
+              <button class='btn btn-success btn-lg btn-block' type='button'>Enter course room</button>
+              </a>
+            <?php } ?>
+          </div>
+          <div class="col-sm-4 margin-top">
+            <a href="http://www.x3dom.org/check/">Test my browser</a>
+          </div>
+        
+            <div class="col-xs-12 margin-top">
+            <p class="col-sm-3">Created by:</p>
+            
+            <a href="mailto:<?php echo $entry->email; ?>">
+              <p class="col-sm-6 output-element"><?php echo $entry->given_name ." ". $entry->family_name; ?></p>
+            </a>
+          </div>
+          <div class="col-xs-12">
+            <p class="col-sm-3">Contact:</p>
+            <p class="col-sm-9 output-element"><?php echo $entry->contact; ?></p>
+          </div>
+          <div class="col-xs-12">
+            <p class="col-sm-3">Description:</p>
+            <p class="col-sm-9 output-element"><?php echo $entry->description; ?></p>
+          </div>
+          <div class="col-xs-12">
+            <p class="col-sm-3">Dates:</p>
+            <p class="col-sm-9 output-element"><?php echo $entry->dates; ?></p>
+          </div>
+          <div class="col-xs-12">
+            <p class="col-sm-3">Links:</p>
+            <p class="col-sm-9 output-element"><?php echo replaceLinks($entry->links); ?></p>
           </div>
 
         </div>
-        <div class='col-md-8'>
+        <div class='col-md-6'>
           <div><h3>Models</h3></div>
           <br><br>
 
@@ -122,7 +175,6 @@
 
 
   <script src="../js/modernizr-latest.js"></script>
-  <script src="../js/jquery.cslider.js"></script>
   <script src="../js/custom.js"></script>
 
   <script type='text/javascript' src='../js/x3d-extensions.js'> </script>

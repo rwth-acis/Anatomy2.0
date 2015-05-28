@@ -30,11 +30,12 @@ $text = mysql_escape_string(filter_input(INPUT_POST, 'text'));
 $role_link = filter_input(INPUT_POST, 'roleLink');
 $contact = filter_input(INPUT_POST, 'contact');
 $dates = filter_input(INPUT_POST, 'dates');
+$links = filter_input(INPUT_POST, 'links');
 
 //Creator stays the same
 	
 // modify database-entry
-$sql = "UPDATE courses SET name='$name', description='$text', role_url='$role_link', contact='$contact', dates='$dates' WHERE id=$id";
+$sql = "UPDATE courses SET name='$name', description='$text', role_url='$role_link', contact='$contact', dates='$dates', links='$links' WHERE id=$id";
 
 //echo "sqlquery: $sql";
 

@@ -32,12 +32,13 @@ $text = mysql_real_escape_string(filter_input(INPUT_POST, 'text'));
 $role_link = filter_input(INPUT_POST, 'roleLink');
 $contact = filter_input(INPUT_POST, 'contact');
 $dates = filter_input(INPUT_POST, 'dates');
+$links = filter_input(INPUT_POST, 'links');
 
 // Get id of currently logged in user
 $creator = $_SESSION["user_id"];
 	
 // Create database-entry
-$sql = "INSERT INTO courses (name, description, creator, role_url, contact, dates) VALUES ('$name','$text', $creator, '$role_link', '$contact', '$dates')";
+$sql = "INSERT INTO courses (name, description, creator, role_url, contact, dates, links) VALUES ('$name','$text', $creator, '$role_link', '$contact', '$dates', '$links')";
 
 $conn->query($sql);
 

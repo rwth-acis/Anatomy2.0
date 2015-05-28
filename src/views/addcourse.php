@@ -84,6 +84,12 @@
             <textarea class="form-control" rows="3" name="dates" id="targetDates" placeholder="Enter dates relevant for your students"></textarea>
           </div>
         </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="targetLinks">Links:</label>
+          <div class="col-sm-10">
+            <textarea class="form-control" rows="3" name="links" id="targetLinks" placeholder="Enter links to e.g. Campus Office, L2P"></textarea>
+          </div>
+        </div>
         <button type="submit" class="btn btn-success  col-xs-6" id="SubmitButton" value="Upload">Save</button>
       </form>
       <div id="output"></div>

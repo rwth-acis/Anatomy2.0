@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  * @file courses.php
- * Webpage for viewing an overview of all existing courses.
+ * Webpage for viewing an overview of all existing subjects.
  */
 ?>
 <!DOCTYPE html>
@@ -64,7 +64,7 @@
               <div class="container">
                   <div class="row">
                       <div class="col-sm-8">
-                          <h1>Courses</h1>
+                          <h1>Subjects</h1>
                       </div>
                   </div>
               </div>

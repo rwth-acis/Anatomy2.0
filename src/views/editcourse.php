@@ -119,6 +119,10 @@
                 <label for="targetDates">Dates:</label>
                 <textarea class="form-control" rows="3" name="dates" id="targetDates"><?php echo htmlentities($entry->dates) ?></textarea>
               </div>
+              <div class="form-group">
+                <label for="targetLinks">Links:</label>
+                <textarea class="form-control" rows="3" name="links" id="targetLinks"><?php echo htmlentities($entry->links) ?></textarea>
+              </div>
               <button type="submit" class="btn btn-success col-xs-6" id="SubmitButton" value="Upload">Save</button>
             </form>
             <br>
