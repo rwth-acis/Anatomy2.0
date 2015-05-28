@@ -79,12 +79,12 @@
 	       if(isset($_GET["widget"]) && $_GET["widget"] == "true")
 	       {
 	         //we have to link to the widget versions:
-	         print("<a href='courses.php?widget=true'>");
+	         print("<a href='subjects.php?widget=true'>");
 	       }
 	       else
 	       {
   	         //we have to link to the non-widget versions:
-	         print("<a href='courses.php'>");
+	         print("<a href='subjects.php'>");
 	       }
 	    ?>
             <i class="fa fa-file fa-2x"></i>

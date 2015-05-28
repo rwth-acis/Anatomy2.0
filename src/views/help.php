@@ -157,7 +157,7 @@
                         if(isset($_GET["widget"]) && $_GET["widget"] == "true")
                         {
                       ?>
-                        <li><a href="courses.php?widget=true">Courses</a><br>
+                        <li><a href="subjects.php?widget=true">Courses</a><br>
                             <span class="small text-muted">A list of all the courses available</span></li>
                         <li><a href="overview.php?widget=true">Gallery</a><br>
                             <span class="small text-muted">An extensive list of all the models present in our database</span></li>
@@ -166,7 +166,7 @@
                         <li><a href="login.php?widget=true">Login</a><br>
                             <span class="small text-muted">Want to create a course room ? Simply login in and get started.</span></li>
                       <?php } else { ?>
-                        <li><a href="courses.php">Courses</a><br>
+                        <li><a href="subjects.php">Courses</a><br>
                             <span class="small text-muted">A list of all the courses available</span></li>
                         <li><a href="overview.php">Gallery</a><br>
                             <span class="small text-muted">An extensive list of all the models present in our database</span></li>

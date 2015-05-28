@@ -182,7 +182,25 @@ label {
 .navbar-inverse .navbar-nav > li > a, .navbar-inverse .navbar-nav > .open ul > a {
   text-align: left;
 }
+@media(max-width: 767px) {
+  .headline-btn {
+    display: none;
+  }
 
+  .headline-btn-smartphone {
+    margin: 10px 0px;
+  }
+}
+
+@media(min-width: 767px) {
+  .headline-btn {
+    margin-top: 30px;
+  }
+
+  .headline-btn-smartphone {
+    display: none;
+  }
+}
 
 
 /* ==========================================================================
@@ -385,6 +403,10 @@ span.text-content span {
   padding-left: 30px;
 }
 
+.model_div {
+  margin: 10px;
+}
+
 
 /* ==========================================================================
    HIGHLIGHTS
@@ -443,6 +465,14 @@ ul.list-spaces li {
 /* ==========================================================================
    HELPERS
    ========================================================================== */
+
+.margin-top {
+  margin-top: 10px;
+}
+
+.output-element {
+  white-space: pre-wrap;
+}
 
 .container-full {
   margin: 0 auto;
