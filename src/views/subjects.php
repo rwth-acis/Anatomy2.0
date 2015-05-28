@@ -47,7 +47,7 @@
            print("<script type='text/javascript' src='../js/overview-widget.js'> </script>");
            print("<script type='text/javascript' src='../js/init-subsite.js'></script>");
        }
-    ?>-->
+    ?>
 
 </head>
 <body>
@@ -73,25 +73,16 @@
     }
   ?>
 
-  <!-- Button to create a new course -->
-  <?php if (isset($_SESSION['user_id'])) { ?>
-  <div class="container-fluid">
-    <div class="row">
-      <p><a class="btn btn-primary btn-lg" style="width:100%" href="addcourse.php" role="button">Create New Course</a></p>
-    </div>
-  </div>
-  <?php } ?>
-
   <!-- Build course table -->
     <div id="table-container">
     <?php
       include '../php/db_connect.php';
       include '../php/tools.php';
 
-      $query  = $db->query("SELECT * FROM courses");
+      $query  = $db->query("SELECT * FROM subjects");
       $result = $query->fetchAll();
 
-      $html = createTable($result,"course");
+      $html = createTable($result,"subjects");
       echo $html;
     ?>
     </div>

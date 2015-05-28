@@ -30,6 +30,8 @@ function createTable($result, $type) {
     foreach ($result as $entry) {
         if(substr($type,0,1) == "m") {
             $html .= getModelStructure($entry,$type);
+        } else if(substr($type,0,1) == "s") {
+          $html .= getSubjectStructure($entry);
         } else {
             $html .= getCourseStructure($entry);
         }
@@ -100,6 +102,23 @@ function getCourseStructure($entry) {
 
     // id used to derive course id (from database) connected to clicked link
     return "<li><a href='course.php?id=$entry[id]".$html."' id='a_img$entry[id]'>
+            <img src=$entry[img_url] alt=$entry[name] class='img-responsive img-fit'>
+            <p style='font-weight: bold;'>$entry[name]</p>
+            </a></li>";
+}
+
+/**
+ * Creates the html structure of one subject entry with the given data
+ * @param  object $entry Subject data from database
+ * @return string/html        HTML containing the course information
+ */
+function getSubjectStructure($entry) {
+    $html = "";
+    // Decide if we are in ROLE space
+    if(isset($_GET['widget']) && $_GET['widget'] == 'true') {$html = "&widget=true";}
+
+    // id used to derive course id (from database) connected to clicked link
+    return "<li><a href='course_list.php?id=$entry[id]".$html."' id='a_img$entry[id]'>
             <img src=$entry[img_url] alt=$entry[name] class='img-responsive img-fit'>
             <p style='font-weight: bold;'>$entry[name]</p>
             </a></li>";
