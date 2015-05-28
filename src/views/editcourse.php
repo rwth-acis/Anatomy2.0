@@ -89,56 +89,58 @@
         <br><br>
       <div class='container'>
         <div class='row'>
-          <div class='col-md-4'>
-            <br><br>
+          <div class='col-md-6'>
+            <div class='featured-box'>
+              Enter course name, course room URL, contact, description and dates below. If you would like help on how to create your course room, press the "?" button.<br>
+              To show models in your course room, add models on the right side. You can delete models by pressing the red "x". Those models will not be shown in your course room.<br>
+              Press "Save when you are done.
+            </div>
+            
             <form role="form" action="../php/edit_script_course.php<?php if(isset($_GET['widget']) && $_GET['widget'] == true) {echo '?widget=true';} ?>" method="post" enctype="multipart/form-data" id="UploadForm">              
               <div class="form-group">
                 <input type="hidden" name="targetId" value="<?php echo $arg; ?>">
-                <label for="targetName">Your Course Name</label>
+                <label for="targetName">Course name:</label>
                 <input type="text" class="form-control" rows="1" name="name" id="targetName" value="<?php echo htmlentities($entry->name); ?>" required>
               </div>
-            
-              <div class='featured-box'>
-                <div class="form-group">
-                  <label for="targetText">Link to the Preview Image of your Course</label>
-                  <textarea class="form-control" rows="1" name="previewImgLink" id="targetImgLink"><?php echo $entry->img_url; ?></textarea>
-                </div>
-                <br>
-                <div class="form-group">
-                  <label for="targetText">Link to your course space in ROLE</label>
-                  <input type="text" class="form-control" rows="1" name="roleLink" id="targetRole" value="<?php echo $entry->role_url; ?>">
-                </div> </br>
-
-                <div class="form-group">
-                  <label for="targetText">Description of your Course</label>
-                  <textarea class="form-control" rows="3" name="text" id="targetText"><?php echo htmlentities($entry->description) ?></textarea>
-                </div>
+              <div class="form-group">
+                <label for="targetText">Course room:</label>
+                <input type="text" class="form-control" rows="1" name="roleLink" id="targetRole" value="<?php echo $entry->role_url; ?>">
+                <button class="col-sm-1 btn btn-default btn-inline" tpye="button">?</button>
               </div>
-              <button type="submit" class="btn btn-default" id="SubmitButton" value="Upload">Submit</button>
+              <div class="form-group">
+                <label for="targetContact">Contact:</label>
+                <textarea class="form-control" rows="3" name="contact" id="targetContact"><?php echo htmlentities($entry->contact) ?></textarea>
+              </div>
+              <div class="form-group">
+                <label for="targetText">Description:</label>
+                <textarea class="form-control" rows="3" name="text" id="targetText"><?php echo htmlentities($entry->description) ?></textarea>
+              </div>
+              <div class="form-group">
+                <label for="targetDates">Dates:</label>
+                <textarea class="form-control" rows="3" name="dates" id="targetDates"><?php echo htmlentities($entry->dates) ?></textarea>
+              </div>
+              <button type="submit" class="btn btn-success col-xs-6" id="SubmitButton" value="Upload">Save</button>
             </form>
             <br>
           </div> 
 
-          <div class='col-md-8'>
+          <div class='col-md-6'>
             <div><h3>Models</h3></div>
             <!-- Buttons to create add and upload models -->
-            <button class='btn btn-success' type='button' id="openbox" onclick="startBlackout()">Add</button>
-            <a href="upload.php" target="blank"><button class='btn btn-success' type='button'>Upload</button></a>
-          
-            <br><br>
-        
-      <div id="model_table">
-      <?php 
-        $query = $db->query("SELECT * 
-                             FROM course_models
-                             INNER JOIN models ON course_models.model_id = models.id
-                             WHERE course_models.course_id = $arg");
-        $result = $query->fetchAll();
+            <button class='btn btn-success col-xs-6' type='button' id="openbox" onclick="startBlackout()">Add</button>
+            
+            <div id="model_table" class="col-xs-12 model_div">
+            <?php 
+              $query = $db->query("SELECT * 
+                                   FROM course_models
+                                   INNER JOIN models ON course_models.model_id = models.id
+                                   WHERE course_models.course_id = $arg");
+              $result = $query->fetchAll();
 
-        $html = createTable($result,"modeldeletion");
-        echo $html;
-      ?>
-      </div>
+              $html = createTable($result,"modeldeletion");
+              echo $html;
+            ?>
+            </div>
            
           </div>
         </div>

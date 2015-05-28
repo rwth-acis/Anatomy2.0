@@ -24,16 +24,17 @@
 $conn = require '../php/db_connect.php';
 
 //Get input data from form
-$id = $_POST['targetId'];
-$name = mysql_escape_string($_POST['name']);
-$text = mysql_escape_string($_POST['text']);
-$role_link = $_POST['roleLink'];
-$preview_img_link = $_POST['previewImgLink'] != "" ? $_POST['previewImgLink'] : "https://www.symplicity.com/assets/Icon_-_Product_Features_-_Tutor_New.jpg";
+$id = filter_input(INPUT_POST, 'targetId');
+$name = mysql_escape_string(filter_input(INPUT_POST, 'name'));
+$text = mysql_escape_string(filter_input(INPUT_POST, 'text'));
+$role_link = filter_input(INPUT_POST, 'roleLink');
+$contact = filter_input(INPUT_POST, 'contact');
+$dates = filter_input(INPUT_POST, 'dates');
 
 //Creator stays the same
 	
 // modify database-entry
-$sql = "UPDATE courses SET name='$name', description='$text', role_url='$role_link', img_url='$preview_img_link' WHERE id=$id";
+$sql = "UPDATE courses SET name='$name', description='$text', role_url='$role_link', contact='$contact', dates='$dates' WHERE id=$id";
 
 //echo "sqlquery: $sql";
 
