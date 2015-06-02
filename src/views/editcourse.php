@@ -69,7 +69,7 @@
       include 'menu.php'; 
       include '../php/tools.php';
       try {
-      	include '../php/database_connect.php';
+      	include '../php/db_connect.php';
       } catch(Excepton $e) {
       	error_log($e->getMessage());
       }
