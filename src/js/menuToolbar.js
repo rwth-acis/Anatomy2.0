@@ -102,7 +102,7 @@ function x3dSynchronize() {
  * so locally
  */
 function btnShowInfo() {
-  var show = document.getElementById('btnInfo').innerHTML === "Show info";
+  var show = document.getElementById('btnInfo').innerHTML === "Show info [SPACE]";
   if (isInRole() && isSynchronized) {
     var msgContent = {'show': show};
     publishIWC("ShowInfo", msgContent);
@@ -136,12 +136,12 @@ function showInfo(show) {
   var metadata_overlay = document.getElementById('metadata_overlay');
   if (show) {
     x3dom.runtime.statistics(true);
-    btn.innerHTML = "Hide info";
+    btn.innerHTML = "Hide info [SPACE]";
     metadata_overlay.style.display = "block";
   }
   else {
     x3dom.runtime.statistics(false);
-    btn.innerHTML = "Show info";
+    btn.innerHTML = "Show info [SPACE]";
     metadata_overlay.style.display = "none";
   }
 }
@@ -161,4 +161,21 @@ function saveInfoState() {
 function synchronizeInfoState() {
   showInfo(displayInfo);
   displayInfo = undefined;
+}
+
+/**
+ * 
+ * @returns {undefined}
+ */
+function showHelp() {
+  var btn = document.getElementById('btnHelp');
+  var mainNav = document.getElementById('mainNav');
+  if (btn.innerHTML === "Show help") {
+    mainNav.style.display = "block";
+    btn.innerHTML = "Hide help";
+  }
+  else {
+    mainNav.style.display = "none";
+    btn.innerHTML = "Show help";
+  }
 }

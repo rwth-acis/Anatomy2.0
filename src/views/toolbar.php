@@ -47,18 +47,18 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <!-- li role="presentation" class="dropdown navbar-li">
+        <li role="presentation" class="dropdown navbar-li">
           <select id="viewModeSelect" onChange="x3dChangeView()" class="form-control navbar-select">
-            <option>Walk</option>
-            <option id="optionExamine">Examine</option>
-            <option>Fly</option>
-            <option>Helicopter</option>
-            <option>LookAt</option>
-            <option>Turntable</option>
-            <option>Game</option>
+            <!-- option>[W]alk</option>
+            <option id="optionExamine">[E]xamine</option>
+            <option>[F]ly</option>
+            <option>[H]elicopter</option>
+            <option>[L]ookAt</option>
+            <option>[T]urntable</option>
+            <option>[G]ame</option -->
           </select>
-        </li -->
-        <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="showAll()">Reset view</button></li>
+        </li>
+        <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="showAll()">Reset view [A]</button></li>
       <?php
         // If and only if inside ROLE environment, show the synchronize / unsynchronize button
         if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
@@ -68,7 +68,8 @@
           }
       ?>
         <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" id="btnCopy">Copy Link</button></li>
-        <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="btnShowInfo()" id="btnInfo">Show info</button></li>
+        <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="btnShowInfo()" id="btnInfo">Show info [SPACE]</button></li>
+        <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="showHelp()" id="btnHelp">Hide help</button></li>
         <!-- Show lecturer mode button only if user logged in (as lecturer) and in ROLE environment -->
         <?php if (isset($_SESSION['user_id']) && (isset($_GET["widget"]) && $_GET["widget"] == "true")) { ?>
           <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="toggleLecturerMode()" id="btnLecturerMode">Enable Lecturer Mode</button></li>

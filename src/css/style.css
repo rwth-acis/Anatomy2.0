@@ -182,7 +182,25 @@ label {
 .navbar-inverse .navbar-nav > li > a, .navbar-inverse .navbar-nav > .open ul > a {
   text-align: left;
 }
+@media(max-width: 767px) {
+  .headline-btn {
+    display: none;
+  }
 
+  .headline-btn-smartphone {
+    margin: 10px 0px;
+  }
+}
+
+@media(min-width: 767px) {
+  .headline-btn {
+    margin-top: 30px;
+  }
+
+  .headline-btn-smartphone {
+    display: none;
+  }
+}
 
 
 /* ==========================================================================
@@ -385,6 +403,10 @@ span.text-content span {
   padding-left: 30px;
 }
 
+.model_div {
+  margin: 10px;
+}
+
 
 /* ==========================================================================
    HIGHLIGHTS
@@ -443,6 +465,14 @@ ul.list-spaces li {
 /* ==========================================================================
    HELPERS
    ========================================================================== */
+
+.margin-top {
+  margin-top: 10px;
+}
+
+.output-element {
+  white-space: pre-wrap;
+}
 
 .container-full {
   margin: 0 auto;
@@ -713,17 +743,15 @@ footer ul li {
   border-color: white;
 }
 
+/* Styles the toolbar */
 .navbar-select {
   margin-top: 8px;
   margin-bottom: 8px;
 }
-
 .navbar-li {
   margin-right: 8px;
   margin-left: 8px;
 }
-
-
 
 /* ==========================================================================
    MEDIA QUERIES
@@ -770,4 +798,18 @@ footer ul li {
     font-size: 19px;
     font-weight: 400;
   }
+}
+
+/* Navigation info at lower left corner */
+#mainNav {
+	position:absolute;
+	left:20px;
+	bottom:20px;
+	width:200px;
+	background-color:#EEE;
+	border:1px solid silver;
+	padding:20px;
+	z-index:5;
+	opacity:0.8;
+	color:#000;
 }

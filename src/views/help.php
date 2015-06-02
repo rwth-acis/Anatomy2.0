@@ -43,7 +43,10 @@
 </head>
 
 <body>
-    <?php include("menu.php"); ?>
+    <?php 
+      include("menu.php");
+      require '../config/config.php';
+    ?>
 
     <?php
       //Decide if this site is inside a separate widget
@@ -101,8 +104,8 @@
                   <li>Log in (e.g. with your Google account)</li>
                   <li>Add the following widgets in the sidebar on the left</li>
                   <ul>
-                <li>http://eiche.informatik.rwth-aachen.de/henm1415g2/src/role/overview.xml</li>
-                <li>http://eiche.informatik.rwth-aachen.de/henm1415g2/src/role/model_viewer.xml</li>
+                <li><?php echo $baseUrl; ?>/src/widgets/overview.xml</li>
+                <li><?php echo $baseUrl; ?>/src/widgets/model_viewer.xml</li>
                   </ul>
                   <li>Invite others by providing the link to the space (e.g. http://role-sandbox.eu/spaces/spacename)</li>
                   <li>Select a model in the overview</li>
@@ -154,7 +157,7 @@
                         if(isset($_GET["widget"]) && $_GET["widget"] == "true")
                         {
                       ?>
-                        <li><a href="courses.php?widget=true">Courses</a><br>
+                        <li><a href="subjects.php?widget=true">Courses</a><br>
                             <span class="small text-muted">A list of all the courses available</span></li>
                         <li><a href="overview.php?widget=true">Gallery</a><br>
                             <span class="small text-muted">An extensive list of all the models present in our database</span></li>
@@ -163,7 +166,7 @@
                         <li><a href="login.php?widget=true">Login</a><br>
                             <span class="small text-muted">Want to create a course room ? Simply login in and get started.</span></li>
                       <?php } else { ?>
-                        <li><a href="courses.php">Courses</a><br>
+                        <li><a href="subjects.php">Courses</a><br>
                             <span class="small text-muted">A list of all the courses available</span></li>
                         <li><a href="overview.php">Gallery</a><br>
                             <span class="small text-muted">An extensive list of all the models present in our database</span></li>

@@ -18,7 +18,7 @@
  * The footer of a each website
  */
 ?>
-<footer id="footer">
+<footer id="footer" style="margin-top: 100px">
     <div class="container">
       <div class="clear"></div>
       <!--CLEAR FLOATS-->
@@ -35,13 +35,13 @@
                 {
               ?>
                 <a href="welcome.php?widget=true">Home</a> | 
-                <a href="courses.php?widget=true">Courses</a> |
+                <a href="subjects.php?widget=true">Courses</a> |
                 <a href="overview.php?widget=true">Gallery</a> |
                 <a href="upload.php?widget=true">Upload</a> |
                 <a href="help.php?widget=true">Help</a>
               <?php } else { ?>
                 <a href="welcome.php">Home</a> | 
-                <a href="courses.php">Courses</a> |
+                <a href="subjects.php">Courses</a> |
                 <a href="overview.php">Gallery</a> |
                 <a href="role.php">Role</a> |
                 <a href="upload.php">Upload</a> |
@@ -54,9 +54,9 @@
           <div class="col-md-6 panel">
             <div class="panel-body">
               <p class="text-right">
-                HENM LAB 2014/15: 3D Models
+                Anatomy2.0
               </p>
-              <p class="text-right">Reach us at: <a href="mailto:henm1415g2@dbis.rwth-aachen.de">henm1415g2@dbis.rwth-aachen.de</a></p>
+              <p class="text-right">Reach us at: <a href="mailto:3d@dbis.rwth-aachen.de">3d@dbis.rwth-aachen.de</a></p>
             </div>
           </div>
 
