@@ -22,10 +22,11 @@
   $confirmed = 0;
   $access_token = filter_input(INPUT_POST, 'access_token');
   // from fake login:
-  $userprofile->sub = filter_input(INPUT_POST, 'sub');
-  $userprofile->email = filter_input(INPUT_POST, 'email');
-  $userprofile->given_name = filter_input(INPUT_POST, 'given_name');
-  $userprofile->family_name = filter_input(INPUT_POST, 'family_name');
+  $userProfile = new stdClass();
+  $userProfile->sub = filter_input(INPUT_POST, 'sub');
+  $userProfile->email = filter_input(INPUT_POST, 'email');
+  $userProfile->given_name = filter_input(INPUT_POST, 'given_name');
+  $userProfile->family_name = filter_input(INPUT_POST, 'family_name');
   // fake_end
   
   if (isset($access_token)) {
@@ -34,7 +35,7 @@
       session_start();
 		$_SESSION['access_token'] = $access_token;
 		//from fake login:
-		$_SESSION['sub'] = $userprofile->sub;
+		$_SESSION['sub'] = $userProfile->sub;
 		// fake_end		
 
 		////// Get user-profile from las2peer-service     not needed for fake login
