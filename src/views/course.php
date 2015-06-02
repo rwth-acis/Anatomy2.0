@@ -55,7 +55,6 @@
       $query  = $db->query("SELECT courses.*, users.given_name, users.family_name, users.email FROM courses JOIN users ON courses.creator = users.id WHERE courses.id = $arg");
       
       $entry = $query->fetchObject();
-      
       $is_logged_in = isset($_SESSION["user_id"]) && $entry->creator == $_SESSION['user_id'];
        
       /**
@@ -80,16 +79,7 @@
   <header id='head' class='secondary'>
     <div class='container'>
       <div class='row'>
-        <div class ="col-sm-8">
-          <h1><?php echo "$entry->name";?></h1>
-        </div>
-        
-        <div class="col-sm-4">
-          <?php 
-            $btn_edit_class = "btn btn-success btn-block btn-lg";
-            printLinkBtn("editcourse.php?id=$arg", $btn_edit_class." headline-btn", "Edit");
-          ?>          
-        </div>
+        <h1><?php echo "$entry->name";?></h1>
       </div>
     </div>
   </header>
@@ -99,12 +89,7 @@
       <br><br>
     <div class='container'>
       <div class='row'>
-        <div class='col-md-6'>   
-          <div class="col-sm-12">
-            <?php 
-              printLinkBtn("editcourse.php?id=$arg", $btn_edit_class." headline-btn-smartphone", "Edit");
-            ?> 
-          </div>
+        <div class='col-sm-6 non-overflow-div'>   
           <div class="col-sm-8">            
             <?php if(!(isset($_GET["widget"]) && $_GET["widget"] == "true")) { ?>
               <a href=<?php echo "$entry->role_url"; ?>>
@@ -117,31 +102,29 @@
           </div>
         
             <div class="col-xs-12 margin-top">
-            <p class="col-sm-3">Created by:</p>
-            
-            <a href="mailto:<?php echo $entry->email; ?>">
-              <p class="col-sm-6 output-element"><?php echo $entry->given_name ." ". $entry->family_name; ?></p>
-            </a>
+            <label class="col-sm-3">Created by:</label>
+            <p class="col-sm-3 output-element"><?php echo $entry->given_name ." ". $entry->family_name; ?></p>
+            <a href="mailto:<?php echo $entry->email; ?>"><?php echo $entry->email; ?></a>
           </div>
           <div class="col-xs-12">
-            <p class="col-sm-3">Contact:</p>
+            <label class="col-sm-3">Contact:</label>
             <p class="col-sm-9 output-element"><?php echo $entry->contact; ?></p>
           </div>
           <div class="col-xs-12">
-            <p class="col-sm-3">Description:</p>
+            <label class="col-sm-3">Description:</label>
             <p class="col-sm-9 output-element"><?php echo $entry->description; ?></p>
           </div>
           <div class="col-xs-12">
-            <p class="col-sm-3">Dates:</p>
+            <label class="col-sm-3">Dates:</label>
             <p class="col-sm-9 output-element"><?php echo $entry->dates; ?></p>
           </div>
           <div class="col-xs-12">
-            <p class="col-sm-3">Links:</p>
+            <label class="col-sm-3">Links:</label>
             <p class="col-sm-9 output-element"><?php echo replaceLinks($entry->links); ?></p>
           </div>
 
         </div>
-        <div class='col-md-6'>
+        <div class='col-sm-6'>
           <div><h3>Models</h3></div>
           <br><br>
 
@@ -157,6 +140,14 @@
   echo $html;
   ?>
 
+        </div>
+        <div class="col-sm-12 middle-btn-div">
+          <div class=" col-sm-5">
+            <?php printLinkBtn("editcourse.php?id=$arg", "btn btn-success btn-block btn-lg middle-btn-margin", "Edit"); ?>
+          </div>
+          <div class="col-sm-5">
+            <button class="btn btn-warning col-sm-5 btn-block btn-lg middle-btn-margin" type='button' id="btn-delete">Delete</button>
+          </div>
         </div>
       </div>
     </div>
@@ -188,5 +179,6 @@
         print("<script type='text/javascript' src='../js/init-subsite.js'></script>");
     }
   ?>
+  <script type="text/javascript" src="../js/course.js"></script>
 </body>
 </html>

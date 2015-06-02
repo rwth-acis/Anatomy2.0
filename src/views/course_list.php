@@ -81,7 +81,7 @@
           </div>
 
           <!-- List of all courses -->
-          <div class='col-md-8'>
+          <div class='col-sm-8'>
             <h3>Choose course</h3>
             <table class="table table-striped table-bordered table-hover">
               <thead>

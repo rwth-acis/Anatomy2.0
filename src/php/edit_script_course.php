@@ -44,6 +44,6 @@ $conn->query($sql);
 $html = "";
 if(isset($_GET['widget']) && $_GET['widget'] == 'true') {$html = "&widget=true";}
 
-header("Location: ../views/course.php?id=$id$html");
+header("Location:../views/course.php?id=$id$html");
 
 ?>
