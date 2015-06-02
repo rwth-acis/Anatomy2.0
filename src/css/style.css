@@ -560,6 +560,15 @@ img.pull-left {
 
 }
 
+.navigation-info-img {
+  width: 40px;
+  height: 40px;
+}
+
+.navigation_info {
+  display:none;
+}
+
 
 /* ==========================================================================
    FOOTER
@@ -805,7 +814,6 @@ footer ul li {
 	position:absolute;
 	left:20px;
 	bottom:20px;
-	width:200px;
 	background-color:#EEE;
 	border:1px solid silver;
 	padding:20px;
