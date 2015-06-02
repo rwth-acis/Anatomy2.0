@@ -52,6 +52,7 @@
 <body>
   <?php
     include("menu.php");
+    include("../php/tools.php");
   ?>
   <?php
     //Decide if this site is inside a separate widget
@@ -59,17 +60,36 @@
 
     }
     else {
-      echo '
+  ?>
       <header id="head" class="secondary">
-        <div class="container">
-          <div class="row">
-            <h1>Gallery</h1>
+        <div class='container'>
+          <div class='row'>
+            <div  class="col-sm-8">
+              <h1>Gallery</h1>
+            </div>
+            <div class="col-sm-4">
+              <?php 
+                $btn_edit_class = "btn btn-success btn-block btn-lg";
+                printLinkBtn("upload.php", $btn_edit_class." headline-btn", "Upload");
+              ?>    
+            </div>
           </div>
         </div>
       </header>
-      ';
+  <?php
     }
   ?>
+  <div class='container'>
+    <div class='row'>
+      <div class='col-md-6'>   
+        <div class="col-sm-12">
+          <?php 
+            printLinkBtn("upload.php", $btn_edit_class." headline-btn-smartphone", "Upload");
+          ?> 
+        </div>
+      </div>
+    </div>
+  </div>
   <?php include("search.php"); ?>
   <!-- container -->
   <section class="container">
@@ -77,7 +97,6 @@
     <div class="container" id="result-container">
       <?php
       include '../php/db_connect.php';
-      include '../php/tools.php';
 
       $query  = $db->query("SELECT * FROM models");
       $result = $query->fetchAll();

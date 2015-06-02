@@ -123,4 +123,19 @@ function getSubjectStructure($entry) {
             <p style='font-weight: bold;'>$entry[name]</p>
             </a></li>";
 }
+       
+/**
+ * Print a button which links to the editcourse.php
+ * @param type $arg id of the course
+ * @param type $class css class which should be applied to the button
+ */
+function printLinkBtn($url, $class, $text) {
+  $widgetExtension = "";
+  if(isset($_GET["widget"]) && $_GET["widget"] == "true") { 
+    $widgetExtension = "&widget=true"; 
+  }
+  echo "<a href=$url $widgetExtension>"; 
+  echo "<button class='$class' type='button'>$text</button>";
+  echo "</a>";
+}
 ?>

@@ -37,14 +37,11 @@
                 <a href="welcome.php?widget=true">Home</a> | 
                 <a href="subjects.php?widget=true">Courses</a> |
                 <a href="overview.php?widget=true">Gallery</a> |
-                <a href="upload.php?widget=true">Upload</a> |
                 <a href="help.php?widget=true">Help</a>
               <?php } else { ?>
                 <a href="welcome.php">Home</a> | 
                 <a href="subjects.php">Courses</a> |
                 <a href="overview.php">Gallery</a> |
-                <a href="role.php">Role</a> |
-                <a href="upload.php">Upload</a> |
                 <a href="help.php">Help</a>
               <?php } ?>
               </p>

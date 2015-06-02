@@ -59,21 +59,6 @@
       $is_logged_in = isset($_SESSION["user_id"]) && $entry->creator == $_SESSION['user_id'];
        
       /**
-       * Print a button which links to the editcourse.php
-       * @param type $arg id of the course
-       * @param type $class css class which should be applied to the button
-       */
-      function printEditBtn($arg, $class) {
-        $widgetExtension = "";
-        if(isset($_GET["widget"]) && $_GET["widget"] == "true") { 
-          $widgetExtension = "&widget=true"; 
-        }
-        echo "<a href=editcourse.php?id=$arg $widgetExtension>"; 
-        echo "<button class='$class' type='button'>Edit</button>";
-        echo "</a>";
-      }
-       
-      /**
        * Replaces all URLs in the given text by <a> tags
        * Taken from https://css-tricks.com/snippets/php/find-urls-in-text-make-links/
        * @param String $text 
@@ -102,7 +87,7 @@
         <div class="col-sm-4">
           <?php 
             $btn_edit_class = "btn btn-success btn-block btn-lg";
-            printEditBtn($arg, $btn_edit_class." headline-btn");
+            printLinkBtn("editcourse.php?id=$arg", $btn_edit_class." headline-btn", "Edit");
           ?>          
         </div>
       </div>
@@ -117,7 +102,7 @@
         <div class='col-md-6'>   
           <div class="col-sm-12">
             <?php 
-              printEditBtn($arg, $btn_edit_class." headline-btn-smartphone");
+              printLinkBtn("editcourse.php?id=$arg", $btn_edit_class." headline-btn-smartphone", "Edit");
             ?> 
           </div>
           <div class="col-sm-8">            
