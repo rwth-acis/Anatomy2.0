@@ -15,29 +15,43 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  * 
- *  @file check_credentials.php
- *  Script for verification of login credentials (email + password).
+ *  @file checkUserKnown.php
+ *  Script for verification of OIDC-login.
  */
 
   $confirmed = 0;
   $access_token = filter_input(INPUT_POST, 'access_token');
-
+  // from fake login:
+  $userprofile->sub = filter_input(INPUT_POST, 'sub');
+  $userprofile->email = filter_input(INPUT_POST, 'email');
+  $userprofile->given_name = filter_input(INPUT_POST, 'given_name');
+  $userprofile->family_name = filter_input(INPUT_POST, 'family_name');
+  // fake_end
+  
   if (isset($access_token)) {
-      require '../php/db_connect.php';
-      require '../config/config.php';
-  		require '../php/tools.php';
 
-  		$aRes = httpRequest("GET", $las2peerUrl.'/'.'user'.'?access_token='.$access_token);
-      // Use only when debugging
-	  	// require '../php/fb.php';
+		////// Setup session and cache access_token as login-validation, also for other pages      
+      session_start();
+		$_SESSION['access_token'] = $access_token;
+		//from fake login:
+		$_SESSION['sub'] = $userprofile->sub;
+		// fake_end		
 
-      $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+		////// Get user-profile from las2peer-service     not needed for fake login
+		
+      // require '../config/config.php';
+  		// require '../php/tools.php';
+  		// $res = getUserProfile($access_token);
+  		// if($res->bOk === false) {
+      //		die('Cannot retrieve User-information!');
+      //	}
+		//	
+      //$userProfile = json_decode($res->sMsg);
       
-      if($aRes->bOk == FALSE or $aRes->iStatus !== 200) {
-      	error_log('3dnrt/user call unsuccessfull: '.$aRes->sMsg);
-      	die('Cannot retrieve User-information!');
-      }
-      $userProfile = json_decode($aRes->sMsg);
+		////// Search database for user and create new entry if it doesn't have      
+      
+      require '../php/db_connect.php';
+      $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
       
       // FIRST OF ALL, CHECK WHETHER THE USER IS KNOWN TO THE SYSTEM
       // THIS IS DONE BY CHECKING WHETHER THE UNIQUE OPEN ID CONNECT SUB EXISTS IN OUR DATABASE
@@ -46,28 +60,21 @@
       // This will escape symbols in the SQL statement (also supposed to prevent 
       // SQL injection attacks). Returns a PDOStatement
       $sth = $db->prepare($sqlSelect);
-      // Executes the select statement on DB
       $sth->execute();
-      // As there can be only one row in the result, get the first row
       $user = $sth->fetch();
-      // If $user is empty, the user is not known
-      $sqlInsert="";
       
+      $sqlInsert="";
+      // If $user is empty, the user is not known
       if(!$user) {
         // CREATE A NEW USER DATABASE ENTRY IF USER WAS NOT KNOWN TO THE SYSTEM
 		  $sqlInsert = "INSERT INTO users (email, openIdConnectSub, given_name, family_name) VALUES ('".$userProfile->email."','".$userProfile->sub."','".$userProfile->given_name."','".$userProfile->family_name."')";
         $sth = $db->prepare($sqlInsert);
-        // Executes the select statement on DB
         $ret = $sth->execute();
         if($ret === false) {
           error_log('Error: user insertion in database failed!');
           die('Could not create new user.');
         }
-      }
-      else {
-        $confirmed = $user['confirmed'];
+      } else {
+      	// TODO: update user-email
       }
   }
-  
-  $result = ['confirmed'=>$confirmed, 'sqlSelect'=>$sqlSelect, 'sqlInsert'=>$sqlInsert];		
-  echo json_encode($result);

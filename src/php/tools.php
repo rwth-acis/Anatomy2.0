@@ -154,4 +154,65 @@ function httpRequest($method, $url, $data = false)
 
     return $result;
 }
-?>
+
+/**
+ * Requests a user-profile from the las2peer-login-service.
+ * @param  string The token that is send to the OIDC-provider
+ * @return struct {'bOk':boolean, 'sMsg':string}, sMsg is userprofile in JSON on success and errormessage on fail
+ */
+function getUserProfile($access_token) {
+	$result = new stdClass();
+	$result->success = false;
+	$result->message = '';
+	
+	$oidc_request = httpRequest("GET", $las2peerUrl.'/'.'user'.'?access_token='.$access_token);
+	
+	if($oidc_request->bOk == FALSE or $oidc_request->iStatus !== 200) {
+		$result->bOk = false;
+		$result->sMsg = $oidc_request->sMsg;
+	} else {
+		error_log('3dnrt/user call unsuccessfull: '.$oidc_request->sMsg);
+		$result->bOk = true;
+		$result->message = $oidc_request->sMsg;
+	}
+		
+	return $result;
+}
+
+/**
+ * @return [bErr:bool, bIsConfirmed:bool, sMsg:string]
+ */
+function checkUserConfirmed($sub) {
+
+	$result = new stdClass();
+
+	try {
+	   require '../php/db_connect.php';
+	} catch (Exception $e) {
+		$result->bErr = true;
+		$result->bIsConfirmed = false;
+		$result->sMsg = $e->getMessage();
+		
+		return $result;
+	}
+
+   $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+   
+   $sqlSelect = "SELECT confirmed FROM users WHERE openIdConnectSub='".$sub."'";
+   $sth = $db->prepare($sqlSelect);
+   $sth->execute();
+   $user = $sth->fetch();
+   
+   // If $user is empty, the user is not known
+   if(!$user) {
+   	$result->bErr = false;
+   	$result->bIsConfirmed = false;
+   	$result->sMsg = "User has no databaseentry.";
+   } else {
+   	$result->bErr = false;
+   	$result->bIsConfirmed = ($user['confirmed'] == 1);
+   	$result->sMsg = "Value queried from database.";
+   }
+   
+   return $result;
+}
