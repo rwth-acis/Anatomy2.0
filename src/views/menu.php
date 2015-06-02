@@ -26,14 +26,10 @@
   <!-- Ajax helper script for menu_logged_in.js / menu_logged_out.js -->
   <script src="../js/ajax.js" type="text/javascript"></script>
   <!-- Functionality for login button (depends whether user is logged in or not) -->
-  <?php if (isset($_SESSION['user_id'])) { ?>
-    <script src="../js/menu_logged_in.js" type="text/javascript"></script>
-  <?php } else { ?>
-    <script src="../js/tools.js" type="text/javascript"></script>
-    <script src="../js/menu_logged_out.js" type="text/javascript"></script>
-  <?php } ?>
-  
-		<!-- import jQuery for AJAX calls (must) -->
+	<?php if (!isset($_SESSION['access_token'])) { ?>
+		<script src="../js/tools.js" type="text/javascript"></script>
+   <?php } ?>
+ 		<!-- import jQuery for AJAX calls (must) -->
 		<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
 		<!-- import Bootstrap for responsive UI (must) -->
 		<script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
@@ -50,7 +46,7 @@
 		<script type="text/javascript" src="../js/jsrsasign/rsapem-1.1.js"></script>
 		<script type="text/javascript" src="../js/jsrsasign/rsasign-1.2.min.js"></script>
 		<script type="text/javascript" src="../js/jsrsasign/x509-1.1.js"></script>
-		<script type="text/javascript" src="../js/welcome.js"></script>
+		<script type="text/javascript" src="../js/signin_callbacks.js"></script>
 <!--
 
 //-->
@@ -114,7 +110,7 @@
             If user_id is set, the user is currently logged in -->
           <li>
             <a href='#' id='menu_login'>
-            <?php if (isset($_SESSION['user_id'])) { echo ("Logout"); } else { echo("Login"); } ?>
+<?php if (isset($_SESSION['user_id'])) { echo ("Logout"); } else { echo("Login"); } ?>
                   </a>
           </li>
           <li>
@@ -142,4 +138,4 @@
     var s = document.getElementsByTagName('script')[0]; 
     s.parentNode.insertBefore(po, s);
   })();
-</script>
+  </script>

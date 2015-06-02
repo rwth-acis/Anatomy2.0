@@ -30,7 +30,7 @@ function initRegister() {
 }
 
 /**
- * Event handler for register (=create account) button in register.php
+ * Event handler for register (=create account) button in register_as_tutor.php
  * Sends ajax request to server to create account.
  */
 function onRegisterClicked() {
@@ -41,7 +41,7 @@ function onRegisterClicked() {
     // Show a little animated "loading" image
     document.getElementById('register_loader').style.display = "inline";
     // Send a post request to server to create a new user in database
-    ajax.post("../php/register.php", {register_email:email, register_pw:password}, function(msg) {
+    ajax.post("../php/register_as_tutor.php", {register_email:email, register_pw:password}, function(msg) {
       msg = JSON.parse(msg);
       // Redirect to "success" page if account creation was successfull
       if (msg.result === "ok") {
