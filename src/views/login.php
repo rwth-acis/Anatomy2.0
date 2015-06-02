@@ -19,6 +19,8 @@
  */
 
 $isTutor = false;
+$user_oidc_profile = new stdClass();
+$user_database_entry = NULL;
 
 abstract class USER_STATUS
 {
@@ -37,16 +39,16 @@ $status = -1;
 //$_SESSION['access_token'] = '1234abcd';
 //$_SESSION['sub'] = '8f55-3f84d7524753';
 //FB::log($_SESSION);
-$userProfile = new stdClass();
-$userProfile->access_token = $_SESSION['access_token'];
-$userProfile->sub = $_SESSION['sub'];
+$user_oidc_profile = new stdClass();
+$user_oidc_profile->access_token = $_SESSION['access_token'];
+$user_oidc_profile->sub = $_SESSION['sub'];
 
 if(!isset($_SESSION['access_token'])) {
 	$status = USER_STATUS::NO_SESSION;
 } else {
 	// following is not needed for fake login
 	// require '../config/config.php';
-	require '../php/tools.php';
+	require_once '../php/tools.php';
 	//
 	// $aRes = httpRequest("GET", $las2peerUrl.'/'.'user'.'?access_token='.$_SESSION['access_token']);	
 	//
@@ -56,17 +58,25 @@ if(!isset($_SESSION['access_token'])) {
 	// } else {
 	//	// OIDC is OK
 	//	// check if user is confirmed as tutor
-	//	$userProfile = json_decode($aRes->sMsg);
-		$r = checkUserConfirmed($userProfile->sub);
-		if($r->bErr) {
+	//	$user_oidc_profile = json_decode($aRes->sMsg);
+
+	try {
+		   $user_database_entry = getSingleDatabaseEntryByValue('users', 'openIdConnectSub', $user_oidc_profile->sub);
+		   
+		   if(!$user_database_entry) {
+		   	// User has no databaseentry
+				$status = USER_STATUS::USER_NOT_CONFIRMED;
+		   } else {
+		   	if($user_database_entry['confirmed'] != 1) {
+					$status = USER_STATUS::USER_NOT_CONFIRMED;
+				} else {
+					$status = USER_STATUS::USER_IS_TUTOR;			
+				}
+		   }
+	} catch (Exception $e) {
 			$status = USER_STATUS::DATABASE_ERROR;
-			error_log($r->sMsg);
-		} else if(!$r->bIsConfirmed) {
-			$status = USER_STATUS::USER_NOT_CONFIRMED;
-		} else {
-			$status = USER_STATUS::USER_IS_TUTOR;
-		}
-	// }
+			error_log($e->getMessage());
+	}
 	
 	// DEBUG:
 	// if($aRes->bOk == FALSE or $aRes->iStatus !== 200) {
@@ -97,6 +107,8 @@ switch($status) {
 		$err_msg = '';
 		break;
 }
+
+/////////////// Start Output
 	
 switch($status) {
 	case USER_STATUS::NO_SESSION:

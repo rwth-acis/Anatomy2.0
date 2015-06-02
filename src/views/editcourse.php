@@ -52,31 +52,6 @@
   </head>
 
   <body>
-    <?php 
-      //Decide if this site is inside a separate widget
-      if(isset($_GET["widget"]) && $_GET["widget"] == "true")
-      {
-          print("<script type='text/javascript' src='../js/model-viewer-widget.js'> </script>");
-          print("<script type='text/javascript' src='../js/init-subsite.js'></script>");
-      }
-      include("menu.php"); 
-      include "../php/db_connect.php";
-      include '../php/tools.php';
-
-      if (isset($_SESSION['user_id'])) {
-        $query  = $db->query("SELECT * FROM courses WHERE id = $_GET[id]");
-        $entry = $query->fetchObject();
-        $arg = $_GET["id"];
-      }
-
-      // If the user is not logged in or he is not the creator, redirect him to the login page
-      if(!isset($entry->creator) || $entry->creator != $_SESSION['user_id']) { 
-        echo $entry;
-        //header("Location: login.php");
-        exit();
-      }
-    ?>
-    
     <header id='head' class='secondary'>
     <div class='container'>
       <div class='row'>
@@ -84,7 +59,44 @@
       </div>
     </div>
     </header>
+    <?php 
+      //Decide if this site is inside a separate widget
+      if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+      {
+          print("<script type='text/javascript' src='../js/model-viewer-widget.js'> </script>");
+          print("<script type='text/javascript' src='../js/init-subsite.js'></script>");
+      }
+      include 'menu.php'; 
+      include '../php/tools.php';
+      try {
+      	include '../php/db_connect.php';
+      } catch(Excepton $e) {
+      	error_log($e->getMessage());
+      }
 
+   	// checkUserLogin
+		$isTutor = false;
+		include 'login.php';
+		// now $user_oidc_profile and $user_database_entry are set
+
+		if($isTutor) {
+			try {
+				$entry = getSingleDatabaseEntryByValue('courses', 'id', $_GET['id']);
+			} catch(Exception $e) {
+				error_log($e->getMessage());
+			}
+	      $arg = $_GET['id'];
+      }
+
+      // If the user is not the creator, show message
+      if(!isset($entry) || !isset($entry['creator']) || $entry['creator'] != $user_database_entry['id']) { 
+       	?>
+       	<div class="alert alert-danger" role="alert">You could not be confirmed as creator of this course!</div>
+       	<?php
+      } else {
+			/* begin EDIT COURSE FORM */
+    ?>
+    
     <div id='courses'>
       <section class='container'>
         <br><br>
@@ -171,6 +183,11 @@
       <!-- Models will be inserted here -->
       </div>
     </div>
+    
+   	<?php
+			/* end EDIT COURSE FORM */
+      } 
+    ?>
   
     
     <?php include("footer.php");?>

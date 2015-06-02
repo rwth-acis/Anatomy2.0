@@ -200,6 +200,26 @@ function getUserProfile($access_token) {
 }
 
 /**
+ * Function throws exceptions.
+ * @param string $table Table from which to retrieve value
+ * @param string $key
+ * @param string $value
+ * @return array {key1=>value1, key2=>value2, ...} or NULL if $key-$value is not found in $table
+ */
+function getSingleDatabaseEntryByValue($table, $key, $value) {
+   require '../php/db_connect.php';
+
+   $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+   
+   $sqlSelect = "SELECT * FROM ".$table." WHERE ".$key."='".$value."'";
+   $sth = $db->prepare($sqlSelect);
+   $sth->execute();
+   $entry = $sth->fetch();
+   
+   return $entry;
+}
+
+/**
  * @return [bErr:bool, bIsConfirmed:bool, sMsg:string]
  */
 function checkUserConfirmed($sub) {
@@ -207,7 +227,7 @@ function checkUserConfirmed($sub) {
 	$result = new stdClass();
 
 	try {
-	   require '../php/db_connect.php';
+	   $user = getSingleDatabaseEntryByValue('users', 'openIdConnectSub', $sub);
 	} catch (Exception $e) {
 		$result->bErr = true;
 		$result->bIsConfirmed = false;
@@ -215,13 +235,6 @@ function checkUserConfirmed($sub) {
 		
 		return $result;
 	}
-
-   $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
-   
-   $sqlSelect = "SELECT confirmed FROM users WHERE openIdConnectSub='".$sub."'";
-   $sth = $db->prepare($sqlSelect);
-   $sth->execute();
-   $user = $sth->fetch();
    
    // If $user is empty, the user is not known
    if(!$user) {
@@ -235,4 +248,23 @@ function checkUserConfirmed($sub) {
    }
    
    return $result;
+}
+
+/**
+ * This function throws an exception, when the database can not be accessed.
+ *
+ * @return id or NULL, if user is not found
+ */
+function getUserId($sub) {
+
+	$result = new stdClass();
+
+   $user = getSingleDatabaseEntryByValue('users', 'openIdConnectSub', $sub);
+   
+   // If $user is empty, the user is not known
+   if(!$user) {
+   	return NULL;
+   } else {
+   	return $user->id;
+   }
 }
