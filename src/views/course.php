@@ -46,7 +46,8 @@
     <?php include("menu.php"); ?>
 
     <?php
-      //get data from db
+      // Get course data and name + email of its creator from our database based
+      // on the id given in the website URL
       include '../php/db_connect.php';
       include '../php/tools.php';
 
@@ -57,6 +58,11 @@
       
       $is_logged_in = isset($_SESSION["user_id"]) && $entry->creator == $_SESSION['user_id'];
        
+      /**
+       * Print a button which links to the editcourse.php
+       * @param type $arg id of the course
+       * @param type $class css class which should be applied to the button
+       */
       function printEditBtn($arg, $class) {
         $widgetExtension = "";
         if(isset($_GET["widget"]) && $_GET["widget"] == "true") { 
@@ -67,7 +73,12 @@
         echo "</a>";
       }
        
-      // Taken from https://css-tricks.com/snippets/php/find-urls-in-text-make-links/
+      /**
+       * Replaces all URLs in the given text by <a> tags
+       * Taken from https://css-tricks.com/snippets/php/find-urls-in-text-make-links/
+       * @param String $text 
+       * @return String
+       */
       function replaceLinks($text) {
         $reg_exUrl = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
         preg_match_all($reg_exUrl, $text, $matches);

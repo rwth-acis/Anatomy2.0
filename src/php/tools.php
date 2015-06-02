@@ -110,7 +110,7 @@ function getCourseStructure($entry) {
 /**
  * Creates the html structure of one subject entry with the given data
  * @param  object $entry Subject data from database
- * @return string/html        HTML containing the course information
+ * @return string/html        HTML containing the subject information
  */
 function getSubjectStructure($entry) {
     $html = "";
