@@ -69,7 +69,7 @@
       include 'menu.php'; 
       include '../php/tools.php';
       try {
-      	include '../php/db_connect.php';
+      	include '../php/database_connect.php';
       } catch(Excepton $e) {
       	error_log($e->getMessage());
       }
@@ -113,30 +113,30 @@
               <div class="form-group">
                 <input type="hidden" name="targetId" value="<?php echo $arg; ?>">
                 <label for="targetName">Course name:</label>
-                <input type="text" class="form-control" rows="1" name="name" id="targetName" value="<?php echo htmlentities($entry->name); ?>" required>
+                <input type="text" class="form-control" rows="1" name="name" id="targetName" value="<?php echo htmlentities($entry['name']); ?>" required>
               </div>
               <div class="form-group">
                 <label for="targetText">Course room:</label>
-                <input type="text" class="form-control" rows="1" name="roleLink" id="targetRole" value="<?php echo $entry->role_url; ?>">
+                <input type="text" class="form-control" rows="1" name="roleLink" id="targetRole" value="<?php echo $entry['role_url']; ?>">
                 <a target="_blank" href="role.php">
                   <input class="col-sm-1 btn btn-default btn-inline" tpye="button" value="?"/>
                 </a>
               </div>
               <div class="form-group">
                 <label for="targetContact">Contact:</label>
-                <textarea class="form-control" rows="3" name="contact" id="targetContact"><?php echo htmlentities($entry->contact) ?></textarea>
+                <textarea class="form-control" rows="3" name="contact" id="targetContact"><?php echo htmlentities($entry['contact']) ?></textarea>
               </div>
               <div class="form-group">
                 <label for="targetText">Description:</label>
-                <textarea class="form-control" rows="3" name="text" id="targetText"><?php echo htmlentities($entry->description) ?></textarea>
+                <textarea class="form-control" rows="3" name="text" id="targetText"><?php echo htmlentities($entry['description']) ?></textarea>
               </div>
               <div class="form-group">
                 <label for="targetDates">Dates:</label>
-                <textarea class="form-control" rows="3" name="dates" id="targetDates"><?php echo htmlentities($entry->dates) ?></textarea>
+                <textarea class="form-control" rows="3" name="dates" id="targetDates"><?php echo htmlentities($entry['dates']) ?></textarea>
               </div>
               <div class="form-group">
                 <label for="targetLinks">Links:</label>
-                <textarea class="form-control" rows="3" name="links" id="targetLinks"><?php echo htmlentities($entry->links) ?></textarea>
+                <textarea class="form-control" rows="3" name="links" id="targetLinks"><?php echo htmlentities($entry['links']) ?></textarea>
               </div>
               <button type="submit" class="btn btn-success col-xs-6" id="SubmitButton" value="Upload">Save</button>
             </form>
