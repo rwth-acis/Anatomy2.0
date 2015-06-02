@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @file welcome.js
+ * @file signin_callbacks.js
  * Callback for OpenID Connect
  */
 
@@ -24,10 +24,13 @@
 function signinCallback(result) {
   if(result === "success"){
   	 var token = getURLParameter('access_token');
-    // after successful sign in, check whether the user is known to our system
-    ajax.post("../php/checkUserKnown.php", {access_token:token}, function(data) {
-    	// DEBUG
-    	data = JSON.parse(data);
+	    // after successful sign in, check whether the user is known to our system
+	    //fake login:
+	    ajax.post("../php/checkUserKnown.php", {access_token:token, sub:oidc_userinfo.sub, email:oidc_userinfo.email, given_name:oidc_userinfo.given_name, family_name:oidc_userinfo.family_name}, function(data) {
+	    //secure:
+	    //ajax.post("../php/checkUserKnown.php", {access_token:token}, function(data) {
+			// DEBUG
+			data = JSON.parse(data);
 	 });
   } else {
     // if sign in was not successful, log the cause of the error on the console
