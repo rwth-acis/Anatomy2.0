@@ -31,74 +31,77 @@
 	<script src="../js/script.js"></script> 	
   </head>
   <body>
-    <?php 
-      include("menu.php"); 
-      // If the user is not logged in, redirect him to the login page
-      if (!isset($_SESSION['user_id'])) { 
-        header("Location: login.php");
-        exit();
-      }
-
-    ?> 
-	
     <div class="container">
 	    <h1>Create a new course</h1>
-      
-      <div class="featured-box">
-        <p>
-          Enter course name, course room URL, contact, description and dates below. If you would like help on how to creat your course room, press the "?" button.<br>
-          Models will be added afterwards.<br>
-          Press "Save when you are done.
-        </p>
-      </div>
-	    <!--- UPLOAD FORM -->
-   		<form role="form" class="form-horizontal" action="../php/upload_script_course.php<?php if(isset($_GET['widget']) && $_GET['widget']) {echo '?widget=true';} ?>" method="post" enctype="multipart/form-data" id="UploadForm">
-        <div class="form-group">
-          <label class="col-sm-2 control-label" for="targetName">Course name:</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" rows="1" name="name" id="targetName" placeholder="Enter your course name" required>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-2 control-label" for="targetRole">Course room:</label>
-          <div class="col-sm-9">
-            <input type="text" class="form-control" rows="1"name="roleLink" id="targetRole" placeholder="Enter ROLE space link">
-            <a target="_blank" href="role.php">
-              <input class="col-sm-1 btn btn-default btn-inline" type="button" value="?"/>
-            </a>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-2 control-label" for="targetContact">Contact:</label>
-          <div class="col-sm-10">
-            <textarea class="form-control" rows="3" name="contact" id="targetContact" placeholder="Enter your contact details"></textarea>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-2 control-label" for="targetText">Description:</label>
-          <div class="col-sm-10">
-            <textarea class="form-control" rows="3" name="text" id="targetText" placeholder="Enter course description"></textarea>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-2 control-label" for="targetDates">Dates:</label>
-          <div class="col-sm-10">
-            <textarea class="form-control" rows="3" name="dates" id="targetDates" placeholder="Enter dates relevant for your students"></textarea>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-2 control-label" for="targetLinks">Links:</label>
-          <div class="col-sm-10">
-            <textarea class="form-control" rows="3" name="links" id="targetLinks" placeholder="Enter links to e.g. Campus Office, L2P"></textarea>
-          </div>
-        </div>
-        <input hidden id="subject_input" name="subject_id">
-        <button type="submit" class="btn btn-success col-xs-6" id="SubmitButton" value="Upload">Save</button>
-      </form>
-      <div id="output"></div>
+    <?php 
+      include("menu.php"); 
+
+   	// checkUserLogin
+		$isTutor = false;
+		include 'login.php';
+
+		if($isTutor) {
+			/* begin ADD COURSE FORM */
+	    ?> 	      
+	      <div class="featured-box">
+	        <p>
+	          Enter course name, course room URL, contact, description and dates below. If you would like help on how to creat your course room, press the "?" button.<br>
+	          Models will be added afterwards.<br>
+	          Press "Save when you are done.
+	        </p>
+	      </div>
+		    <!--- UPLOAD FORM -->
+	   		<form role="form" class="form-horizontal" action="../php/upload_script_course.php<?php if(isset($_GET['widget']) && $_GET['widget']) {echo '?widget=true';} ?>" method="post" enctype="multipart/form-data" id="UploadForm">
+	        <div class="form-group">
+	          <label class="col-sm-2 control-label" for="targetName">Course name:</label>
+	          <div class="col-sm-10">
+	            <input type="text" class="form-control" rows="1" name="name" id="targetName" placeholder="Enter your course name" required>
+	          </div>
+	        </div>
+	        <div class="form-group">
+	          <label class="col-sm-2 control-label" for="targetRole">Course room:</label>
+	          <div class="col-sm-9">
+	            <input type="text" class="form-control" rows="1"name="roleLink" id="targetRole" placeholder="Enter ROLE space link">
+	            <a target="_blank" href="role.php">
+	              <input class="col-sm-1 btn btn-default btn-inline" type="button" value="?"/>
+	            </a>
+	          </div>
+	        </div>
+	        <div class="form-group">
+	          <label class="col-sm-2 control-label" for="targetContact">Contact:</label>
+	          <div class="col-sm-10">
+	            <textarea class="form-control" rows="3" name="contact" id="targetContact" placeholder="Enter your contact details"></textarea>
+	          </div>
+	        </div>
+	        <div class="form-group">
+	          <label class="col-sm-2 control-label" for="targetText">Description:</label>
+	          <div class="col-sm-10">
+	            <textarea class="form-control" rows="3" name="text" id="targetText" placeholder="Enter course description"></textarea>
+	          </div>
+	        </div>
+	        <div class="form-group">
+	          <label class="col-sm-2 control-label" for="targetDates">Dates:</label>
+	          <div class="col-sm-10">
+	            <textarea class="form-control" rows="3" name="dates" id="targetDates" placeholder="Enter dates relevant for your students"></textarea>
+	          </div>
+	        </div>
+	        <div class="form-group">
+	          <label class="col-sm-2 control-label" for="targetLinks">Links:</label>
+	          <div class="col-sm-10">
+	            <textarea class="form-control" rows="3" name="links" id="targetLinks" placeholder="Enter links to e.g. Campus Office, L2P"></textarea>
+	          </div>
+	        </div>
+	        <input hidden id="subject_input" name="subject_id">
+	        <button type="submit" class="btn btn-success col-xs-6" id="SubmitButton" value="Upload">Save</button>
+	      </form>
+	      <div id="output"></div>
+	    <?php
+	 	}
+	 	?>
     </div>
-    
-    <?php include("footer.php");?>
+
+	<?php    
+      include("footer.php");?>
     
     <script type="text/javascript" src="../js/tools.js"></script>
     <script type="text/javascript" src="../js/addCourse.js"></script>
