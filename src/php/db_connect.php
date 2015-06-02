@@ -19,21 +19,20 @@
  */
 
   // Sets the variables $host, $database, $user, $password
-	require '../config/database.php';
-
-	// mysql_connect - call for compatibility-reasons. The API is deprecated (http://php.net/manual/de/function.mysql-connect.php)
-    $connection = mysql_connect($host, $user, $password)
-    or die ("Unable to connect! Please check username and password");
-
-    mysql_select_db($database) or die ("Requested database does not exist!");
-
-
-	try {
-		$db = new PDO("mysql:host=$host;dbname=$database", $user, $password);
-	} catch (PDOException $e) {
-		die ('Connection failed: ' . $e->getMessage());
-		exit();
+	if( (include '../config/database.php') === false) {
+		throw new Exception("The config/database.php is missing! No information about database available.");
 	}
 
+	// mysql_connect - call for compatibility-reasons. The API is deprecated (http://php.net/manual/de/function.mysql-connect.php)
+    $connection = mysql_connect($host, $user, $password);
+    if(!$connection) {
+		//throw new Exception("Unable to connect! Please check username and password");
+	 }
+
+    if(!mysql_select_db($database)) {
+    	throw new Exception("Requested database does not exist!");
+	}
+
+	$db = new PDO("mysql:host=$host;dbname=$database", $user, $password);
+
 	return $db;
-?>
