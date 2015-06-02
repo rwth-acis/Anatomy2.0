@@ -84,7 +84,7 @@ Meeting with Yogi. Eiche-cloud (oidc-provider) connection does not work (bug), c
 The login workflow will then work like this:
 
 context|fake|later
--|-|-
+---|---|---
 oidc-callback, `ajax.post("../php/checkUserKnown.php,"` (`welcome.js` → `signin_callbacks.js`)|`access_token`,`sub`,`email`, `given_name`,`family_name`|`access_token`
 setup session (`checkUserKnown.php`)|`access_token`,`sub`|`access_token`
 get userprofile (`checkUserKnown.php`)|-|las2peer-request
@@ -93,11 +93,11 @@ create user databaseentry if not exists (`checkUserKnown.php`)|`sub`,`email`, `g
 Register workflow:
 
 context|fake|later
--|-|-
+---|---|---
 javascript-button (`login.php`), `ajax.post("../php/register.php",...)`|`$_SESSION['email']`|`$_SESSION['acess_token']`, las2peer-request
 send email (`register.php`→`register_as_tutor.php`)|-|-
 
-Login/Tutor-restricted servieces:
+Login/Tutor-restricted services:
 - upload model
 - add course
 - edit course (+ only creator)
@@ -107,11 +107,21 @@ They all `include 'login.php';`. `login.php` sets variable `$isTutor` and render
 Flow:
 
 context|fake|later
--|-|-
+---|---|---
 cookie set?, (`login.php`)|`$_SESSION['access_token']`|`$_SESSION['access_token']`
 values valid?, `(login.php)`|- (use `$_SESSION[...]`)|`$_SESSION['acess_token']`, las2peer-request
 setting `$isTutor` (`login.php`)|databasequery `$_SESSION['sub']`|databasequery `$user->sub`
 (edit course) check whether user created course (`getCourseCreator()`, `tools.php`)|databasequery `$_SESSION['sub']`|databasequery `$user->sub`
 
-Today's debuggin consisted mainly of not seeing the error of a not working database.
+Today's debugging consisted mainly of not seeing the error of a not running database.
+
+## 2.6.2015
+
+`addcourse`/`editcourse` flow:
+
+context|fake|later
+---|---|---
+User authorization (`login.php`)|see table above|see table above
+`<form action= "../php/upload_script_course.php..."`|
+
 
