@@ -565,6 +565,10 @@ img.pull-left {
   height: 40px;
 }
 
+.navigation_info {
+  display:none;
+}
+
 
 /* ==========================================================================
    FOOTER
