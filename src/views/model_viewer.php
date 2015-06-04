@@ -84,7 +84,7 @@
           <navigationInfo headlight="true" type="examine" id="navType"></navigationInfo>
           <background skyColor='1.0 1.0 1.0'> </background>
           <?php
-            if(isset($model)) {
+            if(is_object($model)) {
               echo "<inline url=\"../../$model->data_url\" onload=\"initializeModelViewer()\"> </inline>";
             }
           ?>
@@ -92,7 +92,7 @@
         </scene>
       </x3d>
       <?php
-        if(isset($model)) {
+        if(is_object($model)) {
           echo "<div id='metadata_overlay'>
             <div class='x3dom-states-head'> </div>
             <div class='x3dom-states-item-title'>Name:</div>
