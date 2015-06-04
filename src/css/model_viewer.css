@@ -34,11 +34,10 @@ p {
 }
 
 #viewer_object {
-    width: 90%;
-    height: 90%;
+    width: 100%;
+    height: 100%;
     vertical-align: middle;
-    border: 2px;
-    border-color: white;
+    border-width: 0;
 }
 
 #metadata_overlay {

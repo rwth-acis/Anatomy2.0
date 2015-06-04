@@ -66,53 +66,49 @@
         //Decide if this site is inside a separate widget
         print("<script type='text/javascript' src='../js/model-viewer-widget.js'> </script>");
       }
+      
+      include '../php/db_connect.php';
+      $model_id = filter_input(INPUT_GET, "id");
+      if (isset($model_id)) {
+        $query  = "SELECT * FROM models WHERE id = $model_id";
+        $model = $db->query($query)->fetchObject();
+      }
 
       include("toolbar.php");
     ?>
 
     <div class="row" style="position:relative; padding-left:5%; padding-right:5%">
-
-    <?php if(isset($_GET["id"])) { ?>
       <p id='debugText' style="display:none;"></p>
       <x3d id='viewer_object' showStat="false">
         <scene>
           <navigationInfo headlight="true" type="examine" id="navType"></navigationInfo>
           <background skyColor='1.0 1.0 1.0'> </background>
           <?php
-            include '../php/db_connect.php';
-            $arg    = $_GET["id"];
-            $query  = "SELECT data_url FROM models WHERE id = $arg";
-            $result = mysql_query($query);
-            $entry  = mysql_fetch_object($result);
-            echo "<inline url=\"../../$entry->data_url\" onload=\"initializeModelViewer()\"> </inline>";
+            if(is_object($model)) {
+              echo "<inline url=\"../../$model->data_url\" onload=\"initializeModelViewer()\"> </inline>";
+            }
           ?>
           <viewpoint id="viewport" DEF="viewport" centerOfRotation="0 0 0" position="0.00 0.00 5.00" orientation="-0.92 0.35 0.17 0.00" fieldOfView="0.858"> </viewpoint>
         </scene>
       </x3d>
       <?php
-        $arg    = $_GET["id"];
-        $query  = "SELECT * FROM models WHERE id = $arg";
-        $result = mysql_query($query);
-        $entry  = mysql_fetch_object($result);
-        echo "<div id='metadata_overlay'>
-          <div class='x3dom-states-head'> </div>
-          <div class='x3dom-states-item-title'>Name:</div>
-          <div class='x3dom-states-item-value'>$entry->name</div> <br>
-          <div class='x3dom-states-item-title'>Classification:</div>
-          <div class='x3dom-states-item-value'>$entry->classification</div> <br>
-          <div class='x3dom-states-item-title'>Description:</div>
-          <div class='x3dom-states-item-value'>$entry->description</div> <br>
-          <div class='x3dom-states-item-title'>Upload Date:</div>
-          <div class='x3dom-states-item-value'>$entry->upload_date</div> <br>
-          <div class='x3dom-states-item-title'><a href=\"../../$entry->data_url\">Download</a></div>
-          </div>";
+        if(is_object($model)) {
+          echo "<div id='metadata_overlay'>
+            <div class='x3dom-states-head'> </div>
+            <div class='x3dom-states-item-title'>Name:</div>
+            <div class='x3dom-states-item-value'>$model->name</div> <br>
+            <div class='x3dom-states-item-title'>Classification:</div>
+            <div class='x3dom-states-item-value'>$model->classification</div> <br>
+            <div class='x3dom-states-item-title'>Description:</div>
+            <div class='x3dom-states-item-value'>$model->description</div> <br>
+            <div class='x3dom-states-item-title'>Upload Date:</div>
+            <div class='x3dom-states-item-value'>$model->upload_date</div> <br>
+            <div class='x3dom-states-item-title'><a href=\"../../$model->data_url\">Download</a></div>
+            </div>";
+        }
       ?>
+      <!-- Creates a panel with information about mouse usage and hotkeys for navigation -->
+      <?php include("nav_info.html"); ?>
     </div>
-    <?php } else { ?>
-      <p id='debugText'>Please select model!</p>
-    <?php } ?>  <!--- ENDIF around viewer -->
-    
-    <!-- Creates a panel with information about mouse usage and hotkeys for navigation -->
-    <?php include("nav_info.html"); ?>
   </body>
 </html>

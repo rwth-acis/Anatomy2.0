@@ -16,7 +16,7 @@
  -->
 
 <Module>
-    <ModulePrefs title="Anatomy 2.0 Gallery" description="HENM Overview" author="Group2" author_email="henm1415@dbis.rwth-aachen.de" height="600" width="400">
+    <ModulePrefs title="Anatomy 2.0 Gallery" description="HENM Overview" author="Group2" author_email="henm1415@dbis.rwth-aachen.de" height="400" width="1000">
         <Require feature="opensocial-0.8"/>
     </ModulePrefs>
     <Content type="xml">

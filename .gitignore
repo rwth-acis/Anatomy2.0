@@ -80,6 +80,8 @@ model-data/*
 !model-data/helmet-5
 !model-data/knight
 
+models/*
+
 #ignore config files
 src/config/database.php
 src/config/config.php
