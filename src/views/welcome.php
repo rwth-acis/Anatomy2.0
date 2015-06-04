@@ -72,7 +72,7 @@
     <div class="container">
   <p>&nbsp;</p>
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-6">
           <div class="featured-box">
 	    <?php
 	       //Decide if this site is inside a separate widget
@@ -95,7 +95,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
           <div class="featured-box">
 	    <?php
 	       //Decide if this site is inside a separate widget
@@ -118,51 +118,9 @@
             </div>
           </div>
         </div>
-        <?php
-          //Decide if this site is inside a separate widget
-          if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
-          {
-        ?>
-        <div class="col-md-4">
-          <div class="featured-box">
-            <a href='role.php'>
-              <i class="fa fa-tachometer fa-2x"></i>
-              <div class="text">
-                  <h3>Role</h3>
-                  <p>Head to the Role learning environment and setup your own space.</p>
-              </div>
-            </a>
-          </div>
-        </div>
-        <?php
-          }
-        ?>
       </div>
       <div class="row">
-        <div class="col-md-4">
-          <div class="featured-box">
-	    <?php
-	       //Decide if this site is inside a separate widget
-	       if(isset($_GET["widget"]) && $_GET["widget"] == "true")
-	       {
-	         //we have to link to the widget versions:
-	         print("<a href='login.php?widget=true'>");
-	       }
-	       else
-	       {
-  	         //we have to link to the non-widget versions:
-	         print("<a href='login.php'>");
-	       }
-	    ?>
-            <i class="fa fa-sign-in fa-2x"></i>
-            <div class="text">
-              <h3>Login</h3>
-              <p>Want to create a course room ? Simply login in and get started.</p>
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
           <div class="featured-box">
 	    <?php
 	       //Decide if this site is inside a separate widget
@@ -185,7 +143,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
           <div class="featured-box">
 	    <?php
 	       //Decide if this site is inside a separate widget

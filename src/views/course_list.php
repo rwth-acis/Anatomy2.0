@@ -47,7 +47,8 @@
   <?php include("menu.php"); ?>
 
   <?php
-    //get data from db
+    // Get all course data and name + email of their creators from our database based
+    // on the subject id given in the website URL
     include '../php/db_connect.php';
     include '../php/tools.php';
 
@@ -67,6 +68,7 @@
     <section class='container'>
       <div class='container'>
         <div class='row'>
+          <!-- Info box with data about subject -->
           <div class='col-sm-4'>
             <div class='featured-box'>
               <img src="<?php echo "$subject->img_url"?>" >
@@ -78,7 +80,8 @@
             </div>
           </div>
 
-          <div class='col-md-8'>
+          <!-- List of all courses -->
+          <div class='col-sm-8'>
             <h3>Choose course</h3>
             <table class="table table-striped table-bordered table-hover">
               <thead>
@@ -129,6 +132,7 @@
         print("<script type='text/javascript' src='../js/init-subsite.js'></script>");
     }
   ?>
+  <!-- Library which defines behavior of the <table class="table table-striped table-bordered table-hover"> -->
   <script type="text/javascript" src="../js/jasny-bootstrap.min.js"></script>
 </body>
 </html>
