@@ -49,7 +49,7 @@
         <p>
           Enter course name, course room URL, contact, description and dates below. If you would like help on how to creat your course room, press the "?" button.<br>
           Models will be added afterwards.<br>
-          Press "Save when you are done.
+          Press "Save" when you are done.
         </p>
       </div>
 	    <!--- CREATE COURSE INPUT FORM -->

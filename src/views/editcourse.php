@@ -94,7 +94,7 @@
             <div class='featured-box'>
               Enter course name, course room URL, contact, description and dates below. If you would like help on how to create your course room, press the "?" button.<br>
               To show models in your course room, add models on the right side. You can delete models by pressing the red "x". Those models will not be shown in your course room.<br>
-              Press "Save when you are done.
+              Press "Save" when you are done.
             </div>
             
             <!-- FROM FOR EDITING INPUT VALUES -->
