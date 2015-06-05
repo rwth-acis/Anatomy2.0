@@ -19,10 +19,10 @@
  */
 ?>
 <?php
-ob_start();
-/*Debugging with FireBug+FirePHP
-  require_once '../php/fb.php';
-  session_start();*/
+/*ob_start();
+  Debugging with FireBug+FirePHP
+  require_once '../php/fb.php';*/
+  session_start();
   require '../config/config.php'; 
 ?>
   <link rel='stylesheet' type='text/css' href='../css/style.css'>
