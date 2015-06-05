@@ -91,7 +91,7 @@
       // If the user is not the creator, show message
       if(!isset($entry) || !isset($entry['creator']) || $entry['creator'] != $user_database_entry['id']) { 
        	?>
-       	<div class="alert alert-danger" role="alert">You could not be confirmed as creator of this course!</div>
+       	<div class="alert alert-danger" role="alert">You are not creator of this course!</div>
        	<?php
       } else {
 			/* begin EDIT COURSE FORM */
@@ -119,7 +119,7 @@
                 <label for="targetText">Course room:</label>
                 <input type="text" class="form-control" rows="1" name="roleLink" id="targetRole" value="<?php echo $entry['role_url']; ?>">
                 <a target="_blank" href="role.php">
-                  <input class="col-sm-1 btn btn-default btn-inline" tpye="button" value="?"/>
+                  <input class="col-sm-1 btn btn-default btn-inline" type="button" value="?"/>
                 </a>
               </div>
               <div class="form-group">

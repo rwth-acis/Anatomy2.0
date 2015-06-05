@@ -30,7 +30,7 @@ function signinCallback(result) {
 	    //secure:
 	    //ajax.post("../php/checkUserKnown.php", {access_token:token}, function(data) {
 			// DEBUG
-			data = JSON.parse(data);
+			//data = JSON.parse(data);
 	 });
   } else {
     // if sign in was not successful, log the cause of the error on the console

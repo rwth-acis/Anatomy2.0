@@ -19,16 +19,16 @@
  */
 ?>
 <?php
-  session_start();
+ob_start();
+/*Debugging with FireBug+FirePHP
+  require_once '../php/fb.php';
+  session_start();*/
   require '../config/config.php'; 
 ?>
   <link rel='stylesheet' type='text/css' href='../css/style.css'>
   <!-- Ajax helper script for menu_logged_in.js / menu_logged_out.js -->
   <script src="../js/ajax.js" type="text/javascript"></script>
   <!-- Functionality for login button (depends whether user is logged in or not) -->
-	<?php if (!isset($_SESSION['access_token'])) { ?>
-		<script src="../js/tools.js" type="text/javascript"></script>
-   <?php } ?>
  		<!-- import jQuery for AJAX calls (must) -->
 		<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
 		<!-- import Bootstrap for responsive UI (must) -->
@@ -46,15 +46,16 @@
 		<script type="text/javascript" src="../js/jsrsasign/rsapem-1.1.js"></script>
 		<script type="text/javascript" src="../js/jsrsasign/rsasign-1.2.min.js"></script>
 		<script type="text/javascript" src="../js/jsrsasign/x509-1.1.js"></script>
-		<script type="text/javascript" src="../js/signin_callbacks.js"></script>
 <!--
-
 //-->
-</script>
 
   <!-- Allows opening dropdown menu if screen size is small -->
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
   <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+
+	<script src="../js/tools.js" type="text/javascript"></script>
+	<script type="text/javascript" src="../js/signin_callbacks.js"></script>
 
   <div class='navbar navbar-inverse'>
     <div class='container'>

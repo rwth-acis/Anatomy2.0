@@ -116,7 +116,6 @@ switch($status) {
 	case USER_STATUS::OIDC_UNAUTHORIZED:
 	case USER_STATUS::OIDC_ERROR:
 	case USER_STATUS::DATABASE_ERROR:
-	case USER_STATUS::USER_NOT_CONFIRMED:
 		// show error
 		?>
 		<div class="alert alert-danger" role="alert"><?php echo $err_msg?></div>
@@ -157,17 +156,24 @@ switch($status) {
 	case USER_STATUS::USER_NOT_CONFIRMED:
 		// show button to request confirmation as tutor
 		?>
-		<button id="sendEmail">Send Email (Please push only one time.)</button>
-		<div id="emailConfirmation"></div>
-		<script>
-			document.getElementById('sendEmail').innerHtml = "Resend Email";
-			document.getElementById('emailConfirmation').innerHrml = "Email succesfully sent!";
-		</script>
+			<div class="login-card" id="div_lecturer_registration">
+		<div >
+	    		<button class="login login-submit" id="btn_request_lecturer">I'm a lecturer</button>
+		    </div>
+		      <b>What is the purpose of being a lecturer?</b> <br>
+		      The information is required only for creating your own courses, uploading models and presenting models in <i>lecturer mode</i>.
+		      <b>As a student, you do not need to register as lecturer.</b>
+		</div>
 		<?php
 }
 
 switch($status) {
 	case USER_STATUS::USER_IS_TUTOR:
 		$isTutor = true;
+		break;
+	default:
+		?>
+		    <script src="../js/login.js"></script>
+		<?php
 }
 

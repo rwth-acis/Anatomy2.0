@@ -21,6 +21,7 @@
  * Handler function for clicking the "Submit" button on login.php
  * Does an ajax post request to server (where login credentials are checked)
  */
+ /*
 function onClickLogin() {
   var email = document.getElementById('login_email').value;
   var password = document.getElementById('login_password').value;
@@ -46,3 +47,38 @@ function onClickLogin() {
     });
   }
 }
+*/
+
+function initLogin() {
+  btn = document.getElementById('btn_request_lecturer');
+  if(btn !== null) {
+    btn.addEventListener('click', onRequestLecturerClick, false);
+  }
+}
+
+/**
+ * Event handler for register (=create account) button in register_as_tutor.php
+ * Sends ajax request to server to create account.
+ */
+function onRequestLecturerClick() {
+    ajax.post("../php/register_as_tutor.php", {}, function(msg) {
+    	console.log(msg);
+//      msg = JSON.parse(msg);
+      // Redirect to "success" page if account creation was successfull
+      div = document.getElementById("div_lecturer_registration");
+      if (msg.result === "ok" || true) {
+        		div.innerHTML = `A 3DModels administrator of your university <b>has been contacted</b>. The administrator will
+        enable your account. Afterwards, you can login with lecturer rights.
+        <br> <br>
+        <b>Why is a confirmation needed?</b> <br>
+        Your account enables functionality that is restricted to be used by lecturers only. The administrator therefore makes sure, that
+        only lecturers have an account.`;
+      }
+      else {
+      }
+    });
+  }
+
+/// Call initialize for registration when DOM loaded
+document.addEventListener('DOMContentLoaded', initLogin, false);
+
