@@ -36,6 +36,7 @@
 		$_SESSION['access_token'] = $access_token;
 		//from fake login:
 		$_SESSION['sub'] = $userProfile->sub;
+		$_SESSION['email'] = $userProfile->email;
 		// fake_end		
 
 		////// Get user-profile from las2peer-service     not needed for fake login
