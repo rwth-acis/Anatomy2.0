@@ -61,20 +61,26 @@ function initLogin() {
  * Sends ajax request to server to create account.
  */
 function onRequestLecturerClick() {
+  btn = document.getElementById('btn_request_lecturer');
+
+  // feedback button pressed  
+  btn.style.opacity = .5; //For real browsers;
+  btn.style.filter = "alpha(opacity=50)"; //For IE;
+  
     ajax.post("../php/register_as_tutor.php", {}, function(msg) {
     	console.log(msg);
-//      msg = JSON.parse(msg);
-      // Redirect to "success" page if account creation was successfull
-      div = document.getElementById("div_lecturer_registration");
-      if (msg.result === "ok" || true) {
-        		div.innerHTML = `A 3DModels administrator of your university <b>has been contacted</b>. The administrator will
-        enable your account. Afterwards, you can login with lecturer rights.
-        <br> <br>
-        <b>Why is a confirmation needed?</b> <br>
-        Your account enables functionality that is restricted to be used by lecturers only. The administrator therefore makes sure, that
-        only lecturers have an account.`;
+      msg = JSON.parse(msg);      
+      if (msg.result === true) {
+	        		div.innerHTML = `A 3DModels administrator of your university <b>has been contacted</b>. The administrator will
+	        enable your account. Afterwards, you can login with lecturer rights.
+	        <br> <br>
+	        <b>Why is a confirmation needed?</b> <br>
+	        Your account enables functionality that is restricted to be used by lecturers only. The administrator therefore makes sure, that
+	        only lecturers have an account.`;
       }
       else {
+		  btn.style.opacity = 1; //For real browsers;
+		  btn.style.filter = "alpha(opacity=100)"; //For IE;
       }
     });
   }
