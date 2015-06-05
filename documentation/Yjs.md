@@ -1,5 +1,5 @@
 ### 5.6.2015
-Erste Versuche mit `y.js`:
+Erste Versuche mit `y.js`(https://dadamonad.github.io/yjs/tutorial/):
 client1:
 ```php
 <script src="./y.js"></script>
@@ -106,6 +106,49 @@ project root
 Dadurch entstehen Konflikte bei Versionsunterschieden, allerdings vebraucht das weniger Speicher. `bower` ist einzig auf Frontendentwicklung ausgerichtet.
 http://bower.io/
 
-##### `Node.js`
+##### Aktueller Stand
 
-Jetzt 
+Stand bis jetzt der Synchronisation:
+- `init-subsite.js`
+    Name|Aufgabe
+    ---|---
+    `subscribeIWC(topic, callback)`|Registriert eine IWC-Message bei Role
+    `publishIWC(topic, content)`|Sendet eine Message an Role und damit an alle Widgets in diesem Raum
+    `receiveMessage(event)`|Bearbeitet Eintritt in den Lernraum, leitet das `event` sonst an Callbacks weiter
+    Kümmert sich um die bei Eintritt in den Lernraum empfangenen Nachrichten, gibt ein Lebenszeichen an die anderen und verwaltet die Referenzen auf die Callbacks für die einzelnen IWC-Messages in `subscribeCallbacks = new Map();`
+- `model-viewer-widget.js`
+    Name|Aufgabe
+    ---|---
+    `initWidget()`|keine
+    `receiveModelSelectedByOverview(msgContent)`|Lade das Modell in den Viewer, welches in `msgContent` angegeben ist
+    `initWidget` wird von `model_viewer.php` ausgeführt, `receiveMo...iew` wird als IWC-Message registriert.
+- `viewer.js`
+	Name|Aufgabe
+    ---|---
+	`getParameterByName(name)`|Query Parameter aus der URL
+	`onReloadRequest()`|"Function for reloading synchronously with other widgets"
+    `onUserConnected(extras)`|"Function for initial state sync from other clients"
+    `initializeModelViewer()`|"Sets up the X3D viewport and subscribes to mouse callbacks for propagating changes."
+    `onKeyDown(e)`|Debuggingzweck
+    `onUserConnected(message)`|Benachrichtigt neue User über aktuelle View
+    `onRemoteUpdate(extras)`|Synchronisiert View mit Änderung eines anderen Clients
+    `onLocalUpdate()`|Sendet eigene Position an andere Clients
+    `viewpointChanged(evt)`|`x3dom`-EventListener, ruft `onLocalUpdate()` in einem Callback auf
+    `log(message)`|Debugzweck
+    `receiveModelSelectedByOverview(msgContent)`|Lade das Modell in den Viewer, welches in `msgContent` angegeben ist
+    `synchronizePositionAndOrientation()`|Setzt `x3dom`-View auf zuletzt erhaltene Werte
+   `savePositionAndOrientation()`|Speichert aktuelle View zwischen
+   `finishedSettingView()`|Callback aufgerufen, wenn die Bewegung zu einer View beendet ist ("interpolation")
+   `onRemoteLecturerMode(extras)`|Setzt Lecturer-Mode, verändert den Button und setzt das Flag
+	`toggleLecturerMode()`|`onclick`-Funktion des Buttons in `toolbar.php`, wird auch bei verlassen des Raumes aufgerufen (über `window.onbeforeunload`)
+- (nicht direkt Synchronisation) `x3d-extensions.js`
+	- Kamera auf ganze Szene setzen (kann evtl. durch `x3dom`'s `showAll` ersetzt werden
+	- Setzen und Abfrage der aktuellen View: Translation und Rotation
+	- Interpolation aus einer aktuellen in eine neue View
+
+Zusammenfassung: Einige Aufgaben werden auf jeden Fall erhalten bleiben, so z.B. das wechseln des Lecturer-modes. Die Synchronisationsaufgaben können hoffentlich durch `y.js` gelöst werden.
+Eventuell kann man den Code auf vielleicht ⅓ des Umfanges reduzieren?
+
+##### Test auf lokaler Maschine
+
+Zuerst noch ein weiterer Test von `y.js` aus dem Tutorial
