@@ -71,7 +71,9 @@ function onRequestLecturerClick() {
     	console.log(msg);
       msg = JSON.parse(msg);      
       if (msg.result === true) {
-	        		div.innerHTML = `A 3DModels administrator of your university <b>has been contacted</b>. The administrator will
+
+			   div = document.getElementById("div_lecturer_registration");
+			  div.innerHTML = `A 3DModels administrator of your university <b>has been contacted</b>. The administrator will
 	        enable your account. Afterwards, you can login with lecturer rights.
 	        <br> <br>
 	        <b>Why is a confirmation needed?</b> <br>
