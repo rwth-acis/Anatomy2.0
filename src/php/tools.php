@@ -138,4 +138,148 @@ function printLinkBtn($url, $class, $text) {
   echo "<button class='$class' type='button'>$text</button>";
   echo "</a>";
 }
-?>
+
+// Method: POST, PUT, GET etc
+// Data: array("param" => "value") ==> index.php?param=value
+// copy-pasted from
+// http://stackoverflow.com/questions/9802788/call-a-rest-api-in-php/9802854#9802854
+function httpRequest($method, $url, $data = false)
+{
+    $curl = curl_init();
+
+    switch ($method)
+    {
+        case "POST":
+            curl_setopt($curl, CURLOPT_POST, 1);
+
+            if ($data)
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+            break;
+        case "PUT":
+            curl_setopt($curl, CURLOPT_PUT, 1);
+            break;
+        default:
+            if ($data)
+                $url = sprintf("%s?%s", $url, http_build_query($data));
+    }
+
+    // Optional Authentication:
+    // curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+    // curl_setopt($curl, CURLOPT_USERPWD, "username:password");
+
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+
+    $res_exec = curl_exec($curl);
+    // To avoid warnings:
+    if (!isset($result)) 
+       $result = new stdClass();
+       
+    if($res_exec == FALSE) {
+    	$result->bOk = FALSE;
+    	$result->sMsg = curl_error($curl);
+    } else {
+    	$result->bOk = TRUE;
+    	$result->sMsg = $res_exec;
+    	$result->iStatus = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    }
+
+    curl_close($curl);
+
+    return $result;
+}
+
+
+/**
+ * Requests a user-profile from the las2peer-login-service.
+ * @param  string The token that is send to the OIDC-provider
+ * @return struct {'bOk':boolean, 'sMsg':string}, sMsg is userprofile in JSON on success and errormessage on fail
+ */
+function getUserProfile($access_token) {
+	$result = new stdClass();
+	$result->success = false;
+	$result->message = '';
+	
+	$oidc_request = httpRequest("GET", $las2peerUrl.'/'.'user'.'?access_token='.$access_token);
+	
+	if($oidc_request->bOk == FALSE or $oidc_request->iStatus !== 200) {
+		$result->bOk = false;
+		$result->sMsg = $oidc_request->sMsg;
+	} else {
+		error_log('3dnrt/user call unsuccessfull: '.$oidc_request->sMsg);
+		$result->bOk = true;
+		$result->message = $oidc_request->sMsg;
+	}
+		
+	return $result;
+}
+
+/**
+ * Function throws exceptions.
+ * @param string $table Table from which to retrieve value
+ * @param string $key
+ * @param string $value
+ * @return array {key1=>value1, key2=>value2, ...} or NULL if $key-$value is not found in $table
+ */
+function getSingleDatabaseEntryByValue($table, $key, $value) {
+   require '../php/db_connect.php';
+
+   $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+   
+   $sqlSelect = "SELECT * FROM ".$table." WHERE ".$key."='".$value."'";
+   $sth = $db->prepare($sqlSelect);
+   $sth->execute();
+   $entry = $sth->fetch();
+   
+   return $entry;
+}
+
+/**
+ * @return [bErr:bool, bIsConfirmed:bool, sMsg:string]
+ */
+function checkUserConfirmed($sub) {
+
+	$result = new stdClass();
+
+	try {
+	   $user = getSingleDatabaseEntryByValue('users', 'openIdConnectSub', $sub);
+	} catch (Exception $e) {
+		$result->bErr = true;
+		$result->bIsConfirmed = false;
+		$result->sMsg = $e->getMessage();
+		
+		return $result;
+	}
+   
+   // If $user is empty, the user is not known
+   if(!$user) {
+   	$result->bErr = false;
+   	$result->bIsConfirmed = false;
+   	$result->sMsg = "User has no databaseentry.";
+   } else {
+   	$result->bErr = false;
+   	$result->bIsConfirmed = ($user['confirmed'] == 1);
+   	$result->sMsg = "Value queried from database.";
+   }
+   
+   return $result;
+}
+
+/**
+ * This function throws an exception, when the database can not be accessed.
+ *
+ * @return id or NULL, if user is not found
+ */
+function getUserId($sub) {
+
+	$result = new stdClass();
+
+   $user = getSingleDatabaseEntryByValue('users', 'openIdConnectSub', $sub);
+   
+   // If $user is empty, the user is not known
+   if(!$user) {
+   	return NULL;
+   } else {
+   	return $user->id;
+   }
+}

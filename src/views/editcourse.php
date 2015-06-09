@@ -52,30 +52,6 @@
   </head>
 
   <body>
-    <?php 
-      //Decide if this site is inside a separate widget
-      if(isset($_GET["widget"]) && $_GET["widget"] == "true")
-      {
-          print("<script type='text/javascript' src='../js/model-viewer-widget.js'> </script>");
-          print("<script type='text/javascript' src='../js/init-subsite.js'></script>");
-      }
-      include("menu.php"); 
-      include "../php/db_connect.php";
-      include '../php/tools.php';
-
-      if (isset($_SESSION['user_id'])) {
-        $query  = $db->query("SELECT * FROM courses WHERE id = $_GET[id]");
-        $entry = $query->fetchObject();
-        $arg = $_GET["id"];
-      }
-
-      // If the user is not logged in or he is not the creator, redirect him to the login page
-      if(!isset($entry->creator) || $entry->creator != $_SESSION['user_id']) { 
-        header("Location: login.php");
-        exit();
-      }
-    ?>
-    
     <header id='head' class='secondary'>
     <div class='container'>
       <div class='row'>
@@ -83,7 +59,44 @@
       </div>
     </div>
     </header>
+    <?php 
+      //Decide if this site is inside a separate widget
+      if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+      {
+          print("<script type='text/javascript' src='../js/model-viewer-widget.js'> </script>");
+          print("<script type='text/javascript' src='../js/init-subsite.js'></script>");
+      }
+      include 'menu.php'; 
+      include '../php/tools.php';
+      try {
+      	include '../php/db_connect.php';
+      } catch(Excepton $e) {
+      	error_log($e->getMessage());
+      }
+      
+      // checkUserLogin
+      $isTutor = false;
+      include 'login.php';
+      // now $user_oidc_profile and $user_database_entry are set
 
+      if($isTutor) {
+        try {
+          $entry = getSingleDatabaseEntryByValue('courses', 'id', filter_input(INPUT_GET, 'id'));
+        } catch(Exception $e) {
+          error_log($e->getMessage());
+        }
+        $arg = filter_input(INPUT_GET, 'id');
+      }
+
+      // If the user is not the creator, show message
+      if(!isset($entry) || !isset($entry['creator']) || $entry['creator'] != $user_database_entry['id']) { 
+       	?>
+       	<div class="alert alert-danger" role="alert">You are not creator of this course!</div>
+       	<?php
+      } else {
+			/* begin EDIT COURSE FORM */
+    ?>
+    
     <div id='courses'>
       <section class='container'>
         <br><br>
@@ -102,31 +115,31 @@
               <div class="form-group">
                 <input type="hidden" name="targetId" value="<?php echo $arg; ?>">
                 <label for="targetName">Course name:</label>
-                <input type="text" class="form-control" rows="1" name="name" id="targetName" value="<?php echo htmlentities($entry->name); ?>" required>
+                <input type="text" class="form-control" rows="1" name="name" id="targetName" value="<?php echo htmlentities($entry['name']); ?>" required>
               </div>
               <div class="form-group">
                 <label for="targetText">Course room:</label>
-                <input type="text" class="form-control" rows="1" name="roleLink" id="targetRole" placeholder="Enter ROLE space link" value="<?php echo $entry->role_url; ?>">
+                <input type="text" class="form-control" rows="1" name="roleLink" id="targetRole" placeholder="Enter ROLE space link" value="<?php echo $entry['role_url']; ?>">
                 <!-- Help button which opens role.php in new tab. TODO: Could be done more specific and in place. Also in addcourse.php -->
                 <a target="_blank" href="role.php">
-                  <input class="col-sm-1 btn btn-default btn-inline" tpye="button" value="?"/>
+                  <input class="col-sm-1 btn btn-default btn-inline" type="button" value="?"/>
                 </a>
               </div>
               <div class="form-group">
                 <label for="targetContact">Contact:</label>
-                <textarea class="form-control" rows="3" name="contact" id="targetContact" placeholder="Enter your contact details, e.g. enter university name, department, address, phone number, fax number""><?php echo htmlentities($entry->contact) ?></textarea>
+                <textarea class="form-control" rows="3" name="contact" id="targetContact" placeholder="Enter your contact details, e.g. enter university name, department, address, phone number, fax number""><?php echo htmlentities($entry['contact']); ?></textarea>
               </div>
               <div class="form-group">
                 <label for="targetText">Description:</label>
-                <textarea class="form-control" rows="3" name="text" id="targetText"  placeholder="Enter course description"><?php echo htmlentities($entry->description) ?></textarea>
+                <textarea class="form-control" rows="3" name="text" id="targetText"  placeholder="Enter course description"><?php echo htmlentities($entry['description']); ?></textarea>
               </div>
               <div class="form-group">
                 <label for="targetDates">Dates:</label>
-                <textarea class="form-control" rows="3" name="dates" id="targetDates" placeholder="Enter dates for online appointments which are relevant for your students"><?php echo htmlentities($entry->dates) ?></textarea>
+                <textarea class="form-control" rows="3" name="dates" id="targetDates" placeholder="Enter dates for online appointments which are relevant for your students"><?php echo htmlentities($entry['dates']); ?></textarea>
               </div>
               <div class="form-group">
                 <label for="targetLinks">Links:</label>
-                <textarea class="form-control" rows="3" name="links" placeholder="Enter external links which provide additional information, e.g. links to Campus Office, L2P" id="targetLinks"><?php echo htmlentities($entry->links) ?></textarea>
+                <textarea class="form-control" rows="3" name="links" placeholder="Enter external links which provide additional information, e.g. links to Campus Office, L2P" id="targetLinks"><?php echo htmlentities($entry['links']); ?></textarea>
               </div>
               <button type="submit" class="btn btn-success col-xs-6" id="SubmitButton" value="Upload">Save</button>
             </form>
@@ -173,6 +186,11 @@
       <!-- Models will be inserted here -->
       </div>
     </div>
+    
+   	<?php
+			/* end EDIT COURSE FORM */
+      } 
+    ?>
   
     
     <?php include("footer.php");?>

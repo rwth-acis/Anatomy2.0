@@ -36,7 +36,13 @@ $links = filter_input(INPUT_POST, 'links');
 $subject_id = filter_input(INPUT_POST, 'subject_id');
 
 // Get id of currently logged in user
-$creator = $_SESSION["user_id"];
+// TODO las2peer-call
+// with $_SESSION['access_token']
+
+ob_start();
+include '../views/login.php';
+ob_end_clean();
+$creator = $user_database_entry['id'];	
 	
 // Create database-entry
 $sql = "INSERT INTO courses (name, description, creator, role_url, contact, dates, links, subject_id) VALUES ('$name','$text', $creator, '$role_link', '$contact', '$dates', '$links', '$subject_id')";

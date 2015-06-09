@@ -31,19 +31,18 @@
 	<script src="../js/script.js"></script> 	
   </head>
   <body>
-    <?php 
-      include("menu.php"); 
-      // If the user is not logged in, redirect him to the login page
-      if (!isset($_SESSION['user_id'])) { 
-        header("Location: login.php");
-        exit();
-      }
-
-    ?> 
-	
     <div class="container">
 	    <h1>Create a new course</h1>
+    <?php 
+      include("menu.php");
       
+      // checkUserLogin
+      $isTutor = false;
+      include 'login.php';
+
+      if($isTutor) {
+        /* begin ADD COURSE FORM */
+    ?> 
       <!-- User info text box -->
       <div class="featured-box">
         <p>
@@ -99,9 +98,12 @@
       </form>
       <div id="output"></div>	    
       <!--- CREATE COURSE INPUT FORM ENDING -->
+    <?php
+      }
+	 	?>
     </div>
-    
-    <?php include("footer.php");?>
+
+	<?php include("footer.php");?>
     
     <script type="text/javascript" src="../js/tools.js"></script>
     <script type="text/javascript" src="../js/addCourse.js"></script>

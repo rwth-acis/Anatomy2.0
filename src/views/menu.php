@@ -19,22 +19,43 @@
  */
 ?>
 <?php
+/*ob_start();
+  Debugging with FireBug+FirePHP
+  require_once '../php/fb.php';*/
   session_start();
+  require '../config/config.php'; 
 ?>
   <link rel='stylesheet' type='text/css' href='../css/style.css'>
   <!-- Ajax helper script for menu_logged_in.js / menu_logged_out.js -->
   <script src="../js/ajax.js" type="text/javascript"></script>
   <!-- Functionality for login button (depends whether user is logged in or not) -->
-  <?php if (isset($_SESSION['user_id'])) { ?>
-    <script src="../js/menu_logged_in.js" type="text/javascript"></script>
-  <?php } else { ?>
-    <script src="../js/tools.js" type="text/javascript"></script>
-    <script src="../js/menu_logged_out.js" type="text/javascript"></script>
-  <?php } ?>
+ 		<!-- import jQuery for AJAX calls (must) -->
+		<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+		<!-- import Bootstrap for responsive UI (must) -->
+		<script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+		<!-- import JWS and JSRSASIGN (must) -->
+		<script type="text/javascript" src="../js/jsjws/jws-2.0.js"></script>
+		<script type="text/javascript" src="../js/jsrsasign/ext/base64.js"></script>
+		<script type="text/javascript" src="../js/jsrsasign/ext/jsbn.js"></script>
+		<script type="text/javascript" src="../js/jsrsasign/ext/jsbn2.js"></script>
+		<script type="text/javascript" src="../js/jsrsasign/ext/rsa.js"></script>
+		<script type="text/javascript" src="../js/jsrsasign/ext/rsa2.js"></script>
+		<script type="text/javascript" src="../js/jsrsasign/asn1hex-1.1.js"></script>
+		<script type="text/javascript" src="../js/jsrsasign/base64x-1.1.js"></script>
+		<script type="text/javascript" src="../js/jsrsasign/crypto-1.1.js"></script>
+		<script type="text/javascript" src="../js/jsrsasign/rsapem-1.1.js"></script>
+		<script type="text/javascript" src="../js/jsrsasign/rsasign-1.2.min.js"></script>
+		<script type="text/javascript" src="../js/jsrsasign/x509-1.1.js"></script>
+<!--
+//-->
 
   <!-- Allows opening dropdown menu if screen size is small -->
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
   <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+
+	<script src="../js/tools.js" type="text/javascript"></script>
+	<script type="text/javascript" src="../js/signin_callbacks.js"></script>
 
   <div class='navbar navbar-inverse'>
     <div class='container'>
@@ -83,15 +104,29 @@
           <li><a href='help.php'>Help</a></li>");
   }
 ?>
-          <!-- Button will show "login" or "logout" based on current login status of user.
-            If user_id is set, the user is currently logged in -->
           <li>
-            <a href='#' id='menu_login'>
-            <?php if (isset($_SESSION['user_id'])) { echo ("Logout"); } else { echo("Login"); } ?>
-                  </a>
+						<span id="signinButton">
+							<span class="oidc-signin"
+								data-callback="signinCallback"
+								data-name="Learning Layers"
+								data-logo="https://raw.githubusercontent.com/learning-layers/LayersToolTemplate/master/extras/logo.png"
+								data-server="https://api.learning-layers.eu/o/oauth2"
+								data-clientid=<?php echo($oidcClientId); ?>
+								data-scope="openid phone email address profile">
+							</span>
+						</span>
           </li>
         </ul>
       </div>
     </div>
   </div>
-  </br></br>
+  <script type="text/javascript">
+  (function() {
+    var po = document.createElement('script'); 
+    po.type = 'text/javascript'; 
+    po.async = true;
+    po.src = '../js/oidc-button.js';
+    var s = document.getElementsByTagName('script')[0]; 
+    s.parentNode.insertBefore(po, s);
+  })();
+  </script>

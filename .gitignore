@@ -74,6 +74,7 @@ Temporary Items
 *#
 
 #ignore models exept for the four example models
+models/*
 model-data/*
 !model-data/deer
 !model-data/raptor
@@ -85,3 +86,16 @@ models/*
 #ignore config files
 src/config/database.php
 src/config/config.php
+
+#ignore Eclipse project files
+.buildpath
+.project
+.settings
+
+# ignore server-configuration and info-page
+php.ini
+info.php
+
+# ignore FirePHP-files
+src/php/FirePHP.class.php
+src/php/fb.php
