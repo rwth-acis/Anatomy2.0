@@ -110,8 +110,11 @@
 
 	<?php include("footer.php");?>
     
+  <?php if($isTutor) { ?>
     <script type="text/javascript" src="../js/tools.js"></script>
     <script type="text/javascript" src="../js/addCourse.js"></script>
+  <?php } ?>
+    
   </body>
 
 </html>
