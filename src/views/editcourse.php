@@ -29,10 +29,7 @@
     <script type='text/javascript' src='../js/x3dom.js'> </script>
 
     <script type='text/javascript' src='../js/x3d-extensions.js'> </script>
-    <script type='text/javascript' src='../js/viewer.js'> </script>
-    <link type='text/css' rel='stylesheet' href='http://www.x3dom.org/download/x3dom.css'> </link>
-
-    <link rel='stylesheet' type='text/css' href='../css/model_viewer.css'></link>
+    <link type='text/css' rel='stylesheet' href='http://www.x3dom.org/download/x3dom.css'/>
 
     <!-- Additional styles -->
     <link rel='stylesheet' type='text/css' href='../css/bootstrap.min.css'>
@@ -52,10 +49,12 @@
   </head>
 
   <body>
+    <?php include "menu.php"; ?>
+    
     <header id='head' class='secondary'>
     <div class='container'>
       <div class='row'>
-          <h1>Edit Your Course</h1>
+        <h1>Edit Your Course</h1>
       </div>
     </div>
     </header>
@@ -65,8 +64,7 @@
       {
           print("<script type='text/javascript' src='../js/model-viewer-widget.js'> </script>");
           print("<script type='text/javascript' src='../js/init-subsite.js'></script>");
-      }
-      include 'menu.php'; 
+      } 
       include '../php/tools.php';
       try {
       	include '../php/db_connect.php';
@@ -86,15 +84,15 @@
           error_log($e->getMessage());
         }
         $arg = filter_input(INPUT_GET, 'id');
-      }
 
-      // If the user is not the creator, show message
-      if(!isset($entry) || !isset($entry['creator']) || $entry['creator'] != $user_database_entry['id']) { 
-       	?>
-       	<div class="alert alert-danger" role="alert">You are not creator of this course!</div>
-       	<?php
-      } else {
-			/* begin EDIT COURSE FORM */
+
+        // If the user is not the creator, show message
+        if(!isset($entry) || !isset($entry['creator']) || $entry['creator'] != $user_database_entry['id']) { 
+          ?>
+          <div class="alert alert-danger" role="alert">Someone else created this course. Only the creator is able to edit a course. Please contact the creator if something has to be changed.</div>
+          <?php
+        } else {
+        /* begin EDIT COURSE FORM */
     ?>
     
     <div id='courses'>
@@ -189,7 +187,8 @@
     
    	<?php
 			/* end EDIT COURSE FORM */
-      } 
+        } 
+      }
     ?>
   
     
