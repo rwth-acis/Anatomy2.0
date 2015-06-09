@@ -14,8 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @file course.php
- * Webpage for viewing a single course
+ * @file course_delete.php
+ * Webpage for deleting a single course
  */
 ?>
 <!DOCTYPE html>
@@ -89,6 +89,8 @@
                   <th>Course name</th>
                   <th>Created by</th>
                   <th>Created at</th>
+                  <th></th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody data-link="row" class="rowlink">
@@ -97,8 +99,10 @@
                 ?>
                 <tr>
                   <td><a href="course.php?id=<?php echo $course["id"]; ?>"><?php echo $course["name"]; ?></a></td>
-                    <td><?php echo $course["given_name"]." ".$course["family_name"]; ?></td>
-                    <td><?php echo $course["edit_date"]; ?></td>
+                  <td><?php echo $course["given_name"]." ".$course["family_name"]; ?></td>
+                  <td><?php echo $course["edit_date"]; ?></td>
+                  <td class="rowlink-skip"><input type="button" data-id="<?php echo $course["id"];?>" class="btn btn-edit btn-sm btn-success btn-block" value="Edit"/></td>
+                  <td class="rowlink-skip"><input type="button" data-id="<?php echo $course["id"];?>" class="btn btn-delete btn-sm btn-warning btn-block" value="Delete"</td>
                 </tr>
                 <?php
                   }
@@ -116,10 +120,8 @@
 
   <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
   <script src="../js/modernizr-latest.js"></script>
-  <script src="../js/jquery.cslider.js"></script>
   <script src="../js/custom.js"></script>
   <script type='text/javascript' src='../js/x3d-extensions.js'> </script>
-  <script type='text/javascript' src='../js/viewer.js'> </script>
   <!-- General functionality (used in menuToolbar.js) -->
   <script type="text/javascript" src="../js/tools.js"></script>
   <!-- The library for the copy to clipboard feature in the toolbar -->
@@ -133,6 +135,8 @@
     }
   ?>
   <!-- Library which defines behavior of the <table class="table table-striped table-bordered table-hover"> -->
-  <script type="text/javascript" src="../js/jasny-bootstrap.min.js"></script>
+  <!--<script type="text/javascript" src="../js/jasny-bootstrap.min.js"></script>-->
+  <script type="text/javascript" src="../js/ajax.js"></script>
+  <script type="text/javascript" src="../js/course-list.js"></script>
 </body>
 </html>
