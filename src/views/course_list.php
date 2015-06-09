@@ -116,10 +116,8 @@
 
   <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
   <script src="../js/modernizr-latest.js"></script>
-  <script src="../js/jquery.cslider.js"></script>
   <script src="../js/custom.js"></script>
   <script type='text/javascript' src='../js/x3d-extensions.js'> </script>
-  <script type='text/javascript' src='../js/viewer.js'> </script>
   <!-- General functionality (used in menuToolbar.js) -->
   <script type="text/javascript" src="../js/tools.js"></script>
   <!-- The library for the copy to clipboard feature in the toolbar -->
