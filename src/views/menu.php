@@ -72,9 +72,7 @@
           <span class='icon-bar'></span>
           <span class='icon-bar'></span>
         </button>
-        <a class='navbar-brand' href='welcome.php?widget=true'>
-          <img src='../images/logo.png' class='head-logo' alt='HENM: 3D Models'>
-        </a>
+        <img src='../images/logo.png' class='head-logo' alt='HENM: 3D Models'>
       </div>
       <div id='henm-nav-bar' class='collapse navbar-collapse'>
         <ul class='nav navbar-nav pull-right mainNav'>
@@ -92,9 +90,7 @@
           <span class='icon-bar'></span>
           <span class='icon-bar'></span>
         </button>
-        <a class='navbar-brand' href='welcome.php'>
-          <img src='../images/logo.png' class='head-logo' alt='HENM: 3D Models'>
-        </a>
+        <img src='../images/logo.png' class='head-logo' alt='HENM: 3D Models'>
       </div>
       <div id='henm-nav-bar' class='collapse navbar-collapse'>
         <ul class='nav navbar-nav pull-right mainNav'>
