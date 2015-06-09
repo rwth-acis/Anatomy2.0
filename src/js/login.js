@@ -44,12 +44,14 @@ function onRequestLecturerClick() {
       msg = JSON.parse(msg);      
       if (msg.result === true) {
 
-			   div = document.getElementById("div_lecturer_registration");
-			  div.innerHTML = "A 3DModels administrator of your university <b>has been contacted</b>. The administrator will enable your account. Afterwards, you have all lecturer rights." +
+			  div = document.getElementById("div_lecturer_registration");
+			  div.innerHTML = "<p>" +
+          "A 3DModels administrator of your university <b>has been contacted</b>. The administrator will enable your account. Afterwards, you have all lecturer rights." +
 	        "<br> <br>" +
 	        "<b>Why is a confirmation needed?</b> <br>" +
 	        "Your account enables functionality that is restricted to be used by lecturers only. The administrator therefore makes sure, that" +
-	        "only lecturers have an account";
+	        "only lecturers have an account\n" +
+          "</p>";
       }
       else {
 		  btn.style.opacity = 1; //For real browsers;

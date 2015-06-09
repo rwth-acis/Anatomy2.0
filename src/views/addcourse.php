@@ -31,11 +31,15 @@
 	<script src="../js/script.js"></script> 	
   </head>
   <body>
-    <div class="container">
-	    <h1>Create a new course</h1>
+    <?php include("menu.php"); ?>
+    <header id='head' class='secondary'>
+    <div class='container'>
+      <div class='row'>
+        <h1>Create a new course</h1>
+      </div>
+    </div>
+    </header>
     <?php 
-      include("menu.php");
-      
       // checkUserLogin
       $isTutor = false;
       include 'login.php';
@@ -43,6 +47,7 @@
       if($isTutor) {
         /* begin ADD COURSE FORM */
     ?> 
+    <div class='container'>
       <!-- User info text box -->
       <div class="featured-box">
         <p>
@@ -96,12 +101,12 @@
         <input hidden id="subject_input" name="subject_id">
         <button type="submit" class="btn btn-success col-xs-6" id="SubmitButton" value="Upload">Save</button>
       </form>
-      <div id="output"></div>	    
+      <div id="output"></div>	   
+    </div> 
       <!--- CREATE COURSE INPUT FORM ENDING -->
     <?php
       }
 	 	?>
-    </div>
 
 	<?php include("footer.php");?>
     

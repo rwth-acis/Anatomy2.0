@@ -86,7 +86,7 @@ if(!isset($_SESSION['access_token'])) {
 
 switch($status) {
 	case USER_STATUS::NO_SESSION:
-		$err_msg = 'You did not login.';
+		$err_msg = 'This feature can only be used as a lecturer. We cannot confirm that you are a lecturer when you are not logged in. If you are a lecturer, please click the "Sign in" button to log in.';
 		break;
 	case USER_STATUS::LAS2PEER_CONNECT_ERROR:
 		$err_msg = 'Unable to check your login, sorry!';
@@ -101,7 +101,7 @@ switch($status) {
 		$err_msg = 'Your tutor-status could not be checked, sorry! You may try again later.';
 		break;
 	case USER_STATUS::USER_NOT_CONFIRMED:
-		$err_msg = 'You are not recognised as tutor. If you want to, you can send an email to the admins and they may confirm you as tutor.';
+		$err_msg = 'At the moment, you do not have a lecturer account. If you are a lecturer, you can request your account being upgraded to a lecturer account by clicking the "I am a lecturer!" button.';
 		break;
 	case USER_STATUS::USER_IS_TUTOR:
 		$err_msg = '';
@@ -116,9 +116,10 @@ switch($status) {
 	case USER_STATUS::OIDC_UNAUTHORIZED:
 	case USER_STATUS::OIDC_ERROR:
 	case USER_STATUS::DATABASE_ERROR:
+  case USER_STATUS::USER_NOT_CONFIRMED:
 		// show error
 		?>
-		<div class="alert alert-danger" role="alert"><?php echo $err_msg?></div>
+<div class="alert alert-danger" role="alert"><p><?php echo $err_msg?></p></div>
 		<?php
 }
 
@@ -156,14 +157,17 @@ switch($status) {
 	case USER_STATUS::USER_NOT_CONFIRMED:
 		// show button to request confirmation as tutor
 		?>
-			<div class="login-card" id="div_lecturer_registration">
-		<div >
-	    		<button class="login login-submit" id="btn_request_lecturer">I'm a lecturer</button>
-		    </div>
-		      <b>What is the purpose of being a lecturer?</b> <br>
-		      The information is required only for creating your own courses, uploading models and presenting models in <i>lecturer mode</i>.
-		      <b>As a student, you do not need to register as lecturer.</b>
-		</div>
+			<div class="featured-box" id="div_lecturer_registration">
+        <button class="login login-submit btn btn-success btn-block" id="btn_request_lecturer">I am a lecturer</button>
+		    <p>
+		      <b>How does upgrading to a lecturer account work?</b> <br>
+		      Our admins will check whether you are a lecturer. If you are, they will upgrade your account to a lecturer account. Once your account has been upgraded, you will be informed by mail.
+        </p>
+        <p>
+          <b>What benefits do I have when using a lecturer account?</b><br>
+          A lecturer account is required for creating your own courses, uploading models and presenting models in lecturer mode.
+        </p>
+      </div>
 		<?php
 }
 
