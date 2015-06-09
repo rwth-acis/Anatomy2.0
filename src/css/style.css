@@ -67,7 +67,7 @@ label {
 }
 
 .head-logo{
-  width: 300px;
+  height: inherit;
 }
 
 #head.secondary {

@@ -73,7 +73,7 @@
           <span class='icon-bar'></span>
         </button>
         <a class='navbar-brand' href='welcome.php?widget=true'>
-          <img src='../images/logo.gif' class='head-logo' alt='HENM: 3D Models'>
+          <img src='../images/logo.png' class='head-logo' alt='HENM: 3D Models'>
         </a>
       </div>
       <div id='henm-nav-bar' class='collapse navbar-collapse'>
@@ -93,7 +93,7 @@
           <span class='icon-bar'></span>
         </button>
         <a class='navbar-brand' href='welcome.php'>
-          <img src='../images/logo.gif' class='head-logo' alt='HENM: 3D Models'>
+          <img src='../images/logo.png' class='head-logo' alt='HENM: 3D Models'>
         </a>
       </div>
       <div id='henm-nav-bar' class='collapse navbar-collapse'>
