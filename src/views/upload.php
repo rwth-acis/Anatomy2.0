@@ -110,20 +110,21 @@
 		      </div>
 		      <div id="output"></div>
 		    </div>
-  <!-- Form Validation - Parsley -->
-  <script src="../js/parsley.min.js"></script>
-  <script src="../js/upload-validation.js"></script>
-		    <?php
-				/* end UPLOAD FORM */
+      
+      <!-- Javascript -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+      <script src="../js/jquery.form.min.js"></script>
+      <script src="../js/script.js"></script>
+      <!-- Form Validation - Parsley -->
+      <script src="../js/parsley.min.js"></script>
+      <script src="../js/upload-validation.js"></script>
+    <?php
+        /* end UPLOAD FORM */
 			}
-		?>
+    ?>
 
   <?php include("footer.php");?>
 
-  <!-- Javascript -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-  <script src="../js/jquery.form.min.js"></script>
-  <script src="../js/script.js"></script>
 
   </body>
 </html>
