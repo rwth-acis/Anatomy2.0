@@ -30,21 +30,28 @@ $course_id = mysql_real_escape_string(filter_input(INPUT_POST, 'course_id'));
 // Get all models associated with the course
 $query = $db->query("SELECT * 
                      FROM courses
-                     WHERE id = $course_id");
+                     WHERE id = $course_id AND creator = ".$_SESSION["user_id"]);
 $course = $query->fetch();
 
-$subject_id = $course["subject_id"];
+// Check whether user is creator of this course
+// Only the creator can delete the course
+if ($course !== FALSE) {
+  $subject_id = $course["subject_id"];
 
-// Remove the connection between models and this course
-$sql_remove_models = "DELETE FROM course_models WHERE course_id=$course_id";
-$conn->query($sql_remove_models);
-	
-// Delete the course itself
-$sql_delete_course = "DELETE FROM courses WHERE id=$course_id";
-$conn->query($sql_delete_course);
+  // Remove the connection between models and this course
+  $sql_remove_models = "DELETE FROM course_models WHERE course_id=$course_id";
+  $conn->query($sql_remove_models);
 
-$html = "";
-if(isset($_GET['widget']) && $_GET['widget'] == 'true') {$html = "&widget=true";}
+  // Delete the course itself
+  $sql_delete_course = "DELETE FROM courses WHERE id=$course_id";
+  $conn->query($sql_delete_course);
 
-echo $subject_id;
+  $html = "";
+  if(isset($_GET['widget']) && $_GET['widget'] == 'true') {$html = "&widget=true";}
 
+  echo $subject_id;
+}
+else {
+  // If not deleted, return FALSE
+  echo "FALSE";
+}

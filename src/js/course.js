@@ -23,7 +23,9 @@ document.addEventListener("DOMContentLoaded", function() {
     
     var id = getURLParameter("id");  
     ajax.post("../php/delete_course.php", {"course_id": id}, function(data){
-      window.location = "course_list.php?id="+data;
+      if (data !== "FALSE") {
+        window.location = "course_list.php?id="+data;
+      }
     });
     
   }, false);
