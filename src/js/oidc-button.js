@@ -180,7 +180,7 @@ function renderButton(signin){
 		if (!nofill) {
 			$(".oidc-signin").removeClass("btn-success").addClass("btn-default")
 		};
-		$(".oidc-signin").html("<img style='margin-right:5px' src='" + oidc_logo + "' height='" + size + "px'/> Sign in with <i>" + oidc_name + "</i>");
+		$(".oidc-signin").html("<img style='margin-right:5px' src='" + oidc_logo + "' height='" + size + "px'/> Sign in");
 		$(".oidc-signin").click(function (e){
 			var url = oidc_provider_config.authorization_endpoint + "?response_type=id_token%20token&client_id=" + oidc_clientid + "&scope=" + oidc_scope;
 			window.location.href = url;

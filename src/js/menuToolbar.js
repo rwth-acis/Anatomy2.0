@@ -61,7 +61,7 @@ function setViewMode(mode) {
  */
 function initCopy() {
   // ZeroClipboard needs to know where it can find the ".swf" file (flash movie)
-  ZeroClipboard.config( { swfPath: 'http://eiche.informatik.rwth-aachen.de/henm1415g2/src/swf/ZeroClipboard.swf' } );
+  ZeroClipboard.config( { swfPath: '../swf/ZeroClipboard.swf' } );
   // Create client instance and attach copy event to it
   var client = new ZeroClipboard();
   client.on( "copy", function (event) {
