@@ -23,6 +23,10 @@
 
 @import url(http://fonts.googleapis.com/css?family=Lato:400,700);
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: 'Lato', sans-serif;
   font-weight: normal;
