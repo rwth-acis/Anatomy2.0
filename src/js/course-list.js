@@ -31,15 +31,12 @@ document.addEventListener("DOMContentLoaded", function(){
   for (var i = 0; i < deleteBtns.length; i++) {
     deleteBtns[i].onclick = function(event) {
       
-      var choseDelete = confirm("Do you really want to delete course " + event.target.dataset.id + "?");
+      window.location = "course_delete.php?id=" + event.target.dataset.id;
+      /*var choseDelete = confirm("Do you really want to delete course " + event.target.dataset.id + "?");
       
       if (choseDelete) {
-        ajax.post("../php/delete_course.php", {"course_id": event.target.dataset.id}, function(data){
-          if (data !== "FALSE") {
-            window.location = "course_list.php?id="+data;
-          }
-        });
-      }
+        
+      }*/
     };
   }
 });

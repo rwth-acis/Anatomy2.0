@@ -833,3 +833,11 @@ footer ul li {
   margin-top: 30px;
   font-weight: bold;
 }
+
+.btn-yes-no {
+  margin: 0 4.16%;
+}
+
+.delete-confirm-div {
+  text-align: center;
+}

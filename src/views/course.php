@@ -55,7 +55,6 @@
       $query  = $db->query("SELECT courses.*, users.given_name, users.family_name, users.email FROM courses JOIN users ON courses.creator = users.id WHERE courses.id = $arg");
       
       $entry = $query->fetchObject();
-      $is_logged_in = isset($_SESSION["user_id"]) && $entry->creator == $_SESSION['user_id'];
        
       /**
        * Replaces all URLs in the given text by <a> tags

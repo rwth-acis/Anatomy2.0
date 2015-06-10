@@ -13,17 +13,25 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  * 
- *  @file course.js
- *  
+ *  @file course-delete.js
+ *  Functionality for views/course_delete.php
  */
 
 document.addEventListener("DOMContentLoaded", function() {
   
-  document.getElementById("btn-delete").addEventListener("click", function() {
-    
-    var id = getURLParameter("id");  
-    
-    window.location = "course_delete.php?id="+id;
-    
-  }, false);
+  // When clicking yes, remove course from database
+  document.getElementById("btn-yes").addEventListener("click", function() {
+    var courseId = getURLParameter("id");
+    ajax.post("../php/delete_course.php", {"course_id": courseId}, function(data){
+      if (data !== "FALSE") {
+        window.location = "course_list.php?id="+data;
+      }
+    });
+  });
+  
+  // When clicking no, go back to page where user came from
+  document.getElementById("btn-no").addEventListener("click", function() {
+    window.location = document.referrer;
+  });
+  
 });
