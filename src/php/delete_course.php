@@ -21,6 +21,8 @@
 
 session_start();
 
+ob_start();
+
 //create database connection (needs to be done before mysql_real_escape_string)
 $conn = require '../php/db_connect.php';
 
@@ -28,9 +30,12 @@ $conn = require '../php/db_connect.php';
 $course_id = mysql_real_escape_string(filter_input(INPUT_POST, 'course_id'));
 
 // Get all models associated with the course
-$query = $db->query("SELECT * 
-                     FROM courses
-                     WHERE id = $course_id AND creator = ".$_SESSION["user_id"]);
+$sql_select = "SELECT * 
+                FROM courses
+                INNER JOIN users ON courses.creator = users.id
+                WHERE courses.id = $course_id AND users.openIdConnectSub = '" . $_SESSION["sub"] . "'";
+
+$query = $db->query($sql_select);
 $course = $query->fetch();
 
 // Check whether user is creator of this course
@@ -49,9 +54,16 @@ if ($course !== FALSE) {
   $html = "";
   if(isset($_GET['widget']) && $_GET['widget'] == 'true') {$html = "&widget=true";}
 
-  echo $subject_id;
+  $return = $subject_id . "SELECT * 
+                     FROM courses
+                     INNER JOIN users ON courses.creator = users.id
+                     WHERE courses.id = $course_id AND users.openIdConnectSub = " . $_SESSION["sub"];
 }
 else {
   // If not deleted, return FALSE
-  echo "FALSE";
+  $return = "FALSE";
 }
+
+ob_end_clean();
+
+echo $return;

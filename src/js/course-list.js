@@ -17,7 +17,7 @@
  * All functionality for views/course_list.php
  */
 
-
+/// Initialize course_list.php
 document.addEventListener("DOMContentLoaded", function(){
   var editBtns = document.getElementsByClassName("btn-edit");
   var deleteBtns = document.getElementsByClassName("btn-delete");
@@ -30,16 +30,7 @@ document.addEventListener("DOMContentLoaded", function(){
   
   for (var i = 0; i < deleteBtns.length; i++) {
     deleteBtns[i].onclick = function(event) {
-      
-      var choseDelete = confirm("Do you really want to delete course " + event.target.dataset.id + "?");
-      
-      if (choseDelete) {
-        ajax.post("../php/delete_course.php", {"course_id": event.target.dataset.id}, function(data){
-          if (data !== "FALSE") {
-            window.location = "course_list.php?id="+data;
-          }
-        });
-      }
+      window.location = "course_delete.php?id=" + event.target.dataset.id;
     };
   }
 });
