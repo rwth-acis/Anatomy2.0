@@ -46,10 +46,9 @@ ob_start();
 include '../views/login.php';
 ob_end_clean();
 $creator = $user_database_entry['id'];
-// TODO : undo set creator & subject id + config include
+// TODO : undo set creator & subject id 
 $creator = 99;
 $subject_id = 1;
-include '../config/config.php';
 
 // Create database-entry
 $sql = "INSERT INTO courses (name, description, creator, role_url, contact, dates, links, subject_id) VALUES ('$name','$text', $creator, '$role_link', '$contact', '$dates', '$links', '$subject_id')";

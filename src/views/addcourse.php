@@ -40,7 +40,14 @@
       </div>
     </div>
     </header>
-    <?php 
+    <?php
+      // TODO: Comment IN!
+      //// checkUserLogin		
+      //$isTutor = false;		
+      //include 'login.php';		 
+		
+      //if($isTutor) {		
+      /* begin ADD COURSE FORM */
     ?> 
     <div class='container'>
       <!-- User info text box -->
@@ -95,7 +102,9 @@
       <div id="output"></div>	   
     </div> 
       <!--- CREATE COURSE INPUT FORM ENDING -->
-
+  <?php 
+      //} 
+  ?>
 	<?php include("footer.php");?>
     
   <?php if($isTutor) { ?>

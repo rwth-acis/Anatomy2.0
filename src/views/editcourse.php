@@ -77,6 +77,8 @@
       include 'login.php';
       // now $user_oidc_profile and $user_database_entry are set
 
+      // TODO: COMMENT IN
+      //if($isTutor) {
         try {
           $entry = getSingleDatabaseEntryByValue('courses', 'id', filter_input(INPUT_GET, 'id'));
         } catch(Exception $e) {
@@ -84,7 +86,17 @@
         }
         $arg = filter_input(INPUT_GET, 'id');
 
-
+        //TODO: COMMENT IN
+        // If the user is not the creator, show message		
+//        if(!isset($entry) || !isset($entry['creator']) || $entry['creator'] != $user_database_entry['id']) { 		
+          ?>		
+<!--      //TODO: COMMENT IN
+<div class="alert alert-danger" role="alert">Someone else created this course. Only the creator is able to edit a course. Please contact the creator if something has to be changed.</div>		
+-->
+          <?php		
+          //TODO: COMMENT IN
+//        } else {
+       
         /* begin EDIT COURSE FORM */
     ?>
     
@@ -180,7 +192,11 @@
       </div>
     </div>
     
-  
+    <?php
+      // TODO: COMMENT IN
+      //  }
+      //}
+    ?>
     
     <?php include("footer.php");?>
   </body>
