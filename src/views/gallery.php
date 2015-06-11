@@ -44,9 +44,20 @@
   <section class="container">
     <div class="container" id="result-container">
       <?php
+      $course_id = filter_input(INPUT_GET, "id");
+      
       include '../php/db_connect.php';
 
-      $query  = $db->query("SELECT * FROM models");
+      if (isset($course_id)) {
+        $sql_select_models = "SELECT * FROM models "
+                . "JOIN course_models ON models.id=model_id "
+                . "WHERE course_id=$course_id";
+      }
+      else {
+        $sql_select_models = "SELECT * FROM models";
+      }
+      
+      $query  = $db->query($sql_select_models);
       $result = $query->fetchAll();
 
       $html = createTable($result, 'model');
