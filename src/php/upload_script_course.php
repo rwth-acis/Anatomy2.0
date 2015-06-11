@@ -98,5 +98,5 @@ if (isset($_GET['widget']) && $_GET['widget'] == 'true') {
 // After creating a course, the user is redirected to the edit page. The reason
 // for this is, that it is not possible to add models on addcourse.php. But the user
 // can add models on editcourse.php
-header("Location: ../views/editcourse.php?id=$last_id$html$xml_file_name_path");
+header("Location: ../views/editcourse.php?id=$last_id$html");
 ?>

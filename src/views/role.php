@@ -86,7 +86,8 @@
                     <li>In the sidebar on the left by clicking the "+" symbol next to "Widgets". A popup window will appear.</li>
                     <li>Copy the URL into the textbox in the popup window and click "OK".</li>
                   </ol>
-                  <li>Invite others by providing the link to the space (e.g. http://role-sandbox.eu/spaces/spacename)</li>
+                  <li>Enter the ROLE Space URL (e.g. http://role-sandbox.eu/spaces/spacename) on the "Edit Your Course" page.</li>
+                  <li>Invite others by providing the link to the space</li>
                   <li>Select a model in the overview</li>
                 </ol>
 
