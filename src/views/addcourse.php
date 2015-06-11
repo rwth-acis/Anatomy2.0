@@ -40,20 +40,21 @@
       </div>
     </div>
     </header>
-    <?php 
-      // checkUserLogin
-      $isTutor = false;
-      include 'login.php';
-
-      if($isTutor) {
-        /* begin ADD COURSE FORM */
+    <?php
+      // TODO: Comment IN!
+      //// checkUserLogin		
+      //$isTutor = false;		
+      //include 'login.php';		 
+		
+      //if($isTutor) {		
+      /* begin ADD COURSE FORM */
     ?> 
     <div class='container'>
       <!-- User info text box -->
       <div class="featured-box">
         <p>
-          Enter course name, course room URL, contact, description and dates below. If you would like help on how to creat your course room, press the "?" button.<br>
-          Models will be added afterwards.<br>
+          Enter course name, contact, description and dates below. If you would like help on how to creat your course room, press the "?" button.<br>
+          In a second step, you can add models and create your course room. <br>
           Press "Save" when you are done.
         </p>
       </div>
@@ -67,12 +68,8 @@
         </div>
         <div class="form-group">
           <label class="col-sm-2 control-label" for="targetRole">Course room:</label>
-          <div class="col-sm-9">
-            <input type="text" class="form-control" rows="1"name="roleLink" id="targetRole" placeholder="Enter ROLE space link">
-            <!-- Help button which opens role.php in new tab. TODO: Could be done more specific and in place. Also in editcourse.php -->
-            <a target="_blank" href="role.php">
-              <input class="col-sm-1 btn btn-default btn-inline" type="button" value="?"/>
-            </a>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" rows="1"name="roleLink" id="targetRole" placeholder="Enter in second step! We will assist you in creating your ROLE space.">
           </div>
         </div>
         <div class="form-group">
@@ -105,10 +102,9 @@
       <div id="output"></div>	   
     </div> 
       <!--- CREATE COURSE INPUT FORM ENDING -->
-    <?php
-      }
-	 	?>
-
+  <?php 
+      //} 
+  ?>
 	<?php include("footer.php");?>
     
   <?php if($isTutor) { ?>

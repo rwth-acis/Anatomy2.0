@@ -53,6 +53,10 @@ if ($course !== FALSE) {
 
   $html = "";
   if(isset($_GET['widget']) && $_GET['widget'] == 'true') {$html = "&widget=true";}
+  
+  // DELETE THE WIDGET WHICH WAS CREATED FOR THE COURSE
+  $xml_file_name_path = __DIR__ . "/../widgets/gallery$course_id.xml";
+  unlink($xml_file_name_path);
 
   $return = $subject_id . "SELECT * 
                      FROM courses
