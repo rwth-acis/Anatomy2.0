@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 /**
  * Copyright 2015 Adam Brunnmeier, Dominik Studer, Alexandra Wörner, Frederik Zwilling, Ali Demiralp, Dev Sharma, Luca Liehner, Marco Dung, Georgios Toubekis
  *
@@ -19,12 +20,14 @@
  * Adss new course to the course database on the server
  * adds metadata about it database.
  */
-
 session_start();
 
 //create database connection (needs to be done before mysql_real_escape_string)
 $conn = require '../php/db_connect.php';
 
+if ((include '../config/config.php') === false) {
+  throw new Exception("The config.php is missing! Cannot create widget automatically.");
+}
 
 //Get input data from form
 $name = mysql_real_escape_string(filter_input(INPUT_POST, 'name'));
@@ -42,8 +45,12 @@ $subject_id = filter_input(INPUT_POST, 'subject_id');
 ob_start();
 include '../views/login.php';
 ob_end_clean();
-$creator = $user_database_entry['id'];	
-	
+$creator = $user_database_entry['id'];
+// TODO : undo set creator & subject id + config include
+$creator = 99;
+$subject_id = 1;
+include '../config/config.php';
+
 // Create database-entry
 $sql = "INSERT INTO courses (name, description, creator, role_url, contact, dates, links, subject_id) VALUES ('$name','$text', $creator, '$role_link', '$contact', '$dates', '$links', '$subject_id')";
 
@@ -51,12 +58,45 @@ $conn->query($sql);
 
 $last_id = $conn->lastInsertId();
 
+// CREATING A XML FILE FOR THE GALLERY WIDGET
+$xml_file_name_path = __DIR__ . "/../widgets/gallery$last_id.xml";
+$content = 
+'<?xml version="1.0" encoding="UTF-8" ?>
+  <Module>
+    <ModulePrefs title="Anatomy 2.0 Gallery" description="" author="Dominik Studer" author_email="studer@dbis.rwth-aachen.de" height="250" width="1000">
+        <Require feature="opensocial-0.8"/>
+    </ModulePrefs>
+    <Content type="html">
+<![CDATA[
+
+  <!-- The following seems to be the minimum required includes and html for iwc to work -->
+
+  <!-- Interwidget communication includes -->
+  <script src ="http://open-app.googlecode.com/files/openapp.js" > </script>
+  <script src ="http://dbis.rwth-aachen.de/gadgets/iwc/lib/iwc.js" > </script>
+  <script src ="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <!-- provide Role objects for subsites -->
+  <script type="text/javascript" src="../js/init-wrapper.js"></script>
+
+  <!-- container for the actual site: -->
+  <iframe id="content-frame" src="' . $baseUrl . '/src/views/gallery.php?widget=true&id=' . $last_id . '" width="100%" height="100%" frameborder="no" padding=0 margin=0>
+  </iframe>
+
+]]>
+    </Content>
+</Module>
+';
+$fp = fopen($xml_file_name_path, "wb");
+fwrite($fp, $content);
+fclose($fp);
+
 $html = "";
-if(isset($_GET['widget']) && $_GET['widget'] == 'true') {$html = "&widget=true";}
+if (isset($_GET['widget']) && $_GET['widget'] == 'true') {
+  $html = "&widget=true";
+}
 
 // After creating a course, the user is redirected to the edit page. The reason
 // for this is, that it is not possible to add models on addcourse.php. But the user
 // can add models on editcourse.php
-header("Location: ../views/editcourse.php?id=$last_id$html");
-
+header("Location: ../views/editcourse.php?id=$last_id$html$xml_file_name_path");
 ?>
