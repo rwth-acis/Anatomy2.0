@@ -86,7 +86,7 @@ if(!isset($_SESSION['access_token'])) {
 
 switch($status) {
 	case USER_STATUS::NO_SESSION:
-		$err_msg = 'This feature can only be used as a lecturer. We cannot confirm that you are a lecturer when you are not logged in. If you are a lecturer, please click the "Sign in" button to log in.';
+		$err_msg = 'This feature can only be used as a lecturer. If you are a lecturer, please click the "Sign in" button to log in.';
 		break;
 	case USER_STATUS::LAS2PEER_CONNECT_ERROR:
 		$err_msg = 'Unable to check your login, sorry!';
