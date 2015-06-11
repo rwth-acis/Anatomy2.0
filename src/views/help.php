@@ -101,12 +101,12 @@
 
                 <ol>
                   <li>Create a ROLE space <a href="http://role-sandbox.eu/">here</a></li>
-                  <li>Log in (e.g. with your Google account)</li>
-                  <li>Add the following widgets in the sidebar on the left</li>
-                  <ul>
-                <li><?php echo $baseUrl; ?>/src/widgets/overview.xml</li>
-                <li><?php echo $baseUrl; ?>/src/widgets/model_viewer.xml</li>
-                  </ul>
+                  <li>Log in (Use a Learning Layers account)</li>
+                  <li>On the "Edit Your Course" page next to the "Course room" entry two URLs are given. Do the following steps for each of them once:  </li>
+                  <ol>
+                    <li>In the sidebar on the left by clicking the "+" symbol next to "Widgets". A popup window will appear.</li>
+                    <li>Copy the URL into the textbox in the popup window and click "OK".</li>
+                  </ol>
                   <li>Invite others by providing the link to the space (e.g. http://role-sandbox.eu/spaces/spacename)</li>
                   <li>Select a model in the overview</li>
                 </ol>
