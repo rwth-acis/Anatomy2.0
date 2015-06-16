@@ -54,6 +54,8 @@
   </head>
 
   <body>
+    
+    <div style="position: fixed; height:100%"></div>
     <?php
       // Hide the menu in ROLE environment. Outside ROLE the menu must be displayed.
       if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
@@ -74,7 +76,6 @@
       include("toolbar.php");
     ?>
 
-    <div class="row" style="position:relative; padding-left:5%; padding-right:5%">
       <x3d id='viewer_object' showStat="false">
         <scene>
           <navigationInfo headlight="true" type="examine" id="navType"></navigationInfo>
@@ -86,25 +87,24 @@
           ?>
           <viewpoint id="viewport" DEF="viewport" centerOfRotation="0 0 0" position="0.00 0.00 5.00" orientation="-0.92 0.35 0.17 0.00" fieldOfView="0.858"> </viewpoint>
         </scene>
+        <?php
+          if(is_object($model)) {
+            echo "<div id='metadata_overlay'>
+              <div class='x3dom-states-head'> </div>
+              <div class='x3dom-states-item-title'>Name:</div>
+              <div class='x3dom-states-item-value'>$model->name</div> <br>
+              <div class='x3dom-states-item-title'>Classification:</div>
+              <div class='x3dom-states-item-value'>$model->classification</div> <br>
+              <div class='x3dom-states-item-title'>Description:</div>
+              <div class='x3dom-states-item-value'>$model->description</div> <br>
+              <div class='x3dom-states-item-title'>Upload Date:</div>
+              <div class='x3dom-states-item-value'>$model->upload_date</div> <br>
+              <div class='x3dom-states-item-title'><a href=\"../../$model->data_url\">Download</a></div>
+              </div>";
+          }
+        ?>
       </x3d>
-      <?php
-        if(is_object($model)) {
-          echo "<div id='metadata_overlay'>
-            <div class='x3dom-states-head'> </div>
-            <div class='x3dom-states-item-title'>Name:</div>
-            <div class='x3dom-states-item-value'>$model->name</div> <br>
-            <div class='x3dom-states-item-title'>Classification:</div>
-            <div class='x3dom-states-item-value'>$model->classification</div> <br>
-            <div class='x3dom-states-item-title'>Description:</div>
-            <div class='x3dom-states-item-value'>$model->description</div> <br>
-            <div class='x3dom-states-item-title'>Upload Date:</div>
-            <div class='x3dom-states-item-value'>$model->upload_date</div> <br>
-            <div class='x3dom-states-item-title'><a href=\"../../$model->data_url\">Download</a></div>
-            </div>";
-        }
-      ?>
       <!-- Creates a panel with information about mouse usage and hotkeys for navigation -->
       <?php include("nav_info.html"); ?>
-    </div>
   </body>
 </html>
