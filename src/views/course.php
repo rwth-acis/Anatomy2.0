@@ -167,8 +167,6 @@
 
   <!-- General functionality (used in menuToolbar.js) -->
   <script type="text/javascript" src="../js/tools.js"></script>
-  <!-- The library for the copy to clipboard feature in the toolbar -->
-  <script type="text/javascript" src="../js/ZeroClipboard.js"></script>
   <?php
     //Decide if this site is inside a separate widget
     if(isset($_GET["widget"]) && $_GET["widget"] == "true")

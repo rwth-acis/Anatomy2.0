@@ -49,8 +49,6 @@
 
     <!-- General functionality (used in menuToolbar.js) -->
     <script type="text/javascript" src="../js/tools.js"></script>
-    <!-- The library for the copy to clipboard feature in the toolbar -->
-    <script type="text/javascript" src="../js/ZeroClipboard.js"></script>
   </head>
 
   <body>
