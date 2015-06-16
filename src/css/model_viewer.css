@@ -41,9 +41,16 @@ p {
 #viewer_object {
   width: 100%;
   min-height: 350px;
-  height: calc(100% - 120px);
   display: block;
   border: none;
+}
+
+.viewer_object {
+  height: calc(100% - 120px);
+}
+
+.viewer_object_role {
+  height: calc(100% - 50px);
 }
 
 #metadata_overlay {

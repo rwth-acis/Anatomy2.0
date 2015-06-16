@@ -33,6 +33,8 @@
 
   <link rel="stylesheet" href="../css/bootstrap-theme.css" media="screen">
   <link rel="stylesheet" type="text/css" href="../css/da-slider.css" />
+  
+  <link rel="stylesheet" type="text/css" href="../css/style.css" />
 
   <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!--[if lt IE 9]>
