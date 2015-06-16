@@ -124,4 +124,22 @@ context|fake|later
 User authorization (`login.php`)|see table above|see table above
 `<form action= "../php/upload_script_course.php..."`|
 
+## 9.6.2015
+
+Forgotten element "lecturer mode":
+
+Button "enable lecturermode", `toolbar.php`
+**fake**
+```php 
+ob_start();
+include '../views/login.php';
+ob_end_clean(); 
+if ($isTutor && (isset($_GET["widget"]) && $_GET["widget"] == "true"))
+	// insert button
+```
+**later**
+```php 
+if (isTutor() && (isset($_GET["widget"]) && $_GET["widget"] == "true"))
+	// insert button
+```
 
