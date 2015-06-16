@@ -51,9 +51,6 @@
     <script type="text/javascript" src="../js/tools.js"></script>
     <!-- The library for the copy to clipboard feature in the toolbar -->
     <script type="text/javascript" src="../js/ZeroClipboard.js"></script>
-    <!-- JQuery and Turntable.js for navigation info -->
-    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js" ></script>
-    <script type="text/javascript" src="visualizeTurntable.js" ></script>
   </head>
 
   <body>

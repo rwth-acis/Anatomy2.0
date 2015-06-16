@@ -16,6 +16,9 @@
  *
  * @file toolbar.php
  * Toolbar with controls for the viewer navigation and other viewer functionality
+ * 
+ * REQUIRES JQuery and Bootstrap.js to be included before, if not in ROLE environment.
+ * Is included in menu.php
  */
 ?>
 <?php
@@ -26,10 +29,20 @@
   }
 ?>
 
-<!-- Functionality of menu toolbar -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<!-- JS includes of menu toolbar functionality -->
+<?php 
+  // If widget parameter is set, the this is a widget in ROLE environment. 
+  // Therefore menu.php is not included. Then, JQuery and bootstrap.js are also 
+  // missing. Include here. Make sure not to include twice, because this will 
+  // break the menu.
+  if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
+?>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<?php
+  }
+?>
 <script type="text/javascript" src="../js/menuToolbar.js"></script>
-<script src="../js/bootstrap.min.js"></script>
 
 <!-- Toolbar -->
 <nav class="navbar navbar-inverse" role="navigation">
