@@ -65,9 +65,6 @@ var modes = [
              ]
            }
            ];
-           
-var canvas;             
-var context;
 
 function showModeDetails(mode)
 {      
@@ -140,11 +137,6 @@ $(document).ready(function(){
       showAll();
     }
   });
-
-  canvas = document.getElementById('turntableVis');
-  context = canvas.getContext('2d');
-
-  updateArc(0.2, 1.4);
 });
 
 function getIndex(option) {

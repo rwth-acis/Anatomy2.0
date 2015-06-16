@@ -62,17 +62,3 @@ p {
   cursor 		: help;
   display: none;
 }
-
-#debugText {
-  font-size         : 10px;
-  background-color  : #323232;
-  color             : #FFF;
-
-  position          : absolute;
-  bottom            : 0px;
-  left              : 24px;
-  right             : 24px;
-
-  z-index           : 1000;
-  display           : none;
-}

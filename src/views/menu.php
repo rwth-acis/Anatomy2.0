@@ -25,7 +25,6 @@
   session_start();
   require '../config/config.php'; 
 ?>
-  <link rel='stylesheet' type='text/css' href='../css/style.css'>
   <!-- Ajax helper script for menu_logged_in.js / menu_logged_out.js -->
   <script src="../js/ajax.js" type="text/javascript"></script>
   <!-- Functionality for login button (depends whether user is logged in or not) -->

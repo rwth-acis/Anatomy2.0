@@ -45,7 +45,7 @@
 <script type="text/javascript" src="../js/menuToolbar.js"></script>
 
 <!-- Toolbar -->
-<nav class="navbar navbar-inverse" role="navigation">
+<nav class="navbar toolbar navbar-inverse" role="navigation">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">

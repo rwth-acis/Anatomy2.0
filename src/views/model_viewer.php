@@ -75,7 +75,6 @@
     ?>
 
     <div class="row" style="position:relative; padding-left:5%; padding-right:5%">
-      <p id='debugText' style="display:none;"></p>
       <x3d id='viewer_object' showStat="false">
         <scene>
           <navigationInfo headlight="true" type="examine" id="navType"></navigationInfo>
