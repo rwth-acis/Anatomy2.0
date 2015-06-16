@@ -41,12 +41,11 @@
     </div>
     </header>
     <?php
-      // TODO: Comment IN!
-      //// checkUserLogin		
-      //$isTutor = false;		
-      //include 'login.php';		 
+      // checkUserLogin		
+      $isTutor = false;		
+      include 'login.php';		 
 		
-      //if($isTutor) {		
+      if($isTutor) {		
       /* begin ADD COURSE FORM */
     ?> 
     <div class='container'>
@@ -103,7 +102,7 @@
     </div> 
       <!--- CREATE COURSE INPUT FORM ENDING -->
   <?php 
-      //} 
+      } 
   ?>
 	<?php include("footer.php");?>
     
