@@ -30,6 +30,7 @@
 
   <link rel="stylesheet" media="screen" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
   <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/bootstrap.min.css">
   
   <script type='text/javascript' src='../js/init-subsite.js'></script>
   <script type='text/javascript' src='../js/overview-widget.js'> </script>
@@ -42,30 +43,28 @@
   ?>
   
   <!-- container -->
-  <section class="container">
-    <div class="container" id="result-container">
-      <?php
-      $course_id = filter_input(INPUT_GET, "id");
-      
-      include '../php/db_connect.php';
+  <div id="result-container">
+    <?php
+    $course_id = filter_input(INPUT_GET, "id");
 
-      if (isset($course_id)) {
-        $sql_select_models = "SELECT * FROM models "
-                . "JOIN course_models ON models.id=model_id "
-                . "WHERE course_id=$course_id";
-      }
-      else {
-        $sql_select_models = "SELECT * FROM models";
-      }
-      
-      $query  = $db->query($sql_select_models);
-      $result = $query->fetchAll();
+    include '../php/db_connect.php';
 
-      $html = createTable($result, 'model');
-      echo $html;
-      ?>
-    </div>
-  </section>
+    if (isset($course_id)) {
+      $sql_select_models = "SELECT * FROM models "
+              . "JOIN course_models ON models.id=model_id "
+              . "WHERE course_id=$course_id";
+    }
+    else {
+      $sql_select_models = "SELECT * FROM models";
+    }
+
+    $query  = $db->query($sql_select_models);
+    $result = $query->fetchAll();
+
+    $html = createTable($result, 'model');
+    echo $html;
+    ?>
+  </div>
 
   <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
   <script src="../js/modernizr-latest.js"></script>

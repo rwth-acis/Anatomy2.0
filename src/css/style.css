@@ -857,3 +857,8 @@ footer ul li {
 .delete-confirm-div {
   text-align: center;
 }
+
+
+.form-control.col-xs-11 {
+  width: 91.6666666667%;
+}
