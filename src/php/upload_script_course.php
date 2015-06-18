@@ -59,7 +59,7 @@ $xml_file_name_path = __DIR__ . "/../widgets/gallery$last_id.xml";
 $content = 
 '<?xml version="1.0" encoding="UTF-8" ?>
   <Module>
-    <ModulePrefs title="Anatomy 2.0 Gallery" description="" author="Dominik Studer" author_email="studer@dbis.rwth-aachen.de" height="250" width="1000">
+    <ModulePrefs title="Anatomy 2.0 Gallery" description="" author="Dominik Studer" author_email="studer@dbis.rwth-aachen.de" height="250" width="1200">
         <Require feature="opensocial-0.8"/>
     </ModulePrefs>
     <Content type="html">
