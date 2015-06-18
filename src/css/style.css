@@ -355,10 +355,10 @@ ul.img-list {
 
 ul.img-list li {
   display: inline-block;
-  height: 160px;
-  margin: 0 1em 1em 0;
+  height: 180px;
   position: relative;
   width: 160px;
+  overflow: hidden;
 }
 
 span.text-content {
