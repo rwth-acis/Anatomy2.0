@@ -75,7 +75,7 @@
     ?>
 
     <?php if (isset($_GET["widget"]) && $_GET["widget"] == "true") { $viewer_class = "viewer_object_role"; } else { $viewer_class = "viewer_object"; } ?>
-      <x3d id='viewer_object' class = "<?php echo $viewer_class; ?>" showStat="false">
+      <x3d id='viewer_object' swfpath="../swf/x3dom.swf" class = "<?php echo $viewer_class; ?>" showStat="false">
         <scene>
           <navigationInfo headlight="true" type="examine" id="navType"></navigationInfo>
           <background skyColor='1.0 1.0 1.0'> </background>

@@ -90,7 +90,7 @@
       <br><br>
     <div class='container'>
       <div class='row'>
-        <div class='col-sm-6 non-overflow-div'>   
+        <div class='col-md-6 non-overflow-div'>   
           <div class="col-sm-8">            
             <?php if(!(isset($_GET["widget"]) && $_GET["widget"] == "true")) { ?>
               <a href=<?php echo "$entry->role_url"; ?>>
@@ -125,22 +125,21 @@
           </div>
 
         </div>
-        <div class='col-sm-6'>
-          <div><h3>Models</h3></div>
-          <br><br>
+        <div class='col-md-6'>
+            
+          <h3>Models</h3>
+          <?php
+          //create model overview in course
+          $query = $db->query("SELECT * FROM course_models
+                INNER JOIN models ON course_models.model_id = models.id
+                WHERE course_models.course_id = $arg");
+          $result = $query->fetchAll();
 
-  <?php
-  //create model overview in course
-  $query = $db->query("SELECT * FROM course_models
-        INNER JOIN models ON course_models.model_id = models.id
-        WHERE course_models.course_id = $arg");
-  $result = $query->fetchAll();
+          $html = createTable($result,'model');
 
-  $html = createTable($result,'model');
-
-  echo $html;
-  ?>
-
+          echo $html;
+          ?>
+            
         </div>
         <div class="col-sm-12 middle-btn-div">
           <div class=" col-sm-5">
