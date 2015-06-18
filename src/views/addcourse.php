@@ -26,10 +26,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Additional styles -->
     <link rel='stylesheet' type='text/css' href='../css/bootstrap.min.css'>
-    <!--<link rel='stylesheet' type='text/css' href='../css/style.css'> -->
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> 
-	<script src="../js/jquery.form.min.js"></script> 	
-	<script src="../js/script.js"></script> 	
+    <link rel='stylesheet' type='text/css' href='../css/style.css'>
+    <script src="../js/script.js"></script> 	
   </head>
   <body>
     <?php include("menu.php"); ?>

@@ -115,7 +115,6 @@
 
                 <h3>3D Models</h3>
                 <p>
-                    <img src="../images/upload.png" alt="" class="img-rounded pull-right" width="300">
                     There is a database which already
                             contains a list of models with some
                             description and information. Most of these

@@ -86,27 +86,13 @@ function initializeModelViewer() {
   x3dRoot.addEventListener('mousedown', function() {
     canSend = true;
     x3dRoot.removeEventListener('mousedown', arguments.callee);
-    log('Enabled publishing!');
+    console.log('Enabled publishing!');
   });
   x3dRoot.addEventListener('touchstart', function() {
     canSend = true;
     x3dRoot.removeEventListener('touchstart', arguments.callee);
-    log('Enabled publishing!');
+    console.log('Enabled publishing!');
   });
-
-  window.addEventListener( "keypress", onKeyDown, false );
-}
-function onKeyDown(e) {
-  if(e.keyCode == 107) { // K 
-    var debugTextStyle = document.getElementById('debugText').style;
-    if(debugTextStyle.display == 'none') {
-      debugTextStyle.display = 'inline';
-    }
-    else {
-      debugTextStyle.display = 'none';
-    }
-  }
-
 }
 
 function onUserConnected(message) {
@@ -185,7 +171,7 @@ function onLocalUpdate() {
   data.viewMode = getViewMode();
 
   publishIWC("ViewpointUpdate", data);
-  log('Published message!');
+  console.log('Published message!');
 }
 
 /**
@@ -198,7 +184,6 @@ function viewpointChanged(evt) {
   // Prevent widgets from sending updates while applying a received viewpoint msg
   // If we set the position because we received a message we do not want to send it back
   if(!evt || processingMessage || !canSend) {
-    log("Bypassing send!");
     return;
   }
 
@@ -209,7 +194,6 @@ function viewpointChanged(evt) {
   //enable sending the position in a loop
   if(typeof updateInterval != 'number'){ //but only when its not already enabled
     updateInterval = setInterval(onLocalUpdate, sendInterval);
-    log("sending");
   }
 
   //disable sending the positions a bit after the last update
@@ -220,13 +204,8 @@ function viewpointChanged(evt) {
     //disable sending
     clearTimeout(updateInterval);
     updateInterval = null;
-    log("Not sending anymore");
+    console.log("Not sending anymore");
   } , sendInterval + 50);
-}
-
-function log(message) {
-  document.getElementById('debugText').innerHTML =
-  (new Date()).toLocaleTimeString() + ' - ' + message;
 }
 
 /**
@@ -269,7 +248,7 @@ function finishedSettingView(){
   enableSendingTimeout = setTimeout(function(){
     //disable sending
     canSend = true;
-    log("finished updating");
+    console.log("finished updating");
   } , 50);
 }
 

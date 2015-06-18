@@ -49,14 +49,11 @@
 
     <!-- General functionality (used in menuToolbar.js) -->
     <script type="text/javascript" src="../js/tools.js"></script>
-    <!-- The library for the copy to clipboard feature in the toolbar -->
-    <script type="text/javascript" src="../js/ZeroClipboard.js"></script>
-    <!-- JQuery and Turntable.js for navigation info -->
-    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js" ></script>
-    <script type="text/javascript" src="visualizeTurntable.js" ></script>
   </head>
 
   <body>
+    
+    <div style="position: fixed; height:100%"></div>
     <?php
       // Hide the menu in ROLE environment. Outside ROLE the menu must be displayed.
       if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
@@ -77,9 +74,8 @@
       include("toolbar.php");
     ?>
 
-    <div class="row" style="position:relative; padding-left:5%; padding-right:5%">
-      <p id='debugText' style="display:none;"></p>
-      <x3d id='viewer_object' showStat="false">
+    <?php if (isset($_GET["widget"]) && $_GET["widget"] == "true") { $viewer_class = "viewer_object_role"; } else { $viewer_class = "viewer_object"; } ?>
+      <x3d id='viewer_object' class = "<?php echo $viewer_class; ?>" showStat="false">
         <scene>
           <navigationInfo headlight="true" type="examine" id="navType"></navigationInfo>
           <background skyColor='1.0 1.0 1.0'> </background>
@@ -90,25 +86,24 @@
           ?>
           <viewpoint id="viewport" DEF="viewport" centerOfRotation="0 0 0" position="0.00 0.00 5.00" orientation="-0.92 0.35 0.17 0.00" fieldOfView="0.858"> </viewpoint>
         </scene>
+        <?php
+          if(is_object($model)) {
+            echo "<div id='metadata_overlay'>
+              <div class='x3dom-states-head'> </div>
+              <div class='x3dom-states-item-title'>Name:</div>
+              <div class='x3dom-states-item-value'>$model->name</div> <br>
+              <div class='x3dom-states-item-title'>Classification:</div>
+              <div class='x3dom-states-item-value'>$model->classification</div> <br>
+              <div class='x3dom-states-item-title'>Description:</div>
+              <div class='x3dom-states-item-value'>$model->description</div> <br>
+              <div class='x3dom-states-item-title'>Upload Date:</div>
+              <div class='x3dom-states-item-value'>$model->upload_date</div> <br>
+              <div class='x3dom-states-item-title'><a href=\"../../$model->data_url\">Download</a></div>
+              </div>";
+          }
+        ?>
       </x3d>
-      <?php
-        if(is_object($model)) {
-          echo "<div id='metadata_overlay'>
-            <div class='x3dom-states-head'> </div>
-            <div class='x3dom-states-item-title'>Name:</div>
-            <div class='x3dom-states-item-value'>$model->name</div> <br>
-            <div class='x3dom-states-item-title'>Classification:</div>
-            <div class='x3dom-states-item-value'>$model->classification</div> <br>
-            <div class='x3dom-states-item-title'>Description:</div>
-            <div class='x3dom-states-item-value'>$model->description</div> <br>
-            <div class='x3dom-states-item-title'>Upload Date:</div>
-            <div class='x3dom-states-item-value'>$model->upload_date</div> <br>
-            <div class='x3dom-states-item-title'><a href=\"../../$model->data_url\">Download</a></div>
-            </div>";
-        }
-      ?>
       <!-- Creates a panel with information about mouse usage and hotkeys for navigation -->
       <?php include("nav_info.html"); ?>
-    </div>
   </body>
 </html>

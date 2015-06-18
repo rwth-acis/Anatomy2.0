@@ -33,6 +33,8 @@
 
   <link rel="stylesheet" href="../css/bootstrap-theme.css" media="screen">
   <link rel="stylesheet" type="text/css" href="../css/da-slider.css" />
+  
+  <link rel="stylesheet" type="text/css" href="../css/style.css" />
 
   <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!--[if lt IE 9]>
@@ -167,8 +169,6 @@
 
   <!-- General functionality (used in menuToolbar.js) -->
   <script type="text/javascript" src="../js/tools.js"></script>
-  <!-- The library for the copy to clipboard feature in the toolbar -->
-  <script type="text/javascript" src="../js/ZeroClipboard.js"></script>
   <?php
     //Decide if this site is inside a separate widget
     if(isset($_GET["widget"]) && $_GET["widget"] == "true")

@@ -34,7 +34,7 @@
 <tr>
 	<td>verifyText</td>
 	<td>id=btnInfo</td>
-	<td>Show info [SPACE]</td>
+	<td>Show info</td>
 </tr>
 <tr>
 	<td>verifyNotVisible</td>
@@ -74,7 +74,7 @@
 <tr>
 	<td>verifyText</td>
 	<td>id=btnInfo</td>
-	<td>Show info [SPACE]</td>
+	<td>Show info</td>
 </tr>
 <tr>
 	<td>verifyNotVisible</td>

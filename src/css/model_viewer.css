@@ -16,6 +16,11 @@
  * @file model_viewer.css
  * CSS styles for model_viewer.php
  */
+
+html, body {
+  height: 100%;
+  margin: 0px;
+}
  
 body {
     background-color: white;
@@ -34,10 +39,18 @@ p {
 }
 
 #viewer_object {
-    width: 100%;
-    height: 100%;
-    vertical-align: middle;
-    border-width: 0;
+  width: 100%;
+  min-height: 350px;
+  display: block;
+  border: none;
+}
+
+.viewer_object {
+  height: calc(100% - 120px);
+}
+
+.viewer_object_role {
+  height: calc(100% - 50px);
 }
 
 #metadata_overlay {
@@ -61,18 +74,4 @@ p {
 
   cursor 		: help;
   display: none;
-}
-
-#debugText {
-  font-size         : 10px;
-  background-color  : #323232;
-  color             : #FFF;
-
-  position          : absolute;
-  bottom            : 0px;
-  left              : 24px;
-  right             : 24px;
-
-  z-index           : 1000;
-  display           : none;
 }

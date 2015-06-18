@@ -18,6 +18,10 @@
  * Also initializes toolbar elements if needed
  */
 
+var viewerToolbar = {};
+
+viewerToolbar.showInfo = false;
+
 /**
  * Initialize the combo box for navigation modes in toolbar
  * Subscribes for "ShowInfo" event
@@ -59,7 +63,8 @@ function setViewMode(mode) {
 /**
  * Initializes the copy to clipboard functionality
  */
-function initCopy() {
+// TODO: Decide whether to remove. Functionality brings little benefit and does not work properly.
+/*function initCopy() {
   // ZeroClipboard needs to know where it can find the ".swf" file (flash movie)
   ZeroClipboard.config( { swfPath: '../swf/ZeroClipboard.swf' } );
   // Create client instance and attach copy event to it
@@ -74,7 +79,7 @@ function initCopy() {
   // Glue button to client. The copy event is fired when button is clicked
   client.clip( document.getElementById("btnCopy") );
 }
-document.addEventListener("DOMContentLoaded", initCopy, false);
+document.addEventListener("DOMContentLoaded", initCopy, false);*/
 
 /**
  * Stops or starts synchronization with the other viewer widget(s) respectively
@@ -102,13 +107,16 @@ function x3dSynchronize() {
  * so locally
  */
 function btnShowInfo() {
-  var show = document.getElementById('btnInfo').innerHTML === "Show info [SPACE]";
+  // Button always toggles state
+  viewerToolbar.showInfo = !viewerToolbar.showInfo;
+  // Synchronize showing info if in ROLE and Synchronization is turned on
   if (isInRole() && isSynchronized) {
-    var msgContent = {'show': show};
+    var msgContent = {'show': viewerToolbar.showInfo};
     publishIWC("ShowInfo", msgContent);
     console.log("menuToolbar.js: publishIWC 'ShowInfo'");
   }
-  showInfo(show);
+  // Actually show the info overlays
+  showInfo(viewerToolbar.showInfo);
 }
 
 /**
@@ -136,12 +144,12 @@ function showInfo(show) {
   var metadata_overlay = document.getElementById('metadata_overlay');
   if (show) {
     x3dom.runtime.statistics(true);
-    btn.innerHTML = "Hide info [SPACE]";
+    btn.innerHTML = "Hide info";
     metadata_overlay.style.display = "block";
   }
   else {
     x3dom.runtime.statistics(false);
-    btn.innerHTML = "Show info [SPACE]";
+    btn.innerHTML = "Show info";
     metadata_overlay.style.display = "none";
   }
 }

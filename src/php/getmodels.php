@@ -23,11 +23,10 @@ include 'tools.php';
 // Get search words
 $searchstr = explode(" ", trim($_POST['q']));
 
-// Compare each word to the name, the classification and the description of a model
+// Compare each word to the name
 $whereClause = '';
 foreach( $searchstr as $word) {
-   $whereClause .= " name LIKE '%".$word."%'
-                    OR classification LIKE '%".$word."%' OR";
+   $whereClause .= " name LIKE '%".$word."%' OR";
 }
 
 // Remove last 'OR'
