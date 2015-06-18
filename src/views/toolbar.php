@@ -37,7 +37,7 @@
   // break the menu.
   if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
 ?>
-  <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 <?php
   }

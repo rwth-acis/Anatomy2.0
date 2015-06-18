@@ -109,7 +109,7 @@
 		      <div id="output"></div>
       
         <!-- Javascript -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="../js/jquery.form.min.js"></script>
         <script src="../js/script.js"></script>
         <!-- Form Validation - Parsley -->
