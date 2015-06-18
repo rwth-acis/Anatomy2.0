@@ -57,7 +57,7 @@ function iwcCallback(intent) {
 	return;
     }
 
-    if($.inArray(extras.topic, subscribedTopics)) {
+    if(subscribedTopics.indexOf(extras.topic)) {
         //send message to subsite
         contentWindow.postMessage(extras.topic + " " + JSON.stringify(extras), "*");
     }
