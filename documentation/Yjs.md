@@ -151,4 +151,42 @@ Eventuell kann man den Code auf vielleicht ⅓ des Umfanges reduzieren?
 
 ##### Test auf lokaler Maschine
 
-Zuerst noch ein weiterer Test von `y.js` aus dem Tutorial
+Zuerst noch ein weiterer Test von `y.js` aus dem Tutorial:
+
+```php
+<script src="./y.js"></script>
+<script src="./y-text.js"></script>
+<script src="./y-xmpp/y-xmpp.js"></script>
+<textarea style="width: 100%;height:5em"> Please bind me :)</textarea>
+<script>
+	// Connect to our testing server, and join an XMPP multi user chat room.
+	var connector = new Y.XMPP().join("ehtttt");
+	var y = new Y(connector);
+
+	var ytext = new Y.Text();
+	y.val("sync_text",ytext);
+
+	// get a textarea dom object
+	var textarea = document.querySelector("textarea");
+
+	// bind the mutable string to the textarea
+	var someVal = y.val("sync_text");
+	someVal.bind(textarea);
+
+	setInterval( function() {
+			console.log(someVal.val());
+		}, 1000);
+</script>
+```
+
+Das funktioniert aber nicht. Wenn man nur einen Client verwendet, wird das `Y.Text`-Objekt korrekt an das Textfeld gebunden, aber es funktioniert nicht, wenn beide Clients laufen. Kevin hat mir nachher erzählt, dass es daran liegt, dass bei der Synchronisation ein Client das `Y.Text`-Objekt vom anderen erhält und dadurch das schon gebundene `Y.Text`-Objekt verloren geht. Kevin empfiehlt, die observe-Funktion zu implementieren und bei jedem observe das `Y.Text`-Objekt neu zu binden.
+
+
+### 18.6.2015
+
+Eine Auflistung davon, welche Funktionen aus dem aktuellen Code nicht erhalten werden sollen:
+- `init-subsite.js` komplett weg
+- in `model-viewer-widget.js`:
+	- `initWidget()`
+- in `viewer.js`:
+	- `getParameterByName(name)`
