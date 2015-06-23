@@ -58,10 +58,7 @@ if ($course !== FALSE) {
   $xml_file_name_path = __DIR__ . "/../widgets/gallery$course_id.xml";
   unlink($xml_file_name_path);
 
-  $return = $subject_id . "SELECT * 
-                     FROM courses
-                     INNER JOIN users ON courses.creator = users.id
-                     WHERE courses.id = $course_id AND users.openIdConnectSub = " . $_SESSION["sub"];
+  $return = $subject_id;
 }
 else {
   // If not deleted, return FALSE
