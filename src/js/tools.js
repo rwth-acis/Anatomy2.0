@@ -17,6 +17,27 @@
  * File for some java script helper functions that are generally useful
  */
 
+var tools = {};
+
+// URL to ROLE sandbox spaces
+tools.ROLE_SANDBOX_SPACES = "http://role-sandbox.eu/spaces/";
+
+/**
+ * Generates a ROLE space URL for a given course name
+ * @param {String} courseName The name of the course
+ * @returns {String} The ROLE space URL
+ */
+tools.getCourseRoomURL = function(courseName) {
+      
+  // Keep only letters [a-z] of the course name and convert all upper case 
+  // letters to lower case
+  // Taken from http://stackoverflow.com/a/1983774
+  var courseRoom = courseName.toLowerCase().replace(/[^a-z0-9]+/g, "");
+
+  // Add the role space URL prefix to the course name
+  return tools.ROLE_SANDBOX_SPACES + courseRoom;
+}
+
 /**
  * Wrapper for getting the location url (necessary to test with given input data, see spyon in Jasmine)
  */
