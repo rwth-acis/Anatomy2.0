@@ -26,4 +26,14 @@ document.addEventListener("DOMContentLoaded", function() {
     window.location = "course_delete.php?id="+id;
     
   }, false);
+  
+  
+  document.getElementById("enter-course-a").addEventListener("click", function() {
+    
+    var rolespace = document.getElementById("enter-course-a").dataset.rolespace;
+    
+    if (rolespace !== undefined && rolespace !== "") {
+      window.open(tools.ROLE_SANDBOX_SPACES + rolespace);
+    }
+  });
 });
