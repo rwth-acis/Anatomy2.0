@@ -93,8 +93,8 @@
         <div class='col-md-6 non-overflow-div'>   
           <div class="col-sm-8">            
             <?php if(!(isset($_GET["widget"]) && $_GET["widget"] == "true")) { ?>
-              <a href=<?php echo "$entry->role_url"; ?>>
-              <button class='btn btn-success btn-lg btn-block' type='button'>Enter course room</button>
+              <a id="enter-course-a" href="#" data-rolespace="<?php echo $entry->role_url; ?>">
+                <button class='btn btn-success btn-lg btn-block' type='button'>Enter course room</button>
               </a>
             <?php } ?>
           </div>

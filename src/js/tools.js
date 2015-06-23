@@ -27,7 +27,7 @@ tools.ROLE_SANDBOX_SPACES = "http://role-sandbox.eu/spaces/";
  * @param {String} courseName The name of the course
  * @returns {String} The ROLE space URL
  */
-tools.getCourseRoomURL = function(courseName) {
+tools.getCourseRoomName = function(courseName) {
       
   // Keep only letters [a-z] of the course name and convert all upper case 
   // letters to lower case
@@ -35,7 +35,7 @@ tools.getCourseRoomURL = function(courseName) {
   var courseRoom = courseName.toLowerCase().replace(/[^a-z0-9]+/g, "");
 
   // Add the role space URL prefix to the course name
-  return tools.ROLE_SANDBOX_SPACES + courseRoom;
+  return courseRoom;
 };
 
 // Adds a click listener to create-room-btn
@@ -45,14 +45,9 @@ tools.addCreateCourseRoomListener = function() {
   
     var courseRoom = document.getElementById("targetRole").value;
     
-    // Only if the given URL starts with the ROLE Space URL
-    if (courseRoom.lastIndexOf(tools.ROLE_SANDBOX_SPACES, 0) === 0) {
-      // Open the URL given in the "targetRole" input field in a new tab
-      window.open(courseRoom, '_blank');
-    }
-    else {
-      alert("Not a valid course room URL");
-    }
+    // Open the URL given in the "targetRole" input field in a new tab
+    window.open(tools.ROLE_SANDBOX_SPACES + courseRoom, '_blank');
+    
   });
 };
 
@@ -70,7 +65,7 @@ tools.addCourseNameInputListener = function() {
     // Update ROLE Space URL in course room input only if it is empty
     if (courseRoom === undefined || courseRoom === "") {
    
-      var courseRoom = tools.getCourseRoomURL(document.getElementById("targetName").value);
+      var courseRoom = tools.getCourseRoomName(document.getElementById("targetName").value);
       
       // Update the course room input field
       courseRoomInput.value = courseRoom;
