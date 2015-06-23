@@ -98,29 +98,13 @@ function deleteModel(event) {
   );
 }
 
-// Sets the remove icons to trigger the deletion on click
 document.addEventListener("DOMContentLoaded", function(){
+  
+  tools.addCourseNameInputListener();
+  tools.addCreateCourseRoomListener();
+  
+  // Sets the remove icons to trigger the deletion on click
   addDeleteListener();
-  
-  var courseNameInput = document.getElementById("targetName");
-  
-  // When user leaves course name input field, automatically create a suggestion
-  // for the course room name / course room URL
-  courseNameInput.addEventListener("blur", function(event) {
-    
-    var courseRoomInput = document.getElementById("targetRole");
-    
-    var courseRoom = courseRoomInput.value;
-    
-    // Update ROLE Space URL in course room input only if it is empty
-    if (courseRoom === undefined || courseRoom === "") {
-   
-      var courseRoom = tools.getCourseRoomURL(courseNameInput.value);
-      
-      // Update the course room input field
-      courseRoomInput.value = courseRoom;
-    }
-  });
 });
 
 /**

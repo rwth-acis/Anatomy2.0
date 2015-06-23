@@ -79,7 +79,7 @@
     easy. If you do it for the first time, you can follow these steps:</p>
 
                 <ol>
-                  <li>Create a ROLE space <a href="http://role-sandbox.eu/">here</a></li>
+                  <li>On the "Edit Your Course" page click the "+" button next to "Course room"</li>
                   <li>Log in (Use a Learning Layers account)</li>
                   <li>On the "Edit Your Course" page next to the "Course room" entry two URLs are given. Do the following steps for each of them once:  </li>
                   <ol>
