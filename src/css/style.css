@@ -862,3 +862,18 @@ footer ul li {
 .form-control.col-xs-11 {
   width: 91.6666666667%;
 }
+
+.form-control.col-xs-10 {
+  width: 83.33333333%;
+}
+
+/* Introduced for "Course room:" label in editcourse.php at high screen widths */
+.form-group label{
+  display: block;
+}
+
+.course-room-div {
+  width: 83.33333333%;
+  float: left;
+  position: relative;
+}

@@ -20,26 +20,9 @@
 // Fill in the subject id in views/addcourse.php by reading the id from the URL
 document.addEventListener("DOMContentLoaded", function(){
   document.getElementById("subject_input").value = getURLParameter("id");
-  
-  var courseNameInput = document.getElementById("targetName");
-          
-  // When user leaves course name input field, automatically create a suggestion
-  // for the course room name / course room URL
-  courseNameInput.addEventListener("blur", function(event) {
     
-    var courseRoomInput = document.getElementById("targetRole");
-    
-    var courseRoom = courseRoomInput.value;
-    
-    // Update ROLE Space URL in course room input only if it is empty
-    if (courseRoom === undefined || courseRoom === "") {
-   
-      var courseRoom = tools.getCourseRoomURL(courseNameInput.value);
-      
-      // Update the course room input field
-      courseRoomInput.value = courseRoom;
-    }
-  });
+  tools.addCourseNameInputListener();
+  tools.addCreateCourseRoomListener();
 });
 
 

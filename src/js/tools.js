@@ -36,7 +36,47 @@ tools.getCourseRoomURL = function(courseName) {
 
   // Add the role space URL prefix to the course name
   return tools.ROLE_SANDBOX_SPACES + courseRoom;
-}
+};
+
+// Adds a click listener to create-room-btn
+tools.addCreateCourseRoomListener = function() {
+  
+  document.getElementById("create-room-btn").addEventListener("click", function() {
+  
+    var courseRoom = document.getElementById("targetRole").value;
+    
+    // Only if the given URL starts with the ROLE Space URL
+    if (courseRoom.lastIndexOf(tools.ROLE_SANDBOX_SPACES, 0) === 0) {
+      // Open the URL given in the "targetRole" input field in a new tab
+      window.open(courseRoom, '_blank');
+    }
+    else {
+      alert("Not a valid course room URL");
+    }
+  });
+};
+
+
+tools.addCourseNameInputListener = function() {
+  
+  // When user leaves course name input field, automatically create a suggestion
+  // for the course room name / course room URL
+  document.getElementById("targetName").addEventListener("blur", function(event) {
+    
+    var courseRoomInput = document.getElementById("targetRole");
+    
+    var courseRoom = courseRoomInput.value;
+    
+    // Update ROLE Space URL in course room input only if it is empty
+    if (courseRoom === undefined || courseRoom === "") {
+   
+      var courseRoom = tools.getCourseRoomURL(document.getElementById("targetName").value);
+      
+      // Update the course room input field
+      courseRoomInput.value = courseRoom;
+    }
+  });
+};
 
 /**
  * Wrapper for getting the location url (necessary to test with given input data, see spyon in Jasmine)

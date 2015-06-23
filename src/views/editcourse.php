@@ -101,7 +101,7 @@
           <div class='col-md-6'>
             <!-- User information box -->
             <div class='featured-box'>
-              Enter course name, course room URL, contact, description and dates below. If you would like help on how to create your course room, press the "?" button.<br>
+              Enter course name, contact, description and dates below. Click "+" to set up your own course room. If you would like help on how to set up a course room, press the "?" button.<br>
               To show models in your course room, add models on the right side. You can delete models by pressing the red "x". Those models will not be shown in your course room.<br>
               Press "Save" when you are done.
             </div>
@@ -115,7 +115,10 @@
               </div>
               <div class="form-group">
                 <label for="targetText">Course room:</label>
-                <input type="text" class="col-xs-11 form-control" rows="1" name="roleLink" id="targetRole" placeholder="Enter full link to your ROLE space" value="<?php echo $entry['role_url']; ?>">
+                <input type="text" class="col-xs-10 form-control" rows="1" name="roleLink" id="targetRole" placeholder="Enter full link to your ROLE space" value="<?php echo $entry['role_url']; ?>">
+                <a href="#">
+                  <input id="create-room-btn" class="col-xs-1 btn btn-default btn-inline" type="button" value="+"/>
+                </a>
                 <!-- Help button which opens role.php in new tab. TODO: Could be done more specific and in place. Also in addcourse.php -->
                 <a target="_blank" href="role.php">
                   <input class="col-xs-1 btn btn-default btn-inline" type="button" value="?"/>
