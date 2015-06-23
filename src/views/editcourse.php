@@ -115,7 +115,7 @@
               </div>
               <div class="form-group">
                 <label for="targetText">Course room:</label>
-                <input type="text" class="col-xs-11 form-control" rows="1" name="roleLink" id="targetRole" placeholder="Enter ROLE space link" value="<?php echo $entry['role_url']; ?>">
+                <input type="text" class="col-xs-11 form-control" rows="1" name="roleLink" id="targetRole" placeholder="Enter full link to your ROLE space" value="<?php echo $entry['role_url']; ?>">
                 <!-- Help button which opens role.php in new tab. TODO: Could be done more specific and in place. Also in addcourse.php -->
                 <a target="_blank" href="role.php">
                   <input class="col-xs-1 btn btn-default btn-inline" type="button" value="?"/>

@@ -66,7 +66,7 @@
         <div class="form-group">
           <label class="col-sm-2 control-label" for="targetRole">Course room:</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" rows="1"name="roleLink" id="targetRole" placeholder="Enter in second step! We will assist you in creating your ROLE space.">
+            <input type="text" class="form-control" rows="1"name="roleLink" id="targetRole" placeholder="Enter full link to your ROLE space">
           </div>
         </div>
         <div class="form-group">
