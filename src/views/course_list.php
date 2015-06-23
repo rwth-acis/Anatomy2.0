@@ -88,7 +88,7 @@
                 <tr>
                   <th>Course name</th>
                   <th>Created by</th>
-                  <th>Created at</th>
+                  <th>Last edited</th>
                   <th></th>
                   <th></th>
                 </tr>
