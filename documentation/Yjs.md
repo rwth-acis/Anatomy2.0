@@ -190,3 +190,78 @@ Eine Auflistung davon, welche Funktionen aus dem aktuellen Code nicht erhalten w
 	- `initWidget()`
 - in `viewer.js`:
 	- `getParameterByName(name)`
+    
+### 29.6.2015
+
+Heute hab ich mich wieder an der `<textarea>` versucht. Im Firefoxprofil `Temp` habe ich immer die Meldung `Firefox can not establish connection` oder `connection was interrupted` erhalten. Mit dem default Firefoxprofil hab ich dieses Problem nicht.
+
+Folgende Version nun:
+```php
+<script src="./y.js"></script>
+<script src="./y-text.js"></script>
+<script src="./y-xmpp/y-xmpp.js"></script>
+<textarea>Bind me please :)</textarea>
+<script>
+	// Connect to our testing server, and join an XMPP multi user chat room.
+	var connector = new Y.XMPP().join("ehtttt");
+	var y = new Y(connector);
+	var ytext = new Y.Text();
+	y.val("sync_text",ytext);
+
+	window.onload = function(){
+		function syncText() {
+			var textarea = document.querySelector("textarea");
+			var someVal = y.val("sync_text");
+			someVal.bind(textarea);
+		}	
+	
+		connector.whenSynced(syncText);
+
+		y.observe(function(events){
+				for(i in events){
+					if(events[i].type === "add" || events[i].type === "update"){
+						syncText();
+					}
+				}
+
+			});
+	};
+</script>
+```
+für beide clients funktioniert weitestgehend, allerdings funktioniert die Synchronisation nicht immer wie erwartet, vielleicht frag ich Kevin später Mal.
+
+Jetzt klappt es reibungslos! Hier der Code:
+```php
+<script src="./y.js"></script>
+<script src="./y-text.js"></script>
+<script src="./y-xmpp/y-xmpp.js"></script>
+<textarea>Bind me please :)</textarea>
+<script>
+	// Connect to our testing server, and join an XMPP multi user chat room.
+	var connector = new Y.XMPP().join("ehtttt");
+	var y = new Y(connector);
+
+	window.onload = function(){
+		function syncText() {
+			var textarea = document.querySelector("textarea");
+			var someVal = y.val("sync_text");
+			someVal.bind(textarea);
+		}	
+	
+		connector.whenSynced(function() {
+			console.log("synced!");
+			if(y.val("sync_text") == null) {
+				y.val("sync_text",new Y.Text());
+			}
+			y.val("sync_text").observe(function(events){
+				for(i in events){
+					console.log(events[i].type);
+					// because of 'bind' here is nothing to do
+				}
+			});
+			syncText();
+		});
+	};
+</script>
+```
+Wie mir Kevin auch erzählte, besteht das Hauptproblem darin, dass ich immer neue Instanzen des `Y.Text`-Objektes erzeugt habe und diese Instanzen synchronisiert werden mussten.
