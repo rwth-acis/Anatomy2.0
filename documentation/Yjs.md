@@ -190,7 +190,27 @@ Eine Auflistung davon, welche Funktionen aus dem aktuellen Code nicht erhalten w
 	- `initWidget()`
 - in `viewer.js`:
 	- `getParameterByName(name)`
+	- `onReloadRequest()`
+	- `onKeyDown(e)`
+	- `onUserConnected(message)`
+	- `onLocalUpdate()` : wahrscheinlich gleiche Behandlung wie `onRemoteUpdate()`
+	- `log(message)`
+	- `receiveModelSelectedByOverview(msgContent)` : irgendwie doppelt
+	- `synchronizePositionAndOrientation()` : übernimmt `y-js`
+	- `savePositionAndOrientation()`
     
+Das, was erhalten bleiben soll:
+- in `model-viewer-widget.js`:
+	- `receiveModelSelectedByOverview(...)`
+- in `viewer.js`:
+	- `onUserConnected(extras)`: wird ersetzt durch `whenSynced()`
+	- `initializeModelViewer()`
+	- `onRemoteUpdate(extras)` : wird ersetzt durch `observe()`
+	- `viewpointChanged(evt)`
+	- `finishedSettingView()`
+	- `onRemoteLecturerMode(extras)`
+	- `toggleLecturerMode()`
+
 ### 29.6.2015
 
 Heute hab ich mich wieder an der `<textarea>` versucht. Im Firefoxprofil `Temp` habe ich immer die Meldung `Firefox can not establish connection` oder `connection was interrupted` erhalten. Mit dem default Firefoxprofil hab ich dieses Problem nicht.
