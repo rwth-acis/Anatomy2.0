@@ -75,12 +75,12 @@ class AccessControl {
       if ($this->getUserStatus($user) == USER_STATUS::USER_IS_TUTOR) {
 
         $course = getSingleDatabaseEntryByValue('courses', 'id', $course_id);
-        if (!($user->id == $course['creator'])) {
-          $this->lastStatus = USER_STATUS::USER_NOT_CREATOR_COURSE;
-          $ret = false;
+        if ($user->id === $course['creator']) {
+          $ret = true;
         }
         else{
-          $ret = true;
+          $this->lastStatus = USER_STATUS::USER_NOT_CREATOR_COURSE;
+          $ret = false;
         }
       }
     }
@@ -96,11 +96,11 @@ class AccessControl {
   }
   
   public function canUpdateCourse($course_id) {
-    $this->isLecturerAndCourseOwner($course_id);
+    return $this->isLecturerAndCourseOwner($course_id);
   }
   
   public function canDeleteCourse($course_id) {
-    $this->isLecturerAndCourseOwner($course_id);
+    return $this->isLecturerAndCourseOwner($course_id);
   }
   
   public function canEnterLecturerMode() {

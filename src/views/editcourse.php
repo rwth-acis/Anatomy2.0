@@ -56,145 +56,19 @@
       </div>
     </div>
     </header>
-    <?php 
-      //Decide if this site is inside a separate widget
-      if(isset($_GET["widget"]) && $_GET["widget"] == "true")
-      {
-          print("<script type='text/javascript' src='../js/model-viewer-widget.js'> </script>");
-          print("<script type='text/javascript' src='../js/init-subsite.js'></script>");
-      } 
-      include '../php/tools.php';
-      try {
-      	include '../php/db_connect.php';
-      } catch(Excepton $e) {
-      	error_log($e->getMessage());
-      }
-      
-      // checkUserLogin
-      $isTutor = false;
-      include 'login.php';
-      // now $user_oidc_profile and $user_database_entry are set
-
-      if($isTutor) {
-        try {
-          $entry = getSingleDatabaseEntryByValue('courses', 'id', filter_input(INPUT_GET, 'id'));
-        } catch(Exception $e) {
-          error_log($e->getMessage());
-        }
-        $arg = filter_input(INPUT_GET, 'id');
-
-        // If the user is not the creator, show message		
-        if(!isset($entry) || !isset($entry['creator']) || $entry['creator'] != $user_database_entry['id']) { 		
-          ?>		
-<div class="alert alert-danger" role="alert">Someone else created this course. Only the creator is able to edit a course. Please contact the creator if something has to be changed.</div>		
-          <?php		
-        } else {
-       
-        /* begin EDIT COURSE FORM */
-    ?>
-    
-    <div id='courses'>
-      <section class='container'>
-        <br><br>
-      <div class='container'>
-        <div class='row'>
-          <div class='col-md-6'>
-            <!-- User information box -->
-            <div class='featured-box'>
-              Enter course name, contact, description and dates below. Click "+" to set up your own course room. If you would like help on how to set up a course room, press the "?" button.<br>
-              To show models in your course room, add models on the right side. You can delete models by pressing the red "x". Those models will not be shown in your course room.<br>
-              Press "Save" when you are done.
-            </div>
-            
-            <!-- FROM FOR EDITING INPUT VALUES -->
-            <form role="form" action="../php/edit_script_course.php<?php if(isset($_GET['widget']) && $_GET['widget'] == true) {echo '?widget=true';} ?>" method="post" enctype="multipart/form-data" id="UploadForm">              
-              <div class="form-group">
-                <input type="hidden" name="targetId" value="<?php echo $arg; ?>">
-                <label for="targetName">Course name:</label>
-                <input type="text" class="form-control" rows="1" name="name" id="targetName" value="<?php echo htmlentities($entry['name']); ?>" required>
-              </div>
-              <div class="form-group">
-                <label for="targetText">Course room:</label>
-                <input type="text" class="col-xs-10 form-control" rows="1" name="roleLink" id="targetRole" placeholder="Enter full link to your ROLE space" value="<?php echo $entry['role_url']; ?>">
-                <a href="#">
-                  <input id="create-room-btn" class="col-xs-1 btn btn-default btn-inline" type="button" value="+"/>
-                </a>
-                <!-- Help button which opens role.php in new tab. TODO: Could be done more specific and in place. Also in addcourse.php -->
-                <a target="_blank" href="role.php">
-                  <input class="col-xs-1 btn btn-default btn-inline" type="button" value="?"/>
-                </a>
-                <div class="featured-box">
-                  <p><?php echo $baseUrl . "/src/widgets/model_viewer.xml"; ?></p>
-                  <p><?php echo $baseUrl . "/src/widgets/gallery" . $entry['id'] . ".xml"; ?></p>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="targetContact">Contact:</label>
-                <textarea class="form-control" rows="3" name="contact" id="targetContact" placeholder="Enter your contact details, e.g. enter university name, department, address, phone number, fax number""><?php echo htmlentities($entry['contact']); ?></textarea>
-              </div>
-              <div class="form-group">
-                <label for="targetText">Description:</label>
-                <textarea class="form-control" rows="3" name="text" id="targetText"  placeholder="Enter course description"><?php echo htmlentities($entry['description']); ?></textarea>
-              </div>
-              <div class="form-group">
-                <label for="targetDates">Dates:</label>
-                <textarea class="form-control" rows="3" name="dates" id="targetDates" placeholder="Enter dates for online appointments which are relevant for your students"><?php echo htmlentities($entry['dates']); ?></textarea>
-              </div>
-              <div class="form-group">
-                <label for="targetLinks">Links:</label>
-                <textarea class="form-control" rows="3" name="links" placeholder="Enter external links which provide additional information, e.g. links to Campus Office, L2P" id="targetLinks"><?php echo htmlentities($entry['links']); ?></textarea>
-              </div>
-              <button type="submit" class="btn btn-success col-xs-6" id="SubmitButton" value="Upload">Save</button>
-            </form>
-            <!-- FROM FOR EDITING INPUT VALUES ENDING -->
-            <br>
-          </div> 
-
-          <!-- AREA FOR ADDING AND REMOVING MODELS FROM A COURSE -->
-          <div class='col-md-6'>
-            <div><h3>Models</h3></div>
-            <!-- Buttons to create add and upload models -->
-            <button class='btn btn-success col-xs-6' type='button' id="openbox" onclick="startBlackout()">Add</button>
-            
-            <div id="model_table" class="col-xs-12 model_div">
-            <?php 
-              $query = $db->query("SELECT * 
-                                   FROM course_models
-                                   INNER JOIN models ON course_models.model_id = models.id
-                                   WHERE course_models.course_id = $arg");
-              $result = $query->fetchAll();
-
-              $html = createTable($result,"modeldeletion");
-              echo $html;
-            ?>
-            </div>           
-          </div>
-          <!-- AREA FOR ADDING AND REMOVING MODELS FROM A COURSE -->
-          
-        </div>
-      </div>  
-      </section>
-    </div>
-    <!-- container -->
-
-    <!-- Darken background when model select window appears -->
-    <div id="blackout" onclick="endBlackout()"></div>
-
-    <!-- Show models in a pop-up -->
-    <div id="modelbox">
-      <div id="closebox" onclick="endBlackout()">close</div>
-      <button class='btn btn-success' type='button' id="addmodels" onclick="addModels()">Add models to course</button>
-      <?php include("search.php"); ?>
-      <div id="result-container">
-      <!-- Models will be inserted here -->
-      </div>
-    </div>
-    
     <?php
-        }
+      require '../php/access_control.php';
+      $course_id = filter_input(INPUT_GET, 'id');
+      $accessControl = new AccessControl();
+      $canEditCourse = $accessControl->canUpdateCourse($course_id);
+
+      if($canEditCourse) {		
+        include 'editcourse_content.php';
+      } else {
+        include 'not_authorized.php';
       }
+
+      include("footer.php");
     ?>
-    
-    <?php include("footer.php");?>
   </body>
 </html>
