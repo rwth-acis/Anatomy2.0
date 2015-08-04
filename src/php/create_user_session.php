@@ -15,9 +15,10 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  * 
- *  @file checkUserKnown.php
+ *  @file create_user_session.php
  *  Script for verification of OIDC-login.
  */
+  include 'user_management.php';
 
   $confirmed = 0;
   $access_token = filter_input(INPUT_POST, 'access_token');
@@ -52,31 +53,16 @@
       
 		////// Search database for user and create new entry if it doesn't have      
       
-      require '../php/db_connect.php';
-      $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
-      
-      // FIRST OF ALL, CHECK WHETHER THE USER IS KNOWN TO THE SYSTEM
-      // THIS IS DONE BY CHECKING WHETHER THE UNIQUE OPEN ID CONNECT SUB EXISTS IN OUR DATABASE
-      $sqlSelect = "SELECT * FROM `users` WHERE openIdConnectSub='".$userProfile->sub."'";
+    require '../php/db_connect.php';
+    $userManagement = new UserManagement();
+    // FIRST OF ALL, CHECK WHETHER THE USER IS KNOWN TO THE SYSTEM
+    // THIS IS DONE BY CHECKING WHETHER THE UNIQUE OPEN ID CONNECT SUB EXISTS IN OUR DATABASE
+    $user = $userManagement->readUser($db, $userProfile->sub);
 
-      // This will escape symbols in the SQL statement (also supposed to prevent 
-      // SQL injection attacks). Returns a PDOStatement
-      $sth = $db->prepare($sqlSelect);
-      $sth->execute();
-      $user = $sth->fetch();
-      
-      $sqlInsert="";
-      // If $user is empty, the user is not known
-      if(!$user) {
-        // CREATE A NEW USER DATABASE ENTRY IF USER WAS NOT KNOWN TO THE SYSTEM
-		  $sqlInsert = "INSERT INTO users (email, openIdConnectSub, given_name, family_name) VALUES ('".$userProfile->email."','".$userProfile->sub."','".$userProfile->given_name."','".$userProfile->family_name."')";
-        $sth = $db->prepare($sqlInsert);
-        $ret = $sth->execute();
-        if($ret === false) {
-          error_log('Error: user insertion in database failed!');
-          die('Could not create new user.');
-        }
-      } else {
-      	// TODO: update in database: user-email, name, first name, etc.
-      }
+    // If $user is empty, the user is not known
+    if(!$user) {
+      $userManagement->createUser($db, $userProfile);
+    } else {
+      // TODO: update in database: user-email, name, first name, etc.
+    }
   }

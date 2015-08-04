@@ -34,7 +34,6 @@
   // fake_end
 
   // TODO: get email from las2peer-service
-  // see 'checkUserKnown.php' for getting user credentials from $_SESSION['access_token']
 
 	$bAtLeastOne = false;
    // Send a mail to admins to inform that someone wants to register
