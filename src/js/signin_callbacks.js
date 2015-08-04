@@ -26,7 +26,7 @@ function signinCallback(result) {
   	 var token = getURLParameter('access_token');
 	    // after successful sign in, check whether the user is known to our system
 	    //fake login:
-	    ajax.post("../php/create_user_session.php", {access_token:token, sub:oidc_userinfo.sub, email:oidc_userinfo.email, given_name:oidc_userinfo.given_name, family_name:oidc_userinfo.family_name}, function(data) {
+	    ajax.post("../php/create_user_session.php", {access_token:token, service_typye:'LearningLayers', sub:oidc_userinfo.sub, email:oidc_userinfo.email, given_name:oidc_userinfo.given_name, family_name:oidc_userinfo.family_name}, function(data) {
 	    //secure:
 	    //ajax.post("../php/create_user_session.php", {access_token:token}, function(data) {
 			// DEBUG

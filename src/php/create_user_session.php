@@ -39,6 +39,10 @@
 		$_SESSION['sub'] = $userProfile->sub;
 		$_SESSION['email'] = $userProfile->email;
 		// fake_end		
+    
+    // Store which type of login service is used for authentication
+    // Currently only the 'LearningLayers' service is supported
+    $_SESSION['service_type'] = filter_input(INPUT_POST, 'service_type');
 
 		////// Get user-profile from las2peer-service     not needed for fake login
 		
@@ -51,8 +55,7 @@
 		//	
       //$userProfile = json_decode($res->sMsg);
       
-		////// Search database for user and create new entry if it doesn't have      
-      
+    ////// Search database for user and create new entry if it doesn't have      
     require '../php/db_connect.php';
     $userManagement = new UserManagement();
     // FIRST OF ALL, CHECK WHETHER THE USER IS KNOWN TO THE SYSTEM
