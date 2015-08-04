@@ -108,13 +108,3 @@ switch($status) {
       </div>
 		<?php
 }
-
-switch($status) {
-	case USER_STATUS::USER_IS_TUTOR:
-		$isTutor = true;
-		break;
-	default:
-		?>
-		    <script src="../js/login.js"></script>
-		<?php
-}

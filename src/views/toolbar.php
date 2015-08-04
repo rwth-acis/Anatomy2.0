@@ -86,12 +86,21 @@
         <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="showHelp()" id="btnHelp">Show help</button></li>
         <!-- Show lecturer mode button only if user logged in (as lecturer) and in ROLE environment -->
         <?php
-        		ob_start();
-				include '../views/login.php';
-				ob_end_clean(); 
-        		if ($isTutor && (isset($_GET["widget"]) && $_GET["widget"] == "true")) { ?>
+          ob_start();
+          include '../views/login.php';
+          require '../php/access_control.php';
+          $accessControl = new AccessControl();
+          $canEnterLecturerMode = $accessControl->canEnterLecturerMode();          
+          ob_end_clean(); 
+          
+          echo $canEnterLecturerMode;
+          
+          if ($canEnterLecturerMode && (isset($_GET["widget"]) && $_GET["widget"] == "true")) { 
+        ?>
           <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="toggleLecturerMode()" id="btnLecturerMode">Enable Lecturer Mode</button></li>
-        <?php } ?>
+        <?php 
+          }
+        ?>
 
       </ul>
     </div><!-- /.navbar-collapse -->
