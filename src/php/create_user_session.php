@@ -60,11 +60,11 @@
     $userManagement = new UserManagement();
     // FIRST OF ALL, CHECK WHETHER THE USER IS KNOWN TO THE SYSTEM
     // THIS IS DONE BY CHECKING WHETHER THE UNIQUE OPEN ID CONNECT SUB EXISTS IN OUR DATABASE
-    $user = $userManagement->readUser($db, $userProfile->sub);
+    $user = $userManagement->readUser($userProfile->sub);
 
     // If $user is empty, the user is not known
     if(!$user) {
-      $userManagement->createUser($db, $userProfile);
+      $userManagement->createUser($userProfile);
     } else {
       // TODO: update in database: user-email, name, first name, etc.
     }

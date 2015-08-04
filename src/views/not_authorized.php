@@ -42,6 +42,9 @@ switch($status) {
   case USER_STATUS::USER_IS_TUTOR:
     $err_msg = '';
     break;
+  case USER_STATUS::USER_NOT_CREATOR_COURSE:
+    $err_msg = 'Someone else created this course. Only the creator is able to modify or delete this course.';
+    break;
 }
 
 switch($status) {
@@ -51,6 +54,7 @@ switch($status) {
 	case USER_STATUS::OIDC_ERROR:
 	case USER_STATUS::DATABASE_ERROR:
   case USER_STATUS::USER_NOT_CONFIRMED:
+  case USER_STATUS::USER_NOT_CREATOR_COURSE:
 		// show error
 		?>
 <div class="alert alert-danger" role="alert"><p><?php echo $err_msg?></p></div>

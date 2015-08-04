@@ -21,20 +21,26 @@
 
 class UserManagement {
   
-  public function readUser($db, $sub) {
-    $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+  private $db;
+  
+  function __construct() {
+    $this->db = require 'db_connect.php';
+  }
+  
+  public function readUser($sub) {
+    $this->db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
     $sqlSelect = "SELECT * FROM `users` WHERE openIdConnectSub='" . $sub . "'";
     // This will escape symbols in the SQL statement (also supposed to prevent 
     // SQL injection attacks). Returns a PDOStatement
-    $sth = $db->prepare($sqlSelect);
+    $sth = $this->db->prepare($sqlSelect);
     $sth->execute();
     return $sth->fetch(PDO::FETCH_OBJ);
   }
   
-  public function createUser($db, $userProfile) {
+  public function createUser($userProfile) {
     // CREATE A NEW USER DATABASE ENTRY
     $sqlInsert = "INSERT INTO users (email, openIdConnectSub, given_name, family_name) VALUES ('".$userProfile->email."','".$userProfile->sub."','".$userProfile->given_name."','".$userProfile->family_name."')";
-    $sth = $db->prepare($sqlInsert);
+    $sth = $this->db->prepare($sqlInsert);
     $ret = $sth->execute();
     if($ret === false) {
       error_log('Error: user insertion in database failed!');
@@ -42,11 +48,11 @@ class UserManagement {
     }
   }
   
-  public function updateUser($db, $userProfile) {
+  public function updateUser($userProfile) {
     // TODO
   }
   
-  public function deleteUser($db, $sub) {
+  public function deleteUser($sub) {
     // TODO
   }
 }

@@ -55,41 +55,32 @@
     </div>
   </header>
   
-  
-  <?php 
-    // A course can only be deleted by its creator. Therefore check whether the 
-    // user is logged in and if so, whether he is the owner.
-    // $isTutor will be set to true in 'login.php', if user is logged in and 
-    // confirmed in our database. Otherwise explanation will be shown to the user.
-    $isTutor = false;
-    include 'login.php';
+  <?php
+    require '../php/access_control.php';
+    $accessControl = new AccessControl();
+    $canCreateCourse = $accessControl->canDeleteCourse($course_id);
 
-    if($isTutor) {
-      // Check whether tutor is also creator of course
-      // If the user is not the creator, show explanation to user
-      if(!isset($course) || !isset($course['creator']) || $course['creator'] != $user_database_entry['id']) { 
-  ?>
-        <div class="alert alert-danger" role="alert">Someone else created this course. Only the creator is able to delete this course.</div>
-  <?php
-      }
-      // If the user is the creator, show the main content
-      else {
+    if($canCreateCourse) {		
   ?>   
-        <!-- Confirmation check UI elements to ask user whether or not to delete the 
-          selected course.-->
-        <div class="center-block container">
-          <div class="featured-box container delete-confirm-div">
-            <p><strong>Do you really want to delete course <?php echo $course['name']; ?>?</strong></p>
-            <input type="button" id="btn-yes" class="btn btn-warning col-sm-5 btn-yes-no" value="Yes"/>
-            <input type="button" id="btn-no" class="btn btn-success col-sm-5 btn-yes-no" value="No"/>
-          </div>
+      <!-- Confirmation check UI elements to ask user whether or not to delete the 
+        selected course.-->
+      <div class="center-block container">
+        <div class="featured-box container delete-confirm-div">
+          <p><strong>Do you really want to delete course <?php echo $course['name']; ?>?</strong></p>
+          <input type="button" id="btn-yes" class="btn btn-warning col-sm-5 btn-yes-no" value="Yes"/>
+          <input type="button" id="btn-no" class="btn btn-success col-sm-5 btn-yes-no" value="No"/>
         </div>
+      </div>
+  
+      <script type="text/javascript" src="../js/course-delete.js"></script>
   <?php
+      } else {
+        include 'not_authorized.php';
       }
-    }
-  ?> 
+      
+      include("footer.php");
+  ?>
             
-  <script type="text/javascript" src="../js/course-delete.js"></script>
 </body>
 
 </html>

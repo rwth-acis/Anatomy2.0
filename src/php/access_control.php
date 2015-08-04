@@ -27,9 +27,8 @@ class AccessControl {
   private $lastStatus = USER_STATUS::NO_SESSION;
 
   private function getSessionUser() {
-    $db = require_once 'db_connect.php';
     $userManagement = new UserManagement();      
-    return $userManagement->readUser($db, $_SESSION['sub']);
+    return $userManagement->readUser($_SESSION['sub']);
   }
   
   private function getUserStatus($user) {
@@ -76,7 +75,13 @@ class AccessControl {
       if ($this->getUserStatus($user) == USER_STATUS::USER_IS_TUTOR) {
 
         $course = getSingleDatabaseEntryByValue('courses', 'id', $course_id);
-        $ret = $user->id == $course->creator;
+        if (!($user->id == $course['creator'])) {
+          $this->lastStatus = USER_STATUS::USER_NOT_CREATOR_COURSE;
+          $ret = false;
+        }
+        else{
+          $ret = true;
+        }
       }
     }
     return $ret;
@@ -105,38 +110,6 @@ class AccessControl {
   public function getLastErrorStatus() {
     return $this->lastStatus;
   }
-  
-  public function getErrorMessage($status) {
-    switch($status) {
-      case USER_STATUS::NO_SESSION:
-        $err_msg = 'This feature can only be used as a lecturer. If you are a lecturer, please click the "Sign in" button to log in.';
-        break;
-      case USER_STATUS::LAS2PEER_CONNECT_ERROR:
-        $err_msg = 'Unable to check your login, sorry!';
-        break;
-      case USER_STATUS::OIDC_UNAUTHORIZED:
-        $err_msg = 'Your logindata is invalid. Probably the session has expired and you have to login again.';
-        break;
-      case USER_STATUS::OIDC_ERROR:
-        $err_msg = 'Some error with your account-validation occured, sorry!';
-        break;
-      case USER_STATUS::DATABASE_ERROR:
-        $err_msg = 'Your tutor-status could not be checked, sorry! You may try again later.';
-        break;
-      case USER_STATUS::USER_NOT_CONFIRMED:
-        $err_msg = 'At the moment, you do not have a lecturer account. If you are a lecturer, you can request your account being upgraded to a lecturer account by clicking the "I am a lecturer!" button.';
-        break;
-      case USER_STATUS::USER_IS_TUTOR:
-        $err_msg = '';
-        break;
-    }
-
-    return $err_msg;
-  }
-  
-  public function getLastErrorMessage() {
-    return $this->getErrorMessage($this->getLastErrorStatus());
-  }
 }
 
 abstract class USER_STATUS
@@ -148,4 +121,5 @@ abstract class USER_STATUS
     const DATABASE_ERROR = 4;
     const USER_NOT_CONFIRMED = 5;
     const USER_IS_TUTOR = 6;
+    const USER_NOT_CREATOR_COURSE = 7;
 }
