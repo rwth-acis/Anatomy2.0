@@ -28,7 +28,7 @@ class UserManagement {
     // SQL injection attacks). Returns a PDOStatement
     $sth = $db->prepare($sqlSelect);
     $sth->execute();
-    return $sth->fetch();
+    return $sth->fetch(PDO::FETCH_OBJ);
   }
   
   public function createUser($db, $userProfile) {
