@@ -16,7 +16,9 @@
  *  limitations under the License.
  * 
  *  @file create_user_session.php
- *  Script for verification of OIDC-login.
+ *  Reads user data. Saves user data in session variables. If the user is not 
+ *  yet known in our database or not up-to-date, the database entry is 
+ *  created/updated.
  */
   include 'user_management.php';
 

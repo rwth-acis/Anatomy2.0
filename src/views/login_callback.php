@@ -18,16 +18,38 @@
  *  @file login_callback.php
  *  TODO
  */
+?>
+<!DOCTYPE html>	
+<html>
+  
+  <head>
+    <title>Redirecting</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" charset="utf8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel='stylesheet' type='text/css' href='../css/bootstrap.min.css'>
+    <link rel='stylesheet' type='text/css' href='../css/style.css'>
+		<script src="../js/signin_callbacks.js"></script>
+  </head>
+  
+  <body>
+    <?php 
+    $menuForLoginCallback = true;
+    include("menu.php"); 
+    ?>
+    
+    <header id='head' class='secondary'>
+    <div class='container'>
+      <div class='row'>
+        <h1>Redirecting ...</h1>
+      </div>
+    </div>
+    </header>
+    
+    <?php include("footer.php"); ?>
+    
+  </body>
+  
+</html>
 
-session_start();
-
-require_once '../config/config.php';
-
-if (isset($_SESSION["currentPage"])) {
-
-  header('Location: '.$baseUrl.'/src/views/'.$_SESSION["currentPage"]);
-}
-else {
-  header('Location: '.$baseUrl.'/src/views/welcome.php');
-}
 

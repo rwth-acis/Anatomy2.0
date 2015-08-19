@@ -37,3 +37,21 @@ function signinCallback(result) {
     console.log(result);
   }
 }
+
+function redirectCallback(result) {
+  if(result === "success"){
+  	 var token = getURLParameter('access_token');
+	    // after successful sign in, check whether the user is known to our system
+	    //fake login:
+	    ajax.post("../php/create_user_session.php", {access_token:token, service_typye:'LearningLayers', sub:oidc_userinfo.sub, email:oidc_userinfo.email, given_name:oidc_userinfo.given_name, family_name:oidc_userinfo.family_name}, function(data) {
+	    //secure:
+	    //ajax.post("../php/create_user_session.php", {access_token:token}, function(data) {
+			// DEBUG
+			//data = JSON.parse(data);
+      window.location.replace("../php/login_redirect.php");
+	 });
+  } else {
+    // if sign in was not successful, log the cause of the error on the console
+    console.log(result);
+  }
+}

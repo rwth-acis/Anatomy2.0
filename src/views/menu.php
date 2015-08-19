@@ -24,10 +24,12 @@
   require_once '../php/fb.php';*/
   session_start();
   require '../config/config.php'; 
+  if ($menuForLoginCallback !== true) {
+    $_SESSION["currentPage"] = $_SERVER['REQUEST_URI'];
+  }
 ?>
   <!-- Ajax helper script for menu_logged_in.js / menu_logged_out.js -->
   <script src="../js/ajax.js" type="text/javascript"></script>
-  <!-- Functionality for login button (depends whether user is logged in or not) -->
   
   <!-- Bootstrap and JQuery also required for dropdown menu if screen size is small -->
   <!-- import jQuery for AJAX calls (must) -->
@@ -98,7 +100,13 @@
           <li>
 						<span id="signinButton">
 							<span class="oidc-signin"
-								data-callback="signinCallback"
+								<?php
+                if ($menuForLoginCallback !== true) {
+                  echo 'data-callback="signinCallback"';
+                } else {
+                  echo 'data-callback="redirectCallback"';
+                }
+                ?>
 								data-name="Learning Layers"
 								data-logo="https://raw.githubusercontent.com/learning-layers/LayersToolTemplate/master/extras/logo.png"
 								data-server="https://api.learning-layers.eu/o/oauth2"
