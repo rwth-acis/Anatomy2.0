@@ -21,7 +21,7 @@
 
 require_once 'user_management.php';
 require_once 'tools.php';
-require_once 'authorization.php';
+require_once 'authentication.php';
 
 class AccessControl {
   
@@ -30,19 +30,19 @@ class AccessControl {
    */
   private $lastStatus = USER_STATUS::NO_SESSION;
   /**
-   * @var Authorization A variable to store an Authorization instance
+   * @var Authentication A variable to store an Authentication instance
    */
-  private $authorization;
+  private $authentication;
   
   /**
-   * @return Authorization Getter for $authorization which makes sure the 
+   * @return Authentication Getter for $authentication which makes sure the 
    * variable is not empty
    */
-  private function getAuthorization() {
-    if (!isset ($this->authorization)) {
-      $this->authorization = new Authorization();
+  private function getAuthentication() {
+    if (!isset ($this->authentication)) {
+      $this->authentication = new Authentication();
     }
-    return $this->authorization;
+    return $this->authentication;
   }
 
   /**
@@ -79,7 +79,7 @@ class AccessControl {
    * @return boolean true, if it is a lecturer
    */
   private function isLecturer() {
-    if(!$this->getAuthorization()->isAuthorized()) {
+    if(!$this->getAuthentication()->isAuthenticated()) {
       $this->lastStatus = USER_STATUS::NO_SESSION;
       return false;
     } else {
@@ -95,7 +95,7 @@ class AccessControl {
    */
   private function isLecturerAndCourseOwner($course_id) {
     $ret = false;
-    if(!$this->getAuthorization()->isAuthorized()) {
+    if(!$this->getAuthentication()->isAuthenticated()) {
       $this->lastStatus = USER_STATUS::NO_SESSION;
     } else {
       $user = $this->getSessionUser();

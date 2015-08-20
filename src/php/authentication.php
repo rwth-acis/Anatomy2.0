@@ -15,16 +15,16 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  * 
- *  @file authorization.php
+ *  @file authentication.php
  *  Does identity verification – tries to verify users are who they say they are
  */
 
-class Authorization {
+class Authentication {
 
   /**
    * @return boolean true, if the users identity has been verified
    */
-  public function isAuthorized() {
+  public function isAuthenticated() {
     
     session_start();
     
