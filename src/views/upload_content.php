@@ -19,7 +19,6 @@
  *  The content of 'upload_content.php' if the user is allowed to create / upload models
  */
 ?>
-s
 <div class="container">
 
   <?php $action = '"../php/upload_script.php"'; ?>

@@ -21,7 +21,7 @@
  *  created/updated.
  */
   include 'user_management.php';
-  require_once 'authorization.php';
+  require_once 'authentication.php';
 
   $confirmed = 0;
   $access_token = filter_input(INPUT_POST, 'access_token');
@@ -40,9 +40,9 @@
     // timespan.
 		$_SESSION['access_token'] = $access_token;
     
-    // Retrieve user data from the authorization service (e.g. Learning Layers)
-    $authorization = new Authorization();
-    $userProfile = $authorization->getUserProfile();
+    // Retrieve user data from the authentication service (e.g. Learning Layers)
+    $authentication = new Authentication();
+    $userProfile = $authentication->getUserProfile();
     
 		// from fake login: As we cannot connect to the Learning Layers server, we
     // have to store sub and email in a session variable
