@@ -21,41 +21,28 @@
  *  created/updated.
  */
   include 'user_management.php';
+  require_once 'authorization.php';
 
   $confirmed = 0;
   $access_token = filter_input(INPUT_POST, 'access_token');
-  // from fake login:
-  $userProfile = new stdClass();
-  $userProfile->sub = filter_input(INPUT_POST, 'sub');
-  $userProfile->email = filter_input(INPUT_POST, 'email');
-  $userProfile->given_name = filter_input(INPUT_POST, 'given_name');
-  $userProfile->family_name = filter_input(INPUT_POST, 'family_name');
-  // fake_end
   
-  if (isset($access_token)) {
+  if (isset($access_token) && $access_token != 'null') {
 
-		////// Setup session and cache access_token as login-validation, also for other pages      
-      session_start();
-		$_SESSION['access_token'] = $access_token;
-		//from fake login:
-		$_SESSION['sub'] = $userProfile->sub;
-		$_SESSION['email'] = $userProfile->email;
-		// fake_end		
+		// Setup session and cache access_token as login-validation, also for other pages      
+    session_start();
     
     // Store which type of login service is used for authentication
     // Currently only the 'LearningLayers' service is supported
     $_SESSION['service_type'] = filter_input(INPUT_POST, 'service_type');
-
-		////// Get user-profile from las2peer-service     not needed for fake login
-		
-      // require '../config/config.php';
-  		// require '../php/tools.php';
-  		// $res = getUserProfile($access_token);
-  		// if($res->bOk === false) {
-      //		die('Cannot retrieve User-information!');
-      //	}
-		//	
-      //$userProfile = json_decode($res->sMsg);
+		$_SESSION['access_token'] = $access_token;
+    
+    $authorization = new Authorization();
+    $userProfile = $authorization->getUserProfile();
+    
+		//from fake login:
+		$_SESSION['sub'] = $userProfile->sub;
+		$_SESSION['email'] = $userProfile->email;
+		// fake_end		
       
     ////// Search database for user and create new entry if it doesn't have      
     require '../php/db_connect.php';
@@ -70,4 +57,11 @@
     } else {
       // TODO: update in database: user-email, name, first name, etc.
     }
+    
+    echo 'orig token '.$access_token;
+    echo 'service '.$_SESSION['service_type'];
+    echo 'token '.$_SESSION['access_token'];
+  }
+  else {
+    echo 'no token '. $access_token;
   }

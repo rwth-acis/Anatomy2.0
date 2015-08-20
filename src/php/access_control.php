@@ -21,10 +21,19 @@
 
 require_once 'user_management.php';
 require_once 'tools.php';
+require_once 'authorization.php';
 
 class AccessControl {
   
   private $lastStatus = USER_STATUS::NO_SESSION;
+  private $authorization;
+  
+  private function getAuthorization() {
+    if (!isset ($this->authorization)) {
+      $this->authorization = new Authorization();
+    }
+    return $this->authorization;
+  }
 
   private function getSessionUser() {
     $userManagement = new UserManagement();      
@@ -58,7 +67,7 @@ class AccessControl {
   }
   
   private function isLecturer() {
-    if(!isset($_SESSION['access_token'])) {
+    if(!$this->getAuthorization()->isAuthorized()) {
       $this->lastStatus = USER_STATUS::NO_SESSION;
       return false;
     } else {
@@ -68,7 +77,7 @@ class AccessControl {
   
   private function isLecturerAndCourseOwner($course_id) {
     $ret = false;
-    if(!isset($_SESSION['access_token'])) {
+    if(!$this->getAuthorization()->isAuthorized()) {
       $this->lastStatus = USER_STATUS::NO_SESSION;
     } else {
       $user = $this->getSessionUser();

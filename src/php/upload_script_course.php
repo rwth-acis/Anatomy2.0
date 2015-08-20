@@ -24,6 +24,7 @@ session_start();
 
 //create database connection (needs to be done before mysql_real_escape_string)
 $conn = require '../php/db_connect.php';
+require_once '../php/tools.php';
 
 if ((include '../config/config.php') === false) {
   throw new Exception("The config.php is missing! Cannot create widget automatically.");
@@ -38,12 +39,8 @@ $dates = filter_input(INPUT_POST, 'dates');
 $links = filter_input(INPUT_POST, 'links');
 $subject_id = filter_input(INPUT_POST, 'subject_id');
 
-// Get id of currently logged in user
-// TODO las2peer-call
-// with $_SESSION['access_token']
-
 ob_start();
-include '../views/login.php';
+$user_database_entry = getSingleDatabaseEntryByValue('users', 'openIdConnectSub', $_SESSION['sub']);
 ob_end_clean();
 $creator = $user_database_entry['id'];
 
