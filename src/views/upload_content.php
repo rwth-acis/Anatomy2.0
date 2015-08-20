@@ -15,8 +15,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  * 
- *  @file check_credentials.php
- *  Script for verification of login credentials (email + password).
+ *  @file upload_content.php
+ *  The content of 'upload_content.php' if the user is allowed to create / upload models
  */
 ?>
 s

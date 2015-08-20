@@ -15,11 +15,19 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  * 
- *  @file check_credentials.php
- *  Script for verification of login credentials (email + password).
+ *  @file not_authorized.php
+ *  HTML to be included in pages where the user cannot access the content based 
+ *  on insufficient user rights. E.g. a user might not be allowed to upload models,
+ *  then this page is included in upload.php.
+ * 
+ *  WARNING: $accessControl has to be instantiated in the calling 
  */
+
+// $accessControl has to be instantiated in the calling HTML page.
+// Will retrieve an error code for the access control problem.
 $status = $accessControl->getLastErrorStatus();
 
+// Create a human understandable error description for the error code in $status
 switch($status) {
   case USER_STATUS::NO_SESSION:
     $err_msg = 'This feature can only be used as a lecturer. If you are a lecturer, please click the "Sign in" button to log in.';
@@ -47,6 +55,7 @@ switch($status) {
     break;
 }
 
+// Show the error only for certain error states
 switch($status) {
 	case USER_STATUS::NO_SESSION:
 	case USER_STATUS::LAS2PEER_CONNECT_ERROR:
@@ -61,6 +70,7 @@ switch($status) {
 		<?php
 }
     
+// Show a login button if the problem is, that the user is not yet logged in.
 switch($status) {		
 	case USER_STATUS::NO_SESSION:
 	case USER_STATUS::OIDC_UNAUTHORIZED:
@@ -91,6 +101,8 @@ switch($status) {
 		<?php
 }
 
+// If the user does not have a lecturer account (instead he just has a standard 
+// student account), show some info on how to upgrade to a lecturer account
 switch($status) {
 	case USER_STATUS::USER_NOT_CONFIRMED:
 		// show button to request confirmation as tutor

@@ -15,7 +15,9 @@
  * limitations under the License.
  *
  * @file register_redirect_url.php
- * TODO
+ * Registers a url in $_SESSION["currentPage"].
+ * This is used to be able to redirect users to the page they came from after 
+ * using learning layers service to authenticate
  */
 
 session_start();

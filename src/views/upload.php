@@ -46,6 +46,7 @@
     </br> </br>
     
     <?php
+      // Check whether the currently logged in user is allowed to create / upload models
       require '../php/access_control.php';
       $accessControl = new AccessControl();
       $canCreateModel = $accessControl->canCreateModel();

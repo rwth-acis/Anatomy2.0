@@ -26,6 +26,7 @@
   $confirmed = 0;
   $access_token = filter_input(INPUT_POST, 'access_token');
   
+  // Session data should only be updated, if the user got a new access token
   if (isset($access_token) && $access_token != 'null') {
 
 		// Setup session and cache access_token as login-validation, also for other pages      
@@ -34,12 +35,17 @@
     // Store which type of login service is used for authentication
     // Currently only the 'LearningLayers' service is supported
     $_SESSION['service_type'] = filter_input(INPUT_POST, 'service_type');
+    // Also store the access token, because this will be needed to authenticate
+    // the user. This makes sense, when the token is valid only for a limited
+    // timespan.
 		$_SESSION['access_token'] = $access_token;
     
+    // Retrieve user data from the authorization service (e.g. Learning Layers)
     $authorization = new Authorization();
     $userProfile = $authorization->getUserProfile();
     
-		//from fake login:
+		// from fake login: As we cannot connect to the Learning Layers server, we
+    // have to store sub and email in a session variable
 		$_SESSION['sub'] = $userProfile->sub;
 		$_SESSION['email'] = $userProfile->email;
 		// fake_end		
@@ -53,15 +59,9 @@
 
     // If $user is empty, the user is not known
     if(!$user) {
+      // CREATE A NEW USER DATABASE ENTRY IF USER WAS NOT KNOWN TO THE SYSTEM
       $userManagement->createUser($userProfile);
     } else {
       // TODO: update in database: user-email, name, first name, etc.
     }
-    
-    echo 'orig token '.$access_token;
-    echo 'service '.$_SESSION['service_type'];
-    echo 'token '.$_SESSION['access_token'];
-  }
-  else {
-    echo 'no token '. $access_token;
   }

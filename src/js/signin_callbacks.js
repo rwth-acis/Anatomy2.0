@@ -14,42 +14,46 @@
  * limitations under the License.
  *
  * @file signin_callbacks.js
- * Callback for OpenID Connect
+ * Callback for OpenID Connect.
+ * See https://github.com/learning-layers/openid-connect-button for more infos
  */
 
 /**
+ * This is the callback function for any LL login button (oidc-button) except 
+ * for on the "login_redirect.php"
  * @param {String} result message returned from LL login server
  * @returns {undefined}
  */
 function signinCallback(result) {
-  if(result === "success"){
-  	var token = getURLParameter('access_token');
-    // after successful sign in, check whether the user is known to our system
-    //fake login:
-    ajax.post("../php/create_user_session.php", {access_token:token, service_type:'LearningLayers', sub:oidc_userinfo.sub, email:oidc_userinfo.email, given_name:oidc_userinfo.given_name, family_name:oidc_userinfo.family_name}, function(data) {
-	    //secure:
-	    //ajax.post("../php/create_user_session.php", {access_token:token}, function(data) {
-			// DEBUG
-			//data = JSON.parse(data);
-	  });
-  } else {
-    // if sign in was not successful, log the cause of the error on the console
-    console.log(result);
-  }
+  callbackHelper(result, function(data) {    
+    // Nothing to do
+  });
 }
 
+/**
+ * This is the callback function the LL login button (oidc-button) on 
+ * "login_redirect.php"
+ * @param {String} result message returned from LL login server
+ * @returns {undefined}
+ */
 function redirectCallback(result) {
+  callbackHelper(result, function(data) {
+    // Redirect to 'login_redirect.php'
+    window.location.replace("../php/login_redirect.php");
+  });
+}
+
+function callbackHelper(result, createSessionCallback) {
   if(result === "success"){
   	var token = getURLParameter('access_token');
-    // after successful sign in, check whether the user is known to our system
-    //fake login:
-    ajax.post("../php/create_user_session.php", {access_token:token, service_type:'LearningLayers', sub:oidc_userinfo.sub, email:oidc_userinfo.email, given_name:oidc_userinfo.given_name, family_name:oidc_userinfo.family_name}, function(data) {
-	    //secure:
-	    //ajax.post("../php/create_user_session.php", {access_token:token}, function(data) {
-			// DEBUG
-			//data = JSON.parse(data);
-      window.location.replace("../php/login_redirect.php");
-    });
+    // When user name and password were correct, the user gets assigned a token.
+    // We store the token and the login service name in a session at our server.
+    // Also, the user will be stored / updated in our database.
+    // fake login: As our server cannot connect to the Learning Layers server,
+    // the client has to send the data (e.g. email, name) to our server.
+    ajax.post("../php/create_user_session.php", {access_token:token, service_type:'LearningLayers',
+      sub:oidc_userinfo.sub, email:oidc_userinfo.email, given_name:oidc_userinfo.given_name,
+      family_name:oidc_userinfo.family_name}, createSessionCallback);
   } else {
     // if sign in was not successful, log the cause of the error on the console
     console.log(result);

@@ -24,9 +24,6 @@
   require_once '../php/fb.php';*/
   session_start();
   require '../config/config.php'; 
-  if ($menuForLoginCallback !== true) {
-    $_SESSION["currentPage"] = $_SERVER['REQUEST_URI'];
-  }
 ?>
   <!-- Ajax helper script for menu_logged_in.js / menu_logged_out.js -->
   <script src="../js/ajax.js" type="text/javascript"></script>
@@ -101,6 +98,8 @@
 						<span id="signinButton">
 							<span class="oidc-signin"
 								<?php
+                // The menu button in login_callback.php needs a different data-callback 
+                // method, because it is supposed to redirect to another page
                 if ($menuForLoginCallback !== true) {
                   echo 'data-callback="signinCallback"';
                 } else {

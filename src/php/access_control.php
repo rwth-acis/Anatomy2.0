@@ -25,9 +25,19 @@ require_once 'authorization.php';
 
 class AccessControl {
   
+  /**
+   * @var USER_STATUS The last status describing the users access control rights
+   */
   private $lastStatus = USER_STATUS::NO_SESSION;
+  /**
+   * @var Authorization A variable to store an Authorization instance
+   */
   private $authorization;
   
+  /**
+   * @return Authorization Getter for $authorization which makes sure the 
+   * variable is not empty
+   */
   private function getAuthorization() {
     if (!isset ($this->authorization)) {
       $this->authorization = new Authorization();
@@ -35,23 +45,21 @@ class AccessControl {
     return $this->authorization;
   }
 
+  /**
+   * @return Object object with property names that correspond to the column 
+   * names of our users table for the user of the current session
+   */
   private function getSessionUser() {
     $userManagement = new UserManagement();      
     return $userManagement->readUser($_SESSION['sub']);
   }
   
+  /**
+   * Evaluates the status of a authenticated user further (is it a tutor or not?)
+   * @param Object $user A user object from our database
+   * @return USER_STATUS The status of the authenticated user 
+   */
   private function getUserStatus($user) {
-    
-    // $aRes = httpRequest("GET", $las2peerUrl.'/'.'user'.'?access_token='.$_SESSION['access_token']);	
-    //
-    // if($aRes->bOk == FALSE) { $status = USER_STATUS::LAS2PEER_CONNECT_ERROR;
-    // } else if($aRes->iStatus === 401) { $status = USER_STATUS::OIDC_UNAUTHORIZED;
-    // } else if($aRes->iStatus !== 200) { $status = USER_STATUS::OIDC_ERROR;
-    // } else {
-    //	// OIDC is OK
-    //	// check if user is confirmed as tutor
-    //	$user_oidc_profile = json_decode($aRes->sMsg);
-
     if(!$user) {
      // User has no databaseentry
       $status = USER_STATUS::USER_NOT_CONFIRMED;
@@ -66,6 +74,10 @@ class AccessControl {
     return $status;
   }
   
+  /**
+   * Checks whether the user of the current session is a lecturer
+   * @return boolean true, if it is a lecturer
+   */
   private function isLecturer() {
     if(!$this->getAuthorization()->isAuthorized()) {
       $this->lastStatus = USER_STATUS::NO_SESSION;
@@ -75,6 +87,12 @@ class AccessControl {
     }
   }
   
+  /**
+   * Checks whether the user of the current session is a lecturer and whether it
+   * is the owner of the give course
+   * @param String $course_id ID of the course whose owner the user has to be
+   * @return boolean true, if user is a lecturer and the owner of the course
+   */
   private function isLecturerAndCourseOwner($course_id) {
     $ret = false;
     if(!$this->getAuthorization()->isAuthorized()) {
@@ -96,31 +114,56 @@ class AccessControl {
     return $ret;
   }
   
+  /**
+   * @return boolean true, if user is allowed to create / upload models
+   */
   public function canCreateModel() {
     return $this->isLecturer();
   }
   
+  /**
+   * @return boolean true, if user is allowed to create courses
+   */
   public function canCreateCourse() {
     return $this->isLecturer();
   }
   
+  /**
+   * @param String $course_id ID of a course
+   * @return boolean true, if user is allowed to update the course whose ID is 
+   * given
+   */
   public function canUpdateCourse($course_id) {
     return $this->isLecturerAndCourseOwner($course_id);
   }
   
+  /**
+   * @param String $course_id ID of a course
+   * @return boolean true, if user is allowed to delete the course whose ID is 
+   * given
+   */
   public function canDeleteCourse($course_id) {
     return $this->isLecturerAndCourseOwner($course_id);
   }
   
+  /**
+   * @return boolean true, if user is allowed to use the lecturer mode
+   */
   public function canEnterLecturerMode() {
     return $this->isLecturer();
   }
   
+  /**
+   * @return USER_STATUS Returns the status of the last access control check
+   */
   public function getLastErrorStatus() {
     return $this->lastStatus;
   }
 }
 
+/**
+ * Class with constants for all possible user access control states
+ */
 abstract class USER_STATUS
 {
     const NO_SESSION = 0;

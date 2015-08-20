@@ -39,6 +39,8 @@ $dates = filter_input(INPUT_POST, 'dates');
 $links = filter_input(INPUT_POST, 'links');
 $subject_id = filter_input(INPUT_POST, 'subject_id');
 
+// Get the ID (of our DB) of the currently logged in user. Required, because this 
+// user will be registered as the creator of the course.
 ob_start();
 $user_database_entry = getSingleDatabaseEntryByValue('users', 'openIdConnectSub', $_SESSION['sub']);
 ob_end_clean();

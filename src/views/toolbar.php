@@ -27,6 +27,7 @@
   if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
     session_start();
   }
+  // Include some configuration information
   require_once '../config/config.php'; 
 ?>
 
@@ -112,10 +113,7 @@
           if ($canEnterLecturerMode && (isset($_GET["widget"]) && $_GET["widget"] == "true")) { 
         ?>
         <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="toggleLecturerMode()" id="btnLecturerMode">Enable Lecturer Mode</button></li>
-        <?php 
-          }
-        ?>
-        <script>console.log("Change 1");</script>
+        <!-- A span which will be filled with a Sign In button or information about which user is currently logged in. Will be filled in oidc-button.js -->
         <li class="navbar-li">
           <span id="signinButton">
             <span class="oidc-signin"
@@ -128,11 +126,18 @@
             </span>
           </span>
         </li>
+        <?php 
+          }
+        ?>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
 
+<?php 
+// If we are in a ROLE space, show the Sign in button / Sign in status
+if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
+?>
 <script type="text/javascript">
   (function() {
     var po = document.createElement('script'); 
@@ -143,3 +148,6 @@
     s.parentNode.insertBefore(po, s);
   })();
 </script>
+<?php
+}
+?>

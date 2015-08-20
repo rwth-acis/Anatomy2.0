@@ -16,7 +16,8 @@
  *  limitations under the License.
  * 
  *  @file login_callback.php
- *  TODO
+ *  Callback page for the Learning Layers service. Will redirect to the page the
+ *  user was originally on.
  */
 ?>
 <!DOCTYPE html>	
@@ -34,6 +35,9 @@
   
   <body>
     <?php 
+    // By setting $menuForLoginCallback = true; 'menu.php' will call 
+    // 'redirectCallback' in 'signin_callbacks.js'. Then the user will be 
+    // redirected to the page he came from before using the Learning Layers login.
     $menuForLoginCallback = true;
     include("menu.php"); 
     ?>

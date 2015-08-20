@@ -33,7 +33,7 @@
 </head>
 <body>
   <?php
-    // LOAD COURSE DATA ////////////////////////////////////////////////////////
+    // LOAD COURSE DATA FROM OUR DATABASE //////////////////////////////////////
     include '../php/tools.php';
     $course_id = filter_input(INPUT_GET, 'id');
     try {
@@ -56,6 +56,7 @@
   </header>
   
   <?php
+    // Check whether the currently logged in user is allowed to delete courses
     require '../php/access_control.php';
     $accessControl = new AccessControl();
     $canCreateCourse = $accessControl->canDeleteCourse($course_id);

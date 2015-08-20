@@ -183,7 +183,8 @@ function renderButton(signin){
 		$(".oidc-signin").html("<img style='margin-right:5px' src='" + oidc_logo + "' height='" + size + "px'/> Sign in");
 		$(".oidc-signin").click(function (e){
       // Changed the standard implementation here
-      console.log(window.location.href);
+      // To allow our system to redirect to the page which is open when clicking 
+      // this button, we save the pages url in a session
       jQuery.post('../php/register_redirect_url.php', {requestUri:window.location.href, name:'hugo'}, function(data) {});
       // End Changed the standard implementation here
 			var url = oidc_provider_config.authorization_endpoint + "?response_type=id_token%20token&client_id=" + oidc_clientid + "&scope=" + oidc_scope;

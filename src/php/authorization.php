@@ -16,16 +16,24 @@
  *  limitations under the License.
  * 
  *  @file authorization.php
- *  TODO
+ *  Does identity verification – tries to verify users are who they say they are
  */
 
 class Authorization {
 
+  /**
+   * @return boolean true, if the users identity has been verified
+   */
   public function isAuthorized() {
     
     session_start();
     
+    // Implementation depends on the service used to authenticate a user 
+    // (e.g. Learning Layers)
     if ($_SESSION['service_type'] === 'LearningLayers') {
+      // fake implementation: As we cannot connect to the Learning Layers server,
+      // there is no way to find out whether the access token is still valid
+      // so we always return true if there is an access token at all
       if (isset($_SESSION['access_token'])) {
         return true;
       }
@@ -35,12 +43,20 @@ class Authorization {
     }
   }
   
+  /**
+   * Reading user data from the authentication service provider 
+   * (e.g. Learning Layers)
+   * @return \stdClass with sub, email, given_name and family_name attribute
+   */
   public function getUserProfile() {    
     
     session_start();
     
+    // Where the data can be retrieved from depends on which service has been 
+    // used to authenticate the user
     if ($_SESSION['service_type'] === 'LearningLayers') {
-      // from fake login:
+      // from fake login: As we cannot connect to the Learning Layers server, we
+      // read user data provided from the client to our server
       $userProfile = new stdClass();
       $userProfile->sub = filter_input(INPUT_POST, 'sub');
       $userProfile->email = filter_input(INPUT_POST, 'email');
