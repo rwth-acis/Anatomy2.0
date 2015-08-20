@@ -27,6 +27,8 @@
   if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
     session_start();
   }
+  // Include some configuration information
+  require_once '../config/config.php'; 
 ?>
 
 <!-- JS includes of menu toolbar functionality -->
@@ -39,10 +41,26 @@
 ?>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  
+  <!-- import JWS and JSRSASIGN (must) -->
+  <script type="text/javascript" src="../js/jsjws/jws-2.0.js"></script>
+  <script type="text/javascript" src="../js/jsrsasign/ext/base64.js"></script>
+  <script type="text/javascript" src="../js/jsrsasign/ext/jsbn.js"></script>
+  <script type="text/javascript" src="../js/jsrsasign/ext/jsbn2.js"></script>
+  <script type="text/javascript" src="../js/jsrsasign/ext/rsa.js"></script>
+  <script type="text/javascript" src="../js/jsrsasign/ext/rsa2.js"></script>
+  <script type="text/javascript" src="../js/jsrsasign/asn1hex-1.1.js"></script>
+  <script type="text/javascript" src="../js/jsrsasign/base64x-1.1.js"></script>
+  <script type="text/javascript" src="../js/jsrsasign/crypto-1.1.js"></script>
+  <script type="text/javascript" src="../js/jsrsasign/rsapem-1.1.js"></script>
+  <script type="text/javascript" src="../js/jsrsasign/rsasign-1.2.min.js"></script>
+  <script type="text/javascript" src="../js/jsrsasign/x509-1.1.js"></script>
+  <script src="../js/signin_callbacks.js"></script>
 <?php
   }
 ?>
 <script type="text/javascript" src="../js/menuToolbar.js"></script>
+
 
 <!-- Toolbar -->
 <nav class="navbar toolbar navbar-inverse" role="navigation">
@@ -86,14 +104,50 @@
         <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="showHelp()" id="btnHelp">Show help</button></li>
         <!-- Show lecturer mode button only if user logged in (as lecturer) and in ROLE environment -->
         <?php
-        		ob_start();
-				include '../views/login.php';
-				ob_end_clean(); 
-        		if ($isTutor && (isset($_GET["widget"]) && $_GET["widget"] == "true")) { ?>
-          <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="toggleLecturerMode()" id="btnLecturerMode">Enable Lecturer Mode</button></li>
-        <?php } ?>
-
+          ob_start();
+          require '../php/access_control.php';
+          $accessControl = new AccessControl();
+          $canEnterLecturerMode = $accessControl->canEnterLecturerMode();          
+          ob_end_clean(); 
+          
+          if ($canEnterLecturerMode && (isset($_GET["widget"]) && $_GET["widget"] == "true")) { 
+        ?>
+        <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="toggleLecturerMode()" id="btnLecturerMode">Enable Lecturer Mode</button></li>
+        <!-- A span which will be filled with a Sign In button or information about which user is currently logged in. Will be filled in oidc-button.js -->
+        <li class="navbar-li">
+          <span id="signinButton">
+            <span class="oidc-signin"
+              data-callback="signinCallback"
+              data-name="Learning Layers"
+              data-logo="https://raw.githubusercontent.com/learning-layers/LayersToolTemplate/master/extras/logo.png"
+              data-server="https://api.learning-layers.eu/o/oauth2"
+              data-clientid=<?php echo($oidcClientId); ?>
+              data-scope="openid phone email address profile">
+            </span>
+          </span>
+        </li>
+        <?php 
+          }
+        ?>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
+
+<?php 
+// If we are in a ROLE space, show the Sign in button / Sign in status
+if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
+?>
+<script type="text/javascript">
+  (function() {
+    var po = document.createElement('script'); 
+    po.type = 'text/javascript'; 
+    po.async = true;
+    po.src = '../js/oidc-button.js';
+    var s = document.getElementsByTagName('script')[0]; 
+    s.parentNode.insertBefore(po, s);
+  })();
+</script>
+<?php
+}
+?>
