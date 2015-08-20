@@ -53,16 +53,16 @@ Two other features are implemented by us:
 Learning Layers will redirect the user to **login\_callback.php** , which will redirect the user again by calling **login\_redirect.php**. **login\_redirect.php** has access to session storage and can therefore redirect to the page the user came from.Ã?Â
 2. 2.Anatomy2.0 saves additional properties of users which the Learning Layers service cannot store. Therefore, a database entry needs to be created for each user of our application. This database entry also needs to store email and name of users (although they can be received from Learning Layers). This is, because email and name of course creators or model uploaders should be shown to other users, which cannot access this data from Learning Layers. To save this data, **create\_user\_session.php** creates and updates database entries.Ã?Â
 
- ![]/LoginSequence.png
+ ![](/LoginSequence.png)
 
 # Authentication and Access Control
 
 To make sure users access (especially change and delete) only those objects that they are allowed to, Anatomy 2.0 implements authentication and access control mechanisms. They are handled in **authentication.php** and **access\_control.php**. The control flow is described in the picture below.
 
- ![]/AccessControl.png
+ ![](/AccessControl.png)
 
 ## User management classes
 
 To give an overview of the dependencies between all classes which are concerned with user management, the following diagram has been created. Please note, that most classes in the diagram are not real classes, but just files.
 
- ![]/LoginClasses.png
+ ![](/LoginClasses.png)
