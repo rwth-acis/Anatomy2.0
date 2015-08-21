@@ -5,7 +5,7 @@
    * Sets the confirmation flag in the database for a given email address
 	 */
   
-  $mail = $_POST['mail'];
+  //$mail = $_POST['mail'];
   
   // Get DB connection
   $conn = require '../php/db_connect.php';

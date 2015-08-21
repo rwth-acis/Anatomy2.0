@@ -45,7 +45,7 @@ switch($status) {
     $err_msg = 'Your tutor-status could not be checked, sorry! You may try again later.';
     break;
   case USER_STATUS::USER_NOT_CONFIRMED:
-    $err_msg = 'At the moment, you do not have a lecturer account. If you are a lecturer, you can request your account being upgraded to a lecturer account by clicking the "I am a lecturer!" button.';
+    $err_msg = 'At the moment, you do not have a lecturer account. If you are a lecturer, you can request your account being upgraded to a lecturer account by clicking the "Upgrade to lecturer account!" button.';
     break;
   case USER_STATUS::USER_IS_TUTOR:
     $err_msg = '';
@@ -108,10 +108,11 @@ switch($status) {
 		// show button to request confirmation as tutor
 		?>
 			<div class="featured-box" id="div_lecturer_registration">
-        <button class="login login-submit btn btn-success btn-block" id="btn_request_lecturer">I am a lecturer</button>
+        <button class="login login-submit btn btn-success btn-block" id="btn_request_lecturer">Upgrade to lecturer account</button>
+        <img src="../images/ajax-loader.gif" id="loader" class="hidden">
 		    <p>
 		      <b>How does upgrading to a lecturer account work?</b> <br>
-		      Our admins will check whether you are a lecturer. If you are, they will upgrade your account to a lecturer account. Once your account has been upgraded, you will be informed by mail.
+		      When clicking the "Upgrade to lecturer account" button, we will upgrade your account to a lecturer account. Once your account has been upgraded, you will be informed by mail.
         </p>
         <p>
           <b>What benefits do I have when using a lecturer account?</b><br>
@@ -120,3 +121,7 @@ switch($status) {
       </div>
 		<?php
 }
+    ?>
+
+<!-- Functionality for btn_request_lecturer (To upgrade an account to lecturer rights) -->    
+<script src="../js/upgrade-account.js"></script>

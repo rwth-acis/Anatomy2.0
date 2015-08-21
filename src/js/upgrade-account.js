@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @file login.js
- * Contains all client side logic for login functionality
+ * @file registration.js
+ * Contains all client side logic for upgrading user accounts to lecturer accounts
  */
 
 /**
@@ -22,7 +22,7 @@
  * @returns {undefined}
  */
 function initLogin() {
-  btn = document.getElementById('btn_request_lecturer');
+  var btn = document.getElementById('btn_request_lecturer');
   if(btn !== null) {
     btn.addEventListener('click', onRequestLecturerClick, false);
   }
@@ -33,30 +33,27 @@ function initLogin() {
  * Sends ajax request to server to create account.
  */
 function onRequestLecturerClick() {
-  btn = document.getElementById('btn_request_lecturer');
-
-  // feedback button pressed  
-  btn.style.opacity = .5; //For real browsers;
-  btn.style.filter = "alpha(opacity=50)"; //For IE;
+  
+//  var UPGRADE_WITH_ADMIN_INFO_TEXT = "<p>" +
+//          "A 3DModels administrator of your university <b>has been contacted</b>. The administrator will enable your account. Afterwards, you have all lecturer rights." +
+//	        "<br> <br>" +
+//	        "<b>Why is a confirmation needed?</b> <br>" +
+//	        "Your account enables functionality that is restricted to be used by lecturers only. The administrator therefore makes sure, that" +
+//	        "only lecturers have an account\n" +
+//          "</p>";
+  
+  $('loader').removeClass('hidden');
   
     ajax.post("../php/register_as_tutor.php", {}, function(msg) {
-    	console.log(msg);
+      
       msg = JSON.parse(msg);      
       if (msg.result === true) {
 
-			  div = document.getElementById("div_lecturer_registration");
-			  div.innerHTML = "<p>" +
-          "A 3DModels administrator of your university <b>has been contacted</b>. The administrator will enable your account. Afterwards, you have all lecturer rights." +
-	        "<br> <br>" +
-	        "<b>Why is a confirmation needed?</b> <br>" +
-	        "Your account enables functionality that is restricted to be used by lecturers only. The administrator therefore makes sure, that" +
-	        "only lecturers have an account\n" +
-          "</p>";
+        // Refresh the current page to show its content instead of not_authorized.php
+			  window.location.reload(true);
       }
-      else {
-		  btn.style.opacity = 1; //For real browsers;
-		  btn.style.filter = "alpha(opacity=100)"; //For IE;
-      }
+      $('loader').addClass('hidden');
+      
     });
   }
 
