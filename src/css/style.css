@@ -871,3 +871,7 @@ footer ul li {
   float: left;
   position: relative;
 }
+
+.authorization-error-container {
+  max-width: 1200px;
+}
