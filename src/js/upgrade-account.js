@@ -18,7 +18,7 @@
  */
 
 /**
- * Initializes login.php
+ * Initializes upgrade-account.php
  * @returns {undefined}
  */
 function initLogin() {
@@ -29,11 +29,14 @@ function initLogin() {
 }
 
 /**
- * Event handler for register (=create account) button in register_as_tutor.php
- * Sends ajax request to server to create account.
+ * Event handler for "Upgrade to lecturer account" button in not_authorized.php
+ * Sends ajax request to server to set confirmed flag. Also reads optional user 
+ * data and writes sends it to our server.
  */
 function onRequestLecturerClick() {
   
+  // This is the old info message. Here the user was informed, that an admin 
+  // first had to accept the account upgrade. This is no longer required.
 //  var UPGRADE_WITH_ADMIN_INFO_TEXT = "<p>" +
 //          "A 3DModels administrator of your university <b>has been contacted</b>. The administrator will enable your account. Afterwards, you have all lecturer rights." +
 //	        "<br> <br>" +
@@ -42,15 +45,18 @@ function onRequestLecturerClick() {
 //	        "only lecturers have an account\n" +
 //          "</p>";
   
-  // Using Bootstrap (button.js) to add a loading state behavior. The button cannot be clicked while loading is going on
+  // Using Bootstrap (button.js) to add a loading state behavior. This disables the
+  // button after being clicked and shows the text "Updating.."
   var btn = $('#btn_request_lecturer');
   btn.button('loading');
   
+  // Read optional user input
   var affiliationValue = $('#affiliation-input').val();
   var cityValue = $('#city-input').val();
   var streetValue = $('#street-input').val();
   var phoneValue = $('#phone-input').val();
   
+  // Request server to upgrade our account to a lecturer (=tutor) account
   ajax.post("../php/register_as_tutor.php", 
       {affiliation:affiliationValue, city:cityValue, street:streetValue, phone:phoneValue}, 
       function(msg) {
@@ -62,6 +68,8 @@ function onRequestLecturerClick() {
       window.location.reload(true);
     }
     else {
+      // If upgrade was not successfull, unlock the "Upgrade to lecturer" button,
+      // such that the user can click it again.
       btn.button('reset');
     }
 
