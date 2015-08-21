@@ -3,6 +3,9 @@
 	 * @file confirm_registration.php
 	 * 
    * Sets the confirmation flag in the database for a given email address
+   * 
+   * WARNING: The following variables need to be set before calling this script:
+   * $mail, $affiliation, $city, $street, $phone 
 	 */
   
   //$mail = $_POST['mail'];
@@ -21,8 +24,8 @@
     $result = array('result'=>'error', 'mail'=>$mail, 'sql_select'=>$sql_select, 'error'=>'The account for the email address \'' . $mail . '\' is already confirmed.' );	
   }
   else { 
-    // Confirm account
-    $sql = "UPDATE users SET confirmed=1 WHERE email='" . $mail . "'";
+    // Confirm account, also update affiliation, city, street and phone (if provided)
+    $sql = "UPDATE users SET confirmed=1, affiliation='".$affiliation."', city='".$city."', street='".$street."', phone='".$phone."' WHERE email='" . $mail . "'";
     $sth = $db->prepare($sql);
     $success = $sth->execute();
     

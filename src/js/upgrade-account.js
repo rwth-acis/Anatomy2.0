@@ -42,20 +42,31 @@ function onRequestLecturerClick() {
 //	        "only lecturers have an account\n" +
 //          "</p>";
   
-  $('loader').removeClass('hidden');
+  // Using Bootstrap (button.js) to add a loading state behavior. The button cannot be clicked while loading is going on
+  var btn = $('#btn_request_lecturer');
+  btn.button('loading');
   
-    ajax.post("../php/register_as_tutor.php", {}, function(msg) {
-      
-      msg = JSON.parse(msg);      
-      if (msg.result === true) {
+  var affiliationValue = $('#affiliation-input').val();
+  var cityValue = $('#city-input').val();
+  var streetValue = $('#street-input').val();
+  var phoneValue = $('#phone-input').val();
+  
+  ajax.post("../php/register_as_tutor.php", 
+      {affiliation:affiliationValue, city:cityValue, street:streetValue, phone:phoneValue}, 
+      function(msg) {
 
-        // Refresh the current page to show its content instead of not_authorized.php
-			  window.location.reload(true);
-      }
-      $('loader').addClass('hidden');
-      
-    });
-  }
+    msg = JSON.parse(msg);      
+    if (msg.result === true) {
+
+      // Refresh the current page to show its content instead of not_authorized.php
+      window.location.reload(true);
+    }
+    else {
+      btn.button('reset');
+    }
+
+  });
+}
 
 /// Call initialize for registration when DOM loaded
 document.addEventListener('DOMContentLoaded', initLogin, false);

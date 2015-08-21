@@ -48,6 +48,8 @@
     // have to store sub and email in a session variable
 		$_SESSION['sub'] = $userProfile->sub;
 		$_SESSION['email'] = $userProfile->email;
+    $_SESSION['given_name'] = $userProfile->given_name;
+    $_SESSION['family_name'] = $userProfile->family_name;
 		// fake_end		
       
     ////// Search database for user and create new entry if it doesn't have      

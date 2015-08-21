@@ -54,6 +54,12 @@ switch($status) {
     $err_msg = 'Someone else created this course. Only the creator is able to modify or delete this course.';
     break;
 }
+?>
+
+<!-- A container for all output of not_authorized.php -->
+<div class="container authorization-error-container">
+
+<?php
 
 // Show the error only for certain error states
 switch($status) {
@@ -66,7 +72,9 @@ switch($status) {
   case USER_STATUS::USER_NOT_CREATOR_COURSE:
 		// show error
 		?>
-<div class="alert alert-danger" role="alert"><p><?php echo $err_msg?></p></div>
+<div class="alert alert-danger" role="alert">
+  <p><?php echo $err_msg?></p>
+</div>
 		<?php
 }
     
@@ -107,21 +115,66 @@ switch($status) {
 	case USER_STATUS::USER_NOT_CONFIRMED:
 		// show button to request confirmation as tutor
 		?>
-			<div class="featured-box" id="div_lecturer_registration">
-        <button class="login login-submit btn btn-success btn-block" id="btn_request_lecturer">Upgrade to lecturer account</button>
-        <img src="../images/ajax-loader.gif" id="loader" class="hidden">
-		    <p>
-		      <b>How does upgrading to a lecturer account work?</b> <br>
-		      When clicking the "Upgrade to lecturer account" button, we will upgrade your account to a lecturer account. Once your account has been upgraded, you will be informed by mail.
-        </p>
-        <p>
-          <b>What benefits do I have when using a lecturer account?</b><br>
-          A lecturer account is required for creating your own courses, uploading models and presenting models in lecturer mode.
-        </p>
+  <div class="featured-box" id="div_lecturer_registration">
+    <form class="form-horizontal">
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Name</label>
+        <div class="col-sm-10">
+          <p class="form-control-static"><?php echo $_SESSION['given_name']." ".$_SESSION['family_name']; ?></p>
+        </div>
       </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Email</label>
+        <div class="col-sm-10">
+          <p class="form-control-static"><?php echo $_SESSION['email']; ?></p>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="affiliation-input" class="col-sm-2 control-label">Affiliation*</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="affiliation-input" placeholder="Affiliation">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="city-input" class="col-sm-2 control-label">City*</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="city-input" placeholder="ZIP code and city">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="street-input" class="col-sm-2 control-label">Street*</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="street-input" placeholder="Street and street number">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="phone-input" class="col-sm-2 control-label">Phone*</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="phone-input" placeholder="Phone number">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" class="btn btn-default btn-block" data-loading-text="Upgrading..." id="btn_request_lecturer">Upgrade to lecturer account</button>
+        </div>
+      </div>
+    </form>
+    
+    <p>*optional</p>
+    <p>
+      <b>How does upgrading to a lecturer account work?</b> <br>
+      When clicking the "Upgrade to lecturer account" button, we will upgrade your account to a lecturer account. Once your account has been upgraded, you will be informed by mail.
+    </p>
+    <p>
+      <b>What benefits do I have when using a lecturer account?</b><br>
+      A lecturer account is required for creating your own courses, uploading models and presenting models in lecturer mode.
+    </p>
+  </div>
 		<?php
 }
     ?>
+
+</div>
 
 <!-- Functionality for btn_request_lecturer (To upgrade an account to lecturer rights) -->    
 <script src="../js/upgrade-account.js"></script>
