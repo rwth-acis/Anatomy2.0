@@ -1,8 +1,26 @@
 /**
+ * Copyright 2015 Adam Brunnmeier, Dominik Studer, Alexandra Wörner, Frederik Zwilling, Ali Demiralp, Dev Sharma, Luca Liehner, Marco Dung, Georgios Toubekis
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
  * @file menuToolbar.js
  * Provides event handler for click events of all toolbar buttons
  * Also initializes toolbar elements if needed
  */
+
+var viewerToolbar = {};
+
+viewerToolbar.showInfo = false;
 
 /**
  * Initialize the combo box for navigation modes in toolbar
@@ -34,12 +52,21 @@ function x3dChangeView() {
   document.getElementById('navType').setAttribute("type", select.options[select.selectedIndex].value);
 }
 
+function getViewMode() {
+  var select = document.getElementById('viewModeSelect');
+  return select.options[select.selectedIndex].value;
+}
+function setViewMode(mode) {
+  document.getElementById('navType').setAttribute(mode);
+}
+
 /**
  * Initializes the copy to clipboard functionality
  */
-function initCopy() {
+// TODO: Decide whether to remove. Functionality brings little benefit and does not work properly.
+/*function initCopy() {
   // ZeroClipboard needs to know where it can find the ".swf" file (flash movie)
-  ZeroClipboard.config( { swfPath: 'http://eiche.informatik.rwth-aachen.de/henm1415g2/src/swf/ZeroClipboard.swf' } );
+  ZeroClipboard.config( { swfPath: '../swf/ZeroClipboard.swf' } );
   // Create client instance and attach copy event to it
   var client = new ZeroClipboard();
   client.on( "copy", function (event) {
@@ -52,7 +79,7 @@ function initCopy() {
   // Glue button to client. The copy event is fired when button is clicked
   client.clip( document.getElementById("btnCopy") );
 }
-document.addEventListener("DOMContentLoaded", initCopy, false);
+document.addEventListener("DOMContentLoaded", initCopy, false);*/
 
 /**
  * Stops or starts synchronization with the other viewer widget(s) respectively
@@ -62,6 +89,7 @@ function x3dSynchronize() {
   var btn = document.getElementById('btnSynchronize');
   if (isSynchronized) {
     btn.innerHTML ="Synchronize";
+    // TODO: Check whether "savePositionAndOrientation() call has to be removed
     savePositionAndOrientation();
     saveInfoState();
   }
@@ -79,13 +107,16 @@ function x3dSynchronize() {
  * so locally
  */
 function btnShowInfo() {
-  var show = document.getElementById('btnInfo').innerHTML === "Show info";
+  // Button always toggles state
+  viewerToolbar.showInfo = !viewerToolbar.showInfo;
+  // Synchronize showing info if in ROLE and Synchronization is turned on
   if (isInRole() && isSynchronized) {
-    var msgContent = {'show': show};
+    var msgContent = {'show': viewerToolbar.showInfo};
     publishIWC("ShowInfo", msgContent);
     console.log("menuToolbar.js: publishIWC 'ShowInfo'");
   }
-  showInfo(show);
+  // Actually show the info overlays
+  showInfo(viewerToolbar.showInfo);
 }
 
 /**
@@ -138,4 +169,21 @@ function saveInfoState() {
 function synchronizeInfoState() {
   showInfo(displayInfo);
   displayInfo = undefined;
+}
+
+/**
+ * 
+ * @returns {undefined}
+ */
+function showHelp() {
+  var btn = document.getElementById('btnHelp');
+  var mainNav = document.getElementById('mainNav');
+  if (btn.innerHTML === "Show help") {
+    mainNav.style.display = "block";
+    btn.innerHTML = "Hide help";
+  }
+  else {
+    mainNav.style.display = "none";
+    btn.innerHTML = "Show help";
+  }
 }

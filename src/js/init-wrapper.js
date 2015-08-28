@@ -1,4 +1,18 @@
 /**
+ * Copyright 2015 Adam Brunnmeier, Dominik Studer, Alexandra Wörner, Frederik Zwilling, Ali Demiralp, Dev Sharma, Luca Liehner, Marco Dung, Georgios Toubekis
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
  * @file init-wrapper.js
  * Initialization of wrapper in Role to pass necessary objects to the wrapped site and enable inter device-communication
  */
@@ -35,7 +49,7 @@ function iwcCallback(intent) {
     if(intent.sender.indexOf(space) < 0){
 	return;
     }
-    
+
     var extras = intent.extras;
 
     if(typeof extras.topic === 'undefined'){
@@ -43,9 +57,9 @@ function iwcCallback(intent) {
 	return;
     }
 
-    if($.inArray(extras.topic, subscribedTopics)) {
+    if(subscribedTopics.indexOf(extras.topic)) {
         //send message to subsite
-        contentWindow.postMessage(extras.topic + " " + JSON.stringify(extras), "*");    
+        contentWindow.postMessage(extras.topic + " " + JSON.stringify(extras), "*");
     }
 }
 
@@ -53,7 +67,7 @@ function iwcCallback(intent) {
  *  Send intent to other widgets/devices through iwc
  * @param intent The intent of the message to publish
  */
-function publishMessage(intent) 
+function publishMessage(intent)
 {
     if(iwc.util.validateIntent(intent)) {
         iwcClient.publish(intent);
@@ -66,7 +80,7 @@ function publishMessage(intent)
 /**
  *  Create default intent to be modified and send later to other devices/widgets
  */
-function getDefaultIntent(){ 
+function getDefaultIntent(){
     var intent = {
         'component' :'',                            // recipient, empty for broadcast
         'data'      :'http://data.org/some/data',   // data as URI
@@ -89,7 +103,7 @@ function receiveSubsiteMessage(event)
     //TODO: check that message really comes from our server
     // if (event.origin !== "http://example.org:8080")
     //  return;
-    
+
     //Debug output for message
     //console.info("Wrapper: We got a message: ", event.data);
 

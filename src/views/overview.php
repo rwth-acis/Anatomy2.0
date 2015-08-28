@@ -1,3 +1,23 @@
+<?php
+/**
+ * Copyright 2015 Adam Brunnmeier, Dominik Studer, Alexandra Wörner, Frederik Zwilling, Ali Demiralp, Dev Sharma, Luca Liehner, Marco Dung, Georgios Toubekis
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @file overview.php
+ * Webpage for viewing an overview of all existing models in the database.
+ */
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,13 +39,12 @@
   <script src="assets/js/respond.min.js"></script>
   <![endif]-->
 
-  <!-- Init communication with wrapper -->
-  <script type='text/javascript' src='../js/init-subsite.js'></script>
   <?php
     //Decide if this site is inside a separate widget
     if(isset($_GET["widget"]) && $_GET["widget"] == "true")
     {
       print("<script type='text/javascript' src='../js/overview-widget.js'> </script>");
+      print("<script type='text/javascript' src='../js/init-subsite.js'></script>");
     }
   ?>
 
@@ -33,6 +52,7 @@
 <body>
   <?php
     include("menu.php");
+    include("../php/tools.php");
   ?>
   <?php
     //Decide if this site is inside a separate widget
@@ -40,25 +60,43 @@
 
     }
     else {
-      echo '
+  ?>
       <header id="head" class="secondary">
-        <div class="container">
-          <div class="row">
-            <h1>Models</h1>
+        <div class='container'>
+          <div class='row'>
+            <div  class="col-sm-8">
+              <h1>Gallery</h1>
+            </div>
+            <div class="col-sm-4">
+              <?php 
+                $btn_edit_class = "btn btn-success btn-block btn-lg";
+                printLinkBtn("upload.php", $btn_edit_class." headline-btn", "Upload");
+              ?>    
+            </div>
           </div>
         </div>
       </header>
-      ';
+  <?php
     }
   ?>
-  <?php include("search.html"); ?>
+  <div class='container'>
+    <div class='row'>
+      <div class='col-md-6'>   
+        <div class="col-sm-12">
+          <?php 
+            printLinkBtn("upload.php", $btn_edit_class." headline-btn-smartphone", "Upload");
+          ?> 
+        </div>
+      </div>
+    </div>
+  </div>
+  <?php include("search.php"); ?>
   <!-- container -->
   <section class="container">
     <br><br><br>
     <div class="container" id="result-container">
       <?php
       include '../php/db_connect.php';
-      include '../php/tools.php';
 
       $query  = $db->query("SELECT * FROM models");
       $result = $query->fetchAll();

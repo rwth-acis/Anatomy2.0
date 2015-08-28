@@ -1,4 +1,18 @@
 /**
+ * Copyright 2015 Adam Brunnmeier, Dominik Studer, Alexandra Wörner, Frederik Zwilling, Ali Demiralp, Dev Sharma, Luca Liehner, Marco Dung, Georgios Toubekis
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
  * @file Viewer.js
  * File for X3D viewer functionality
  */
@@ -72,14 +86,23 @@ function initializeModelViewer() {
   x3dRoot.addEventListener('mousedown', function() {
     canSend = true;
     x3dRoot.removeEventListener('mousedown', arguments.callee);
-    log('Enabled publishing!');
+    console.log('Enabled publishing!');
   });
   x3dRoot.addEventListener('touchstart', function() {
     canSend = true;
     x3dRoot.removeEventListener('touchstart', arguments.callee);
-    log('Enabled publishing!');
+    console.log('Enabled publishing!');
   });
 }
+
+function onUserConnected(message) {
+  var data            = getView(x3dRoot.runtime);
+  data["timestamp"]   = new Date();
+  lastTimestamp       = data["timestamp"];
+  data.selectedModel  = window.location.search;
+  publishIWC("ViewpointUpdate", data);
+}
+subscribeIWC("UserConnected", onUserConnected);
 
 /**
  * Event handler for getting a new iwc message with a new view matrix and
@@ -113,6 +136,7 @@ function onRemoteUpdate(extras) {
     canSend = false;
 
     setView(x3dRoot.runtime, extras, finishedSettingView);
+    setViewMode(extras.viewMode);
     lastTimestamp = newTimestamp;
   }
 
@@ -144,8 +168,10 @@ function onLocalUpdate() {
   data.selectedModel = window.location.search;
   data.modelId = getParameterByName('id');
 
+  data.viewMode = getViewMode();
+
   publishIWC("ViewpointUpdate", data);
-  log('Published message!');
+  console.log('Published message!');
 }
 
 /**
@@ -158,8 +184,6 @@ function viewpointChanged(evt) {
   // Prevent widgets from sending updates while applying a received viewpoint msg
   // If we set the position because we received a message we do not want to send it back
   if(!evt || processingMessage || !canSend) {
-    log("Bypassing send!");
-
     return;
   }
 
@@ -170,7 +194,6 @@ function viewpointChanged(evt) {
   //enable sending the position in a loop
   if(typeof updateInterval != 'number'){ //but only when its not already enabled
     updateInterval = setInterval(onLocalUpdate, sendInterval);
-    log("sending");
   }
 
   //disable sending the positions a bit after the last update
@@ -181,13 +204,8 @@ function viewpointChanged(evt) {
     //disable sending
     clearTimeout(updateInterval);
     updateInterval = null;
-    log("Not sending anymore");
+    console.log("Not sending anymore");
   } , sendInterval + 50);
-}
-
-function log(message) {
-  document.getElementById('debugText').innerHTML =
-  (new Date()).toLocaleTimeString() + ' - ' + message;
 }
 
 /**
@@ -203,7 +221,10 @@ function receiveModelSelectedByOverview(msgContent){
  */
 function synchronizePositionAndOrientation() {
   if(lastData != null) {
+    processingMessage = true;
     setView(x3dRoot.runtime, lastData, function() {});
+    setViewMode(lastData.viewMode);
+    processingMessage = false;
   }
 }
 
@@ -227,7 +248,7 @@ function finishedSettingView(){
   enableSendingTimeout = setTimeout(function(){
     //disable sending
     canSend = true;
-    log("finished updating");
+    console.log("finished updating");
   } , 50);
 }
 

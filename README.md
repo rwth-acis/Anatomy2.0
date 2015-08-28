@@ -9,5 +9,5 @@ Links UK
 http://www.ukaachen.de/kliniken-institute/institut-fuer-neuroanatomie/lehre/digitale-3d-lehrmodelle.html
 
 3D – Modelle
-http://eiche.informatik.rwth-aachen.de/henm1415g2/src/views/overview.php
+http://dbis.rwth-aachen.de/3dnrt/
 

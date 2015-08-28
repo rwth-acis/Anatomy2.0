@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-- phpMyAdmin XML Dump
-- version 4.2.7.1
-- http://www.phpmyadmin.net
--
-- Host: buche.informatik.rwth-aachen.de
-- Erstellungszeit: 02. Jan 2015 um 11:37
-- Server Version: 5.5.40-0ubuntu0.12.04.1
-- PHP-Version: 5.5.15
--->
+ - Copyright 2015 Adam Brunnmeier, Dominik Studer, Alexandra Wörner, Frederik Zwilling, Ali Demiralp, Dev Sharma, Luca Liehner, Marco Dung, Georgios Toubekis
+ -
+ - Licensed under the Apache License, Version 2.0 (the "License");
+ - you may not use this file except in compliance with the License.
+ - You may obtain a copy of the License at
+ -
+ -   http://www.apache.org/licenses/LICENSE-2.0
+ -
+ - Unless required by applicable law or agreed to in writing, software
+ - distributed under the License is distributed on an "AS IS" BASIS,
+ - WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ - See the License for the specific language governing permissions and
+ - limitations under the License.
+ -
+ -
+ - phpMyAdmin XML Dump
+ - version 4.2.7.1
+ - http://www.phpmyadmin.net
+ -
+ - Host: buche.informatik.rwth-aachen.de
+ - Erstellungszeit: 02. Jan 2015 um 11:37
+ - Server Version: 5.5.40-0ubuntu0.12.04.1
+ - PHP-Version: 5.5.15
+ -->
 
 <dataset>
     <table name="models_test">
@@ -27,7 +42,7 @@
             <value>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</value>
             <value>Archeology</value>
             <value>2014-11-25 00:00:00</value>
-            <value>2.4 MB</value>
+            <value>2400000</value>
             <value>models/1/1.x3d</value>
             <value>models/1/preview/1.png</value>
             <value>NULL</value>
@@ -38,7 +53,7 @@
             <value>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</value>
             <value>Games</value>
             <value>2014-11-25 00:00:00</value>
-            <value>1.2 MB</value>
+            <value>1200000</value>
             <value>models/2/2.x3d</value>
             <value>models/2/preview/2.png</value>
             <value>NULL</value>
@@ -49,7 +64,7 @@
             <value>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</value>
             <value>Archeology</value>
             <value>2014-11-27 00:00:00</value>
-            <value>13.9 MB</value>
+            <value>13900000</value>
             <value>models/3/3.x3d</value>
             <value>models/3/preview/3.png</value>
             <value>NULL</value>
@@ -60,7 +75,7 @@
             <value>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem</value>
             <value>Archeology</value>
             <value>2014-11-27 00:00:00</value>
-            <value>28.7 MB</value>
+            <value>28700000</value>
             <value>models/4/4.x3d</value>
             <value>models/4/preview/4.png</value>
             <value>NULL</value>
@@ -71,7 +86,7 @@
             <value>Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?</value>
             <value>Archeology</value>
             <value>2014-11-27 00:00:00</value>
-            <value>42.0 MB</value>
+            <value>42000000</value>
             <value>models/5/5.x3d</value>
             <value>models/5/preview/5.png</value>
             <value>NULL</value>
@@ -82,7 +97,7 @@
             <value>Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?</value>
             <value>Archeology</value>
             <value>2014-11-27 00:00:00</value>
-            <value>53.4 MB</value>
+            <value>53400000</value>
             <value>models/6/6.x3d</value>
             <value>models/6/preview/6.png</value>
             <value>NULL</value>
@@ -93,7 +108,7 @@
             <value>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.</value>
             <value>Medicine</value>
             <value>2014-12-12 00:00:00</value>
-            <value>2.4 MB</value>
+            <value>2400000</value>
             <value>models/11/11.x3d</value>
             <value>models/11/preview/11.png</value>
             <value>NULL</value>
@@ -104,7 +119,7 @@
             <value> Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.</value>
             <value>Medicine</value>
             <value>2014-12-12 00:00:00</value>
-            <value>10.3 MB</value>
+            <value>10300000</value>
             <value>models/12/12.x3d</value>
             <value>models/12/preview/12.png</value>
             <value>NULL</value>

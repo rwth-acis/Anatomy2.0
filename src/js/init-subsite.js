@@ -1,4 +1,18 @@
 /**
+ * Copyright 2015 Adam Brunnmeier, Dominik Studer, Alexandra Wörner, Frederik Zwilling, Ali Demiralp, Dev Sharma, Luca Liehner, Marco Dung, Georgios Toubekis
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
  * @file init-subsite.js
  * Initialization of a subside inside a wrapper in Role
  */
@@ -18,15 +32,21 @@ function receiveMessage(event)
     //Debug output for message
     // console.info("Subsite: We got a message: ", event.data);
 
+    //ignore message if its empty
+    if(event.data === undefined){
+	return;
+    }
+
     //choose reaction
     var msgTopic = event.data.split(" ")[0];
     var msgContent = event.data.slice(msgTopic.length);
     switch(msgTopic){
         case "EmbeddedInRole":
-          isEmbeddedInRole = true;
-          var data = new Object();
-          publishIWC("UserConnected", data);
-          break;
+        isEmbeddedInRole = true;
+
+        var data = {topic: "UserConnected", id: "null"};
+        publishIWC("UserConnected", data);
+        break;
         default:
     if(subscribeCallbacks.has(msgTopic)){
         //call callback function
@@ -65,7 +85,8 @@ function publishIWC(topic, content){
     return;
     }
     //send message to wrapper to send it via iwc
-    roleWrapper.postMessage(topic + " " + JSON.stringify(content), "*");
+    var message = topic + " " + JSON.stringify(content);
+    roleWrapper.postMessage(message, "*");
 }
 
 

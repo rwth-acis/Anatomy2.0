@@ -1,4 +1,20 @@
 <?php
+/**
+ * Copyright 2015 Adam Brunnmeier, Dominik Studer, Alexandra Wörner, Frederik Zwilling, Ali Demiralp, Dev Sharma, Luca Liehner, Marco Dung, Georgios Toubekis
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 require_once "Generic_Tests_DatabaseTestCase.php";
 require_once "../../php/tools.php";
 
@@ -53,17 +69,23 @@ class DBTest extends Generic_Tests_DatabaseTestCase {
             "SELECT * FROM models_test WHERE id = $arg");
         $result = $query->fetchAll();
         
-        $html = createModelsTable($result);
-        $this->assertEquals($html, "<div class='row'><div class='col-md-6 overview-entry' name='table-entry' id='table_entry1'><a href='model_viewer.php?id=3' id='a_img1'>
-            <img src='../../models/3/preview/3.png' alt=Helmet class='img-responsive img-fit'>
-            <h3>Helmet</h3>
-          </a>
-          <p><b>Model Name:</b> Helmet</p>
-            <p><b>Category:</b> Archeology</p>
-            <p><b>Size:</b> 13.9 MB</p>
-            <p><b>Upload Date:</b> 2014-11-27 00:00:00</p>
-            <p><b>Description:</b> Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-        </div></div>");
+        $html = createTable($result, 'model');
+        $this->assertEquals($html, 
+          "<ul class=\"img-list\"><li>" .
+            "<a href='model_viewer.php?id=3' id='a_img3'><img id='image-over3' name='image-over' src='../../models/3/preview/3.png' alt=Helmet width='160' height='160' />
+              <span class='text-content'><span>Name: Helmet<br>Size: 13.26 MB<br> Category: Archeology</span></span></a>
+              <p id='text-over'>Helmet</p>
+              </li></ul>");
+            /*"<div class='row'><div class='col-md-6 overview-entry' name='table-entry' id='table_entry1'><a href='model_viewer.php?id=3' id='a_img1'>" .
+              "<img src='../../models/3/preview/3.png' alt=Helmet class='img-responsive img-fit'>" .
+              "<h3>Helmet</h3>" .
+              "</a>" .
+              "<p><b>Model Name:</b> Helmet</p>" .
+              "<p><b>Category:</b> Archeology</p>" .
+              "<p><b>Size:</b> 13.9 MB</p>" .
+              "<p><b>Upload Date:</b> 2014-11-27 00:00:00</p>" .
+              "<p><b>Description:</b> Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>" .
+            "</div></div>" . */
     }
 }
 ?>

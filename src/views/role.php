@@ -1,3 +1,23 @@
+<?php
+/**
+ * Copyright 2015 Adam Brunnmeier, Dominik Studer, Alexandra Wörner, Frederik Zwilling, Ali Demiralp, Dev Sharma, Luca Liehner, Marco Dung, Georgios Toubekis
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @file role.php
+ * Webpage with infos and links to ROLE
+ */
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,19 +40,21 @@
     <script src="../js/respond.min.js"></script>
     <![endif]-->
 
-    <!-- Init communication with wrapper -->
-    <script type='text/javascript' src='../js/init-subsite.js'></script>
     <?php
        //Decide if this site is inside a separate widget
        if(isset($_GET["widget"]) && $_GET["widget"] == "true")
        {
            print("<script type='text/javascript' src='../js/overview-widget.js'> </script>");
+           print("<script type='text/javascript' src='../js/init-subsite.js'></script>");
        }
     ?>
 </head>
 
 <body>
-    <?php include("menu.php"); ?>
+    <?php 
+      include("menu.php");
+      require '../config/config.php';
+    ?>
 
     <header id="head" class="secondary">
         <div class="container">
@@ -57,14 +79,15 @@
     easy. If you do it for the first time, you can follow these steps:</p>
 
                 <ol>
-                  <li>Create a ROLE space <a href="http://role-sandbox.eu/">here</a></li>
-                  <li>Log in (e.g. with your Google account)</li>
-                  <li>Add the following widgets in the sidebar on the left</li>
-                  <ul>
-                <li>http://eiche.informatik.rwth-aachen.de/henm1415g2/src/role/overview.xml</li>
-                <li>http://eiche.informatik.rwth-aachen.de/henm1415g2/src/role/model_viewer.xml</li>
-                  </ul>
-                  <li>Invite others by providing the link to the space (e.g. http://role-sandbox.eu/spaces/spacename)</li>
+                  <li>On the "Edit Your Course" page click the "+" button next to "Course room"</li>
+                  <li>Log in (Use a Learning Layers account)</li>
+                  <li>On the "Edit Your Course" page next to the "Course room" entry two URLs are given. Do the following steps for each of them once:  </li>
+                  <ol>
+                    <li>In the sidebar on the left by clicking the "+" symbol next to "Widgets". A popup window will appear.</li>
+                    <li>Copy the URL into the textbox in the popup window and click "OK".</li>
+                  </ol>
+                  <li>Enter the ROLE Space URL (e.g. http://role-sandbox.eu/spaces/spacename) on the "Edit Your Course" page.</li>
+                  <li>Invite others by providing the link to the space</li>
                   <li>Select a model in the overview</li>
                 </ol>
 
@@ -82,9 +105,8 @@
 
 
     <script src="../js/modernizr-latest.js"></script>
-    <!-- script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script-->
+    <!-- script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script-->
     <!-- script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script-->
-    <!-- script src="../js/jquery.cslider.js"></script -->
     <script src="../js/custom.js"></script>
 
 </body>
