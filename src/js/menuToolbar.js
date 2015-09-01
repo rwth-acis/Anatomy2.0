@@ -21,25 +21,40 @@
 var viewerToolbar = {};
 
 viewerToolbar.showInfo = false;
+// True, if a user is in the 'set an annotation position marker' mode (which is 
+// started by pressing the 'Annotate' button once)
 viewerToolbar.annotate = false;
 
+/**
+ * Button handler for the 'Annotate' button. Will switch viewer control to 
+ * annotation mode. The button indicates the current mode to the user with 
+ * bootstraps 'active' class.
+ */
 viewerToolbar.onAnnotateClick = function() {
   var btnAnnotate = $('#btnAnnotate');
           
   if (btnAnnotate.hasClass('active')) {
-    console.log('remvoe active');
     btnAnnotate.removeClass('active');
     viewerToolbar.annotate = false;
   }
   else {
-    console.log('make active');
     btnAnnotate.addClass('active');
     viewerToolbar.annotate = true;
   }
 };
 
+/**
+ * Click handler. Fired when the user clicks inside the x3dom viewer. The handler
+ * will be attached to the Inline element.
+ * @param {type} event Information about where the user clicked in the 3D scene
+ * @returns {undefined}
+ */
 viewerToolbar.onModelClick = function(event) {
+  // The handler will set an annotation position marker if and only if the user 
+  // activated the annotation mode by clicking the 'Annotate' button
   if (viewerToolbar.annotate) {
+    // Code taken from http://examples.x3dom.org/v-must/ (Download the zip file and check main.js)
+    // Will show a cone marking the position where a user clicked on the model
     // show 3d marker at pick position
     var pos = new x3dom.fields.SFVec3f(event.worldX, event.worldY, event.worldZ);
     var norm = new x3dom.fields.SFVec3f(event.normalX, event.normalY, event.normalZ);
@@ -67,17 +82,32 @@ viewerToolbar.onModelClick = function(event) {
 
     var ot = document.getElementById('scene');
     ot.appendChild(t);
+    // End code taken from http://examples.x3dom.org/v-must/ 
   }
 };
 
+/**
+ * Handler for when the scene is loaded. Will move the camera to show the full 
+ * model. Requires x3d-extensions.js
+ * @returns {undefined}
+ */
 viewerToolbar.onModelLoaded = function() {
   x3dRoot     = document.getElementById('viewer_object');
   // Normalize scene camera to view all content.
   normalizeCamera(x3dRoot.runtime);
 };
 
+/**
+ * Add click handler when DOM loaded. Note: Due to the implementation of x3dom, 
+ * adding a click event handler to an Inline element does not work in a 
+ * DOMContentLoaded event handler.
+ * @returns {undefined}
+ */
 document.onload = function() {
   document.getElementById('btnAnnotate').addEventListener('click', viewerToolbar.onAnnotateClick);
+  // Note: Due to the implementation of x3dom, adding the following click event 
+  // handler to an Inline element does not work in
+  //  document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('x3dInline').addEventListener('click', viewerToolbar.onModelClick);
 };
 
