@@ -24,7 +24,8 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge' charset='utf8'/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Collaborative 3D Model Viewer</title>
-
+    
+    <script src="../js/jquery.min.js"></script> <!-- Care: conflict if in ROLE -->
     <!-- X3Dom includes -->
     <script type='text/javascript' src='../js/x3dom.js'> </script>
 
@@ -34,20 +35,19 @@
     if(isset($_GET["widget"]) && $_GET["widget"] == "true")
     {
       //we have to link to the widget versions:
-      print("<script type='text/javascript' src='../js/init-subsite.js'></script>");
+    ?>
+      <script type='text/javascript' src='../js/init-subsite.js'></script>
+      <script type='text/javascript' src='../js/viewer.js'> </script>");
+    <?php
     }
     ?>
-    <script type='text/javascript' src='../js/x3d-extensions.js'> </script>
-    <script type='text/javascript' src='../js/viewer.js'> </script>
-    <link type='text/css' rel='stylesheet' href='http://www.x3dom.org/download/x3dom.css'> </link>
-
-    <link rel='stylesheet' type='text/css' href='../css/model_viewer.css'></link>
-
-    <!-- Additional styles -->
+    <link type='text/css' rel='stylesheet' href='http://www.x3dom.org/download/x3dom.css'/>
+    <link rel='stylesheet' type='text/css' href='../css/model_viewer.css'/>
     <link rel='stylesheet' type='text/css' href='../css/bootstrap.min.css'>
     <link rel='stylesheet' type='text/css' href='../css/style.css'>
 
     <!-- General functionality (used in menuToolbar.js) -->
+    <script type='text/javascript' src='../js/x3d-extensions.js'> </script>
     <script type="text/javascript" src="../js/tools.js"></script>
   </head>
 
@@ -61,7 +61,7 @@
         include("menu.php");
       } else {
         //Decide if this site is inside a separate widget
-        print("<script type='text/javascript' src='../js/model-viewer-widget.js'> </script>");
+//        print("<script type='text/javascript' src='../js/model-viewer-widget.js'> </script>");
       }
       
       include '../php/db_connect.php';
@@ -72,38 +72,47 @@
       }
 
       include("toolbar.php");
+      
+      if (isset($_GET["widget"]) && $_GET["widget"] == "true") { 
+        $viewer_class = "viewer_object_role"; 
+        $initModelViewer = "onload=\"initializeModelViewer()\"";
+      } else { 
+        $viewer_class = "viewer_object"; 
+        $initModelViewer = "onload=\"viewerToolbar.onModelLoaded()\"";
+      }
     ?>
-
-    <?php if (isset($_GET["widget"]) && $_GET["widget"] == "true") { $viewer_class = "viewer_object_role"; } else { $viewer_class = "viewer_object"; } ?>
-      <x3d id='viewer_object' swfpath="../swf/x3dom.swf" class = "<?php echo $viewer_class; ?>" showStat="false">
-        <scene>
-          <navigationInfo headlight="true" type="examine" id="navType"></navigationInfo>
-          <background skyColor='1.0 1.0 1.0'> </background>
-          <?php
-            if(is_object($model)) {
-              echo "<inline url=\"../../$model->data_url\" onload=\"initializeModelViewer()\"> </inline>";
-            }
-          ?>
-          <viewpoint id="viewport" DEF="viewport" centerOfRotation="0 0 0" position="0.00 0.00 5.00" orientation="-0.92 0.35 0.17 0.00" fieldOfView="0.858"> </viewpoint>
-        </scene>
+    
+    <x3d id='viewer_object' swfpath="../swf/x3dom.swf" class="<?php echo $viewer_class; ?>" showStat="false">
+      <scene id="scene">
+        <navigationInfo headlight="true" type="examine" id="navType"></navigationInfo>
+        <background skyColor='1.0 1.0 1.0'> </background>
+        <Group id="x3dModel" render="true">
         <?php
           if(is_object($model)) {
-            echo "<div id='metadata_overlay'>
-              <div class='x3dom-states-head'> </div>
-              <div class='x3dom-states-item-title'>Name:</div>
-              <div class='x3dom-states-item-value'>$model->name</div> <br>
-              <div class='x3dom-states-item-title'>Classification:</div>
-              <div class='x3dom-states-item-value'>$model->classification</div> <br>
-              <div class='x3dom-states-item-title'>Description:</div>
-              <div class='x3dom-states-item-value'>$model->description</div> <br>
-              <div class='x3dom-states-item-title'>Upload Date:</div>
-              <div class='x3dom-states-item-value'>$model->upload_date</div> <br>
-              <div class='x3dom-states-item-title'><a href=\"../../$model->data_url\">Download</a></div>
-              </div>";
+            echo "<inline id=\"x3dInline\" url=\"../../$model->data_url\" $initModelViewer> </inline>";
           }
         ?>
-      </x3d>
-      <!-- Creates a panel with information about mouse usage and hotkeys for navigation -->
-      <?php include("nav_info.html"); ?>
+        </Group>
+        <viewpoint id="viewport" DEF="viewport" centerOfRotation="0 0 0" position="0.00 0.00 5.00" orientation="-0.92 0.35 0.17 0.00" fieldOfView="0.858"> </viewpoint>
+      </scene>
+      <?php
+//          if(is_object($model)) {
+//            echo "<div id='metadata_overlay'>
+//              <div class='x3dom-states-head'> </div>
+//              <div class='x3dom-states-item-title'>Name:</div>
+//              <div class='x3dom-states-item-value'>$model->name</div> <br>
+//              <div class='x3dom-states-item-title'>Classification:</div>
+//              <div class='x3dom-states-item-value'>$model->classification</div> <br>
+//              <div class='x3dom-states-item-title'>Description:</div>
+//              <div class='x3dom-states-item-value'>$model->description</div> <br>
+//              <div class='x3dom-states-item-title'>Upload Date:</div>
+//              <div class='x3dom-states-item-value'>$model->upload_date</div> <br>
+//              <div class='x3dom-states-item-title'><a href=\"../../$model->data_url\">Download</a></div>
+//              </div>";
+//          }
+      ?>
+    </x3d>
+    <!-- Creates a panel with information about mouse usage and hotkeys for navigation -->
+    <?php include("nav_info.html"); ?>
   </body>
 </html>

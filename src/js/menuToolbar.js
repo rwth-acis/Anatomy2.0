@@ -21,6 +21,65 @@
 var viewerToolbar = {};
 
 viewerToolbar.showInfo = false;
+viewerToolbar.annotate = false;
+
+viewerToolbar.onAnnotateClick = function() {
+  var btnAnnotate = $('#btnAnnotate');
+          
+  if (btnAnnotate.hasClass('active')) {
+    console.log('remvoe active');
+    btnAnnotate.removeClass('active');
+    viewerToolbar.annotate = false;
+  }
+  else {
+    console.log('make active');
+    btnAnnotate.addClass('active');
+    viewerToolbar.annotate = true;
+  }
+};
+
+viewerToolbar.onModelClick = function(event) {
+  if (viewerToolbar.annotate) {
+    // show 3d marker at pick position
+    var pos = new x3dom.fields.SFVec3f(event.worldX, event.worldY, event.worldZ);
+    var norm = new x3dom.fields.SFVec3f(event.normalX, event.normalY, event.normalZ);
+    
+    // rotate such that cone points to click point
+    var qDir = x3dom.fields.Quaternion.rotateFromTo(new x3dom.fields.SFVec3f(0, -1, 0), norm);
+    var rot = qDir.toAxisAngle();
+    var pos = pos.addScaled(norm, 9.5);  // since length is 10...
+    
+    var t = document.createElement('Transform');
+    t.setAttribute("scale", "3 10 3" );
+    t.setAttribute('rotation', rot[0].x+' '+rot[0].y+' '+rot[0].z+' '+rot[1]);
+    t.setAttribute('translation', pos.x+' '+pos.y+' '+pos.z);
+    
+    var s = document.createElement('Shape');
+    t.appendChild(s);
+    var b = document.createElement('Cone');
+    s.appendChild(b);
+    var a = document.createElement('Appearance');
+    var m = document.createElement('Material');
+    m.setAttribute("diffuseColor", "1 0 0");
+    m.setAttribute("transparency", "0.5");
+    a.appendChild(m);
+    s.appendChild(a);
+
+    var ot = document.getElementById('scene');
+    ot.appendChild(t);
+  }
+};
+
+viewerToolbar.onModelLoaded = function() {
+  x3dRoot     = document.getElementById('viewer_object');
+  // Normalize scene camera to view all content.
+  normalizeCamera(x3dRoot.runtime);
+};
+
+document.onload = function() {
+  document.getElementById('btnAnnotate').addEventListener('click', viewerToolbar.onAnnotateClick);
+  document.getElementById('x3dInline').addEventListener('click', viewerToolbar.onModelClick);
+};
 
 /**
  * Initialize the combo box for navigation modes in toolbar
