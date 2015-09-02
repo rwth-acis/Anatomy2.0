@@ -34,7 +34,7 @@
 <!-- JS includes of menu toolbar functionality -->
 <?php 
   // If widget parameter is set, the this is a widget in ROLE environment. 
-  // Therefore menu.php is not included. Then, JQuery and bootstrap.js are also 
+  // Therefore menu.php is not included. Then, bootstrap.js is also 
   // missing. Include here. Make sure not to include twice, because this will 
   // break the menu.
   if(isset($_GET["widget"]) && $_GET["widget"] == "true") {

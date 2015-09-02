@@ -25,41 +25,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Collaborative 3D Model Viewer</title>
     
-    <script src="../js/jquery.min.js"></script>
-    <script type='text/javascript' src='../js/x3dom.js'> </script>
-
-    <!-- Init communication with wrapper -->
-    <?php
-    //Decide if this site is inside a separate widget
-    if(isset($_GET["widget"]) && $_GET["widget"] == "true")
-    {
-    ?>
-      <script type='text/javascript' src='../js/init-subsite.js'></script>
-      <script type='text/javascript' src='../js/viewer.js'> </script>");
-    <?php
-    }
-    ?>
     <link type='text/css' rel='stylesheet' href='http://www.x3dom.org/download/x3dom.css'/>
     <link rel='stylesheet' type='text/css' href='../css/model_viewer.css'/>
     <link rel='stylesheet' type='text/css' href='../css/bootstrap.min.css'>
     <link rel='stylesheet' type='text/css' href='../css/style.css'>
-
-    <!-- General functionality (used in toolbar.js) -->
-    <script type='text/javascript' src='../js/x3d-extensions.js'> </script>
-    <script type="text/javascript" src="../js/tools.js"></script>
   </head>
 
   <body>
     
+    <!-- This div is a helper to allow our x3d viewer to be full height -->
     <div style="position: fixed; height:100%"></div>
+    <!-- Load all Javascript dependencies. Care: menu.php also loads dependencies -->
     <?php
       // Hide the menu in ROLE environment. Outside ROLE the menu must be displayed.
       if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
       {
         include("menu.php");
+    ?>
+      <script type='text/javascript' src='../js/x3dom.js'> </script>
+      <script type='text/javascript' src='../js/x3d-extensions.js'> </script>
+    <?php
       } else {
-        //Decide if this site is inside a separate widget
-        print("<script type='text/javascript' src='../js/model-viewer-widget.js'> </script>");
+    ?>
+      <script src="../js/jquery.min.js"></script>
+      <script type='text/javascript' src='../js/init-subsite.js'></script>
+      <script type='text/javascript' src='../js/viewer.js'> </script>
+      <script type='text/javascript' src='../js/x3d-extensions.js'> </script>
+      <script type="text/javascript" src="../js/tools.js"></script>      
+      <script type='text/javascript' src='../js/model-viewer-widget.js'> </script>
+    <?php
       }
       
       include '../php/db_connect.php';
