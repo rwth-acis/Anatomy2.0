@@ -51,7 +51,6 @@ annotations.sendRequest = function(method, url, json_payload, retries, func) {
       }
     }
   };
-  console.log(method + " " + url + " " + json_payload);
   xmlhttp.send(json_payload);
 };
 
@@ -86,7 +85,5 @@ annotations.readAnnotations = function(objectId, func) {
     var annos = JSON.parse(answer);
     
     func(annos);
-    
-    console.log("RETURN " + answer);
   });
 };

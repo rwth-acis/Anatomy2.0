@@ -28,15 +28,10 @@ viewerToolbar.showInfo = false;
 // started by pressing the 'Annotate' button once)
 viewerToolbar.annotate = false;
 
-/**
- * Button handler for the 'Annotate' button. Will switch viewer control to 
- * annotation mode. The button indicates the current mode to the user with 
- * bootstraps 'active' class.
- */
-viewerToolbar.onAnnotateClick = function() {
+viewerToolbar.toggleAnnotationMode = function(toOff) {
   var btnAnnotate = $('#btnAnnotate');
           
-  if (btnAnnotate.hasClass('active')) {
+  if (toOff) {
     btnAnnotate.removeClass('active');
     viewerToolbar.annotate = false;
   }
@@ -44,6 +39,15 @@ viewerToolbar.onAnnotateClick = function() {
     btnAnnotate.addClass('active');
     viewerToolbar.annotate = true;
   }
+};
+
+/**
+ * Button handler for the 'Annotate' button. Will switch viewer control to 
+ * annotation mode. The button indicates the current mode to the user with 
+ * bootstraps 'active' class.
+ */
+viewerToolbar.onAnnotateClick = function() {
+  viewerToolbar.toggleAnnotationMode(viewerToolbar.annotate);
 };
 
 /**
@@ -61,6 +65,8 @@ viewerToolbar.onModelClick = function(event) {
     
     modelViewer.showAnnotationMarker(pos, norm);
     annotations.createAnnotation(modelViewer.seviannoObjectId, pos, norm);
+    
+    viewerToolbar.toggleAnnotationMode(true);
   }
 };
 
