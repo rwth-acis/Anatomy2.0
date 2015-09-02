@@ -14,19 +14,24 @@
  * limitations under the License.
  *
  * @file annotations.js
- *  TODO
+ * Handles communication with Sevianno service to store and retrieve annotations
  */
 
 var annotations = {};
 
+// Sevianno stores a tool id with each annotation. Set the tool id here
 annotations.TOOL_ID = "Anatomy";
+// The name of the collection which stores annotations in the ArangoDB of Sevianno
 annotations.ANNOTATIONS_COLLECTION = "TextTypeAnnotations";
-
+// The URL to the Sevianno service
 annotations.BASE_SERVICE_URL = 'http://eiche.informatik.rwth-aachen.de:7075/';
+// The URL for request regarding Sevianno annotations
 annotations.ANNOTATION_SERVICE_URL = annotations.BASE_SERVICE_URL + 'annotations/annotations/';
+// The URL for requests regarding Sevianno objects
 annotations.OBJECT_SERVICE_URL = annotations.BASE_SERVICE_URL + 'annotations/objects/';
 
 /**
+ * Helper function
  * Sends an ajax request to a RESTful service. JSON encoded payload can be sent.
  * @param {String} method GET, POST, PUT or DELETE
  * @param {String} url Target URL of request
@@ -56,6 +61,11 @@ annotations.sendRequest = function(method, url, json_payload, retries, func) {
 
 /**
  * Creates a new Sevianno annotation for current Sevianno object ID (seviannoId)
+ * @param {String} objectId The sevianno object id of the model to which this 
+ * annotation should be stored (is retrieved from our database)
+ * @param {x3dom.fields.SFVec3f} pos The position of the annotation as x3dom vector
+ * @param {x3dom.fields.SFVec3f} norm The normal vector of the annotation as 
+ * x3dom vector. This will define the direction in which this annotaion marker points
  * @returns {undefined}
  */
 annotations.createAnnotation = function(objectId, pos, norm) {
@@ -77,6 +87,8 @@ annotations.createAnnotation = function(objectId, pos, norm) {
 /**
  * Reads all Sevianno annotations for given Sevianno object ID
  * @param {String} objectId The ID of the Sevianno object, whose annotations are to be read
+ * @param {function(object)} func Callback function which provides the annotations 
+ * read from Sevianno service as first parameter
  * @returns {undefined}
  */
 annotations.readAnnotations = function(objectId, func) { 

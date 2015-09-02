@@ -14,13 +14,23 @@
  * limitations under the License.
  *
  * @file model-viewer.js
- *  TODO
+ * Shows annotations in model_viewer.php
+ * 
+ * Requires: annotations.js
  */
 
 var modelViewer = {};
 
+// The id of the model object as stored in Sevianno service (can be retrieved from our database)
 modelViewer.seviannoObjectId = '';
 
+/**
+ * Shows a cone to mark the position of an annotation
+ * @param {x3dom.fields.SFVec3f} pos The position of the annotation as x3dom vector
+ * @param {x3dom.fields.SFVec3f} norm The normal vector of the annotation as 
+ * x3dom vector. This will define the direction in which this annotaion marker points
+ * @returns {undefined}
+ */
 modelViewer.showAnnotationMarker = function(pos, norm) {  
   // Code taken from http://examples.x3dom.org/v-must/ (Download the zip file and check main.js)
   // Will show a cone marking the position where a user clicked on the model
@@ -53,15 +63,17 @@ modelViewer.showAnnotationMarker = function(pos, norm) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+  // Reading the Sevianno object id of the current model from our database (our php 
+  // server will store it in a hidden input field called model-sevianno-id)
   modelViewer.seviannoObjectId = $('#model-sevianno-id').val();
   
+  // Then reading all annotations from Sevianno which belong to this object id and display them
   annotations.readAnnotations(modelViewer.seviannoObjectId, function(annos) {
-    var length = annos.annotations.length;
     $.each(annos.annotations, function(i,n) {
       var annotation = n.annotation;
       var dbPos = annotation.annotationData.pos;
       var dbNorm = annotation.annotationData.norm;
-      
+      // Converting the position and normal vector received to x3dom vectors
       var pos = new x3dom.fields.SFVec3f(dbPos.x, dbPos.y, dbPos.z);
       var norm = new x3dom.fields.SFVec3f(dbNorm.x, dbNorm.y, dbNorm.z);
       modelViewer.showAnnotationMarker(pos, norm);

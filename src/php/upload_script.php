@@ -49,6 +49,11 @@
 					
 					// Create database-entry
 					$conn = require '../php/db_connect.php';
+          
+          // TODO:
+          // Insert a Sevianno object id as value for the "seviannoId" field
+          // As a hint on how to recieve the Sevianno object id, have a look at
+          // http://dbis.rwth-aachen.de/3dnrt/3Drepository/getNewId.php
 				
 					$sql = "INSERT INTO models (name, description, classification, size) VALUES ('$name','$text', '$cat', '$file_size')";
 				

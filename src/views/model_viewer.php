@@ -108,6 +108,7 @@
       ?>
     </x3d>
   
+    <!-- Hidden input field to provide the Sevianno object id from our database to model-viewer.js -->
     <input id="model-sevianno-id" class="hidden" value="<?php echo $model->seviannoId; ?>"/>
     <!-- Creates a panel with information about mouse usage and hotkeys for navigation -->
     <?php include("nav_info.html"); ?>
