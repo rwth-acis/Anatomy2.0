@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @file menuToolbar.js
+ * @file toolbar.js
  * Provides event handler for click events of all toolbar buttons
  * Also initializes toolbar elements if needed
  */
@@ -202,7 +202,7 @@ function btnShowInfo() {
   if (isInRole() && isSynchronized) {
     var msgContent = {'show': viewerToolbar.showInfo};
     publishIWC("ShowInfo", msgContent);
-    console.log("menuToolbar.js: publishIWC 'ShowInfo'");
+    console.log("toolbar.js: publishIWC 'ShowInfo'");
   }
   // Actually show the info overlays
   showInfo(viewerToolbar.showInfo);

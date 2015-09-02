@@ -35,8 +35,6 @@
     <link rel='stylesheet' type='text/css' href='../css/bootstrap.min.css'>
     <link rel='stylesheet' type='text/css' href='../css/style.css'>
     <link rel="stylesheet" href="../css/editcourse.css">
-  
-    <!-- General functionality (used in menuToolbar.js) -->
     <script type="text/javascript" src="../js/tools.js"></script>
     
     <script src="../js/ajax.js"></script>

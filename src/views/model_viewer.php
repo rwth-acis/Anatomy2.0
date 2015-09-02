@@ -44,7 +44,7 @@
     <link rel='stylesheet' type='text/css' href='../css/bootstrap.min.css'>
     <link rel='stylesheet' type='text/css' href='../css/style.css'>
 
-    <!-- General functionality (used in menuToolbar.js) -->
+    <!-- General functionality (used in toolbar.js) -->
     <script type='text/javascript' src='../js/x3d-extensions.js'> </script>
     <script type="text/javascript" src="../js/tools.js"></script>
   </head>

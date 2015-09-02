@@ -58,7 +58,7 @@
 <?php
   }
 ?>
-<script type="text/javascript" src="../js/menuToolbar.js"></script>
+<script type="text/javascript" src="../js/toolbar.js"></script>
 
 
 <!-- Toolbar -->
