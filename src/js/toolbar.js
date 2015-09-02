@@ -16,6 +16,9 @@
  * @file toolbar.js
  * Provides event handler for click events of all toolbar buttons
  * Also initializes toolbar elements if needed
+ * 
+ * Requires: model-viewer.js
+ *   annotations.js
  */
 
 var viewerToolbar = {};
@@ -53,36 +56,11 @@ viewerToolbar.onModelClick = function(event) {
   // The handler will set an annotation position marker if and only if the user 
   // activated the annotation mode by clicking the 'Annotate' button
   if (viewerToolbar.annotate) {
-    // Code taken from http://examples.x3dom.org/v-must/ (Download the zip file and check main.js)
-    // Will show a cone marking the position where a user clicked on the model
-    // show 3d marker at pick position
     var pos = new x3dom.fields.SFVec3f(event.worldX, event.worldY, event.worldZ);
     var norm = new x3dom.fields.SFVec3f(event.normalX, event.normalY, event.normalZ);
     
-    // rotate such that cone points to click point
-    var qDir = x3dom.fields.Quaternion.rotateFromTo(new x3dom.fields.SFVec3f(0, -1, 0), norm);
-    var rot = qDir.toAxisAngle();
-    var pos = pos.addScaled(norm, 9.5);  // since length is 10...
-    
-    var t = document.createElement('Transform');
-    t.setAttribute("scale", "3 10 3" );
-    t.setAttribute('rotation', rot[0].x+' '+rot[0].y+' '+rot[0].z+' '+rot[1]);
-    t.setAttribute('translation', pos.x+' '+pos.y+' '+pos.z);
-    
-    var s = document.createElement('Shape');
-    t.appendChild(s);
-    var b = document.createElement('Cone');
-    s.appendChild(b);
-    var a = document.createElement('Appearance');
-    var m = document.createElement('Material');
-    m.setAttribute("diffuseColor", "1 0 0");
-    m.setAttribute("transparency", "0.5");
-    a.appendChild(m);
-    s.appendChild(a);
-
-    var ot = document.getElementById('scene');
-    ot.appendChild(t);
-    // End code taken from http://examples.x3dom.org/v-must/ 
+    modelViewer.showAnnotationMarker(pos, norm);
+    annotations.createAnnotation(modelViewer.seviannoObjectId, pos, norm);
   }
 };
 

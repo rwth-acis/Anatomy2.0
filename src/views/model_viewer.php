@@ -48,6 +48,7 @@
       } else {
     ?>
       <script src="../js/jquery.min.js"></script>
+      <script type='text/javascript' src='../js/x3dom.js'> </script>
       <script type='text/javascript' src='../js/init-subsite.js'></script>
       <script type='text/javascript' src='../js/viewer.js'> </script>
       <script type='text/javascript' src='../js/x3d-extensions.js'> </script>
@@ -55,6 +56,10 @@
       <script type='text/javascript' src='../js/model-viewer-widget.js'> </script>
     <?php
       }
+    ?>
+      <script type='text/javascript' src='../js/annotations.js'> </script>
+      <script type='text/javascript' src='../js/model-viewer.js'> </script>
+    <?php
       
       include '../php/db_connect.php';
       $model_id = filter_input(INPUT_GET, "id");
@@ -77,7 +82,7 @@
     <x3d id='viewer_object' swfpath="../swf/x3dom.swf" class="<?php echo $viewer_class; ?>" showStat="false">
       <scene id="scene">
         <navigationInfo headlight="true" type="examine" id="navType"></navigationInfo>
-        <background skyColor='1.0 1.0 1.0'> </background>">
+        <background skyColor='1.0 1.0 1.0'> </background>
         <?php
           if(is_object($model)) {
             echo "<inline id=\"x3dInline\" url=\"../../$model->data_url\" $initModelViewer> </inline>";
@@ -102,6 +107,8 @@
           }
       ?>
     </x3d>
+  
+    <input id="model-sevianno-id" class="hidden" value="<?php echo $model->seviannoId; ?>"/>
     <!-- Creates a panel with information about mouse usage and hotkeys for navigation -->
     <?php include("nav_info.html"); ?>
   </body>
