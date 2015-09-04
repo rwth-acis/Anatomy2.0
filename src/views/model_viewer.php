@@ -89,6 +89,7 @@
           }
         ?>
         <viewpoint id="viewport" DEF="viewport" centerOfRotation="0 0 0" position="0.00 0.00 5.00" orientation="-0.92 0.35 0.17 0.00" fieldOfView="0.858"> </viewpoint>
+        <Group id="annotation-markers" onclick="modelViewer.handleAnnotationMarkerClick(event)"></Group>
       </scene>
       <?php
           if(is_object($model)) {
@@ -112,5 +113,10 @@
     <input id="model-sevianno-id" class="hidden" value="<?php echo $model->seviannoId; ?>"/>
     <!-- Creates a panel with information about mouse usage and hotkeys for navigation -->
     <?php include("nav_info.html"); ?>
+    <!-- A box for showing annotation content. There will always be just one box at a time. This div will be moved to the correct position. -->
+    <div id="annotation-content" class="annotation-content hidden">
+      <h4>Hello, world!</h4><button id="annotation-content-close">X</button>
+      <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+    </div>
   </body>
 </html>
