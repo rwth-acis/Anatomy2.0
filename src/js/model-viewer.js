@@ -24,6 +24,10 @@ var modelViewer = {};
 // The id of the model object as stored in Sevianno service (can be retrieved from our database)
 modelViewer.seviannoObjectId = '';
 
+modelViewer.selectedAnnotationId = undefined;
+
+modelViewer.annotations = {};
+
 /**
  * Shows a cone to mark the position of an annotation
  * @param {x3dom.fields.SFVec3f} pos The position of the annotation as x3dom vector
@@ -31,7 +35,7 @@ modelViewer.seviannoObjectId = '';
  * x3dom vector. This will define the direction in which this annotaion marker points
  * @returns {undefined}
  */
-modelViewer.showAnnotationMarker = function(pos, norm) {  
+modelViewer.showAnnotationMarker = function(pos, norm, id) {  
   // Code taken from http://examples.x3dom.org/v-must/ (Download the zip file and check main.js)
   // Will show a cone marking the position where a user clicked on the model
   // show 3d marker at pick position
@@ -47,7 +51,8 @@ modelViewer.showAnnotationMarker = function(pos, norm) {
   t.setAttribute('translation', pos.x+' '+pos.y+' '+pos.z);
 
   var s = document.createElement('Shape');
-  s.setAttribute('class', 'shape')
+  s.setAttribute('class', 'shape');
+  s.dataset.id = id;
   t.appendChild(s);
   var b = document.createElement('Cone');
   s.appendChild(b);
@@ -61,13 +66,6 @@ modelViewer.showAnnotationMarker = function(pos, norm) {
   var ot = document.getElementById('annotation-markers');
   ot.appendChild(t);
   // End code taken from http://examples.x3dom.org/v-must/ 
-  
-//  $(document).ready(function(){
-//        	//Add a onclick callback to every shape
-//        	$(".shape").each(function() {
-//        		$(this).attr("onclick", "handleSingleClick(this)");
-//        	});
-//        });
 };
 
 /**
@@ -76,13 +74,24 @@ modelViewer.showAnnotationMarker = function(pos, norm) {
  * @param {Array} pos2d 2D point where the user clicked (relative to page)
  * @returns {undefined}
  */
-modelViewer.showAnnotationContent = function(pos2d) {
+modelViewer.showAnnotationContentBox = function(pos2d) {
   
   var anno2D = $('#annotation-content');
   anno2D.removeClass('hidden');
   pos2d = modelViewer.calcAnnotationPosition(pos2d);
   anno2D.css('left', pos2d[0] + 'px');
   anno2D.css('top', pos2d[1] + 'px');  
+  
+  modelViewer.showAnnotationContent();
+};
+
+modelViewer.showAnnotationContent = function() {
+  
+  var annotation = modelViewer.annotations[modelViewer.selectedAnnotationId];
+  $('#header-annotation-content').html(annotation.title);
+  $('#p-annotation-content').html(annotation.text);
+  $('#input-annotation-title').val(annotation.title);
+  $('#textarea-annotation-content').val(annotation.text);
 };
 
 /**
@@ -96,10 +105,14 @@ modelViewer.handleAnnotationMarkerClick = function(event) {
   var worldPos = event.hitPnt;
   var runtime = document.getElementById("viewer_object").runtime;
   
+  // Get the id of the clicked annotation
+  var shape = event.hitObject;
+  modelViewer.selectedAnnotationId = shape.dataset.id;
+  
   // x3dom can calculate the 2D position on the screen based on a 3D point
   var pos2d = runtime.calcPagePos(worldPos[0], worldPos[1], worldPos[2]);
   
-  modelViewer.showAnnotationContent(pos2d);
+  modelViewer.showAnnotationContentBox(pos2d);
 };
 
 /**
@@ -160,6 +173,21 @@ modelViewer.calcAnnotationPosition = function(pos2d) {
   return pos2d;
 };
 
+modelViewer.switchAnnotationContentMode = function(mode) {
+  if (mode === 'edit') {
+    $('#div-annotation-content-read').addClass('hidden');
+    $('#div-annotation-content-edit').removeClass('hidden');
+  }
+  else {
+    $('#div-annotation-content-read').removeClass('hidden');
+    $('#div-annotation-content-edit').addClass('hidden');
+  }
+};
+
+modelViewer.storeAnnotationLocally = function(annotation) {
+  modelViewer.annotations[annotation.id] = annotation;
+};
+
 document.addEventListener('DOMContentLoaded', function() {
   // Reading the Sevianno object id of the current model from our database (our php 
   // server will store it in a hidden input field called model-sevianno-id)
@@ -174,12 +202,36 @@ document.addEventListener('DOMContentLoaded', function() {
       // Converting the position and normal vector received to x3dom vectors
       var pos = new x3dom.fields.SFVec3f(dbPos.x, dbPos.y, dbPos.z);
       var norm = new x3dom.fields.SFVec3f(dbNorm.x, dbNorm.y, dbNorm.z);
-      modelViewer.showAnnotationMarker(pos, norm);
+      modelViewer.showAnnotationMarker(pos, norm, annotation.id);
+      
+      modelViewer.storeAnnotationLocally(annotation);
     });
-  })
+  });
   
   // Register handler for close button in annotation content window
-  $('#annotation-content-close').on('click', function() {
+  $('#btn-annotation-content-close').on('click', function() {
     $('#annotation-content').addClass('hidden');
-  })
+    modelViewer.selectedAnnotationId = undefined;
+  });
+  
+  $('#btn-annotation-edit').on('click', function() {
+    modelViewer.switchAnnotationContentMode('edit');
+  });
+  
+  $('#btn-annotation-cancel').on('click', function() {
+    modelViewer.switchAnnotationContentMode('read');
+  });
+  
+  $('#btn-annotation-save').on('click', function() {
+    var title = $('#input-annotation-title').val();
+    var content = $('#textarea-annotation-content').val();
+    $('#ajax_loader').removeClass('hidden');
+    annotations.updateAnnotation(modelViewer.selectedAnnotationId, title, content, function(data) {
+      var annotation = JSON.parse(data);
+      modelViewer.storeAnnotationLocally(annotation);
+      $('#ajax_loader').addClass('hidden');  
+      modelViewer.switchAnnotationContentMode('read');
+      modelViewer.showAnnotationContent();
+    });
+  });
 });

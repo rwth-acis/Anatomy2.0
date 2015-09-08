@@ -84,6 +84,18 @@ annotations.createAnnotation = function(objectId, pos, norm) {
   }
 };
 
+annotations.updateAnnotation = function(annotationId, title, content, func) {
+  var data = new Object();
+  data.title = title;
+  data.text = content;
+  data.timestamp = Date.now();
+  // The id of the annotation where changes should be stored
+  var annotationId = annotationId;
+  var json_payload = JSON.stringify(data);
+
+  annotations.sendRequest("PUT", annotations.OBJECT_SERVICE_URL + annotationId, json_payload, 2, func);
+};
+
 /**
  * Reads all Sevianno annotations for given Sevianno object ID
  * @param {String} objectId The ID of the Sevianno object, whose annotations are to be read

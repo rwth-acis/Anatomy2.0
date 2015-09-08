@@ -115,8 +115,22 @@
     <?php include("nav_info.html"); ?>
     <!-- A box for showing annotation content. There will always be just one box at a time. This div will be moved to the correct position. -->
     <div id="annotation-content" class="annotation-content hidden">
-      <h4>Hello, world!</h4><button id="annotation-content-close">X</button>
-      <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+      <div id="div-annotation-content-read">
+        <h4 id="header-annotation-content" class="annotation-header">Hello, world!</h4>
+        <button id="btn-annotation-content-close" type="button" class="btn btn-default btn-sm pull-right" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <p id="p-annotation-content">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+        <button id="btn-annotation-edit" class="btn btn-default">Edit</button>
+        <button id="btn-annotation-delete" class="btn btn-default">Delete</button>
+      </div>
+      <div id="div-annotation-content-edit" class="hidden">
+        <form action="javascript:void(0);">
+          <input id="input-annotation-title" class="form-control" value="Hello, world!"/>
+          <textarea id="textarea-annotation-content" class="form-control" rows="6">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</textarea>
+          <button id="btn-annotation-save" class="btn btn-default">Save</button>
+          <button id="btn-annotation-cancel" class="btn btn-default">Cancel</button>
+          <img src="../images/ajax-loader.gif" alt="Loader" class="hidden" id="ajax_loader">
+        </form>
+      </div>
     </div>
   </body>
 </html>

@@ -64,7 +64,7 @@ viewerToolbar.onModelClick = function(event) {
     var norm = new x3dom.fields.SFVec3f(event.normalX, event.normalY, event.normalZ);
     
     // Show the new annotation to the user
-    modelViewer.showAnnotationMarker(pos, norm);
+    modelViewer.showAnnotationMarker(pos, norm, undefined);
     // Store the annotation persistently with Sevianno
     annotations.createAnnotation(modelViewer.seviannoObjectId, pos, norm);
     
