@@ -24,8 +24,10 @@ var modelViewer = {};
 // The id of the model object as stored in Sevianno service (can be retrieved from our database)
 modelViewer.seviannoObjectId = '';
 
+// The Sevianno object id of the annotation whose content box is currently visible (the last annotation that has been clicked)
 modelViewer.selectedAnnotationId = undefined;
 
+// A list of all annotations which are related to the current model
 modelViewer.annotations = {};
 
 /**
@@ -52,6 +54,8 @@ modelViewer.showAnnotationMarker = function(pos, norm, id) {
 
   var s = document.createElement('Shape');
   s.setAttribute('class', 'shape');
+  // Store the id of an annotation with the cone shape. The id of the annotation 
+  // can thus be accessed when clicking the shape.
   s.dataset.id = id;
   t.appendChild(s);
   var b = document.createElement('Cone');
@@ -85,11 +89,20 @@ modelViewer.showAnnotationContentBox = function(pos2d) {
   modelViewer.showAnnotationContent();
 };
 
+/**
+ * Shows the textual content of the currently selected annotation in the annotation 
+ * context box. Note, that the content is taken from modelViewer.annotations object.
+ * You might need to update the object first by calling modelViewer.storeAnnotationLocally(annotation)
+ * 
+ * @returns {undefined}
+ */
 modelViewer.showAnnotationContent = function() {
   
   var annotation = modelViewer.annotations[modelViewer.selectedAnnotationId];
+  // Updating the content in the "readonly" div
   $('#header-annotation-content').html(annotation.title);
   $('#p-annotation-content').html(annotation.text);
+  // Updating the content in the "edit" div
   $('#input-annotation-title').val(annotation.title);
   $('#textarea-annotation-content').val(annotation.text);
 };
@@ -173,6 +186,14 @@ modelViewer.calcAnnotationPosition = function(pos2d) {
   return pos2d;
 };
 
+/**
+ * Switches between the "readonly" div of the annotation content box and its "edit" div.
+ * For the users point of view, this makes the content editable or non-editable 
+ * and shows the corresponding buttons.
+ * 
+ * @param {type} mode
+ * @returns {undefined}
+ */
 modelViewer.switchAnnotationContentMode = function(mode) {
   if (mode === 'edit') {
     $('#div-annotation-content-read').addClass('hidden');
@@ -184,6 +205,13 @@ modelViewer.switchAnnotationContentMode = function(mode) {
   }
 };
 
+/**
+ * Stores an annotation in the modelViewer.annotations object. It can be accessed
+ * as an attribute via its annotation id. E.g. as modelViewer.annotations['12365']
+ * @param {Object} annotation The annotation to be stored (one should typically 
+ * store them in the format received from Sevianno)
+ * @returns {undefined}
+ */
 modelViewer.storeAnnotationLocally = function(annotation) {
   modelViewer.annotations[annotation.id] = annotation;
 };
@@ -211,27 +239,39 @@ document.addEventListener('DOMContentLoaded', function() {
   // Register handler for close button in annotation content window
   $('#btn-annotation-content-close').on('click', function() {
     $('#annotation-content').addClass('hidden');
+    // There is no more annotation selected, so update selectedAnnotationId
     modelViewer.selectedAnnotationId = undefined;
   });
   
+  // Handler for the edit button in div-annotation-content-read. Switches to div-annotation-content-edit
   $('#btn-annotation-edit').on('click', function() {
     modelViewer.switchAnnotationContentMode('edit');
   });
   
+  // Handler for the edit button in div-annotation-content-edit. Switches to 
+  // div-annotation-content-read without saving user input.
   $('#btn-annotation-cancel').on('click', function() {
     modelViewer.switchAnnotationContentMode('read');
   });
   
+  // Handler for the edit button in div-annotation-content-edit. Switches to 
+  // div-annotation-content-read while saving all user input at the Sevianno service
   $('#btn-annotation-save').on('click', function() {
+    // Read user input
     var title = $('#input-annotation-title').val();
     var content = $('#textarea-annotation-content').val();
+    // Indicate that the data is being processed by showing a loading indicator
     $('#ajax_loader').removeClass('hidden');
+    // Save the annotations with Sevianno
     annotations.updateAnnotation(modelViewer.selectedAnnotationId, title, content, function(data) {
+      // Update the local annotation stored in modelViewer
       var annotation = JSON.parse(data);
       modelViewer.storeAnnotationLocally(annotation);
+      // Hide the loading indicator
       $('#ajax_loader').addClass('hidden');  
+      // Switch to div-annotation-content-read and update its content
       modelViewer.switchAnnotationContentMode('read');
-      modelViewer.showAnnotationContent();
+      modelViewer.showAnnotationContent(); 
     });
   });
 });

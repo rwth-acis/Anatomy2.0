@@ -84,6 +84,16 @@ annotations.createAnnotation = function(objectId, pos, norm) {
   }
 };
 
+/**
+ * Update the title and content of an annotation.
+ * 
+ * @param {type} annotationId The Sevianno object id of the annotation
+ * @param {type} title The title which will be given to the annotation
+ * @param {type} content The content which will be given to the annotation
+ * @param {type} func A callback function for handling when the request has been 
+ * processed by Sevianno. The first parameter will have JSON payload data.
+ * @returns {undefined}
+ */
 annotations.updateAnnotation = function(annotationId, title, content, func) {
   var data = new Object();
   data.title = title;
