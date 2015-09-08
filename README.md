@@ -8,6 +8,6 @@ http://dbis.rwth-aachen.de/cms/projects/creating-a-pool-of-digital-3d-models-for
 Links UK 
 http://www.ukaachen.de/kliniken-institute/institut-fuer-neuroanatomie/lehre/digitale-3d-lehrmodelle.html
 
-3D – Modelle
+3D – Models
 http://dbis.rwth-aachen.de/3dnrt/
 
