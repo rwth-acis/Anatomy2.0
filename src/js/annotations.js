@@ -121,3 +121,12 @@ annotations.readAnnotations = function(objectId, func) {
     func(annos);
   });
 };
+
+
+annotations.deleteAnnotation = function(objectId, func) { 
+  
+    annotations.sendRequest("DELETE", annotations.OBJECT_SERVICE_URL + objectId, null, 0, function(answer) {
+    
+    func(answer);
+  });
+};

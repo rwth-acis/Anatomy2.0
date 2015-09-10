@@ -30,11 +30,18 @@ modelViewer.selectedAnnotationId = undefined;
 // A list of all annotations which are related to the current model
 modelViewer.annotations = {};
 
+// A list of all annotation markers (the cone shapes) is stored. Note, that not the
+// cone shape is stored directly in the list, but a transform node. The cone shape
+// is the direct child of the transform node.
+modelViewer.annotationMarkers = {};
+
 /**
  * Shows a cone to mark the position of an annotation
  * @param {x3dom.fields.SFVec3f} pos The position of the annotation as x3dom vector
  * @param {x3dom.fields.SFVec3f} norm The normal vector of the annotation as 
  * x3dom vector. This will define the direction in which this annotaion marker points
+ * @param {int} id The Sevianno object id of the shown annotation. Will be stored 
+ * with the geometry shape to be able to reference the annotation when clicking the shape
  * @returns {undefined}
  */
 modelViewer.showAnnotationMarker = function(pos, norm, id) {  
@@ -70,6 +77,9 @@ modelViewer.showAnnotationMarker = function(pos, norm, id) {
   var ot = document.getElementById('annotation-markers');
   ot.appendChild(t);
   // End code taken from http://examples.x3dom.org/v-must/ 
+  
+  // Store the annotation marker globally in modelViewer (The full transform node is stored)
+  modelViewer.annotationMarkers[id] = t;
 };
 
 /**
@@ -261,17 +271,39 @@ document.addEventListener('DOMContentLoaded', function() {
     var title = $('#input-annotation-title').val();
     var content = $('#textarea-annotation-content').val();
     // Indicate that the data is being processed by showing a loading indicator
-    $('#ajax_loader').removeClass('hidden');
+    $('#ajax-loader-edit').removeClass('hidden');
     // Save the annotations with Sevianno
     annotations.updateAnnotation(modelViewer.selectedAnnotationId, title, content, function(data) {
       // Update the local annotation stored in modelViewer
       var annotation = JSON.parse(data);
       modelViewer.storeAnnotationLocally(annotation);
       // Hide the loading indicator
-      $('#ajax_loader').addClass('hidden');  
+      $('#ajax-loader-edit').addClass('hidden');  
       // Switch to div-annotation-content-read and update its content
       modelViewer.switchAnnotationContentMode('read');
       modelViewer.showAnnotationContent(); 
+    });
+  });
+  
+  // Handler for clicking the delete button in div-annotation-content-read
+  $('#btn-annotation-delete').on('click', function(event) {
+    // Get the id of the currently selected annotation (which should be deleted)
+    var annotationId = modelViewer.annotations[modelViewer.selectedAnnotationId].id;
+    
+    // Indicate that deletion is in progress (by showing a loading indicator)
+    $('#ajax-loader-read').removeClass('hidden');
+    // Remove the annotation from Sevianno service storage
+    annotations.deleteAnnotation(annotationId, function() {
+      
+      // When successful, remove annotation marker (cone shape) from viewer
+      // The cone shape is included in a transformation node
+      var annotationMarkers = document.getElementById('annotation-markers');
+      var transformNode = modelViewer.annotationMarkers[annotationId];
+      annotationMarkers.removeChild(transformNode);
+      // Hide annotation content box
+      $('#annotation-content').addClass('hidden');
+      // Hide the loading indicator
+      $('#ajax-loader-read').addClass('hidden');  
     });
   });
 });

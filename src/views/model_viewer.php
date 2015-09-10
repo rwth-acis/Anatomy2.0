@@ -122,6 +122,7 @@
         <p id="p-annotation-content"></p>
         <button id="btn-annotation-edit" class="btn btn-default">Edit</button>
         <button id="btn-annotation-delete" class="btn btn-default">Delete</button>
+        <img src="../images/ajax-loader.gif" alt="Loader" class="hidden" id="ajax-loader-read">
       </div>
       <!-- This div contains elements for viewing annotation content in edit mode -->
       <div id="div-annotation-content-edit" class="hidden">
@@ -130,7 +131,7 @@
           <textarea id="textarea-annotation-content" class="form-control" rows="6"></textarea>
           <button id="btn-annotation-save" class="btn btn-default">Save</button>
           <button id="btn-annotation-cancel" class="btn btn-default">Cancel</button>
-          <img src="../images/ajax-loader.gif" alt="Loader" class="hidden" id="ajax_loader">
+          <img src="../images/ajax-loader.gif" alt="Loader" class="hidden" id="ajax-loader-edit">
         </form>
       </div>
     </div>
