@@ -32,6 +32,9 @@ modelViewer.annotations = {};
 
 modelViewer.lastLocalId = 0;
 
+modelViewer.SELECTION_COLOR = "1 1 0";
+modelViewer.DEFAULT_COLOR = "1 0 0";
+
 // A list of all annotation markers (the cone shapes) is stored. Note, that not the
 // cone shape is stored directly in the list, but a transform node. The cone shape
 // is the direct child of the transform node.
@@ -71,7 +74,7 @@ modelViewer.showAnnotationMarker = function(pos, norm, id) {
   s.appendChild(b);
   var a = document.createElement('Appearance');
   var m = document.createElement('Material');
-  m.setAttribute("diffuseColor", "1 0 0");
+  m.setAttribute("diffuseColor", modelViewer.DEFAULT_COLOR);
   m.setAttribute("transparency", "0.5");
   a.appendChild(m);
   s.appendChild(a);
@@ -99,6 +102,36 @@ modelViewer.showAnnotationContentBox = function(pos2d) {
   anno2D.css('top', pos2d[1] + 'px');  
   
   modelViewer.showAnnotationContent();
+};
+
+modelViewer.clearHighlighting = function() {
+  if (modelViewer.selectedAnnotationId !== undefined) {
+    var shape = modelViewer.annotationMarkers[modelViewer.selectedAnnotationId].children[0];
+    var material = shape.children[1].children[0];
+    material.setAttribute("diffuseColor", modelViewer.DEFAULT_COLOR);
+  }
+};
+
+modelViewer.selectShape = function(shape) {
+  
+  // Remove hightlighting from previously selected annotation
+  modelViewer.clearHighlighting();
+  
+  modelViewer.selectedAnnotationId = shape.dataset.id;
+  
+  // Highlight the selected annotion marker with a different color
+  var material = shape.children[1].children[0];
+  material.setAttribute("diffuseColor", modelViewer.SELECTION_COLOR);
+};
+
+modelViewer.showAnnotationContentBoxForWorldPos = function(worldPos) {
+  
+  var runtime = document.getElementById("viewer_object").runtime;
+  
+  // x3dom can calculate the 2D position on the screen based on a 3D point
+  var pos2d = runtime.calcPagePos(worldPos[0], worldPos[1], worldPos[2]);
+  
+  modelViewer.showAnnotationContentBox(pos2d);
 };
 
 /**
@@ -136,16 +169,12 @@ modelViewer.handleAnnotationMarkerClick = function(event) {
   
   // 3D point where the user clicked
   var worldPos = event.hitPnt;
-  var runtime = document.getElementById("viewer_object").runtime;
   
   // Get the id of the clicked annotation
   var shape = event.hitObject;
-  modelViewer.selectedAnnotationId = shape.dataset.id;
   
-  // x3dom can calculate the 2D position on the screen based on a 3D point
-  var pos2d = runtime.calcPagePos(worldPos[0], worldPos[1], worldPos[2]);
-  
-  modelViewer.showAnnotationContentBox(pos2d);
+  modelViewer.selectShape(shape);
+  modelViewer.showAnnotationContentBoxForWorldPos(worldPos);
 };
 
 /**
