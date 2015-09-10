@@ -120,8 +120,10 @@
       </div>
       <!-- This div contains elements for viewing annotation content in read mode -->
       <div id="div-annotation-content-read">
-        <h4 id="header-annotation-content" class="annotation-header"></h4>
         <button id="btn-annotation-content-close" type="button" class="btn btn-default btn-sm pull-right" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <p id ="username-read" class="pull-right"></p>
+        <p class="pull-right">Last updated by:</p>
+        <h4 id="header-annotation-content" class="annotation-header"></h4>
         <p id="p-annotation-content"></p>
         <button id="btn-annotation-edit" class="btn btn-default">Edit</button>
         <button id="btn-annotation-delete" class="btn btn-default">Delete</button>

@@ -70,7 +70,7 @@ annotations.sendRequest = function(method, url, json_payload, retries, func) {
  * @param {function} func Callback function for the asynchronous request to Sevianno service
  * @returns {undefined}
  */
-annotations.createAnnotation = function(objectId, pos, norm, localId, func) {
+annotations.createAnnotation = function(objectId, pos, norm, localId, username, func) {
   if (objectId !== undefined) {
     var data = new Object();
     data.collection = annotations.ANNOTATIONS_COLLECTION;
@@ -80,6 +80,7 @@ annotations.createAnnotation = function(objectId, pos, norm, localId, func) {
     data.timestamp = Date.now();
     data.toolId = annotations.TOOL_ID;
     data.localId = localId;
+    data.username = username;
     var json_payload = JSON.stringify(data);
 
     annotations.sendRequest("POST", annotations.ANNOTATION_SERVICE_URL, json_payload, 0, func);
@@ -96,11 +97,12 @@ annotations.createAnnotation = function(objectId, pos, norm, localId, func) {
  * processed by Sevianno. The first parameter will have JSON payload data.
  * @returns {undefined}
  */
-annotations.updateAnnotation = function(annotationId, title, content, func) {
+annotations.updateAnnotation = function(annotationId, title, content, username, func) {
   var data = new Object();
   data.title = title;
   data.text = content;
   data.timestamp = Date.now();
+  data.username = username;
   // The id of the annotation where changes should be stored
   var annotationId = annotationId;
   var json_payload = JSON.stringify(data);
