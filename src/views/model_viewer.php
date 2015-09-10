@@ -130,8 +130,8 @@
       <!-- This div contains elements for viewing annotation content in edit mode -->
       <div id="div-annotation-content-edit" class="hidden">
         <form action="javascript:void(0);">
-          <input id="input-annotation-title" class="form-control" value=""/>
-          <textarea id="textarea-annotation-content" class="form-control" rows="6"></textarea>
+          <input id="input-annotation-title" class="form-control" value="" placeholder="Title"/>
+          <textarea id="textarea-annotation-content" class="form-control" rows="6" placeholder="Write your annotation content here .."></textarea>
           <button id="btn-annotation-save" class="btn btn-default">Save</button>
           <button id="btn-annotation-cancel" class="btn btn-default">Cancel</button>
           <img src="../images/ajax-loader.gif" alt="Loader" class="hidden" id="ajax-loader-edit">

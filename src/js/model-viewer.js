@@ -34,6 +34,8 @@ modelViewer.lastLocalId = 0;
 
 modelViewer.SELECTION_COLOR = "1 1 0";
 modelViewer.DEFAULT_COLOR = "1 0 0";
+modelViewer.NO_TITLE_PLACEHOLDER = 'No Title';
+modelViewer.NO_CONTENT_PLACEHOLDER = 'No content';
 
 // A list of all annotation markers (the cone shapes) is stored. Note, that not the
 // cone shape is stored directly in the list, but a transform node. The cone shape
@@ -152,8 +154,17 @@ modelViewer.showAnnotationContent = function() {
   }
   else {
     // Updating the content in the "readonly" div
-    $('#header-annotation-content').html(annotation.title);
-    $('#p-annotation-content').html(annotation.text);
+    if (annotation.title === undefined || annotation.title == '') {
+      $('#header-annotation-content').html(modelViewer.NO_TITLE_PLACEHOLDER);
+    } else {
+      $('#header-annotation-content').html(annotation.title);
+    }
+    if (annotation.text === undefined || annotation.text == '') {
+      $('#p-annotation-content').html(modelViewer.NO_CONTENT_PLACEHOLDER);
+    }
+    else {
+      $('#p-annotation-content').html(annotation.text);
+    }
     // Updating the content in the "edit" div
     $('#input-annotation-title').val(annotation.title);
     $('#textarea-annotation-content').val(annotation.text);
@@ -314,8 +325,8 @@ modelViewer.hideAnnotationContent = function() {
   
   // Clear all input / output fields
   // Updating the content in the "readonly" div
-  $('#header-annotation-content').html('');
-  $('#p-annotation-content').html('');
+  $('#header-annotation-content').html(modelViewer.NO_TITLE_PLACEHOLDER);
+  $('#p-annotation-content').html(modelViewer.NO_CONTENT_PLACEHOLDER);
   // Updating the content in the "edit" div
   $('#input-annotation-title').val('');
   $('#textarea-annotation-content').val('');
