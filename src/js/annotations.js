@@ -66,9 +66,11 @@ annotations.sendRequest = function(method, url, json_payload, retries, func) {
  * @param {x3dom.fields.SFVec3f} pos The position of the annotation as x3dom vector
  * @param {x3dom.fields.SFVec3f} norm The normal vector of the annotation as 
  * x3dom vector. This will define the direction in which this annotaion marker points
+ * @param {String} localId Optional: local id of your annotation. Will be stored in Sevianno
+ * @param {function} func Callback function for the asynchronous request to Sevianno service
  * @returns {undefined}
  */
-annotations.createAnnotation = function(objectId, pos, norm) {
+annotations.createAnnotation = function(objectId, pos, norm, localId, func) {
   if (objectId !== undefined) {
     var data = new Object();
     data.collection = annotations.ANNOTATIONS_COLLECTION;
@@ -77,10 +79,10 @@ annotations.createAnnotation = function(objectId, pos, norm) {
     data.objectId = objectId;
     data.timestamp = Date.now();
     data.toolId = annotations.TOOL_ID;
+    data.localId = localId;
     var json_payload = JSON.stringify(data);
 
-    annotations.sendRequest("POST", annotations.ANNOTATION_SERVICE_URL, json_payload, 0, function(answer) {
-    });
+    annotations.sendRequest("POST", annotations.ANNOTATION_SERVICE_URL, json_payload, 0, func);
   }
 };
 

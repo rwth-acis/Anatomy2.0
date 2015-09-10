@@ -30,6 +30,8 @@ modelViewer.selectedAnnotationId = undefined;
 // A list of all annotations which are related to the current model
 modelViewer.annotations = {};
 
+modelViewer.lastLocalId = 0;
+
 // A list of all annotation markers (the cone shapes) is stored. Note, that not the
 // cone shape is stored directly in the list, but a transform node. The cone shape
 // is the direct child of the transform node.
@@ -109,12 +111,20 @@ modelViewer.showAnnotationContentBox = function(pos2d) {
 modelViewer.showAnnotationContent = function() {
   
   var annotation = modelViewer.annotations[modelViewer.selectedAnnotationId];
-  // Updating the content in the "readonly" div
-  $('#header-annotation-content').html(annotation.title);
-  $('#p-annotation-content').html(annotation.text);
-  // Updating the content in the "edit" div
-  $('#input-annotation-title').val(annotation.title);
-  $('#textarea-annotation-content').val(annotation.text);
+  
+  // If there is no annotation stored with the given id (or the id is undefined), 
+  // then the user has created a new annotation and the request to Sevianno is still in progress
+  if (annotation === undefined) {
+    switchAnnotationContentMode('loading');
+  }
+  else {
+    // Updating the content in the "readonly" div
+    $('#header-annotation-content').html(annotation.title);
+    $('#p-annotation-content').html(annotation.text);
+    // Updating the content in the "edit" div
+    $('#input-annotation-title').val(annotation.title);
+    $('#textarea-annotation-content').val(annotation.text);
+  }
 };
 
 /**
@@ -206,13 +216,56 @@ modelViewer.calcAnnotationPosition = function(pos2d) {
  */
 modelViewer.switchAnnotationContentMode = function(mode) {
   if (mode === 'edit') {
+    $('#div-annotation-content-loading').addClass('hidden');
     $('#div-annotation-content-read').addClass('hidden');
     $('#div-annotation-content-edit').removeClass('hidden');
   }
-  else {
+  else if (mode === 'read') {
+    $('#div-annotation-content-loading').addClass('hidden');
     $('#div-annotation-content-read').removeClass('hidden');
     $('#div-annotation-content-edit').addClass('hidden');
   }
+  else if (mode === 'loading') {
+    $('#div-annotation-content-loading').removeClass('hidden');
+    $('#div-annotation-content-read').addClass('hidden');
+    $('#div-annotation-content-edit').addClass('hidden');    
+  }
+};
+
+modelViewer.createAnnotation = function(pos, norm) {
+  // Generate a local ID to be able to reference the object until a Sevianno ID 
+  // has been received
+  var localId = modelViewer.getNextLocalId();
+  // Show the new annotation to the user
+  modelViewer.showAnnotationMarker(pos, norm, localId);
+  // Store the annotation persistently with Sevianno
+  annotations.createAnnotation(modelViewer.seviannoObjectId, pos, norm, localId, function(answer) {
+    var annotation = JSON.parse(answer);
+    var localId = annotation.annotationData.localId;
+    // If "Loading" div of content box is shown, move to the edit div. The edit div
+    // is chosen, because the user just created an annotation (when this function is called)
+    // and therefore there is no content to read, but the user most likely wants to edit
+    if (!$('#div-annotation-content-loading').hasClass('hidden')) {
+      modelViewer.switchAnnotationContentMode('edit');      
+    }
+    // The currently selected annotation id is the local id of the created annotation,
+    // update the selected annotation id to the Sevianno annotation id
+    if (localId === modelViewer.selectedAnnotationId) {
+      modelViewer.selectedAnnotationId = annotation.id;
+    }
+    // Each shape (annotation marker) stores its annotation id with it. We have 
+    // to update this id from local id to the Sevianno id. Also update the references 
+    // in annotation markers list and annotation list
+    var transform = modelViewer.annotationMarkers[localId];
+    if (transform !== undefined) {
+      transform.children[0].dataset.id = annotation.id;
+      modelViewer.annotationMarkers[annotation.id] = transform;
+      modelViewer.annotationMarkers[localId] = undefined;
+      
+      modelViewer.storeAnnotationLocally(annotation);
+      modelViewer.annotations[localId] = undefined;
+    }
+  });
 };
 
 /**
@@ -224,6 +277,24 @@ modelViewer.switchAnnotationContentMode = function(mode) {
  */
 modelViewer.storeAnnotationLocally = function(annotation) {
   modelViewer.annotations[annotation.id] = annotation;
+};
+
+modelViewer.hideAnnotationContent = function() {
+  // Hide the whole content box
+  $('#annotation-content').addClass('hidden');
+  
+  // Clear all input / output fields
+  // Updating the content in the "readonly" div
+  $('#header-annotation-content').html('');
+  $('#p-annotation-content').html('');
+  // Updating the content in the "edit" div
+  $('#input-annotation-title').val('');
+  $('#textarea-annotation-content').val('');
+};
+
+modelViewer.getNextLocalId = function() {
+  modelViewer.lastLocalId += 1;
+  return 'MODEL_VIEWER' + modelViewer.lastLocalId;
 };
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -248,7 +319,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Register handler for close button in annotation content window
   $('#btn-annotation-content-close').on('click', function() {
-    $('#annotation-content').addClass('hidden');
+    modelViewer.hideAnnotationContent();
     // There is no more annotation selected, so update selectedAnnotationId
     modelViewer.selectedAnnotationId = undefined;
   });
@@ -301,7 +372,7 @@ document.addEventListener('DOMContentLoaded', function() {
       var transformNode = modelViewer.annotationMarkers[annotationId];
       annotationMarkers.removeChild(transformNode);
       // Hide annotation content box
-      $('#annotation-content').addClass('hidden');
+      modelViewer.hideAnnotationContent();
       // Hide the loading indicator
       $('#ajax-loader-read').addClass('hidden');  
     });

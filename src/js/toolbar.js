@@ -63,16 +63,9 @@ viewerToolbar.onModelClick = function(event) {
     var pos = new x3dom.fields.SFVec3f(event.worldX, event.worldY, event.worldZ);
     var norm = new x3dom.fields.SFVec3f(event.normalX, event.normalY, event.normalZ);
     
-    // Show the new annotation to the user
-    // TODO: When providing undefined as annotation ID, the annotation cannot be 
-    // edited and content cannot be shown. It would be better to use local IDs (until we know the Sevianno ID)
-    // for storing annotations in model viewer. Those IDs could also be passed to 
-    // Sevianno and then used to map the callback data to model viewers data structure)
-    modelViewer.showAnnotationMarker(pos, norm, undefined);
-    // Store the annotation persistently with Sevianno
-    annotations.createAnnotation(modelViewer.seviannoObjectId, pos, norm);
-    
-    viewerToolbar.toggleAnnotationMode(true);
+    modelViewer.createAnnotation(pos, norm);
+
+    viewerToolbar.toggleAnnotationMode(true); 
   }
 };
 

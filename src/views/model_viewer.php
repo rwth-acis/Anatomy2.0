@@ -115,6 +115,9 @@
     <?php include("nav_info.html"); ?>
     <!-- A box for showing annotation content. There will always be just one box at a time. This div will be moved to the correct position. -->
     <div id="annotation-content" class="annotation-content hidden">
+      <div id="div-annotation-content-loading" class="hidden">
+        <h4>Loading...</h4>
+      </div>
       <!-- This div contains elements for viewing annotation content in read mode -->
       <div id="div-annotation-content-read">
         <h4 id="header-annotation-content" class="annotation-header"></h4>
