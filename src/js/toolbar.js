@@ -51,6 +51,21 @@ viewerToolbar.onAnnotateClick = function() {
 };
 
 /**
+ * Button handler for the 'Highlight' button. Will turn on and of highlighting mode.
+ * The button indicates the current mode to the user with bootstraps 'active' class.
+ */
+viewerToolbar.onHighlightClick = function() {
+  if (modelHighlighter.showHighlighting) {
+    modelHighlighter.stopHighlighting();
+  }
+  else {
+    modelHighlighter.showHighlighting = true;
+    modelHighlighter.initialize();
+  }
+    
+};
+
+/**
  * Click handler. Fired when the user clicks inside the x3dom viewer. The handler
  * will be attached to the Inline element.
  * @param {type} event Information about where the user clicked in the 3D scene
@@ -88,10 +103,13 @@ viewerToolbar.onModelLoaded = function() {
  */
 document.onload = function() {
   document.getElementById('btnAnnotate').addEventListener('click', viewerToolbar.onAnnotateClick);
+  document.getElementById('btnHighlight').addEventListener('click', viewerToolbar.onHighlightClick);
   // Note: Due to the implementation of x3dom, adding the following click event 
   // handler to an Inline element does not work in
   //  document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('x3dInline').addEventListener('click', viewerToolbar.onModelClick);
+  
+  modelViewer.addEventListener('load', viewerToolbar.onModelLoaded);
 };
 
 /**

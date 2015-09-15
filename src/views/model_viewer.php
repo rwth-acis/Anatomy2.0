@@ -59,6 +59,7 @@
     ?>
       <script type='text/javascript' src='../js/annotations.js'> </script>
       <script type='text/javascript' src='../js/model-viewer.js'> </script>
+      <script type="text/javascript" src="../js/model-part-highlighting.js"></script>
     <?php
       
       include '../php/db_connect.php';
@@ -75,7 +76,7 @@
         $initModelViewer = "onload=\"initializeModelViewer()\"";
       } else { 
         $viewer_class = "viewer_object"; 
-        $initModelViewer = "onload=\"viewerToolbar.onModelLoaded()\"";
+        $initModelViewer = "onload=\"modelViewer.onModelLoaded()\"";
       }
     ?>
     
@@ -83,12 +84,14 @@
       <scene id="scene">
         <navigationInfo headlight="true" type="examine" id="navType"></navigationInfo>
         <background skyColor='1.0 1.0 1.0'> </background>
-        <?php
+        <Group id="model-nodes">
+          <?php
           if(is_object($model)) {
             // nameSpaceName='inlinespace' required for highlighting parts of a model
             echo "<inline nameSpaceName='inlinespace' id=\"x3dInline\" url=\"../../$model->data_url\" $initModelViewer> </inline>";
           }
-        ?>
+          ?>
+        </Group>
         <viewpoint id="viewport" DEF="viewport" centerOfRotation="0 0 0" position="0.00 0.00 5.00" orientation="-0.92 0.35 0.17 0.00" fieldOfView="0.858"> </viewpoint>
         <Group id="annotation-markers" onclick="modelViewer.handleAnnotationMarkerClick(event)" onmouseover="modelViewer.handleAnnotationMarkerMouseOver(event)" onmouseout="modelViewer.handleAnnotationMarkerMouseOut(event)"></Group>
       </scene>

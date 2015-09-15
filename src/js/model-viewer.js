@@ -193,7 +193,6 @@ modelViewer.handleAnnotationMarkerMouseOver = function(event) {
   var shape = event.hitObject;
   var annotationId = shape.dataset.id;
   var username = modelViewer.annotations[annotationId].annotationData.username;
-  console.log('mouse over'+username);
   
   for (var id in modelViewer.annotations) {
     if (modelViewer.annotations[id].annotationData.username === username) {
@@ -207,7 +206,6 @@ modelViewer.handleAnnotationMarkerMouseOut = function(event) {
   var shape = event.hitObject;
   var annotationId = shape.dataset.id;
   var username = modelViewer.annotations[annotationId].annotationData.username;
-  console.log('mouse out'+username);
     
   for (var id in modelViewer.annotations) {
     if (modelViewer.annotations[id].annotationData.username === username) {
@@ -366,6 +364,23 @@ annotationMarkers.getNewMaterial = function () {
   }
   
   return material;
+};
+
+modelViewer.onLoadHandler = [];
+
+modelViewer.addEventListener = function(type, callback) {
+  if (type === 'load') {
+    modelViewer.onLoadHandler.push(callback);
+  }
+  else {
+    console.log('modelViewer.addEventHandler(): Unsupported type '+ type);
+  }
+};
+
+modelViewer.onModelLoaded = function(event) {
+  modelViewer.onLoadHandler.forEach(function(callback) {
+    callback(event);
+  });
 };
 
 /** ****************************************************************************
