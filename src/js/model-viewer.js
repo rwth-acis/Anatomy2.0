@@ -39,13 +39,13 @@ modelViewer.annotations = {};
 modelViewer.lastLocalId = 0;
 
 modelViewer.createAnnotation = function(pos, norm) {
+  
+  var username = modelViewer.getCurrentUsername();
   // Generate a local ID to be able to reference the object until a Sevianno ID 
   // has been received
   var localId = modelViewer.getNextLocalId();
   // Show the new annotation to the user
-  annotationMarkers.showAnnotationMarker(pos, norm, localId);
-  
-  var username = modelViewer.getCurrentUsername();
+  annotationMarkers.showAnnotationMarker(pos, norm, localId, username);
   
   // Store the annotation persistently with Sevianno
   annotations.createAnnotation(modelViewer.seviannoObjectId, pos, norm, localId, username, function(answer) {
@@ -151,9 +151,7 @@ modelViewer.selectAnnotation = function(shape) {
   modelViewer.selectedAnnotationId = shape.dataset.id;
   
   // Highlight the selected annotion marker with a different color
-  var material = shape.children[1].children[0];
-  material.setAttribute("diffuseColor", annotationMarkers.SELECTION_COLOR);
-  material.setAttribute("transparency", annotationMarkers.SELECTION_OPACITY);
+  annotationMarkers.highlightShape(shape);
 };
 
 /**
@@ -191,6 +189,35 @@ modelViewer.handleAnnotationMarkerClick = function(event) {
   annotationContentBox.showForWorldPos(worldPos);
 };
 
+modelViewer.handleAnnotationMarkerMouseOver = function(event) {
+  var shape = event.hitObject;
+  var annotationId = shape.dataset.id;
+  var username = modelViewer.annotations[annotationId].annotationData.username;
+  console.log('mouse over'+username);
+  
+  for (var id in modelViewer.annotations) {
+    if (modelViewer.annotations[id].annotationData.username === username) {
+      var transformNode = annotationMarkers.elements[id];
+      annotationMarkers.emphasizeShape(transformNode.children[0]);
+    }
+  }
+};
+
+modelViewer.handleAnnotationMarkerMouseOut = function(event) {
+  var shape = event.hitObject;
+  var annotationId = shape.dataset.id;
+  var username = modelViewer.annotations[annotationId].annotationData.username;
+  console.log('mouse out'+username);
+    
+  for (var id in modelViewer.annotations) {
+    if (modelViewer.annotations[id].annotationData.username === username) {
+      if (modelViewer.selectedAnnotationId !== id) {
+        annotationMarkers.clearSelection(id);
+      }
+    }
+  }
+};
+
 /** ****************************************************************************
  * This object provides functionality for all features related to the annotation 
  * markers shown on the model
@@ -201,13 +228,47 @@ var annotationMarkers = {};
 
 annotationMarkers.SELECTION_COLOR = '1 1 0';
 annotationMarkers.SELECTION_OPACITY = '0.0';
-annotationMarkers.DEFAULT_COLOR = '1 0 0';
-annotationMarkers.DEFAULT_OPACITY = '0.5';
+annotationMarkers.DEFAULT_COLORS = ['1 0 0', '0 1 0', '0 0 1', '1 0 1', '0 1 1', '1 1 1', '0 0 0'];
+annotationMarkers.DEFAULT_OPACITY = '0.3';
+annotationMarkers.nextColor = 0;
 
 // A list of all annotation markers (the cone shapes) is stored. Note, that not the
 // cone shape is stored directly in the list, but a transform node. The cone shape
 // is the direct child of the transform node.
 annotationMarkers.elements = {};
+
+annotationMarkers.materials = {};
+
+annotationMarkers.copyMaterial = function(material) {
+  
+  var result = undefined;
+  
+  if (material !== undefined) {
+    result = document.createElement('Material');
+
+    result.setAttribute('diffuseColor', material.getAttribute('diffuseColor'));
+    result.setAttribute('transparency', material.getAttribute('transparency'));
+  }
+  
+  return result;
+};
+
+/**
+ * Gets the material to be user for annotation markers of a certain user
+ * @param {String} username The name of the user to derive the material for
+ * @returns {Material} x3dom node for material
+ */
+annotationMarkers.getMaterial = function(username) {
+  
+  var material = annotationMarkers.copyMaterial(annotationMarkers.materials[username]);
+  
+  if (material === undefined) {
+    material = annotationMarkers.getNewMaterial();
+    annotationMarkers.materials[username] = material;
+  }
+  
+  return material;
+};
 
 /**
  * Shows a cone to mark the position of an annotation
@@ -218,7 +279,7 @@ annotationMarkers.elements = {};
  * with the geometry shape to be able to reference the annotation when clicking the shape
  * @returns {undefined}
  */
-annotationMarkers.showAnnotationMarker = function(pos, norm, id) {  
+annotationMarkers.showAnnotationMarker = function(pos, norm, id, username) {  
   // Code taken from http://examples.x3dom.org/v-must/ (Download the zip file and check main.js)
   // Will show a cone marking the position where a user clicked on the model
   // show 3d marker at pick position
@@ -232,6 +293,8 @@ annotationMarkers.showAnnotationMarker = function(pos, norm, id) {
   t.setAttribute("scale", "3 10 3" );
   t.setAttribute('rotation', rot[0].x+' '+rot[0].y+' '+rot[0].z+' '+rot[1]);
   t.setAttribute('translation', pos.x+' '+pos.y+' '+pos.z);
+  
+  var material = annotationMarkers.getMaterial(username);
 
   var s = document.createElement('Shape');
   s.setAttribute('class', 'shape');
@@ -242,10 +305,7 @@ annotationMarkers.showAnnotationMarker = function(pos, norm, id) {
   var b = document.createElement('Cone');
   s.appendChild(b);
   var a = document.createElement('Appearance');
-  var m = document.createElement('Material');
-  m.setAttribute("diffuseColor", annotationMarkers.DEFAULT_COLOR);
-  m.setAttribute("transparency", annotationMarkers.DEFAULT_OPACITY);
-  a.appendChild(m);
+  a.appendChild(material);
   s.appendChild(a);
 
   var ot = document.getElementById('annotation-markers');
@@ -257,24 +317,55 @@ annotationMarkers.showAnnotationMarker = function(pos, norm, id) {
 };
 
 /**
- * Changes a shapes 
+ * Removes the selection appearance from an annotation marker (by removing the 
+ * 'selection' material and attaching the 'standard' user material)
  * @returns {undefined}
  */
 annotationMarkers.clearSelection = function(annotationId) {
   if (annotationId !== undefined) {
     var shape = annotationMarkers.elements[annotationId].children[0];
-    var material = shape.children[1].children[0];
-    material.setAttribute("diffuseColor", annotationMarkers.DEFAULT_COLOR);
-    material.setAttribute("transparency", annotationMarkers.DEFAULT_OPACITY);
+    var username = modelViewer.annotations[annotationId].annotationData.username;
+    var material = annotationMarkers.getMaterial(username);
+    shape.children[1].removeChild(shape.children[1].children[0]);
+    shape.children[1].appendChild(material);
   }
+};
+
+annotationMarkers.emphasizeShape = function(shape) {
+  
+  // Highlight the selected annotion marker with a different color
+  var material = document.createElement('Material');
+  material.setAttribute('diffuseColor', shape.children[1].children[0].getAttribute('diffuseColor'));
+  material.setAttribute('transparency', annotationMarkers.SELECTION_OPACITY);
+  shape.children[1].removeChild(shape.children[1].children[0]);
+  shape.children[1].appendChild(material);
 };
 
 annotationMarkers.highlightShape = function (shape) {
   
   // Highlight the selected annotion marker with a different color
-  var material = shape.children[1].children[0];
-  material.setAttribute("diffuseColor", annotationMarkers.SELECTION_COLOR);
-  material.setAttribute("transparency", annotationMarkers.SELECTION_OPACITY);
+  var material = document.createElement('Material');
+  material.setAttribute('diffuseColor', annotationMarkers.SELECTION_COLOR);
+  material.setAttribute('transparency', annotationMarkers.SELECTION_OPACITY);
+  shape.children[1].removeChild(shape.children[1].children[0]);
+  shape.children[1].appendChild(material);
+};
+
+annotationMarkers.getNewMaterial = function () {
+  
+  var material = document.createElement('Material');
+  material.setAttribute('diffuseColor', annotationMarkers.DEFAULT_COLORS[annotationMarkers.nextColor]);
+  material.setAttribute('transparency', annotationMarkers.DEFAULT_OPACITY);
+  
+  annotationMarkers.nextColor;
+  if (annotationMarkers.nextColor + 1 > annotationMarkers.DEFAULT_COLORS.length) {
+    annotationMarkers.nextColor = 0;
+  }
+  else {
+    annotationMarkers.nextColor++;
+  }
+  
+  return material;
 };
 
 /** ****************************************************************************
@@ -283,7 +374,7 @@ annotationMarkers.highlightShape = function (shape) {
  * 
  * @type Object
  * ****************************************************************************/
-var annotationContentBox = {}
+var annotationContentBox = {};
 
 annotationContentBox.NO_TITLE_PLACEHOLDER = 'No Title';
 annotationContentBox.NO_CONTENT_PLACEHOLDER = 'No content';
@@ -469,7 +560,7 @@ document.addEventListener('DOMContentLoaded', function() {
       // Converting the position and normal vector received to x3dom vectors
       var pos = new x3dom.fields.SFVec3f(dbPos.x, dbPos.y, dbPos.z);
       var norm = new x3dom.fields.SFVec3f(dbNorm.x, dbNorm.y, dbNorm.z);
-      annotationMarkers.showAnnotationMarker(pos, norm, annotation.id);
+      annotationMarkers.showAnnotationMarker(pos, norm, annotation.id, annotation.annotationData.username);
       
       modelViewer.storeAnnotationLocally(annotation);
     });

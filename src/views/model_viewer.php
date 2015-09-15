@@ -85,11 +85,12 @@
         <background skyColor='1.0 1.0 1.0'> </background>
         <?php
           if(is_object($model)) {
-            echo "<inline id=\"x3dInline\" url=\"../../$model->data_url\" $initModelViewer> </inline>";
+            // nameSpaceName='inlinespace' required for highlighting parts of a model
+            echo "<inline nameSpaceName='inlinespace' id=\"x3dInline\" url=\"../../$model->data_url\" $initModelViewer> </inline>";
           }
         ?>
         <viewpoint id="viewport" DEF="viewport" centerOfRotation="0 0 0" position="0.00 0.00 5.00" orientation="-0.92 0.35 0.17 0.00" fieldOfView="0.858"> </viewpoint>
-        <Group id="annotation-markers" onclick="modelViewer.handleAnnotationMarkerClick(event)"></Group>
+        <Group id="annotation-markers" onclick="modelViewer.handleAnnotationMarkerClick(event)" onmouseover="modelViewer.handleAnnotationMarkerMouseOver(event)" onmouseout="modelViewer.handleAnnotationMarkerMouseOut(event)"></Group>
       </scene>
       <?php
           if(is_object($model)) {
