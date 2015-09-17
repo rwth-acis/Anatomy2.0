@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Tests from menuToolbar.js: Checks, if all functionality implemented in the 
+ * Tests from toolbar.js: Checks, if all functionality implemented in the 
  * toolbar is working correctly
  */
 describe('The edit page', function() {

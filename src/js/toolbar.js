@@ -13,14 +13,103 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @file menuToolbar.js
+ * @file toolbar.js
  * Provides event handler for click events of all toolbar buttons
  * Also initializes toolbar elements if needed
+ * 
+ * Requires: model-viewer.js
+ *   annotations.js
  */
 
 var viewerToolbar = {};
 
 viewerToolbar.showInfo = false;
+// True, if a user is in the 'set an annotation position marker' mode (which is 
+// started by pressing the 'Annotate' button once)
+viewerToolbar.annotate = false;
+
+viewerToolbar.toggleAnnotationMode = function(toOff) {
+  var btnAnnotate = $('#btnAnnotate');
+          
+  if (toOff) {
+    btnAnnotate.removeClass('active');
+    viewerToolbar.annotate = false;
+  }
+  else {
+    btnAnnotate.addClass('active');
+    viewerToolbar.annotate = true;
+  }
+};
+
+/**
+ * Button handler for the 'Annotate' button. Will switch viewer control to 
+ * annotation mode. The button indicates the current mode to the user with 
+ * bootstraps 'active' class.
+ */
+viewerToolbar.onAnnotateClick = function() {
+  viewerToolbar.toggleAnnotationMode(viewerToolbar.annotate);
+};
+
+/**
+ * Button handler for the 'Highlight' button. Will turn on and of highlighting mode.
+ * The button indicates the current mode to the user with bootstraps 'active' class.
+ */
+viewerToolbar.onHighlightClick = function() {
+  if (modelHighlighter.showHighlighting) {
+    modelHighlighter.stopHighlighting();
+  }
+  else {
+    modelHighlighter.startHighlighting();
+  }
+    
+};
+
+/**
+ * Click handler. Fired when the user clicks inside the x3dom viewer. The handler
+ * will be attached to the Inline element.
+ * @param {type} event Information about where the user clicked in the 3D scene
+ * @returns {undefined}
+ */
+viewerToolbar.onModelClick = function(event) {
+  // The handler will set an annotation position marker if and only if the user 
+  // activated the annotation mode by clicking the 'Annotate' button
+  if (viewerToolbar.annotate) {
+    var pos = new x3dom.fields.SFVec3f(event.worldX, event.worldY, event.worldZ);
+    var norm = new x3dom.fields.SFVec3f(event.normalX, event.normalY, event.normalZ);
+    
+    modelViewer.createAnnotation(pos, norm);
+
+    viewerToolbar.toggleAnnotationMode(true); 
+  }
+};
+
+/**
+ * Handler for when the scene is loaded. Will move the camera to show the full 
+ * model. Requires x3d-extensions.js
+ * @returns {undefined}
+ */
+viewerToolbar.onModelLoaded = function() {
+  x3dRoot     = document.getElementById('viewer_object');
+  // Normalize scene camera to view all content.
+  normalizeCamera(x3dRoot.runtime);
+};
+
+/**
+ * Add click handler when DOM loaded. Note: Due to the implementation of x3dom, 
+ * adding a click event handler to an Inline element does not work in a 
+ * DOMContentLoaded event handler.
+ * @returns {undefined}
+ */
+document.onload = function() {
+  document.getElementById('btnAnnotate').addEventListener('click', viewerToolbar.onAnnotateClick);
+  document.getElementById('btnHighlight').addEventListener('click', viewerToolbar.onHighlightClick);
+  // Note: Due to the implementation of x3dom, adding the following click event 
+  // handler to an Inline element does not work in
+  //  document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('x3dInline').addEventListener('click', viewerToolbar.onModelClick);
+  
+  modelViewer.addEventListener('load', viewerToolbar.onModelLoaded);
+};
 
 /**
  * Initialize the combo box for navigation modes in toolbar
@@ -113,7 +202,7 @@ function btnShowInfo() {
   if (isInRole() && isSynchronized) {
     var msgContent = {'show': viewerToolbar.showInfo};
     publishIWC("ShowInfo", msgContent);
-    console.log("menuToolbar.js: publishIWC 'ShowInfo'");
+    console.log("toolbar.js: publishIWC 'ShowInfo'");
   }
   // Actually show the info overlays
   showInfo(viewerToolbar.showInfo);

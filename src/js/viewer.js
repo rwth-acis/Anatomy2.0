@@ -19,7 +19,7 @@
 
 var processingMessage = false;
 var canSend           = false;
-//synchronize with other devices? (can be switched in menuToolbar.js)
+//synchronize with other devices? (can be switched in toolbar.js)
 var isSynchronized    = true;
 
 ///interval between two synchronization msgs in ms
@@ -32,7 +32,7 @@ var lastData;
 var x3dRoot;
 
 // Saves whether info should be displayed when synchronizing after unsynchronizing
-// from other widgets, also used in menuToolbar.js
+// from other widgets, also used in toolbar.js
 var displayInfo;
 
 var remoteLecturer  = false;
@@ -217,7 +217,7 @@ function receiveModelSelectedByOverview(msgContent){
 
 /**
  * Re-synchronize with last location sent from other widgets
- * Used in menuToolbar.js.
+ * Used in toolbar.js.
  */
 function synchronizePositionAndOrientation() {
   if(lastData != null) {
@@ -230,7 +230,7 @@ function synchronizePositionAndOrientation() {
 
 /**
  * Save current location when stopping the synchronization in case nothing changes in the other widgets
- * Used in menuToolbar.js.
+ * Used in toolbar.js.
  */
 function savePositionAndOrientation() {
   posAndOrient = getView(x3dRoot.runtime);

@@ -39,7 +39,7 @@
     <script src="../../js/tools.js"></script>
     <script src="../../js/ajax.js"></script>
     <script src="../../js/viewer.js"></script>
-    <script src="../../js/menuToolbar.js"></script>
+    <script src="../../js/toolbar.js"></script>
     <script src="../../js/init-wrapper.js"></script>
     <script src="../../js/init-subsite.js"></script>
     <script src="../../js/editcourse.js"></script>

@@ -34,12 +34,11 @@
 <!-- JS includes of menu toolbar functionality -->
 <?php 
   // If widget parameter is set, the this is a widget in ROLE environment. 
-  // Therefore menu.php is not included. Then, JQuery and bootstrap.js are also 
+  // Therefore menu.php is not included. Then, bootstrap.js is also 
   // missing. Include here. Make sure not to include twice, because this will 
   // break the menu.
   if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
 ?>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
   
   <!-- import JWS and JSRSASIGN (must) -->
@@ -59,7 +58,7 @@
 <?php
   }
 ?>
-<script type="text/javascript" src="../js/menuToolbar.js"></script>
+<script type="text/javascript" src="../js/toolbar.js"></script>
 
 
 <!-- Toolbar -->
@@ -102,6 +101,8 @@
         <!--<li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" id="btnCopy">Copy Link</button></li>-->
         <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="btnShowInfo()" id="btnInfo">Show info</button></li>
         <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="showHelp()" id="btnHelp">Show help</button></li>
+        <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" id="btnAnnotate">Annotate</button></li>
+        <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" id="btnHighlight">Highlight</button></li>
         <!-- Show lecturer mode button only if user logged in (as lecturer) and in ROLE environment -->
         <?php
           ob_start();

@@ -24,18 +24,6 @@ html, body {
  
 body {
     background-color: white;
-    color: white;
-    font-family: Helvetica, sans-serif;
-    font-size: 12px;
-}
-
-p {
-  font-family       : Arial, Sans-Serif;
-  font-weight       : bold;
-  font-size         : 12px;
-  text-transform    : uppercase;
-
-  color             : #C8C8C8;
 }
 
 #viewer_object {
@@ -74,4 +62,18 @@ p {
 
   cursor 		: help;
   display: none;
+}
+
+.annotation-content {
+  padding: 10px;
+  border: solid 1px #ddd;
+  background: rgb(240, 240, 240);
+  opacity: 0.9;
+  width: 400px;
+  max-height: 300px;
+  overflow: auto;
+  position: absolute;
+}
+.annotation-header {
+  display: inline;
 }

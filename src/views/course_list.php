@@ -121,8 +121,8 @@
   <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
   <script src="../js/modernizr-latest.js"></script>
   <script src="../js/custom.js"></script>
+  <!-- TODO: Check whether x3d extensions is really needed here -->
   <script type='text/javascript' src='../js/x3d-extensions.js'> </script>
-  <!-- General functionality (used in menuToolbar.js) -->
   <script type="text/javascript" src="../js/tools.js"></script>
   <?php
     //Decide if this site is inside a separate widget

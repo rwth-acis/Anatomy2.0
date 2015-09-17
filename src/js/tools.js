@@ -127,7 +127,7 @@ function getURLParameter(name) {
 }
 
 /**
- * Used in menuToolbar.js
+ * Used in toolbar.js
  * @return true, if the page is a widget in ROLE. false, otherwise
  */
 function isInRole() {
