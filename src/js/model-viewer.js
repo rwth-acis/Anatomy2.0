@@ -38,6 +38,13 @@ modelViewer.annotations = {};
 
 modelViewer.lastLocalId = 0;
 
+/**
+ * Shows an annotation marker and stores a new annotation in Sevianno service
+ * 
+ * @param {x3dom.fields.SFVec3f} pos 3D position where to create the annotation marker
+ * @param {x3dom.fields.SFVec3f} norm 3D direction where the annotation marker should point to
+ * @returns {undefined}
+ */
 modelViewer.createAnnotation = function(pos, norm) {
   
   var username = modelViewer.getCurrentUsername();
@@ -138,11 +145,28 @@ modelViewer.storeAnnotationLocally = function(annotation) {
   modelViewer.annotations[annotation.id] = annotation;
 };
 
+/**
+ * Model viewer typically uses Sevianno ids to reference models (because they can 
+ * directly be used to do CRUD with Sevianno). But when creating an annotation, 
+ * no annotation id is known until the Sevianno service responds. For this timespan, 
+ * model viewer uses local ids.
+ * 
+ * Note, that model viewer will replace the reference when Sevianno service responds with new id.
+ * 
+ * @returns {String} The local annotation id 
+ */
 modelViewer.getNextLocalId = function() {
   modelViewer.lastLocalId += 1;
   return 'MODEL_VIEWER' + modelViewer.lastLocalId;
 };
 
+/**
+ * Displays the provided annotation marker with the appearance of a 'selected' annotation marker.
+ * Makes all other annotation markers look as usual. Model viewer remembers the selected annotation marker.
+ * 
+ * @param {Object} shape The shape object of the annotation marker which should be selected
+ * @returns {undefined}
+ */
 modelViewer.selectAnnotation = function(shape) {
   
   // Remove hightlighting from previously selected annotation
@@ -155,7 +179,10 @@ modelViewer.selectAnnotation = function(shape) {
 };
 
 /**
- * Get the username of the currently logged in user (or an anonymous label)
+ * Get the username of the currently logged in user (or an anonymous label).
+ * 
+ * Requires oidc-button to be able to retrieve a user name (uses the oidc_userinfo variable)
+ * 
  * @returns {String} the username
  */
 modelViewer.getCurrentUsername = function() {
@@ -189,27 +216,52 @@ modelViewer.handleAnnotationMarkerClick = function(event) {
   annotationContentBox.showForWorldPos(worldPos);
 };
 
+/**
+ * Mouse over listener for annotation markers. The annotation marker will have a
+ * owner (may be the anonymous user). Emphasizes all annotation markers with the
+ * same owner. This helps the user finding out which annotations belong together 
+ * (=are created by the same user).
+ * 
+ * @param {Event} event 
+ * @returns {undefined}
+ */
 modelViewer.handleAnnotationMarkerMouseOver = function(event) {
+  // Get the owner of the annotation marker
   var shape = event.hitObject;
   var annotationId = shape.dataset.id;
   var username = modelViewer.annotations[annotationId].annotationData.username;
   
+  // For each annotation of the same owner ..
   for (var id in modelViewer.annotations) {
     if (modelViewer.annotations[id].annotationData.username === username) {
+      // .. get the annotation marker shape ..
       var transformNode = annotationMarkers.elements[id];
+      // .. and emphsize it
       annotationMarkers.emphasizeShape(transformNode.children[0]);
     }
   }
 };
 
+/**
+ * Mouse out listener for annotation markers. Undo for the emphasizing created by
+ * modelViewer.handleAnnotationMarkerMouseOver.
+ * 
+ * @param {Event} event
+ * @returns {undefined}
+ */
 modelViewer.handleAnnotationMarkerMouseOut = function(event) {
+  // Get the owner of the annotation marker
   var shape = event.hitObject;
   var annotationId = shape.dataset.id;
   var username = modelViewer.annotations[annotationId].annotationData.username;
     
+  // For each annotation of the same owner ..
   for (var id in modelViewer.annotations) {
     if (modelViewer.annotations[id].annotationData.username === username) {
+      // .. check that it is not the currently selected annotation 
+      // (we do not want to change the selected annotations appearance) ..
       if (modelViewer.selectedAnnotationId !== id) {
+        // .. and undo the emphasizing (by resetting all changes made to the markers appearance)
         annotationMarkers.clearSelection(id);
       }
     }
@@ -224,19 +276,35 @@ modelViewer.handleAnnotationMarkerMouseOut = function(event) {
  * ****************************************************************************/
 var annotationMarkers = {};
 
+// Color used for a selected annotation marker
 annotationMarkers.SELECTION_COLOR = '1 1 0';
+// Transparency of a selected annotation marker
 annotationMarkers.SELECTION_OPACITY = '0.0';
+// An array of colors used for non-selected annotation markers
+// Different colors indicate ownership by different users 
+// (one user will get first color, next user gets second color, ..)
 annotationMarkers.DEFAULT_COLORS = ['1 0 0', '0 1 0', '0 0 1', '1 0 1', '0 1 1', '1 1 1', '0 0 0'];
+// Transparency of non-selected + non-mouseover annotation markers
 annotationMarkers.DEFAULT_OPACITY = '0.3';
+// The index of the next unused color in the annotationMarkers.DEFAULT_COLORS array
 annotationMarkers.nextColor = 0;
-
-// A list of all annotation markers (the cone shapes) is stored. Note, that not the
+// A list of all annotation markers (the cone shapes). Note, that not the
 // cone shape is stored directly in the list, but a transform node. The cone shape
 // is the direct child of the transform node.
 annotationMarkers.elements = {};
-
+// Object storing all materials assigned to annotation markers BY USER NAME. When 
+// displaying an annotation marker of a user this can be used to look up how it 
+// should look like.
 annotationMarkers.materials = {};
 
+/**
+ * x3dom scene graph does not allow adding the same material to different shapes.
+ * As we need all annotation markers of a user to look the same, this is a convenience
+ * function to copy the material of a user.
+ * 
+ * @param {Material} material The material to be copied
+ * @returns {Material} A new material with same diffuse color and transparency
+ */
 annotationMarkers.copyMaterial = function(material) {
   
   var result = undefined;
@@ -275,6 +343,8 @@ annotationMarkers.getMaterial = function(username) {
  * x3dom vector. This will define the direction in which this annotaion marker points
  * @param {int} id The Sevianno object id of the shown annotation. Will be stored 
  * with the geometry shape to be able to reference the annotation when clicking the shape
+ * @param {String} username The name of the user that owns the annotation. Is 
+ * required to decide upon the annotation markers appearance
  * @returns {undefined}
  */
 annotationMarkers.showAnnotationMarker = function(pos, norm, id, username) {  
@@ -317,6 +387,7 @@ annotationMarkers.showAnnotationMarker = function(pos, norm, id, username) {
 /**
  * Removes the selection appearance from an annotation marker (by removing the 
  * 'selection' material and attaching the 'standard' user material)
+ * @param {String} annotationId Id of the annotation where annotation marker should no longer appear selected
  * @returns {undefined}
  */
 annotationMarkers.clearSelection = function(annotationId) {
@@ -329,9 +400,16 @@ annotationMarkers.clearSelection = function(annotationId) {
   }
 };
 
+/**
+ * Makes an annotation marker stick out without making it look like being selected
+ * 
+ * @param {Shape} shape The shape node of the annotation marker to be emphasized
+ * @returns {undefined}
+ */
 annotationMarkers.emphasizeShape = function(shape) {
   
-  // Highlight the selected annotion marker with a different color
+  // Create a new material with the original color, but set the transparency like 
+  // for a selected annotation marker
   var material = document.createElement('Material');
   material.setAttribute('diffuseColor', shape.children[1].children[0].getAttribute('diffuseColor'));
   material.setAttribute('transparency', annotationMarkers.SELECTION_OPACITY);
@@ -339,6 +417,12 @@ annotationMarkers.emphasizeShape = function(shape) {
   shape.children[1].appendChild(material);
 };
 
+/**
+ * Makes an annotatio marker look selected.
+ * 
+ * @param {Shape} shape The annotation marker to be displayed as selected
+ * @returns {undefined}
+ */
 annotationMarkers.highlightShape = function (shape) {
   
   // Highlight the selected annotion marker with a different color
@@ -349,13 +433,22 @@ annotationMarkers.highlightShape = function (shape) {
   shape.children[1].appendChild(material);
 };
 
+/**
+ * Model viewer will display annotation markers of different users in differently. 
+ * If for a user you do not have a annotation marker material yet, you can use
+ * this function to get an unused material for your annotation marker.
+ *  
+ * @returns {Material} The new material
+ */
 annotationMarkers.getNewMaterial = function () {
   
+  // Create a new material with the next color from annotationMarkers.DEFAULT_COLORS
   var material = document.createElement('Material');
   material.setAttribute('diffuseColor', annotationMarkers.DEFAULT_COLORS[annotationMarkers.nextColor]);
   material.setAttribute('transparency', annotationMarkers.DEFAULT_OPACITY);
   
-  annotationMarkers.nextColor;
+  // Update annotationMarkers.nextColor. If all colors are already used, just 
+  // use the first color again.
   if (annotationMarkers.nextColor + 1 > annotationMarkers.DEFAULT_COLORS.length) {
     annotationMarkers.nextColor = 0;
   }
@@ -366,9 +459,21 @@ annotationMarkers.getNewMaterial = function () {
   return material;
 };
 
+// Array storing event listener for the onload function of the x3dInline element 
+// in model_viewer.php
 modelViewer.onLoadHandler = [];
 
+/**
+ * Registers an event listener for the x3dInline element in model_viewer.php.
+ * The x3dom inline element seems not to support the 'addEventListener()' function
+ * by itself, so this is a workaround to be able to attach multiple event listener
+ * 
+ * @param {String} type Currently only 'load' supported
+ * @param {function} callback Will be called when event fires
+ * @returns {undefined}
+ */
 modelViewer.addEventListener = function(type, callback) {
+  // Store the event listener in modelViewer.onLoadHandler
   if (type === 'load') {
     modelViewer.onLoadHandler.push(callback);
   }
@@ -377,6 +482,12 @@ modelViewer.addEventListener = function(type, callback) {
   }
 };
 
+/**
+ * Callback function for onLoad event of x3dInline element in model_viewer.php
+ * 
+ * @param {Event} event
+ * @returns {undefined}
+ */
 modelViewer.onModelLoaded = function(event) {
   modelViewer.onLoadHandler.forEach(function(callback) {
     callback(event);
@@ -391,13 +502,18 @@ modelViewer.onModelLoaded = function(event) {
  * ****************************************************************************/
 var annotationContentBox = {};
 
+// Placeholder text for annotation content box in read mode when there is no title
 annotationContentBox.NO_TITLE_PLACEHOLDER = 'No Title';
+// Placeholder text for annotation content box in read mode when there is no content
 annotationContentBox.NO_CONTENT_PLACEHOLDER = 'No content';
+// Placeholder text for annotation content box when there is no user name
 annotationContentBox.ANONYMOUS_USERNAME = 'Anonymous';
 
 /**
- * Show the annotation content box for a user click. It will be moved to the 
- * border of the viewer element.
+ * Show the annotation content box for a user click. Positions the annotation content 
+ * box properly by moving it to the border of the viewer element 
+ * (relative to the mouse click position).
+ * 
  * @param {Array} pos2d 2D point where the user clicked (relative to page)
  * @returns {undefined}
  */
@@ -412,6 +528,13 @@ annotationContentBox.show = function(pos2d) {
   annotationContentBox.showContent();
 };
 
+/**
+ * Shows an annotation content box properly positioned relative to 3D coordinates
+ * of the global / world space
+ * 
+ * @param {x3dom.fields.SFVec3f} worldPos 3D position
+ * @returns {undefined}
+ */
 annotationContentBox.showForWorldPos = function(worldPos) {
   
   var runtime = document.getElementById("viewer_object").runtime;
@@ -548,6 +671,11 @@ annotationContentBox.switchMode = function(mode) {
   }
 };
 
+/**
+ * Hides the annotation content box and resets all of its content
+ * 
+ * @returns {undefined}
+ */
 annotationContentBox.hide = function() {
   // Hide the whole content box
   $('#annotation-content').addClass('hidden');
@@ -561,6 +689,7 @@ annotationContentBox.hide = function() {
   $('#textarea-annotation-content').val('');
 };
 
+// Initializing model viewer
 document.addEventListener('DOMContentLoaded', function() {
   // Reading the Sevianno object id of the current model from our database (our php 
   // server will store it in a hidden input field called model-sevianno-id)
