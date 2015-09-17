@@ -59,8 +59,7 @@ viewerToolbar.onHighlightClick = function() {
     modelHighlighter.stopHighlighting();
   }
   else {
-    modelHighlighter.showHighlighting = true;
-    modelHighlighter.initialize();
+    modelHighlighter.startHighlighting();
   }
     
 };

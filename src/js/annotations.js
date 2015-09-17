@@ -126,7 +126,13 @@ annotations.readAnnotations = function(objectId, func) {
   });
 };
 
-
+/**
+ * Deletes an annotation for Sevianno service.
+ * 
+ * @param {String} objectId Annotations object id
+ * @param {function} func Callback (called when deletion completed)
+ * @returns {undefined}
+ */
 annotations.deleteAnnotation = function(objectId, func) { 
   
     annotations.sendRequest("DELETE", annotations.OBJECT_SERVICE_URL + objectId, null, 0, function(answer) {

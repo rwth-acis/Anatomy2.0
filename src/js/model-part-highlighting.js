@@ -14,39 +14,39 @@
  *  limitations under the License.
  * 
  *  @file model-part-highlighting.php
- *  TODO
+ *  All functionality required to enable and disable highlighting parts of models
+ *  when mousing over them. Clicking on a highlighted model part will make all 
+ *  other parts transparent.
  */
 
 var modelHighlighter = {};
 
+// Indicates whether highlighting functionality is turned on or off
 modelHighlighter.showHighlighting = false;
 
-modelHighlighter.initialize = function() {
+/**
+ * Enables highlighting by adding event listener to model shapes
+ * 
+ * @return {undefined} 
+ */
+modelHighlighter.startHighlighting = function() {
   
-  if (modelHighlighter.showHighlighting === false) {
-    console.log('Model Highlighter: Highlighting disabled. Set \'modelHighlighter.showHighlighting = true\' in case you like to enable highlighting.')
-  }
-  else {
-    var modelNodesGroup = document.getElementById('model-nodes');
-    var allSh = modelNodesGroup.getElementsByTagName('Shape'); 
-    for (var i = 0, length = allSh.length; i < length; i++) {
-      var sh = allSh[i];
-      var app = sh .getElementsByTagName('Appearance')[0];
-      if(app === undefined) {
-        app = document.createElement('Appearance');
-        sh.appendChild(app);
-      }
-      if (!app.getElementsByTagName('Material')[0]) {
-        app.appendChild( document.createElement('Material') );
-      }
-      sh.isSelected = false;
-      sh.onclick = modelHighlighter.funcClick (sh, allSh);
-      sh.onmouseover = modelHighlighter.funcOver (sh);
-      sh.onmouseout = modelHighlighter.funcOut (sh);
-    };
-  }
+  modelHighlighter.showHighlighting = true;
+  
+  var modelNodesGroup = document.getElementById('model-nodes');
+  var allSh = modelNodesGroup.getElementsByTagName('Shape'); 
+  for (var i = 0, length = allSh.length; i < length; i++) {
+    sh.isSelected = false;
+    sh.onclick = modelHighlighter.funcClick (sh, allSh);
+    sh.onmouseover = modelHighlighter.funcOver (sh);
+    sh.onmouseout = modelHighlighter.funcOut (sh);
+  };
 }
 
+/**
+ * Disables highlighting by detaching all event listeners. Also removes all
+ * changes made to shapes appearance
+ */
 modelHighlighter.stopHighlighting = function() {
   
   var modelNodesGroup = document.getElementById('model-nodes');
@@ -75,18 +75,35 @@ modelHighlighter.setMaterialAttribute = function(sh, attr, val) {
     .getElementsByTagName('Material')[0]
     .setAttribute(attr,val); 
 }
+
+/**
+ * Getter for a callback function for mouse over on model parts. Makes them 'glow'
+ * 
+ * @return {function} Callback function for mouse over
+ */
 modelHighlighter.funcOver = function (sh) { 
   return function() { 
     modelHighlighter.setMaterialAttribute(sh,'emissiveColor','1 0.8 0.1'); 
   } 
 }
 
+/**
+ * Getter for a callback function for mouse out on model parts. Removes 'glow'
+ * 
+ * @return {function} Callback function for mouse out
+ */
 modelHighlighter.funcOut = function (sh) { 
   return function() { 
     modelHighlighter.setMaterialAttribute(sh,'emissiveColor','0 0 0'); 
   } 
 }
 
+/**
+ * Getter for a callback function for mouse click on model parts. 
+ * Makes all other model parts transparent
+ * 
+ * @return {function} Callback function for mouse click
+ */
 modelHighlighter.funcClick = function (sh, allSh) {
   return function() {
     other = Array.filter(allSh, x => x != sh);
@@ -106,3 +123,23 @@ modelHighlighter.funcClick = function (sh, allSh) {
     }
   } 
 }
+
+/**
+ * Initializes model by adding a material to all nodes. Material is required for
+ * highlighting effects. Will also enable x3dom lighting calculation.
+ */
+document.addEventListener('DOMContentLoaded', function() {
+  var modelNodesGroup = document.getElementById('model-nodes');
+  var allSh = modelNodesGroup.getElementsByTagName('Shape'); 
+  for (var i = 0, length = allSh.length; i < length; i++) {
+    var sh = allSh[i];
+    var app = sh .getElementsByTagName('Appearance')[0];
+    if(app === undefined) {
+      app = document.createElement('Appearance');
+      sh.appendChild(app);
+    }
+    if (!app.getElementsByTagName('Material')[0]) {
+      app.appendChild( document.createElement('Material') );
+    }
+  };
+});

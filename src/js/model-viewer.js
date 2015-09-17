@@ -36,7 +36,9 @@ modelViewer.selectedAnnotationId = undefined;
 // A list of all annotations which are related to the current model
 modelViewer.annotations = {};
 
-modelViewer.lastLocalId = 0;
+// Model viewer uses local ids for annotations which do not yet have a Sevianno id
+// Stores the next free local id
+modelViewer.nextLocalId = 0;
 
 /**
  * Shows an annotation marker and stores a new annotation in Sevianno service
@@ -156,8 +158,9 @@ modelViewer.storeAnnotationLocally = function(annotation) {
  * @returns {String} The local annotation id 
  */
 modelViewer.getNextLocalId = function() {
-  modelViewer.lastLocalId += 1;
-  return 'MODEL_VIEWER' + modelViewer.lastLocalId;
+  var id = 'MODEL_VIEWER' + modelViewer.nextLocalId;
+  modelViewer.nextLocalId += 1;
+  return id;
 };
 
 /**
