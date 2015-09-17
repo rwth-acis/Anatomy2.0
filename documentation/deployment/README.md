@@ -3,6 +3,7 @@
 To deploy Anatomy2.0 on a server, do the following steps:
 
 1. Install an HTTP server (e.g. Apache Server) or use an existing installation
+2. Enable PHP for your HTTP server
 2. Install MySQL RDBMS or use an existing installation
 3. Clone master or develop branch from https://github.com/rwth-acis/Anatomy2.0
 4. Create a 'models' folder in the root directory of your git directory
