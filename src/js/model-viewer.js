@@ -562,7 +562,7 @@ annotationContentBox.showContent = function() {
   // If there is no annotation stored with the given id (or the id is undefined), 
   // then the user has created a new annotation and the request to Sevianno is still in progress
   if (annotation === undefined) {
-    switchAnnotationContentMode('loading');
+    annotationContentBox.switchMode('loading');
   }
   else {
     // Updating the content in the "readonly" div

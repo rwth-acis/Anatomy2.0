@@ -31,3 +31,14 @@ The color of each annotation marker can be set using its `material` node. The mo
 
 Note: It is not possible to assign the same material to multiple annotation markers, because x3dom will remove the material node from the shape it has been previously attached to. Therefore, `material` nodes are always copied before assigning them to a node. This is already handled by `annotationMarkers.getMaterial()` function.
 
+**Content box:** 
+There needs to be some place to display detailed information about an annotation. Anatomy2.0 has a content box to display detail information for annontations. There is one content box statically defined in HTML code called `annotation-content`. One set of HTML elements is sufficient, because there is always just one content box visible at a time. 
+
+The content box has three different modes to be able to react to user interaction. The modes are `loading`, `read` and `edit`. The content box is in `read` mode by default. `loading` is shown if and only if the user tries to open a content box, but the annotation is not yet in local storage (it is still being created and / or read from Sevianno Service). Switching modes is done with the `annotationContentBox.switchMode()` which accepts a `String` as argument. The argument has to be one of the three mode names.
+
+When a user clicks an annotation marker, the annotation content box has to be positioned somewhere near the marker. But it should not overlap with the marker or the model part which is annotated. Anatomy2.0 has a simple algorithm which tries to approximately achieve this behavior. The annotation content box is initially placed at the position where the user clicked the annotation marker and from there it is shifted to the border of the screen. The positioning is handled by `annotationContentBox.calcPosition()`. Note, that the content box is not repositioned when the user rotates or moves the model on the screen.
+
+### Miscellaneous
+
+**On load event on x3dom inline node:** 
+The x3dom inline element seems not to support the standard HTML `addEventListener()` function, so Model Viewer provides a workaround to be able to attach multiple event listeners to the x3dom inline element. Just call `modelViewer.addEventListener('load', callback)` and replace `callback` by your callback function.
