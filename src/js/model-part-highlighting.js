@@ -36,6 +36,7 @@ modelHighlighter.startHighlighting = function() {
   var modelNodesGroup = document.getElementById('model-nodes');
   var allSh = modelNodesGroup.getElementsByTagName('Shape'); 
   for (var i = 0, length = allSh.length; i < length; i++) {
+    var sh = allSh[i];
     sh.isSelected = false;
     sh.onclick = modelHighlighter.funcClick (sh, allSh);
     sh.onmouseover = modelHighlighter.funcOver (sh);
@@ -128,7 +129,7 @@ modelHighlighter.funcClick = function (sh, allSh) {
  * Initializes model by adding a material to all nodes. Material is required for
  * highlighting effects. Will also enable x3dom lighting calculation.
  */
-document.addEventListener('DOMContentLoaded', function() {
+modelHighlighter.initialize = function() {
   var modelNodesGroup = document.getElementById('model-nodes');
   var allSh = modelNodesGroup.getElementsByTagName('Shape'); 
   for (var i = 0, length = allSh.length; i < length; i++) {
@@ -142,4 +143,4 @@ document.addEventListener('DOMContentLoaded', function() {
       app.appendChild( document.createElement('Material') );
     }
   };
-});
+};
