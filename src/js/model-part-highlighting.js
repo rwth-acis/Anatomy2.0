@@ -84,7 +84,10 @@ modelHighlighter.setMaterialAttribute = function(sh, attr, val) {
  */
 modelHighlighter.funcOver = function (sh) { 
   return function() { 
-    modelHighlighter.setMaterialAttribute(sh,'emissiveColor','1 0.8 0.1'); 
+    if( !sh.isSelected ) {
+	    modelHighlighter.setMaterialAttribute(sh,'emissiveColor','1 0.8 0.1'); 
+	    modelHighlighter.setMaterialAttribute(sh,'transparency','0.0');
+	 }
   } 
 }
 
@@ -95,7 +98,10 @@ modelHighlighter.funcOver = function (sh) {
  */
 modelHighlighter.funcOut = function (sh) { 
   return function() { 
-    modelHighlighter.setMaterialAttribute(sh,'emissiveColor','0 0 0'); 
+    if( !sh.isSelected ) {
+	    modelHighlighter.setMaterialAttribute(sh,'emissiveColor','0 0 0'); 
+	    modelHighlighter.setMaterialAttribute(sh,'transparency','1.0');
+	 }
   } 
 }
 
@@ -106,23 +112,20 @@ modelHighlighter.funcOut = function (sh) {
  * @return {function} Callback function for mouse click
  */
 modelHighlighter.funcClick = function (sh, allSh) {
-  return function() {
-    other = Array.filter(allSh, x => x != sh);
-    if( other.length > 0 ) {
-      sh.isSelected = !sh.isSelected;
-      if( sh.isSelected ) {
-        modelHighlighter.setMaterialAttribute(sh,'transparency','0.0');
-        Array.forEach( other, 
-          x => {modelHighlighter.setMaterialAttribute(x,'transparency','0.9'); x.isSelected=false} 
-        );
-      } else {
-        modelHighlighter.setMaterialAttribute(sh,'transparency','0.0');
-        Array.forEach( other, 
-          x => {modelHighlighter.setMaterialAttribute(x,'transparency','0.0')} 
-        );
-      }
-    }
-  } 
+	 return function() {
+	    other = Array.filter(allSh, x => x !== sh);
+	    if( other.length > 0 ) {
+	      sh.isSelected = true;
+	      if( sh.isSelected ) {
+	        modelHighlighter.setMaterialAttribute(sh,'transparency','0.0');
+		     modelHighlighter.setMaterialAttribute(sh,'emissiveColor','0 0 0'); 
+	        Array.forEach( other, 
+	          x => {modelHighlighter.setMaterialAttribute(x,'transparency','1.0'); x.isSelected=false} 
+	        );
+	        console.log("gae");
+	      }
+    	}
+  }
 }
 
 /**
