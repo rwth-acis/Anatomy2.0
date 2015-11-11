@@ -20,6 +20,9 @@
  */
 
 var modelHighlighter = {};
+modelHighlighter.matNorm = $('');
+modelHighlighter.matOver = $('<Material emissiveColor="1 0.8 0.1" transparency=0.0 />');
+modelHighlighter.matOut = $('<Material emissiveColor="0 0 0" transparency=1.0 />');
 
 // Indicates whether highlighting functionality is turned on or off
 modelHighlighter.showHighlighting = false;
@@ -52,7 +55,7 @@ modelHighlighter.stopHighlighting = function() {
     this.onclick = undefined;
     this.onmouseover = undefined;
     this.onmouseout = undefined;
-	 $(this).find('Appearance Material').attr('emissiveColor', '0 0 0').attr('transparency','0.0');
+	 modelHighlighter.setMaterial(this, modelHighlighter.matNorm);
   });
   
   modelHighlighter.showHighlighting = false;
@@ -63,7 +66,13 @@ modelHighlighter.stopHighlighting = function() {
    inline/@nameSpaceName attribute is essential (s. above link)
    example is at http://x3dom.org/x3dom/example/x3dom_inlineReflection.xhtml */
 /* pressing 'D' for x3dom-debug in every viewer */
-
+modelHighlighter.setMaterial = function (sh, mat) {
+    	if( $(sh).find('Material').length ) {
+    		$(sh).find('Material').replaceWith(mat);
+    	} else {
+    		$(sh).find('Appearance').append(mat);
+    	}	
+}
 
 /**
  * Getter for a callback function for mouse over on model parts. Makes them 'glow'
@@ -73,7 +82,7 @@ modelHighlighter.stopHighlighting = function() {
 modelHighlighter.funcOver = function (sh) { 
   return function() { 
     if( !sh.isSelected ) {
-		 $(sh).find('Appearance Material').attr('emissiveColor', '1 0.8 0.1').attr('transparency','0.0');
+    	modelHighlighter.setMaterial(sh, modelHighlighter.matOver);
 	 }
   } 
 }
@@ -84,11 +93,11 @@ modelHighlighter.funcOver = function (sh) {
  * @return {function} Callback function for mouse out
  */
 modelHighlighter.funcOut = function (sh) { 
-  return function() { 
+	return function () {
     if( !sh.isSelected ) {
-		 $(sh).find('Appearance Material').attr('emissiveColor', '0 0 0').attr('transparency','1.0');
+    	modelHighlighter.setMaterial(sh, modelHighlighter.matOut.clone());
 	 }
-  } 
+	}
 }
 
 /**
@@ -103,9 +112,9 @@ modelHighlighter.funcClick = function (sh, allSh) {
 	    if( other.length > 0 ) {
 	      sh.isSelected = true;
 	      if( sh.isSelected ) {
-	        $(sh).find('Appearance Material').attr('emissiveColor', '0 0 0').attr('transparency','0.0');
+	      	modelHighlighter.setMaterial(sh, modelHighlighter.matNorm);
 	        Array.forEach( other, 
-	          x => {$(x).find('Appearance Material').attr('transparency','1.0'); x.isSelected=false} 
+	          x => {modelHighlighter.setMaterial(x, modelHighlighter.matOut); x.isSelected=false} 
 	        );
 	      }
     	}
@@ -119,11 +128,7 @@ modelHighlighter.funcClick = function (sh, allSh) {
 modelHighlighter.initialize = function() {
   $ ('#model-nodes Shape').each(
 	  function () {
-	    if(! $(this).find('Appearance').length) {
-	      $(this).append('<Appearance/>');
-	    }
-	    if (!$(this).find('Appearance Material').length) {
-	      $(this).find('Appearance').append('<Material/>');
-	    }
+	    modelHighlighter.setMaterial(this, modelHighlighter.matNorm);
   });
+  modelHighlighter.startHighlighting();
 };
