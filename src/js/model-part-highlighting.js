@@ -41,6 +41,7 @@ modelHighlighter.startHighlighting = function() {
     this.onclick = modelHighlighter.funcClick (this, allSh);
     this.onmouseover = modelHighlighter.funcOver (this);
     this.onmouseout = modelHighlighter.funcOut (this);
+    modelHighlighter.setMaterial(this, modelHighlighter.matOver);
   });
 }
 
@@ -66,11 +67,13 @@ modelHighlighter.stopHighlighting = function() {
    inline/@nameSpaceName attribute is essential (s. above link)
    example is at http://x3dom.org/x3dom/example/x3dom_inlineReflection.xhtml */
 /* pressing 'D' for x3dom-debug in every viewer */
+
 modelHighlighter.setMaterial = function (sh, mat) {
+		// clone material as it will be removed from previous context
     	if( $(sh).find('Material').length ) {
-    		$(sh).find('Material').replaceWith(mat);
+    		$(sh).find('Material').replaceWith(mat.clone());
     	} else {
-    		$(sh).find('Appearance').append(mat);
+    		$(sh).find('Appearance').append(mat.clone());
     	}	
 }
 
@@ -95,7 +98,9 @@ modelHighlighter.funcOver = function (sh) {
 modelHighlighter.funcOut = function (sh) { 
 	return function () {
     if( !sh.isSelected ) {
-    	modelHighlighter.setMaterial(sh, modelHighlighter.matOut.clone());
+    	modelHighlighter.setMaterial(sh, modelHighlighter.matOut);
+	 } else {
+    	modelHighlighter.setMaterial(sh, modelHighlighter.matNorm);
 	 }
 	}
 }
@@ -108,17 +113,22 @@ modelHighlighter.funcOut = function (sh) {
  */
 modelHighlighter.funcClick = function (sh, allSh) {
 	 return function() {
-	    other = Array.filter(allSh, x => x !== sh);
-	    if( other.length > 0 ) {
-	      sh.isSelected = true;
-	      if( sh.isSelected ) {
-	      	modelHighlighter.setMaterial(sh, modelHighlighter.matNorm);
-	        Array.forEach( other, 
-	          x => {modelHighlighter.setMaterial(x, modelHighlighter.matOut); x.isSelected=false} 
-	        );
-	      }
-    	}
-  }
+	 	 // only doubleclick
+	 	 if (!sh.lastClicked) {
+	 	 	sh.lastClicked = 0;
+	    }
+	 	 var now = new Date() .getTime();
+	 	 console.log(now - sh.lastClicked);
+	 	 if (now - sh.lastClicked < 200) {
+		      sh.isSelected = !sh.isSelected;
+		      if( sh.isSelected ) {
+		      	modelHighlighter.setMaterial(sh, modelHighlighter.matNorm);
+		      } else {
+		      	modelHighlighter.setMaterial(sh, modelHighlighter.matOver);
+		      }
+  		}
+  		sh.lastClicked = now;
+  	}
 }
 
 /**
@@ -130,5 +140,4 @@ modelHighlighter.initialize = function() {
 	  function () {
 	    modelHighlighter.setMaterial(this, modelHighlighter.matNorm);
   });
-  modelHighlighter.startHighlighting();
 };
