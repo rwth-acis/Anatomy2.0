@@ -32,16 +32,13 @@ modelHighlighter.showHighlighting = false;
 modelHighlighter.startHighlighting = function() {
   
   modelHighlighter.showHighlighting = true;
-  
-  var modelNodesGroup = document.getElementById('model-nodes');
-  var allSh = modelNodesGroup.getElementsByTagName('Shape'); 
-  for (var i = 0, length = allSh.length; i < length; i++) {
-    var sh = allSh[i];
-    sh.isSelected = false;
-    sh.onclick = modelHighlighter.funcClick (sh, allSh);
-    sh.onmouseover = modelHighlighter.funcOver (sh);
-    sh.onmouseout = modelHighlighter.funcOut (sh);
-  };
+  var allSh = $ ('#model-nodes Shape');
+  allSh.each( function () {
+    this.isSelected = false;
+    this.onclick = modelHighlighter.funcClick (this, allSh);
+    this.onmouseover = modelHighlighter.funcOver (this);
+    this.onmouseout = modelHighlighter.funcOut (this);
+  });
 }
 
 /**
@@ -50,18 +47,13 @@ modelHighlighter.startHighlighting = function() {
  */
 modelHighlighter.stopHighlighting = function() {
   
-  var modelNodesGroup = document.getElementById('model-nodes');
-  var allSh = modelNodesGroup.getElementsByTagName('Shape'); 
-  for (var i = 0, length = allSh.length; i < length; i++) {
-    var sh = allSh[i];
-    sh.onclick = undefined;
-    sh.onmouseover = undefined;
-    sh.onmouseout = undefined;
-    // Remove yellow mouse over color
-    modelHighlighter.setMaterialAttribute(sh,'emissiveColor','0 0 0'); 
-    // Remove transparency
-    modelHighlighter.setMaterialAttribute(sh,'transparency','0.0');
-  };
+  var allSh = $ ('#model-nodes Shape');
+  allSh.each( function () {
+    this.onclick = undefined;
+    this.onmouseover = undefined;
+    this.onmouseout = undefined;
+	 $(this).find('Appearance Material').attr('emissiveColor', '0 0 0').attr('transparency','0.0');
+  });
   
   modelHighlighter.showHighlighting = false;
 };
@@ -71,11 +63,7 @@ modelHighlighter.stopHighlighting = function() {
    inline/@nameSpaceName attribute is essential (s. above link)
    example is at http://x3dom.org/x3dom/example/x3dom_inlineReflection.xhtml */
 /* pressing 'D' for x3dom-debug in every viewer */
-modelHighlighter.setMaterialAttribute = function(sh, attr, val) {
-  sh.getElementsByTagName('Appearance')[0]
-    .getElementsByTagName('Material')[0]
-    .setAttribute(attr,val); 
-}
+
 
 /**
  * Getter for a callback function for mouse over on model parts. Makes them 'glow'
@@ -85,8 +73,7 @@ modelHighlighter.setMaterialAttribute = function(sh, attr, val) {
 modelHighlighter.funcOver = function (sh) { 
   return function() { 
     if( !sh.isSelected ) {
-	    modelHighlighter.setMaterialAttribute(sh,'emissiveColor','1 0.8 0.1'); 
-	    modelHighlighter.setMaterialAttribute(sh,'transparency','0.0');
+		 $(sh).find('Appearance Material').attr('emissiveColor', '1 0.8 0.1').attr('transparency','0.0');
 	 }
   } 
 }
@@ -99,8 +86,7 @@ modelHighlighter.funcOver = function (sh) {
 modelHighlighter.funcOut = function (sh) { 
   return function() { 
     if( !sh.isSelected ) {
-	    modelHighlighter.setMaterialAttribute(sh,'emissiveColor','0 0 0'); 
-	    modelHighlighter.setMaterialAttribute(sh,'transparency','1.0');
+		 $(sh).find('Appearance Material').attr('emissiveColor', '0 0 0').attr('transparency','1.0');
 	 }
   } 
 }
@@ -117,12 +103,10 @@ modelHighlighter.funcClick = function (sh, allSh) {
 	    if( other.length > 0 ) {
 	      sh.isSelected = true;
 	      if( sh.isSelected ) {
-	        modelHighlighter.setMaterialAttribute(sh,'transparency','0.0');
-		     modelHighlighter.setMaterialAttribute(sh,'emissiveColor','0 0 0'); 
+	        $(sh).find('Appearance Material').attr('emissiveColor', '0 0 0').attr('transparency','0.0');
 	        Array.forEach( other, 
-	          x => {modelHighlighter.setMaterialAttribute(x,'transparency','1.0'); x.isSelected=false} 
+	          x => {$(x).find('Appearance Material').attr('transparency','1.0'); x.isSelected=false} 
 	        );
-	        console.log("gae");
 	      }
     	}
   }
@@ -133,17 +117,13 @@ modelHighlighter.funcClick = function (sh, allSh) {
  * highlighting effects. Will also enable x3dom lighting calculation.
  */
 modelHighlighter.initialize = function() {
-  var modelNodesGroup = document.getElementById('model-nodes');
-  var allSh = modelNodesGroup.getElementsByTagName('Shape'); 
-  for (var i = 0, length = allSh.length; i < length; i++) {
-    var sh = allSh[i];
-    var app = sh .getElementsByTagName('Appearance')[0];
-    if(app === undefined) {
-      app = document.createElement('Appearance');
-      sh.appendChild(app);
-    }
-    if (!app.getElementsByTagName('Material')[0]) {
-      app.appendChild( document.createElement('Material') );
-    }
-  };
+  $ ('#model-nodes Shape').each(
+	  function () {
+	    if(! $(this).find('Appearance').length) {
+	      $(this).append('<Appearance/>');
+	    }
+	    if (!$(this).find('Appearance Material').length) {
+	      $(this).find('Appearance').append('<Material/>');
+	    }
+  });
 };
