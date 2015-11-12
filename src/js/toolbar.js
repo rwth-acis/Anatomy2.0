@@ -55,13 +55,7 @@ viewerToolbar.onAnnotateClick = function() {
  * The button indicates the current mode to the user with bootstraps 'active' class.
  */
 viewerToolbar.onHighlightClick = function() {
-  if (modelHighlighter.showHighlighting) {
-    modelHighlighter.stopHighlighting();
-  }
-  else {
-    modelHighlighter.startHighlighting();
-  }
-    
+	modelHighlighter.toggleHighlighting();
 };
 
 /**

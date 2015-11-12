@@ -24,8 +24,15 @@ modelHighlighter.matNorm = $('');
 modelHighlighter.matOver = $('<Material emissiveColor="1 0.8 0.1" transparency=0.0 />');
 modelHighlighter.matOut = $('<Material emissiveColor="0 0 0" transparency=1.0 />');
 
-// Indicates whether highlighting functionality is turned on or off
-modelHighlighter.showHighlighting = false;
+
+// Highlighting turned off
+modelHighlighter.STATE_OFF = 0;
+// Everything yellow
+modelHighlighter.STATE_INIT = 1;
+// Normal selection
+modelHighlighter.STATE_WORK = 2;
+// highlighting state-variable
+modelHighlighter.state = modelHighlighter.STATE_OFF;
 
 /**
  * Enables highlighting by adding event listener to model shapes
@@ -34,7 +41,7 @@ modelHighlighter.showHighlighting = false;
  */
 modelHighlighter.startHighlighting = function() {
   
-  modelHighlighter.showHighlighting = true;
+  modelHighlighter.state = modelHighlighter.STATE_INIT;
   var allSh = $ ('#model-nodes Shape');
   allSh.each( function () {
     this.isSelected = false;
@@ -43,6 +50,15 @@ modelHighlighter.startHighlighting = function() {
     this.onmouseout = modelHighlighter.funcOut (this);
     modelHighlighter.setMaterial(this, modelHighlighter.matOver);
   });
+}
+
+modelHighlighter.toggleHighlighting = function() {
+  if (modelHighlighter.state !== modelHighlighter.STATE_OFF) {
+    modelHighlighter.stopHighlighting();
+  }
+  else {
+    modelHighlighter.startHighlighting();
+  }
 }
 
 /**
@@ -59,7 +75,7 @@ modelHighlighter.stopHighlighting = function() {
 	 modelHighlighter.setMaterial(this, modelHighlighter.matNorm);
   });
   
-  modelHighlighter.showHighlighting = false;
+  modelHighlighter.state = modelHighlighter.STATE_OFF;
 };
 
 /* add transparency-effect: */
@@ -84,7 +100,7 @@ modelHighlighter.setMaterial = function (sh, mat) {
  */
 modelHighlighter.funcOver = function (sh) { 
   return function() { 
-    if( !sh.isSelected ) {
+    if( !sh.isSelected && modelHighlighter.state === modelHighlighter.STATE_WORK) {
     	modelHighlighter.setMaterial(sh, modelHighlighter.matOver);
 	 }
   } 
@@ -97,11 +113,13 @@ modelHighlighter.funcOver = function (sh) {
  */
 modelHighlighter.funcOut = function (sh) { 
 	return function () {
-    if( !sh.isSelected ) {
-    	modelHighlighter.setMaterial(sh, modelHighlighter.matOut);
-	 } else {
-    	modelHighlighter.setMaterial(sh, modelHighlighter.matNorm);
-	 }
+		 if( modelHighlighter.state === modelHighlighter.STATE_WORK ) {
+		    if( !sh.isSelected ) {
+		    	modelHighlighter.setMaterial(sh, modelHighlighter.matOut);
+			 } else {
+		    	modelHighlighter.setMaterial(sh, modelHighlighter.matNorm);
+			 }
+		 }
 	}
 }
 
@@ -125,6 +143,13 @@ modelHighlighter.funcClick = function (sh, allSh) {
 		      	modelHighlighter.setMaterial(sh, modelHighlighter.matNorm);
 		      } else {
 		      	modelHighlighter.setMaterial(sh, modelHighlighter.matOver);
+		      }
+		      
+		      if( modelHighlighter.state === modelHighlighter.STATE_INIT ) {
+		      	allSh.not($(sh)).each( function () {
+		      		modelHighlighter.setMaterial(this, modelHighlighter.matOut);
+		      	});
+		      	modelHighlighter.state = modelHighlighter.STATE_WORK;
 		      }
   		}
   		sh.lastClicked = now;
