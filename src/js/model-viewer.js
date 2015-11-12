@@ -692,8 +692,14 @@ annotationContentBox.hide = function() {
   $('#textarea-annotation-content').val('');
 };
 
+modelViewer.x3dLoaded = function () {
+  // Deactivate x3d-hotkeys while editing annotation
+  $('#textarea-annotation-content').on('keypress keydown keyup', function (e) { e.stopPropagation(); });
+  $('#input-annotation-title').on('keypress keydown keyup', function (e) { e.stopPropagation(); });
+}
+
 // Initializing model viewer
-document.addEventListener('DOMContentLoaded', function() {
+$(document).ready( function() {
   // Reading the Sevianno object id of the current model from our database (our php 
   // server will store it in a hidden input field called model-sevianno-id)
   modelViewer.seviannoObjectId = $('#model-sevianno-id').val();
@@ -712,7 +718,7 @@ document.addEventListener('DOMContentLoaded', function() {
       modelViewer.storeAnnotationLocally(annotation);
     });
   });
-  
+    
   // Register handler for close button in annotation content window
   $('#btn-annotation-content-close').on('click', function() {
     annotationContentBox.hide();
