@@ -34,10 +34,12 @@ viewerToolbar.toggleAnnotationMode = function(toOff) {
   if (toOff) {
     btnAnnotate.removeClass('active');
     viewerToolbar.annotate = false;
+    $('.x3dom-canvas').css('cursor','auto');
   }
   else {
     btnAnnotate.addClass('active');
     viewerToolbar.annotate = true;
+    $('.x3dom-canvas').css('cursor','crosshair');
   }
 };
 
