@@ -136,7 +136,6 @@ modelHighlighter.funcClick = function (sh, allSh) {
 	 	 	sh.lastClicked = 0;
 	    }
 	 	 var now = new Date() .getTime();
-	 	 console.log(now - sh.lastClicked);
 	 	 if (now - sh.lastClicked < 200) {
 		      sh.isSelected = !sh.isSelected;
 		      if( sh.isSelected ) {

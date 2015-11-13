@@ -25,9 +25,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Collaborative 3D Model Viewer</title>
     
-    <link type='text/css' rel='stylesheet' href='http://www.x3dom.org/download/x3dom.css'/>
+    <link type='text/css' rel='stylesheet' href='../css/external/x3dom.css'/>
     <link rel='stylesheet' type='text/css' href='../css/model_viewer.css'/>
     <link rel='stylesheet' type='text/css' href='../css/bootstrap.min.css'>
+    <link rel='stylesheet' type='text/css' href='../css/external/jquery-ui.min.css'>
     <link rel='stylesheet' type='text/css' href='../css/style.css'>
   </head>
 
@@ -47,7 +48,6 @@
     <?php
       } else {
     ?>
-      <script src="../js/jquery.min.js"></script>
       <script type='text/javascript' src='../js/x3dom.js'> </script>
       <script type='text/javascript' src='../js/init-subsite.js'></script>
       <script type='text/javascript' src='../js/viewer.js'> </script>
@@ -60,6 +60,7 @@
       <script type='text/javascript' src='../js/annotations.js'> </script>
       <script type='text/javascript' src='../js/model-viewer.js'> </script>
       <script type="text/javascript" src="../js/model-part-highlighting.js"></script>
+      <script type="text/javascript" src="../js/model-special-features.js"></script>
     <?php
       
       include '../php/db_connect.php';

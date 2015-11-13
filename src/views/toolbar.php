@@ -39,7 +39,7 @@
   // break the menu.
   if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
 ?>
-  <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
   
   <!-- import JWS and JSRSASIGN (must) -->
   <script type="text/javascript" src="../js/jsjws/jws-2.0.js"></script>
