@@ -30,9 +30,10 @@
   
   <!-- Bootstrap and JQuery also required for dropdown menu if screen size is small -->
   <!-- import jQuery for AJAX calls (must) -->
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="../js/external/jquery.min.js"></script>
+	<script src='../js/external/jquery-ui.min.js'> </script>
   <!-- import Bootstrap for responsive UI (must) -->
-  <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
   <!-- import JWS and JSRSASIGN (must) -->
   <script type="text/javascript" src="../js/jsjws/jws-2.0.js"></script>
   <script type="text/javascript" src="../js/jsrsasign/ext/base64.js"></script>
