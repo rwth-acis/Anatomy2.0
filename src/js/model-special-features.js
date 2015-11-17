@@ -10,7 +10,7 @@ modelSpecialFeatures.inlinespace = 'inlinespace__'
 
 modelSpecialFeatures.onLoaded = function () {
 	console.log("x3d loaded");
-	var skin_shape = $('x3d Shape#'+modelSpecialFeatures.inlinespace+'headskin_2');
+	var skin_shape = $('x3d Shape#'+modelSpecialFeatures.inlinespace+'headskin_1');
 	if(skin_shape.length) {
 			$('#viewer_object').prepend(
 				$('<div/>').css('width','100px').css('margin','0 auto').slider({
