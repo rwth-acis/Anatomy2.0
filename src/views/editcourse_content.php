@@ -50,7 +50,7 @@
           </div>
           <div class="form-group">
             <label for="targetText">Course room:</label>
-            <input type="text" class="col-xs-10 form-control" rows="1" name="roleLink" id="targetRole" placeholder="Enter full link to your ROLE space" value="<?php echo $entry['role_url']; ?>">
+            <input type="text" class="col-xs-10 form-control" rows="1" name="roleLink" id="targetRole" placeholder="Enter ROLE space name" value="<?php echo $entry['role_url']; ?>">
             <a href="#">
               <input id="create-room-btn" class="col-xs-1 btn btn-default btn-inline" type="button" value="+"/>
             </a>

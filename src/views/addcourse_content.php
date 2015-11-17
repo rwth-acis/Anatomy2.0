@@ -40,7 +40,7 @@
       <label class="col-sm-2 control-label" for="targetRole">Course room:</label>
       <div class="col-sm-10">
         <div class ="course-room-div">
-          <input type="text" class="form-control" rows="1"name="roleLink" id="targetRole" placeholder="Enter full link to your ROLE space">
+          <input type="text" class="form-control" rows="1"name="roleLink" id="targetRole" placeholder="Enter ROLE space name">
         </div>
         <a href="#">
           <input id="create-room-btn" class="col-xs-1 btn btn-default btn-inline" type="button" value="+"/>
