@@ -102,3 +102,6 @@ src/php/fb.php
 
 # ignore role-widgets as they are course-specific and courses are stored in database
 src/widgets/*
+
+# ignore bower-managed files
+src/external/*

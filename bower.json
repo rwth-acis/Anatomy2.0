@@ -1,0 +1,15 @@
+{
+  "name": "Anatomy2.0",
+  "version": "0.0.0",
+  "authors": [
+    "adabru <adam.brunnmeier@rwth-aachen.de>"
+  ],
+  "license": "",
+  "ignore": [],
+  "dependencies": {
+    "yjs": "y-js/yjs#~0.6.40",
+    "y-memory": "y-js/y-memory#~0.6.2",
+    "y-websockets-client": "y-js/y-websockets-client#~0.6.2"
+  },
+  "description": ""
+}
