@@ -98,7 +98,8 @@ viewerToolbar.onModelLoaded = function() {
  */
 document.onload = function() {
   document.getElementById('btnAnnotate').addEventListener('click', viewerToolbar.onAnnotateClick);
-  document.getElementById('btnHighlight').addEventListener('click', viewerToolbar.onHighlightClick);
+//  document.getElementById('btnHighlight').addEventListener('switch-change', viewerToolbar.onHighlightClick);
+  $('#btnHighlight').bootstrapSwitch('state', false, true).on('switchChange.bootstrapSwitch', viewerToolbar.onHighlightClick)  
   // Note: Due to the implementation of x3dom, adding the following click event 
   // handler to an Inline element does not work in
   //  document.addEventListener('DOMContentLoaded', function() {

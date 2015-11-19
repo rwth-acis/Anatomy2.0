@@ -102,7 +102,7 @@
         <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="btnShowInfo()" id="btnInfo">Show info</button></li>
         <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="showHelp()" id="btnHelp">Show help</button></li>
         <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" id="btnAnnotate">Annotate</button></li>
-        <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" id="btnHighlight">Highlight</button></li>
+        <li class="navbar-li"><input type="checkbox" data-label-text="Highlight" id="btnHighlight"></input></li>
         <!-- Show lecturer mode button only if user logged in (as lecturer) and in ROLE environment -->
         <?php
           ob_start();

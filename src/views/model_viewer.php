@@ -28,6 +28,7 @@
     <link type='text/css' rel='stylesheet' href='../css/external/x3dom.css'/>
     <link rel='stylesheet' type='text/css' href='../css/model_viewer.css'/>
     <link rel='stylesheet' type='text/css' href='../css/bootstrap.min.css'>
+    <link rel='stylesheet' type='text/css' href='../css/external/bootstrap-switch.min.css'>
     <link rel='stylesheet' type='text/css' href='../css/external/jquery-ui.min.css'>
     <link rel='stylesheet' type='text/css' href='../css/style.css'>
   </head>
