@@ -9,7 +9,8 @@
   "dependencies": {
     "yjs": "y-js/yjs#~0.6.40",
     "y-memory": "y-js/y-memory#~0.6.2",
-    "y-websockets-client": "y-js/y-websockets-client#~0.6.2"
+    "y-websockets-client": "y-js/y-websockets-client#~0.6.2",
+    "seiyria-bootstrap-slider": "~5.2.6"
   },
   "description": ""
 }

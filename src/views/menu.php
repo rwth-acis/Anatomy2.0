@@ -31,10 +31,10 @@
   <!-- Bootstrap and JQuery also required for dropdown menu if screen size is small -->
   <!-- import jQuery for AJAX calls (must) -->
 	<script src="../js/external/jquery.min.js"></script>
-	<script src='../js/external/jquery-ui.min.js'> </script>
   <!-- import Bootstrap for responsive UI (must) -->
   <script src="../js/bootstrap.min.js"></script>
   <script src="../js/external/bootstrap-switch.min.js"></script>
+  <script src="../external/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
   <!-- import JWS and JSRSASIGN (must) -->
   <script type="text/javascript" src="../js/jsjws/jws-2.0.js"></script>
   <script type="text/javascript" src="../js/jsrsasign/ext/base64.js"></script>

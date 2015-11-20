@@ -29,7 +29,7 @@
     <link rel='stylesheet' type='text/css' href='../css/model_viewer.css'/>
     <link rel='stylesheet' type='text/css' href='../css/bootstrap.min.css'>
     <link rel='stylesheet' type='text/css' href='../css/external/bootstrap-switch.min.css'>
-    <link rel='stylesheet' type='text/css' href='../css/external/jquery-ui.min.css'>
+    <link rel='stylesheet' type='text/css' href='../external/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css'>    
     <link rel='stylesheet' type='text/css' href='../css/style.css'>
   </head>
 
