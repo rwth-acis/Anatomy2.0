@@ -170,6 +170,13 @@
 
     </div>
   </div>
+  <div class="container">
+   <div class="featured-box">
+    <p>
+     3D in the browser works with WebGL using X3DOM - <a href="http://www.x3dom.org/><http://www.x3dom.org/contact/">Learn more!</a> Does my browser support 3D - <a href="http://www.x3dom.org/contact/">Find out!</a>
+    </p>
+   </div>
+  </div>
   <!-- Spacing for footer -->
 <div style="padding-bottom:15%"></div>
   <!-- container -->
