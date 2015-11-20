@@ -136,7 +136,7 @@ modelHighlighter.funcClick = function (sh, allSh) {
 	 	 	sh.lastClicked = 0;
 	    }
 	 	 var now = new Date() .getTime();
-	 	 if (now - sh.lastClicked < 200) {
+	 	 if (now - sh.lastClicked < 320) {
 		      sh.isSelected = !sh.isSelected;
 		      if( sh.isSelected ) {
 		      	modelHighlighter.setMaterial(sh, modelHighlighter.matNorm);
