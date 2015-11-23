@@ -104,4 +104,4 @@ src/php/fb.php
 src/widgets/*
 
 # ignore bower-managed files
-src/external/*
+# src/external/*
