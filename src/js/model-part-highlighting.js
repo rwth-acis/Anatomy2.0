@@ -165,3 +165,5 @@ modelHighlighter.initialize = function() {
 	    modelHighlighter.setMaterial(this, modelHighlighter.matNorm);
   });
 };
+
+modelViewer.addEventListener('load', modelHighlighter.initialize);

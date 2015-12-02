@@ -18,18 +18,32 @@
  */
 
 var modelViewerSync = {}
+var globalFlag = false
 
 //synchronize with other devices? (can be switched in toolbar.js)
 modelViewerSync.isSynchronized    = true;
 
+///interval between two synchronization msgs in ms
+modelViewerSync.sendInterval = 1000
+modelViewerSync.receiveInterval = 1000
+
+// Saves whether info should be displayed when synchronizing after unsynchronizing
+// from other widgets, also used in toolbar.js
+var displayInfo;
+
+modelViewerSync.remoteLecturer  = false;
+modelViewerSync.lecturerMode    = false;
+
 modelViewerSync.initialize = function () {
+// The Y-object creation takes a fair amount of time, blocking the UI
 	Y({
 	  db: {
 	    name: 'memory'
 	  },
 	  connector: {
+//	  	 debug: true,
 	    name: 'websockets-client',
-	    room: 'Anatomy2.0',
+	    room: 'Anatomy2.03',
 	    types: ['Array', 'Text'],
 	  },
      sourceDir: '/src/external'
@@ -41,113 +55,96 @@ modelViewerSync.initialize = function () {
 	// for debugging
 	window.y = modelViewerSync.y
 	
-	modelViewerSync.y.set('locrot', Y.Map).then( function(locrot) {
-		locrot.set('loc_x', 0)
-		locrot.set('loc_y', .)
-		locrot.set('loc_z', 0)
-		locrot.set('rot_x', 0)
-		locrot.set('rot_y', 0)
-		locrot.set('rot_z', 0)
-		modelViewerSync.y.get('locrot').then( function(lr) { console.log(lr.get('loc_x')) } )
-	})
-		
+	var y = modelViewerSync.y
+
+	y.set('loc_x', 0)
+	y.set('loc_y', 0)
+	y.set('loc_z', 0)
+	y.set('rot_x', 0)
+	y.set('rot_y', 0)
+	y.set('rot_z', 0)
+
+	modelViewerSync.y.observe( modelViewerSync.intervalBarrier(
+			modelViewerSync.remoteViewChanged
+			, modelViewerSync.receiveInterval
+			) )
+
 	modelViewerSync.x3dRoot = $('#viewer_object')[0]
 	modelViewerSync.x3dViewport = $('#viewport')[0]
-	
-	// Normalize scene camera to view all content.
-	// normalizeCamera(x3dRoot.runtime);
-	
+		
 	// Add listeners for publishing local changes.
-	modelViewerSync.x3dViewport.addEventListener('viewpointChanged', viewpointChanged)
-	// Add listener for applying remote changes
-	modelViewerSync.y.observePath('locrot', yObserve)
+	modelViewerSync.x3dViewport.addEventListener('viewpointChanged'
+											, modelViewerSync.intervalBarrier(
+													modelViewerSync.localViewChanged
+													, modelViewerSync.sendInterval
+											) )
 
 	console.log("Juhu!")
 
 	})
 }
 
-///interval between two synchronization msgs in ms
-var sendInterval = 700;
-var lastTimestamp;
-var lastData;
-var x3dRoot;
+//modelViewer.addEventListener('load', modelViewerSync.initialize);
 
-// Saves whether info should be displayed when synchronizing after unsynchronizing
-// from other widgets, also used in toolbar.js
-var displayInfo;
-
-var remoteLecturer  = false;
-var lecturerMode    = false;
-
+modelViewerSync.intervalBarrier = function (passFunction, interval) {
+	var state = {}
+	state.interval = interval || 1000
+	state.lastPassed = 0
+	state.passFunction = passFunction
+	
+	return function () {
+		if (state.timeout != null)
+			return
+			
+		var now = new Date() .getTime()
+		var timeToWait = (state.lastPassed + state.interval) - now
+		
+		state.timeout = setTimeout( 
+			function (state) { return function () { 
+				state.timeout = null
+				state.lastPassed = new Date() .getTime()
+				state.passFunction()
+			} } (state)
+			, timeToWait
+		)
+	}
+}
 
 /**
  * Event handler for getting a new iwc message with a new view matrix and
  * updating the local viewer with remote data.
  * @param extras parameters from the iwc message with position and rotation
  */
-modelViewerSync.yObserve = function () {
+modelViewerSync.remoteViewChanged = function (events) {
+	
+	console.log('y observerd')
+
+	var param = {}
+	
+	param.position = {}
+	param.position.x = modelViewerSync.y.get('loc_x') || 0
+	param.position.y = modelViewerSync.y.get('loc_y') || 0
+	param.position.z = modelViewerSync.y.get('loc_z') || 0
+	param.rotation = {}
+	param.rotation.x = modelViewerSync.y.get('rot_x') || 0
+	param.rotation.y = modelViewerSync.y.get('rot_y') || 0
+	param.rotation.z = modelViewerSync.y.get('rot_z') || 0
+
+//	console.log(modelViewerSync.y.contents)
+
+// param = {'position':{'x':1,'y':2,'z':3}, 'rotation':{'x':1,'y':2,'z':3}}
+try{
+	if(globalFlag) {
+		x3dExtensions.setView( modelViewerSync.x3dRoot.runtime, param, 0, function(){} );
+	}
+}catch (e) { console.log(e) }
+//    setViewMode(extras.viewMode);
+	
   // Don't synchronize if the viewpoint is from another model
 /*  if(extras.selectedModel != window.location.search){
     window.location.assign(extras.selectedModel);
     return;
   }*/
-
-  var newTimestamp = new Date(extras.timestamp);
-
-  // Synchronization is stopped
-  if(!isSynchronized) {
-    // Save the timestamp, position and rotation data.
-    if(lastTimestamp == null || newTimestamp > lastTimestamp) {
-      lastData = extras;
-    }
-    return;
-  }
-
-  // Prevent async local and remote updates.
-  processingMessage = true;
-
-  // Update only if received timestamp is greater than last timestamp.
-  if(lastTimestamp == null || newTimestamp > lastTimestamp) {
-    //disable sending position updates until we receive no more update
-    canSend = false;
-
-    setView(x3dRoot.runtime, extras, finishedSettingView);
-    setViewMode(extras.viewMode);
-    lastTimestamp = newTimestamp;
-  }
-
-  // Re-enable async local and remote updates.
-  processingMessage = false;
-}
-
-/**
- * Propagates local changes via mouse to all remote clients
- * when synchronization is enabled.
- */
-function onLocalUpdate() {
-  if(!isEmbeddedInRole || !isSynchronized || processingMessage || !canSend) {
-    return;
-  }
-
-  if(remoteLecturer) {
-    return;
-  }
-
-  // Setup the data to be sent to others.
-  var data = getView(x3dRoot.runtime);
-  data["model"] = window.location.search;
-  data["timestamp"] = new Date();
-  lastTimestamp = data["timestamp"];
-
-  //also specifiy what model was moved (included in uri)
-  data.selectedModel = window.location.search;
-  data.modelId = getParameterByName('id');
-
-  data.viewMode = getViewMode();
-
-  publishIWC("ViewpointUpdate", data);
-  console.log('Published message!');
 }
 
 /**
@@ -155,49 +152,26 @@ function onLocalUpdate() {
  * when synchronization is enabled.
  * @param evt viewpoint changed event
  */
-function viewpointChanged(evt) {
+modelViewerSync.localViewChanged = function (evt) {
+console.log('localViewChanged received')
+	// if(!isEmbeddedInRole || !isSynchronized || !canSend || remoteLecturer) { return }
 
-  // Prevent widgets from sending updates while applying a received viewpoint msg
-  // If we set the position because we received a message we do not want to send it back
-  if(!evt || processingMessage || !canSend) {
-    return;
-  }
+  var data = x3dExtensions.getView(modelViewerSync.x3dRoot.runtime);
 
-  if(remoteLecturer) {
-    return;
-  }
+	modelViewerSync.y.set('loc_x', data.position.x)
+	modelViewerSync.y.set('loc_y', data.position.y)
+	modelViewerSync.y.set('loc_z', data.position.z)
+	modelViewerSync.y.set('rot_x', data.rotation.x)
+	modelViewerSync.y.set('rot_y', data.rotation.y)
+	modelViewerSync.y.set('rot_z', data.rotation.z)
+		 
+//	 console.log('y set, now: '+modelViewerSync.y.contents)
+	 
+/*  data["model"] = window.location.search;
+  data.modelId = getParameterByName('id');
 
-  //enable sending the position in a loop
-  if(typeof updateInterval != 'number'){ //but only when its not already enabled
-    updateInterval = setInterval(onLocalUpdate, sendInterval);
-  }
-
-  //disable sending the positions a bit after the last update
-  if(typeof sendTimeout != 'undefined'){
-    clearTimeout(sendTimeout);
-  }
-  sendTimeout = setTimeout(function(){
-    //disable sending
-    clearTimeout(updateInterval);
-    updateInterval = null;
-    console.log("Not sending anymore");
-  } , sendInterval + 50);
-}
-
-/**
- * Callback function for the setView function,
- * so we get notified when the interpolation is finished.
- */
-function finishedSettingView(){
-  //reenable sending position updates
-  if(typeof enableSendingTimeout != 'undefined'){
-    clearTimeout(enableSendingTimeout);
-  }
-  enableSendingTimeout = setTimeout(function(){
-    //disable sending
-    canSend = true;
-    console.log("finished updating");
-  } , 50);
+  data.viewMode = getViewMode();
+*/
 }
 
 /**
@@ -271,8 +245,10 @@ function synchronizePositionAndOrientation() {
  */
 window.onbeforeunload = function(){
   // Release lecturer mode when leaving.
-  if(lecturerMode) {
+/*  if(modelViewerSync.lecturerMode) {
     toggleLecturerMode();
     sleep(2000);
-  }
+  }*/
 }
+
+

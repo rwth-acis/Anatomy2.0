@@ -17,9 +17,6 @@
  * X3D model and camera functions
  */
 
-///time to interpolate to the next position
-interpolateTime = 1.0;
-
 /**
 * Modifies the current camera of the scene in such a way that
 * all elements are visible to the user.
@@ -27,6 +24,11 @@ interpolateTime = 1.0;
 * @param X3D.runtime Instance of X3D runtime which becomes available
 *    after a scene is fully loaded.
 */
+
+var x3dExtensions = {}
+
+x3dExtensions.interpInterval = undefined
+
 function normalizeCamera(runtime) {
   // Get the scene element from X3D runtime.
   var scene = runtime.canvas.doc._viewarea._scene;
@@ -73,7 +75,7 @@ function normalizeCamera(runtime) {
  * @return position translationMatrix
  * @return rotation rotationMatrix
  */
-function getView(runtime) {
+x3dExtensions.getView = function (runtime) {
   var targetPos;
   var targetRot;
 
@@ -102,42 +104,47 @@ function getView(runtime) {
  * @param finishedCallback Callback triggered when modification
  * is complete
  */
-function setView(runtime, data, finishedCallback) {
-  targetPos = data['position'];
-  targetRot = data['rotation'];
+x3dExtensions.setView = function (runtime, data, duration, finishedCallback) {
+	
+  var targetPos = data['position'];
+  var targetRot = data['rotation'];
 
   // Interpolate from the last to recently received.
-  curTrans = getView(runtime);
-  curPos = curTrans['position'];
-  curRot = curTrans['rotation'];
+  var curTrans = x3dExtensions.getView(runtime);
+  var curPos = curTrans['position'];
+  var curRot = curTrans['rotation'];
 
-  currentTime = 0.0;
-  if(typeof interpInterval != 'undefined') {
-    clearInterval(interpInterval);
+  var currentTime = 0.0;
+  // andere Interpolation noch im Gange
+  if (x3dExtensions.interpInterval != 'undefined') {
+    x3dExtensions.interpInterval = clearInterval(x3dExtensions.interpInterval);
   }
-  interpInterval = setInterval(function() {
-    var posVal = lerpVector(curPos, targetPos, currentTime);
-    var rotVal = slerpQuaternion(curRot, targetRot, currentTime);
+  x3dExtensions.interpInterval = setInterval(function() {
+  	 var percentage;
+  	 if (duration == 0) { percentage = 1.0 }
+  	 else 				  { percentage = currentTime/duration }
+
+    var posVal = lerpVector(curPos, targetPos, percentage);
+    var rotVal = slerpQuaternion(curRot, targetRot, percentage);
 
     var posMat = new x3dom.fields.SFMatrix4f();
     var rotMat = new x3dom.fields.SFMatrix4f();
 
     posMat.setTranslate(posVal);
     rotMat.setRotate(rotVal);
-
     runtime.canvas.doc._viewarea._transMat.setValues(posMat);
     runtime.canvas.doc._viewarea._rotMat.setValues(rotMat);
+/*
     runtime.canvas.doc._viewarea._needNavigationMatrixUpdate = true;
     runtime.canvas.doc.needRender = true;
+*/
+    currentTime += 0.02;
 
-    currentTime += 0.01;
-
-    if(currentTime >= interpolateTime) {
-      clearInterval(interpInterval);
-      //tell the viewer that the interpolation finished
+    if(currentTime >= duration) {
+      x3dExtensions.interpInterval = clearInterval(x3dExtensions.interpInterval);
       finishedCallback();
     }
-  }, 10);
+  }, 20);
 
   //var posMat = new x3dom.fields.SFMatrix4f();
   //var rotMat = new x3dom.fields.SFMatrix4f();
@@ -162,8 +169,8 @@ function setView(runtime, data, finishedCallback) {
  * @return interpolated value between
  *  initial and final value.
  */
-function lerp(source, target, time) {
-  return source * (1.0-time) + target * time;
+function lerp(source, target, percentage) {
+  return source * (1.0-percentage) + target * percentage;
 }
 /**
  * Linear interpolates a x3dom.fields.SFVec3f.
@@ -176,11 +183,11 @@ function lerp(source, target, time) {
  * @return interpolated vector between
  *  initial and final vector.
  */
-function lerpVector(source, target, time) {
+function lerpVector(source, target, percentage) {
   return new x3dom.fields.SFVec3f(
-    lerp(source.x, target.x, time),
-    lerp(source.y, target.y, time),
-    lerp(source.z, target.z, time));
+    lerp(source.x, target.x, percentage),
+    lerp(source.y, target.y, percentage),
+    lerp(source.z, target.z, percentage));
 }
 /**
  * Linear interpolates a x3dom.fields.Quaternion.

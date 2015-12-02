@@ -106,7 +106,6 @@ document.onload = function() {
   document.getElementById('x3dInline').addEventListener('click', viewerToolbar.onModelClick);
   
   modelViewer.addEventListener('load', viewerToolbar.onModelLoaded);
-  modelViewer.addEventListener('load', modelHighlighter.initialize);
 };
 
 /**
