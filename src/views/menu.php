@@ -34,7 +34,9 @@
   <!-- import Bootstrap for responsive UI (must) -->
   <script src="../js/bootstrap.min.js"></script>
   <script src="../js/external/bootstrap-switch.min.js"></script>
+  <link rel='stylesheet' type='text/css' href='../css/external/bootstrap-switch.min.css'>
   <script src="../external/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
+  <link rel='stylesheet' type='text/css' href='../external/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css'>    
   <!-- import JWS and JSRSASIGN (must) -->
   <script type="text/javascript" src="../js/jsjws/jws-2.0.js"></script>
   <script type="text/javascript" src="../js/jsrsasign/ext/base64.js"></script>

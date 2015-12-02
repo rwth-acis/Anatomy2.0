@@ -1,0 +1,14 @@
+{
+  "name": "y-websockets-client",
+  "homepage": "https://github.com/y-js/y-websockets-client",
+  "version": "0.6.3",
+  "_release": "0.6.3",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.6.3",
+    "commit": "90ac4c410bf5784e1eb5b89583ae66dd6561e868"
+  },
+  "_source": "git://github.com/y-js/y-websockets-client.git",
+  "_target": "~0.6.2",
+  "_originalSource": "y-js/y-websockets-client"
+}

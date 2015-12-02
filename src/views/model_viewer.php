@@ -25,11 +25,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Collaborative 3D Model Viewer</title>
     
+    <link rel='stylesheet' type='text/css' href='../css/bootstrap.min.css'>
     <link type='text/css' rel='stylesheet' href='../css/external/x3dom.css'/>
     <link rel='stylesheet' type='text/css' href='../css/model_viewer.css'/>
-    <link rel='stylesheet' type='text/css' href='../css/bootstrap.min.css'>
-    <link rel='stylesheet' type='text/css' href='../css/external/bootstrap-switch.min.css'>
-    <link rel='stylesheet' type='text/css' href='../external/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css'>    
     <link rel='stylesheet' type='text/css' href='../css/style.css'>
   </head>
 
@@ -43,18 +41,17 @@
       if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
       {
         include("menu.php");
-      } else {
-    ?>
-      <script type="text/javascript" src="../js/tools.js"></script>      
-      <script type='text/javascript' src='../js/model-viewer-widget.js'> </script>
-    <?php
       }
     ?>
-      <script type='text/javascript' src='../js/model-viewer-sync.js'> </script>
-      <script type='text/javascript' src='../js/x3dom.js'> </script>
+    	<script src='../external/yjs/y.js'></script>
+    	<script src='../external/y-memory/y-memory.js'></script>
+    	<script src='../external/y-websockets-client/y-websockets-client.js'></script>
+    	
+      <script src='../external/x3dom/x3dom.js'> </script>
       <script type='text/javascript' src='../js/x3d-extensions.js'> </script>
       <script type='text/javascript' src='../js/annotations.js'> </script>
       <script type='text/javascript' src='../js/model-viewer.js'> </script>
+      <script type='text/javascript' src='../js/model-viewer-sync.js'> </script>
       <script type="text/javascript" src="../js/model-part-highlighting.js"></script>
       <script type="text/javascript" src="../js/model-special-features.js"></script>
     <?php
@@ -70,7 +67,7 @@
       
       if (isset($_GET["widget"]) && $_GET["widget"] == "true") { 
         $viewer_class = "viewer_object_role"; 
-        $initModelViewer = "onload=\"initializeModelViewer()\"";
+        $initModelViewer = "onload=\"modelViewer.onModelLoaded()\"";
       } else { 
         $viewer_class = "viewer_object"; 
         $initModelViewer = "onload=\"modelViewer.onModelLoaded()\"";
