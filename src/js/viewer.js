@@ -17,8 +17,6 @@
  * File for X3D viewer functionality
  */
 
-var processingMessage = false;
-var canSend           = false;
 //synchronize with other devices? (can be switched in toolbar.js)
 var isSynchronized    = true;
 
@@ -49,26 +47,6 @@ function getParameterByName(name) {
 }
 
 /**
- * Function for reloading synchronously with other widgets.
- */
-function onReloadRequest() {
-  window.location.reload(false);
-}
-subscribeIWC("Reload", onReloadRequest);
-/**
- * Function for initial state sync from other clients.
- */
-function onUserConnected(extras) {
-  if (lecturerMode) {
-    var data = new Object();
-    data['enabled'] = true;
-    publishIWC("LecturerModeUpdate", data);
-  }
-  onLocalUpdate();
-}
-subscribeIWC("UserConnected", onUserConnected);
-
-/**
  * Sets up the X3D viewport and subscribes to
  * mouse callbacks for propagating changes.
  */
@@ -95,21 +73,19 @@ function initializeModelViewer() {
   });
 }
 
-function onUserConnected(message) {
+function whenSynced(message) {
   var data            = getView(x3dRoot.runtime);
   data["timestamp"]   = new Date();
   lastTimestamp       = data["timestamp"];
   data.selectedModel  = window.location.search;
-  publishIWC("ViewpointUpdate", data);
 }
-subscribeIWC("UserConnected", onUserConnected);
 
 /**
  * Event handler for getting a new iwc message with a new view matrix and
  * updating the local viewer with remote data.
  * @param extras parameters from the iwc message with position and rotation
  */
-function onRemoteUpdate(extras) {
+function Y_Observe(extras) {
   // Don't synchronize if the viewpoint is from another model
   if(extras.selectedModel != window.location.search){
     window.location.assign(extras.selectedModel);
@@ -143,7 +119,6 @@ function onRemoteUpdate(extras) {
   // Re-enable async local and remote updates.
   processingMessage = false;
 }
-subscribeIWC("ViewpointUpdate", onRemoteUpdate);
 
 /**
  * Propagates local changes via mouse to all remote clients
@@ -209,13 +184,6 @@ function viewpointChanged(evt) {
 }
 
 /**
- * An overview widget selected a model, we load it
- */
-function receiveModelSelectedByOverview(msgContent){
-  window.location.assign(msgContent);
-}
-
-/**
  * Re-synchronize with last location sent from other widgets
  * Used in toolbar.js.
  */
@@ -276,7 +244,7 @@ function onRemoteLecturerMode(extras) {
     }
   }
 }
-subscribeIWC("LecturerModeUpdate", onRemoteLecturerMode);
+
 /**
  * Enables / disables the lecturer mode.
  */
@@ -305,3 +273,6 @@ window.onbeforeunload = function(){
     sleep(2000);
   }
 }
+
+
+
