@@ -43,21 +43,16 @@
       if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
       {
         include("menu.php");
-    ?>
-      <script type='text/javascript' src='../js/x3dom.js'> </script>
-      <script type='text/javascript' src='../js/x3d-extensions.js'> </script>
-    <?php
       } else {
     ?>
-      <script type='text/javascript' src='../js/x3dom.js'> </script>
-      <script type='text/javascript' src='../js/init-subsite.js'></script>
-      <script type='text/javascript' src='../js/viewer.js'> </script>
-      <script type='text/javascript' src='../js/x3d-extensions.js'> </script>
       <script type="text/javascript" src="../js/tools.js"></script>      
       <script type='text/javascript' src='../js/model-viewer-widget.js'> </script>
     <?php
       }
     ?>
+      <script type='text/javascript' src='../js/model-viewer-sync.js'> </script>
+      <script type='text/javascript' src='../js/x3dom.js'> </script>
+      <script type='text/javascript' src='../js/x3d-extensions.js'> </script>
       <script type='text/javascript' src='../js/annotations.js'> </script>
       <script type='text/javascript' src='../js/model-viewer.js'> </script>
       <script type="text/javascript" src="../js/model-part-highlighting.js"></script>
