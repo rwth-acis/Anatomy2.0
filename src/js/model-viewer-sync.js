@@ -17,16 +17,60 @@
  * File for X3D viewer functionality
  */
 
+var modelViewerSync = {}
+
 //synchronize with other devices? (can be switched in toolbar.js)
-var isSynchronized    = true;
+modelViewerSync.isSynchronized    = true;
+
+modelViewerSync.initialize = function () {
+	Y({
+	  db: {
+	    name: 'memory'
+	  },
+	  connector: {
+	    name: 'websockets-client',
+	    room: 'Anatomy2.0',
+	    types: ['Array', 'Text'],
+	  },
+     sourceDir: '/src/external'
+	}).then(function (yconfig) {
+
+	modelViewerSync.yconfig = yconfig
+	modelViewerSync.y = yconfig.root
+	
+	// for debugging
+	window.y = modelViewerSync.y
+	
+	modelViewerSync.y.set('locrot', Y.Map).then( function(locrot) {
+		locrot.set('loc_x', 0)
+		locrot.set('loc_y', .)
+		locrot.set('loc_z', 0)
+		locrot.set('rot_x', 0)
+		locrot.set('rot_y', 0)
+		locrot.set('rot_z', 0)
+		modelViewerSync.y.get('locrot').then( function(lr) { console.log(lr.get('loc_x')) } )
+	})
+		
+	modelViewerSync.x3dRoot = $('#viewer_object')[0]
+	modelViewerSync.x3dViewport = $('#viewport')[0]
+	
+	// Normalize scene camera to view all content.
+	// normalizeCamera(x3dRoot.runtime);
+	
+	// Add listeners for publishing local changes.
+	modelViewerSync.x3dViewport.addEventListener('viewpointChanged', viewpointChanged)
+	// Add listener for applying remote changes
+	modelViewerSync.y.observePath('locrot', yObserve)
+
+	console.log("Juhu!")
+
+	})
+}
 
 ///interval between two synchronization msgs in ms
 var sendInterval = 700;
-
 var lastTimestamp;
-
 var lastData;
-
 var x3dRoot;
 
 // Saves whether info should be displayed when synchronizing after unsynchronizing
@@ -36,61 +80,18 @@ var displayInfo;
 var remoteLecturer  = false;
 var lecturerMode    = false;
 
-/**
- * Retrieves URL parameters.
- */
-function getParameterByName(name) {
-    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-        results = regex.exec(location.search);
-    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-}
-
-/**
- * Sets up the X3D viewport and subscribes to
- * mouse callbacks for propagating changes.
- */
-function initializeModelViewer() {
-  x3dRoot     = document.getElementById('viewer_object');
-  x3dViewport = document.getElementById('viewport');
-
-  // Normalize scene camera to view all content.
-  normalizeCamera(x3dRoot.runtime);
-
-  // Add listeners for publishing local changes.
-  x3dViewport.addEventListener('viewpointChanged', viewpointChanged);
-
-  // !!!HACK!!! to prevent propagating initial position when new user connected.
-  x3dRoot.addEventListener('mousedown', function() {
-    canSend = true;
-    x3dRoot.removeEventListener('mousedown', arguments.callee);
-    console.log('Enabled publishing!');
-  });
-  x3dRoot.addEventListener('touchstart', function() {
-    canSend = true;
-    x3dRoot.removeEventListener('touchstart', arguments.callee);
-    console.log('Enabled publishing!');
-  });
-}
-
-function whenSynced(message) {
-  var data            = getView(x3dRoot.runtime);
-  data["timestamp"]   = new Date();
-  lastTimestamp       = data["timestamp"];
-  data.selectedModel  = window.location.search;
-}
 
 /**
  * Event handler for getting a new iwc message with a new view matrix and
  * updating the local viewer with remote data.
  * @param extras parameters from the iwc message with position and rotation
  */
-function Y_Observe(extras) {
+modelViewerSync.yObserve = function () {
   // Don't synchronize if the viewpoint is from another model
-  if(extras.selectedModel != window.location.search){
+/*  if(extras.selectedModel != window.location.search){
     window.location.assign(extras.selectedModel);
     return;
-  }
+  }*/
 
   var newTimestamp = new Date(extras.timestamp);
 
@@ -184,27 +185,6 @@ function viewpointChanged(evt) {
 }
 
 /**
- * Re-synchronize with last location sent from other widgets
- * Used in toolbar.js.
- */
-function synchronizePositionAndOrientation() {
-  if(lastData != null) {
-    processingMessage = true;
-    setView(x3dRoot.runtime, lastData, function() {});
-    setViewMode(lastData.viewMode);
-    processingMessage = false;
-  }
-}
-
-/**
- * Save current location when stopping the synchronization in case nothing changes in the other widgets
- * Used in toolbar.js.
- */
-function savePositionAndOrientation() {
-  posAndOrient = getView(x3dRoot.runtime);
-}
-
-/**
  * Callback function for the setView function,
  * so we get notified when the interpolation is finished.
  */
@@ -263,6 +243,29 @@ function toggleLecturerMode() {
     btn.innerHTML ="Enable Lecturer Mode";
   }
 }
+
+/*
+ * An overview widget selected a model, we load it
+ * @param msgContent received message content from iwc
+ */
+function receiveModelSelectedByOverview(msgContent){
+    console.log("model-viewer-widget: loading site: ", msgContent.href + "&widget=true");
+    window.location.assign(msgContent.href + "&widget=true");
+}
+
+/**
+ * Re-synchronize with last location sent from other widgets
+ * Used in toolbar.js.
+ */
+function synchronizePositionAndOrientation() {
+  if(lastData != null) {
+    processingMessage = true;
+    setView(x3dRoot.runtime, lastData, function() {});
+    setViewMode(lastData.viewMode);
+    processingMessage = false;
+  }
+}
+
 /**
  * Makes sure lecturer mode is released before leaving room.
  */
@@ -273,6 +276,3 @@ window.onbeforeunload = function(){
     sleep(2000);
   }
 }
-
-
-
