@@ -1120,7 +1120,7 @@ else{this._eyePos.x-=Math.sin(yRotRad)*speed;this._eyePos.z+=Math.cos(yRotRad)*s
 {var speed=5*this._deltaT*navi._vf.speed;var yRotRad=(this._yaw/180*Math.PI);this._eyePos.x-=Math.cos(yRotRad)*speed;this._eyePos.z-=Math.sin(yRotRad)*speed;}};x3dom.Viewarea.prototype.strafeLeft=function()
 {var navi=this._scene.getNavigationInfo();if(navi.getType()==="game")
 {var speed=5*this._deltaT*navi._vf.speed;var yRotRad=(this._yaw/180*Math.PI);this._eyePos.x+=Math.cos(yRotRad)*speed;this._eyePos.z+=Math.sin(yRotRad)*speed;}};x3dom.Viewarea.prototype.animateTo=function(target,prev,dur)
-{console.log('target: ', target, 'prev: ', prev, 'dur: ', dur); var navi=this._scene.getNavigationInfo();if(x3dom.isa(target,x3dom.nodeTypes.X3DViewpointNode)){target=target.getViewMatrix().mult(target.getCurrentTransform().inverse());}
+{var navi=this._scene.getNavigationInfo();if(x3dom.isa(target,x3dom.nodeTypes.X3DViewpointNode)){target=target.getViewMatrix().mult(target.getCurrentTransform().inverse());}
 if(navi._vf.transitionType[0].toLowerCase()!=="teleport"&&navi.getType()!=="game")
 {if(prev&&x3dom.isa(prev,x3dom.nodeTypes.X3DViewpointNode)){prev=prev.getViewMatrix().mult(prev.getCurrentTransform().inverse()).mult(this._transMat).mult(this._rotMat);this._mixer._beginTime=this._lastTS;if(arguments.length>=3){this._mixer._endTime=this._lastTS+dur;}
 else{this._mixer._endTime=this._lastTS+navi._vf.transitionTime;}

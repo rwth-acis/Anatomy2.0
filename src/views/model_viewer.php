@@ -44,8 +44,6 @@
       }
     ?>
     	<script src='../external/yjs/y.js'></script>
-    	<script src='../external/y-memory/y-memory.js'></script>
-    	<script src='../external/y-websockets-client/y-websockets-client.js'></script>
     	
       <script src='../external/x3dom/x3dom.js'> </script>
       <script type='text/javascript' src='../js/x3d-extensions.js'> </script>

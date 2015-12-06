@@ -23,9 +23,31 @@ var globalFlag = false
 //synchronize with other devices? (can be switched in toolbar.js)
 modelViewerSync.isSynchronized    = true;
 
-///interval between two synchronization msgs in ms
-modelViewerSync.sendInterval = 1000
-modelViewerSync.receiveInterval = 1000
+// interval between two synchronization msgs in ms
+modelViewerSync.sendInterval = 200
+modelViewerSync.receiveInterval = 777
+
+modelViewerSync.animDuration = modelViewerSync.receiveInterval-50
+
+// stores state whether current animation from local or remote change
+/* it works as follows:
+	a hook is created on 'x3dom.runtime.canvas.doc._viewarea._scene.getViewpoint() → setView()'
+	this function is called most importantly (but not exclusively, check Viewarea.js for more detail) by 
+	- the animations (see x3dom.Viewarea.prototype.animateTo)
+	- the drag-operations (see x3dom.Viewarea.prototype.onDrag)
+	
+	When a remote change is set via the mixer (see x3d-extensions.js), the mixingId is set to some foreign id
+	If a local animation is played (e.g. doubleclick, pressing 'A', ...), the mixingId is set to local id
+	
+	When local change is caused by remote-induced animation, the change is not echoed
+	When local change is caused by local reasons, the change is propagated, but echoed remote changes are neglected
+	An echo can be created by local or remote
+	
+	Every local change is checked whether it comes from a foreign-induced animation
+*/
+modelViewerSync.localId = Math.random()
+modelViewerSync.foreignId = 2 // must be != localId
+modelViewerSync.blockSend = false
 
 // Saves whether info should be displayed when synchronizing after unsynchronizing
 // from other widgets, also used in toolbar.js
@@ -43,7 +65,7 @@ modelViewerSync.initialize = function () {
 	  connector: {
 //	  	 debug: true,
 	    name: 'websockets-client',
-	    room: 'Anatomy2.03',
+	    room: 'Anatomy2.05',
 	    types: ['Array', 'Text'],
 	  },
      sourceDir: '/src/external'
@@ -57,12 +79,7 @@ modelViewerSync.initialize = function () {
 	
 	var y = modelViewerSync.y
 
-	y.set('loc_x', 0)
-	y.set('loc_y', 0)
-	y.set('loc_z', 0)
-	y.set('rot_x', 0)
-	y.set('rot_y', 0)
-	y.set('rot_z', 0)
+	y.set('view_matrix', x3dom.fields.SFMatrix4f.identity())
 
 	modelViewerSync.y.observe( modelViewerSync.intervalBarrier(
 			modelViewerSync.remoteViewChanged
@@ -78,13 +95,55 @@ modelViewerSync.initialize = function () {
 													modelViewerSync.localViewChanged
 													, modelViewerSync.sendInterval
 											) )
-
-	console.log("Juhu!")
-
+											
+	// setting hooks (in terms of decorators) for maintaining information about cause of viewpointChange 
+	// (see comments on declaration)
+	var mixer = modelViewerSync.x3dRoot.runtime.canvas.doc._viewarea._mixer
+	// tracking variable
+	mixer.mixingId = modelViewerSync.foreignId
+	mixer.oldSetBeginMatrix = mixer.setBeginMatrix
+	mixer.setBeginMatrix = function (mat, peerId) { 
+		mixer.mixingId = (peerId == null) ? modelViewerSync.localId : peerId
+		mixer._beginMat.mixingId = mixer.mixingId
+		return mixer.oldSetBeginMatrix(mat)
+	}
+	mixer.oldSetEndMatrix = mixer.setEndMatrix
+	mixer.setEndMatrix = function (mat, peerId) {
+		mixer._endMat.mixingId = (peerId == null) ? modelViewerSync.localId : peerId
+		mixer.oldSetEndMatrix(mat)
+	}
+	mixer.oldMix = mixer.mix
+	mixer.mix = function (timestamp) {
+		var mat = mixer.oldMix(timestamp)
+		mat.mixingId = mixer.mixingId
+		return mat
+	}
+	var viewpoint = modelViewerSync.x3dRoot.runtime.canvas.doc._viewarea._scene.getViewpoint()
+	viewpoint.oldSetView = viewpoint.setView
+	viewpoint.setView = function (mat) {
+		if (mat.mixingId != null) {
+			// mixing in progress
+			if (mat.mixingId == modelViewerSync.localId)
+				modelViewerSync.blockSend = false
+			else
+				modelViewerSync.blockSend = true
+		} else {
+			// no mixing, dragging/panning/similar supposed
+			modelViewerSync.blockSend = false
+			
+			// if dragging/,,, appears during animation
+			mixer.mixingId = modelViewerSync.localId
+		}
+		console.log(modelViewerSync.blockSend)
+			
+		return viewpoint.oldSetView(mat)
+	}
+	
 	})
 }
 
-//modelViewer.addEventListener('load', modelViewerSync.initialize);
+modelViewer.addEventListener('load', modelViewerSync.initialize);
+
 
 modelViewerSync.intervalBarrier = function (passFunction, interval) {
 	var state = {}
@@ -119,25 +178,16 @@ modelViewerSync.remoteViewChanged = function (events) {
 	
 	console.log('y observerd')
 
-	var param = {}
-	
-	param.position = {}
-	param.position.x = modelViewerSync.y.get('loc_x') || 0
-	param.position.y = modelViewerSync.y.get('loc_y') || 0
-	param.position.z = modelViewerSync.y.get('loc_z') || 0
-	param.rotation = {}
-	param.rotation.x = modelViewerSync.y.get('rot_x') || 0
-	param.rotation.y = modelViewerSync.y.get('rot_y') || 0
-	param.rotation.z = modelViewerSync.y.get('rot_z') || 0
-
-//	console.log(modelViewerSync.y.contents)
-
-// param = {'position':{'x':1,'y':2,'z':3}, 'rotation':{'x':1,'y':2,'z':3}}
 try{
 	if(globalFlag) {
-		x3dExtensions.setView( modelViewerSync.x3dRoot.runtime, param, 0, function(){} );
+		receivedView = y.get('view_matrix')
+		// only set new view if not created from yourself
+		if (receivedView.peerId != modelViewerSync.localId) {
+			x3dExtensions.setView( modelViewerSync.x3dRoot.runtime, receivedView, modelViewerSync.animDuration, receivedView.peerId )
+		}
 	}
 }catch (e) { console.log(e) }
+
 //    setViewMode(extras.viewMode);
 	
   // Don't synchronize if the viewpoint is from another model
@@ -153,20 +203,14 @@ try{
  * @param evt viewpoint changed event
  */
 modelViewerSync.localViewChanged = function (evt) {
-console.log('localViewChanged received')
-	// if(!isEmbeddedInRole || !isSynchronized || !canSend || remoteLecturer) { return }
+	if (modelViewerSync.blockSend) { return }
+	// || !isEmbeddedInRole || !isSynchronized || !canSend || remoteLecturer
 
-  var data = x3dExtensions.getView(modelViewerSync.x3dRoot.runtime);
-
-	modelViewerSync.y.set('loc_x', data.position.x)
-	modelViewerSync.y.set('loc_y', data.position.y)
-	modelViewerSync.y.set('loc_z', data.position.z)
-	modelViewerSync.y.set('rot_x', data.rotation.x)
-	modelViewerSync.y.set('rot_y', data.rotation.y)
-	modelViewerSync.y.set('rot_z', data.rotation.z)
-		 
-//	 console.log('y set, now: '+modelViewerSync.y.contents)
-	 
+	var currentView = x3dExtensions.getView(modelViewerSync.x3dRoot.runtime)
+	currentView.peerId = modelViewerSync.localId
+	modelViewerSync.y.set('view_matrix', currentView)
+	console.log('localChange')
+	
 /*  data["model"] = window.location.search;
   data.modelId = getParameterByName('id');
 
