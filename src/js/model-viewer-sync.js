@@ -99,29 +99,23 @@ modelViewerSync.initialize = function () {
 	// setting hooks (in terms of decorators) for maintaining information about cause of viewpointChange 
 	// (see comments on declaration)
 	var mixer = modelViewerSync.x3dRoot.runtime.canvas.doc._viewarea._mixer
+	
 	// tracking variable
 	mixer.mixingId = modelViewerSync.foreignId
-	mixer.oldSetBeginMatrix = mixer.setBeginMatrix
-	mixer.setBeginMatrix = function (mat, peerId) { 
-		mixer.mixingId = (peerId == null) ? modelViewerSync.localId : peerId
-		mixer._beginMat.mixingId = mixer.mixingId
-		return mixer.oldSetBeginMatrix(mat)
-	}
-	mixer.oldSetEndMatrix = mixer.setEndMatrix
-	mixer.setEndMatrix = function (mat, peerId) {
-		mixer._endMat.mixingId = (peerId == null) ? modelViewerSync.localId : peerId
-		mixer.oldSetEndMatrix(mat)
-	}
+
+	mixer._beginMat.fromMixer = true
+	mixer._endMat.fromMixer = true
 	mixer.oldMix = mixer.mix
 	mixer.mix = function (timestamp) {
 		var mat = mixer.oldMix(timestamp)
-		mat.mixingId = mixer.mixingId
+		mat.fromMixer = true
 		return mat
 	}
+	
 	var viewpoint = modelViewerSync.x3dRoot.runtime.canvas.doc._viewarea._scene.getViewpoint()
 	viewpoint.oldSetView = viewpoint.setView
 	viewpoint.setView = function (mat) {
-		if (mat.mixingId != null) {
+		if (mat.fromMixer) {
 			// mixing in progress
 			if (mat.mixingId == modelViewerSync.localId)
 				modelViewerSync.blockSend = false
