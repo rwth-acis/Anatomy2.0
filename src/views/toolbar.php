@@ -58,7 +58,7 @@
 <?php
   }
 ?>
-<script type="text/javascript" src="../js/toolbar.js"></script>
+<script type="text/javascript" src="../js/model-viewer-toolbar.js"></script>
 
 
 <!-- Toolbar -->
@@ -91,16 +91,14 @@
         <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="showAll()">Reset view [A]</button></li>
       <?php
         // If and only if inside ROLE environment, show the synchronize / unsynchronize button
-        if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
+        if(true || isset($_GET["widget"]) && $_GET["widget"] == "true") {
       ?>
-          <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="x3dSynchronize()" id="btnSynchronize">Unsynchronize</button></li>
+          <li class="navbar-li"><input type="checkbox" data-on-text="Sync" data-label-width="0" data-off-text="Not Sync" id="btnSynchronize"></input></li>
       <?php
           }
       ?>
-        <!-- Took out the copy link button, because it is not natively supported by browsers. Requires Flash Player. And has little use. -->
-        <!--<li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" id="btnCopy">Copy Link</button></li>-->
-        <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="btnShowInfo()" id="btnInfo">Show info</button></li>
-        <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="showHelp()" id="btnHelp">Show help</button></li>
+        <li class="navbar-li"><input type="checkbox" data-on-text="Info" data-label-width="0" data-off-text="No Info" id="btnInfo"></input></li>
+        <li class="navbar-li"><input type="checkbox" data-on-text="Help" data-label-width="0" data-off-text="No Help" id="btnHelp"></input></li>
         <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" id="btnAnnotate">Annotate</button></li>
         <li class="navbar-li"><input type="checkbox" data-on-text="Double click parts" data-label-width="0" data-off-text="Highlight is off" id="btnHighlight"></input></li>
         <!-- Show lecturer mode button only if user logged in (as lecturer) and in ROLE environment -->

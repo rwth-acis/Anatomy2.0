@@ -18,16 +18,15 @@
  */
 
 var modelViewerSync = {}
-var globalFlag = false
 
 //synchronize with other devices? (can be switched in toolbar.js)
-modelViewerSync.isSynchronized    = true;
+modelViewerSync.isSynchronized = true;
 
 // interval between two synchronization msgs in ms
 modelViewerSync.sendInterval = 200
-modelViewerSync.receiveInterval = 777
+modelViewerSync.receiveInterval = 333
 
-modelViewerSync.animDuration = modelViewerSync.receiveInterval-50
+modelViewerSync.animDuration = modelViewerSync.receiveInterval * 1.0
 
 /* 	
 	How to decide on whether to apply received remote state and whether to send local state:
@@ -58,13 +57,7 @@ modelViewerSync.animDuration = modelViewerSync.receiveInterval-50
 modelViewerSync.localId = Math.random()
 modelViewerSync.foreignId = 2 // must be != localId
 modelViewerSync.chairmanId = modelViewerSync.localId
-
-// Saves whether info should be displayed when synchronizing after unsynchronizing
-// from other widgets, also used in toolbar.js
-var displayInfo;
-
 modelViewerSync.remoteLecturer  = false;
-modelViewerSync.lecturerMode    = false;
 
 modelViewerSync.initialize = function () {
 	// The Y-object creation takes a fair amount of time, blocking the UI
@@ -89,20 +82,38 @@ modelViewerSync.initialize = function () {
 	var y = modelViewerSync.y
 
 	y.set('view_matrix', x3dom.fields.SFMatrix4f.identity())
+	// y.set('view_mode', 'Examine')
+	// y.set('selected_model', window.location.search)
+	// y.set('lecturer_mode', false)
+	// y.set('show_info', false)
 
-	modelViewerSync.y.observe( modelViewerSync.intervalBarrier(
-			modelViewerSync.remoteViewChanged
-			, modelViewerSync.receiveInterval
-			) )
+
+	modelViewerSync.y.observePath(
+			['view_matrix']
+			, modelViewerSync.intervalBarrier(modelViewerSync.remoteViewChanged, modelViewerSync.receiveInterval)
+	)
+/*	modelViewerSync.y.observePath(['view_mode'], function (events) {
+		setViewMode(y.get('view_mode'))
+	})
+*/
+/*	modelViewerSync.y.observePath(['selected_model'], function (events) {
+		window.location.assign(y.get('selected_model'));
+	})
+*/
+
+/*  data["model"] = window.location.search;
+  data.modelId = getParameterByName('id');
+
+  data.viewMode = getViewMode();
+*/
 
 	modelViewerSync.x3dRoot = $('#viewer_object')[0]
 			
 	// Add listeners for publishing local changes.
-	$('#viewport')[0].addEventListener('viewpointChanged'
-											, modelViewerSync.intervalBarrier(
-													modelViewerSync.localViewChanged
-													, modelViewerSync.sendInterval
-											) )
+	$('#viewport')[0].addEventListener(
+			'viewpointChanged'
+			, modelViewerSync.intervalBarrier(modelViewerSync.localViewChanged, modelViewerSync.sendInterval)
+	)
 	
 	modelViewerSync.viewarea = modelViewerSync.x3dRoot.runtime.canvas.doc._viewarea
 	var viewarea = modelViewerSync.viewarea
@@ -155,28 +166,16 @@ modelViewerSync.intervalBarrier = function (passFunction, interval) {
  * @param extras parameters from the iwc message with position and rotation
  */
 modelViewerSync.remoteViewChanged = function (events) {
+	if (!modelViewerSync.isSynchronized) { return }
+	// || remoteLecturer
 	
+	receivedView = y.get('view_matrix')
 
-try{
-		receivedView = y.get('view_matrix')
-	
-		// only set new view if not created from yourself
-		if (receivedView.peerId == modelViewerSync.localId) { 
-			console.log('→ -')
-			return
-		}
-		console.log('→ +')
-		x3dExtensions.setView( modelViewerSync.x3dRoot.runtime, receivedView, modelViewerSync.animDuration )
-		modelViewerSync.chairmanId = receivedView.peerId
-}catch (e) { console.log(e) }
+	// only set new view if not created from yourself
+	if (receivedView.peerId == modelViewerSync.localId) { return }
 
-//    setViewMode(extras.viewMode);
-	
-  // Don't synchronize if the viewpoint is from another model
-/*  if(extras.selectedModel != window.location.search){
-    window.location.assign(extras.selectedModel);
-    return;
-  }*/
+	x3dExtensions.setView( modelViewerSync.x3dRoot.runtime, receivedView, modelViewerSync.animDuration )
+	modelViewerSync.chairmanId = receivedView.peerId
 }
 
 /**
@@ -185,48 +184,23 @@ try{
  * @param evt viewpoint changed event
  */
 modelViewerSync.localViewChanged = function (evt) {
+	if (!modelViewerSync.isSynchronized) { return }
+	// || remoteLecturer
+	
 	// block if event was triggered by mixing-animation caused from remote state
-	if (modelViewerSync.chairmanId != modelViewerSync.localId) { 
-		console.log("- →")
-		return 
-	}
-	// || !isEmbeddedInRole || !isSynchronized || !canSend || remoteLecturer
+	if (modelViewerSync.chairmanId != modelViewerSync.localId) { return }
 
-	console.log('+ →')
 	var currentView = x3dExtensions.getView(modelViewerSync.x3dRoot.runtime)
 	currentView.peerId = modelViewerSync.localId
 	modelViewerSync.y.set('view_matrix', currentView)
-	
-/*  data["model"] = window.location.search;
-  data.modelId = getParameterByName('id');
-
-  data.viewMode = getViewMode();
-*/
 }
 
-/**
- * Listens to remote lecturers that might enable or disable
- * the lecture mode.
- */
-function onRemoteLecturerMode(extras) {
-  remoteLecturer = extras.enabled;
-
-  if(remoteLecturer)
-    document.getElementById('navType').setAttribute("type", "None");
-  else
-    document.getElementById('navType').setAttribute("type", "Examine");
-
-  var btn = document.getElementById('btnLecturerMode');
-  if(btn != null) {
-    if(remoteLecturer) {
-      btn.innerHTML ="Other Lecturer Has Control!";
-      btn.disabled = true;
-    }
-    else {
-      btn.innerHTML ="Enable Lecturer Mode";
-      btn.disabled = false;
-    }
-  }
+modelViewerSync.toggleSynchronized = function () {
+	modelViewerSync.isSynchronized = !modelViewerSync.isSynchronized
+	// apply remote state
+	if (modelViewerSync.isSynchronized) {
+		modelViewerSync.remoteViewChanged();
+	}
 }
 
 /**
@@ -235,9 +209,7 @@ function onRemoteLecturerMode(extras) {
 function toggleLecturerMode() {
   lecturerMode = !lecturerMode;
 
-  var data = new Object();
-  data['enabled'] = lecturerMode;
-  publishIWC("LecturerModeUpdate", data);
+  y.set('lecturer_mode', lecturerMode)
 
   var btn = document.getElementById('btnLecturerMode');
   if (lecturerMode) {
@@ -245,28 +217,6 @@ function toggleLecturerMode() {
   }
   else {
     btn.innerHTML ="Enable Lecturer Mode";
-  }
-}
-
-/*
- * An overview widget selected a model, we load it
- * @param msgContent received message content from iwc
- */
-function receiveModelSelectedByOverview(msgContent){
-    console.log("model-viewer-widget: loading site: ", msgContent.href + "&widget=true");
-    window.location.assign(msgContent.href + "&widget=true");
-}
-
-/**
- * Re-synchronize with last location sent from other widgets
- * Used in toolbar.js.
- */
-function synchronizePositionAndOrientation() {
-  if(lastData != null) {
-    processingMessage = true;
-    setView(x3dRoot.runtime, lastData, function() {});
-    setViewMode(lastData.viewMode);
-    processingMessage = false;
   }
 }
 

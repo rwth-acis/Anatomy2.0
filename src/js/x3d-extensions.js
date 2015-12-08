@@ -29,8 +29,8 @@ var x3dExtensions = {}
 
 x3dExtensions.interpInterval = undefined
 
-// typing "x3dom.runtime.showAll()" in the console will yield same result except for the animation
-function normalizeCamera(runtime) {
+// typing "x3dom.runtime.showAll()" in the console will yield same result except it will add an animation
+x3dExtensions.normalizeCamera = function (runtime) {
 	var viewarea = runtime.canvas.doc._viewarea
 	var animateTo_bak = viewarea.animateTo
 	viewarea.animateTo = function(target, prev, dur) {
