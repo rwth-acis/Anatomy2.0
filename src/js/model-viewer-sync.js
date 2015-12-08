@@ -36,34 +36,28 @@ modelViewerSync.animDuration = modelViewerSync.receiveInterval-50
 	When local change is caused by local reasons, the change is propagated, but echoed remote changes are neglected
 	(An echo can be created by local or remote)
 	
-	Every local change is checked whether it shall be propagated:
-	                                                                                              propagate?
+	There are events which cause chairmanship of local or remote id
+	see https://github.com/x3dom/x3dom/blob/master/src/Viewarea.js
+
+	                                                                              propagate?
 	viewpointChanged
-	           |------- moving (onDrag, onMoveView), isMoving()                                        ✓
-	           |------- animating (tick), isAnimating()
-	                       |------- mixing (resetView, showAll, fit, onDoubleClick → animateTo)
-	                       |           |------- local mixing                                           ✓
-	                       |           |------- remote mixing                                          ✗
-	                       |------- navigating, navigateTo() - hook                                    ✓
+	           |------- moving (onDrag, onMoveView)                                   ✓
+	           |------- animating
+	                       |------- mixing (showAll, onDoubleClick,… → animateTo)
+	                       |           |------- local mixing                          ✓
+	                       |           |------- custom remote mixing                  ✗
+	                       |------- navigating, (navigateTo == true)                 (✓) 
 	                       
+	(✓) = ignored for simplicity's sake
+
 	animations are calling viewarea._scene.getViewpoint().setView()
 	movements are changing viewarea._transMat and viewarea._rotMat
 	
-	checking animation and navigation is easier than checking mixing
-	→ if !isMoving && isAnimating && !isNavigating && mixingId != localId {
-			stopPropagation
-		}
-
-	isAnimating is not exactly accurate because after being set to false one further time the viewpointChange is called
-	see:
-		https://github.com/x3dom/x3dom/blob/0f859d10a4a830c8fc78cfad6c5f545fb5e1816a/src/X3DDocument.js#L349
-		https://github.com/x3dom/x3dom/blob/91dee119bdc1d37f30bc0abdc58050f43183a21e/src/Viewarea.js#L212
-				
-	Obtaining mixingId with hook on viewarea._mixer.setBeginMatrix
+	To stay informed about the chairmanship, every modifying function is hooked
 */
 modelViewerSync.localId = Math.random()
 modelViewerSync.foreignId = 2 // must be != localId
-modelViewerSync.blockSend = false
+modelViewerSync.chairmanId = modelViewerSync.localId
 
 // Saves whether info should be displayed when synchronizing after unsynchronizing
 // from other widgets, also used in toolbar.js
@@ -73,13 +67,12 @@ modelViewerSync.remoteLecturer  = false;
 modelViewerSync.lecturerMode    = false;
 
 modelViewerSync.initialize = function () {
-// The Y-object creation takes a fair amount of time, blocking the UI
+	// The Y-object creation takes a fair amount of time, blocking the UI
 	Y({
 	  db: {
 	    name: 'memory'
 	  },
 	  connector: {
-//	  	 debug: true,
 	    name: 'websockets-client',
 	    room: 'Anatomy2.05',
 	    types: ['Array', 'Text'],
@@ -103,58 +96,29 @@ modelViewerSync.initialize = function () {
 			) )
 
 	modelViewerSync.x3dRoot = $('#viewer_object')[0]
-	modelViewerSync.x3dViewport = $('#viewport')[0]
 			
 	// Add listeners for publishing local changes.
-	setTimeout( function() { 
-	modelViewerSync.x3dViewport.addEventListener('viewpointChanged'
+	$('#viewport')[0].addEventListener('viewpointChanged'
 											, modelViewerSync.intervalBarrier(
 													modelViewerSync.localViewChanged
 													, modelViewerSync.sendInterval
 											) )
-										}, 1000)
-											
-	// setting hooks (in terms of decorators) for maintaining information about cause of viewpointChange 
-	// (see comments on declaration)
+	
 	modelViewerSync.viewarea = modelViewerSync.x3dRoot.runtime.canvas.doc._viewarea
 	var viewarea = modelViewerSync.viewarea
-	var mixer = viewarea._mixer
-	
-	// tracking variable
-	viewarea.mixingId = modelViewerSync.foreignId
 
-	mixer.oldSetBeginMatrix = mixer.setBeginMatrix
-	mixer.setBeginMatrix = function (mat, peerId) {
-		viewarea.mixingId = (peerId == null) ? modelViewerSync.localId : peerId
-		mixer.oldSetBeginMatrix(mat)
+	var setViewareaHook = function (functionName, peerId) {
+		var oldFunc = viewarea[functionName]
+		viewarea[functionName] = function () {
+			modelViewerSync.chairmanId = peerId
+			return oldFunc.apply(viewarea, arguments)
+		}
 	}
 
-	viewarea.bNavigating = false;
-	viewarea.isNavigating = function() { return viewarea.bNavigating }
-	viewarea.oldNavigateTo = viewarea.navigateTo
-	viewarea.navigateTo = function (timestamp) {
-		viewarea.bNavigating = viewarea.oldNavigateTo(timestamp)
-		return viewarea.bNavigating
-	}
-	
-	viewarea.oldOnDrag = viewarea.onDrag
-	viewarea.onDrag = function (x, y, buttonState) {
-		viewarea.mixingId = modelViewerSync.localId
-		return viewarea.oldOnDrag(x, y, buttonState)
-	}	
-
-	// https://github.com/x3dom/x3dom/blob/91dee119bdc1d37f30bc0abdc58050f43183a21e/src/Viewarea.js#L162	
-	viewarea.oldTick = viewarea.tick
-	viewarea.tick = function (timeStamp) {
-		viewarea.bAnimating = viewarea.oldTick(timeStamp)
-		return viewarea.bAnimating
-	}
-	
-	// override
-	// https://github.com/x3dom/x3dom/blob/91dee119bdc1d37f30bc0abdc58050f43183a21e/src/Viewarea.js#L228
-	viewarea.isAnimating = function () {
-		return viewarea.bAnimating
-	}
+	// hooks for observing chairmanship
+	setViewareaHook('animateTo', modelViewerSync.localId)
+	setViewareaHook('onDrag', modelViewerSync.localId)
+	setViewareaHook('onMoveView', modelViewerSync.localId)
 		
 	})
 }
@@ -202,7 +166,8 @@ try{
 			return
 		}
 		console.log('→ +')
-		x3dExtensions.setView( modelViewerSync.x3dRoot.runtime, receivedView, modelViewerSync.animDuration, receivedView.peerId )
+		x3dExtensions.setView( modelViewerSync.x3dRoot.runtime, receivedView, modelViewerSync.animDuration )
+		modelViewerSync.chairmanId = receivedView.peerId
 }catch (e) { console.log(e) }
 
 //    setViewMode(extras.viewMode);
@@ -221,14 +186,13 @@ try{
  */
 modelViewerSync.localViewChanged = function (evt) {
 	// block if event was triggered by mixing-animation caused from remote state
-	var va = modelViewerSync.viewarea
-	if (!va.isMoving() && va.isAnimating() && !va.isNavigating() && va.mixingId != modelViewerSync.localId) { 
+	if (modelViewerSync.chairmanId != modelViewerSync.localId) { 
 		console.log("- →")
 		return 
 	}
 	// || !isEmbeddedInRole || !isSynchronized || !canSend || remoteLecturer
 
-	console.log(va.isAnimating(), '+ →')
+	console.log('+ →')
 	var currentView = x3dExtensions.getView(modelViewerSync.x3dRoot.runtime)
 	currentView.peerId = modelViewerSync.localId
 	modelViewerSync.y.set('view_matrix', currentView)

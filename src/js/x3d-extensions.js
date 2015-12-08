@@ -60,7 +60,7 @@ x3dExtensions.getView = function (runtime) {
  * @param finishedCallback Callback triggered when modification
  * is complete
  */
-x3dExtensions.setView = function (runtime, target, duration, addParam) {
+x3dExtensions.setView = function (runtime, target, duration) {
 	// copied from "x3dom.Viewarea.prototype.animateTo" in "Viewarea.js"
 	
 	// this function does not modify the CenterOfRotation or the Viewpoint
@@ -73,8 +73,8 @@ x3dExtensions.setView = function (runtime, target, duration, addParam) {
 	viewarea._mixer._beginTime = viewarea._lastTS
 	viewarea._mixer._endTime = viewarea._lastTS + duration/1000.0
 
-	viewarea._mixer.setBeginMatrix( viewarea.getViewMatrix(), addParam )
-	viewarea._mixer.setEndMatrix( x3dom.fields.SFMatrix4f.copy(target), addParam )
+	viewarea._mixer.setBeginMatrix( viewarea.getViewMatrix() )
+	viewarea._mixer.setEndMatrix( x3dom.fields.SFMatrix4f.copy(target) )
 	
 	viewarea._rotMat = x3dom.fields.SFMatrix4f.identity();
 	viewarea._transMat = x3dom.fields.SFMatrix4f.identity();
