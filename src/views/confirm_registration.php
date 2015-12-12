@@ -38,7 +38,7 @@
 	  if(isset($_GET["mail"])) {
   ?> 
   <div id="conf-reg" style="font-size:20px; padding:100px">
-    <p id="conf-text">A confirmation request was sent for <?php echo($GET[mail]); ?>. This should take only a few seconds.</p>
+    <p id="conf-text">A confirmation request was sent for <?php echo($GET["mail"]); ?>. This should take only a few seconds.</p>
     <img src="../images/ajax-loader.gif" id="loader">
   </div>
   <?php 
