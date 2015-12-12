@@ -17,6 +17,26 @@
  * Shows a progress bar when uploading a model in upload.php
  */
 $(document).ready(function() {
+	
+// using parsley to validate form inputs
+  $('#UploadForm').parsley().subscribe('parsley:form:validate', function (formInstance) {
+
+  // if one of these blocks is not failing do not prevent submission
+  // we use here group validation with option force (validate even non required fields)
+  if (formInstance.isValid('block1', true) || formInstance.isValid('block2', true)) {
+    $('.invalid-form-error-message').html('');
+    return;
+  }
+  // else stop form submission
+  formInstance.submitEvent.preventDefault();
+
+  // and display a gentle message
+  $('.invalid-form-error-message')
+    .html("You must correctly fill the fields of at least one of these two blocks!")
+    .addClass("filled");
+  return;
+  });	
+	
 //elements
 var progressbox     = $('#progressbox');
 var progressbar     = $('#progressbar');
@@ -50,4 +70,8 @@ var completed       = '0%';
                 progressbox.slideUp(); // hide progressbar
             }
     });
+});
+
+$(document).ready(function () {
+
 });
