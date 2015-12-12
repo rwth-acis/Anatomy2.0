@@ -102,15 +102,7 @@
           <li>
 						<span id="signinButton">
 							<span class="oidc-signin"
-								<?php
-                // The menu button in login_callback.php needs a different data-callback 
-                // method, because it is supposed to redirect to another page
-                if ($menuForLoginCallback !== true) {
-                  echo 'data-callback="signinCallback"';
-                } else {
-                  echo 'data-callback="redirectCallback"';
-                }
-                ?>
+								data-callback="signinCallback"
 								data-name="Learning Layers"
 								data-logo="https://raw.githubusercontent.com/learning-layers/LayersToolTemplate/master/extras/logo.png"
 								data-server="https://api.learning-layers.eu/o/oauth2"

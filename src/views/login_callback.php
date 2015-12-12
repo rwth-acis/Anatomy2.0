@@ -34,13 +34,7 @@
   </head>
   
   <body>
-    <?php 
-    // By setting $menuForLoginCallback = true; 'menu.php' will call 
-    // 'redirectCallback' in 'signin_callbacks.js'. Then the user will be 
-    // redirected to the page he came from before using the Learning Layers login.
-    $menuForLoginCallback = true;
-    include("menu.php"); 
-    ?>
+    <?php include("menu.php") ?>
     
     <header id='head' class='secondary'>
     <div class='container'>
