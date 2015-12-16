@@ -45,7 +45,7 @@ modelViewerSync.initialize = function () {
 	    room: 'Anatomy2.06',
 	    types: ['Array', 'Text'],
 	  },
-     sourceDir: '/src/external'
+     sourceDir: location.pathname + '/../../external'
 	}).then(function (yconfig) {
 
 	modelViewerSync.yconfig = yconfig

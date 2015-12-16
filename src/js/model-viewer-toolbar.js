@@ -80,7 +80,6 @@ document.onload = function () {
                     })     
         },
         update: function(element, valueAccessor) {
-            console.log(valueAccessor().modeEnabled())
             // make state writable:
             $(element).bootstrapSwitch('readonly', false)
     
