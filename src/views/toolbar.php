@@ -88,7 +88,7 @@
             <option>[G]ame</option -->
           </select>
         </li>
-        <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="showAll()">Reset view [A]</button></li>
+        <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" id="btnResetview">Reset view [A]</button></li>
       <?php
         // If and only if inside ROLE environment, show the synchronize / unsynchronize button
         if(true || isset($_GET["widget"]) && $_GET["widget"] == "true") {
@@ -109,9 +109,9 @@
           $canEnterLecturerMode = $accessControl->canEnterLecturerMode();          
           ob_end_clean(); 
           
-          if ($canEnterLecturerMode && (isset($_GET["widget"]) && $_GET["widget"] == "true")) { 
+          if (true || $canEnterLecturerMode && (isset($_GET["widget"]) && $_GET["widget"] == "true")) { 
         ?>
-        <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="toggleLecturerMode()" id="btnLecturerMode">Enable Lecturer Mode</button></li>
+        <li class="navbar-li"><input type="checkbox" data-on-text="Lecturer on" data-label-width="0" data-off-text="Lecturer off" id="btnLecturer"></input></li>
         <!-- A span which will be filled with a Sign In button or information about which user is currently logged in. Will be filled in oidc-button.js -->
         <li class="navbar-li">
           <span id="signinButton">

@@ -25,16 +25,8 @@
  */
 function signinCallback(result) {
   if(result === "success"){
-  	var sessioncreatedCallback
-	if(window.location.pathname.endsWith('login_callback.php')) {
-		sessioncreatedCallback = function () {
-			 // the LL-login page redirects to 'login_callback.php', so redirect to the last page
-		    window.location.replace("../php/login_redirect.php") // redirection
-		}
-	} else {
-		sessioncreatedCallback = function () {}
-	}
-	
+  	var bRedirect = window.location.pathname.endsWith('login_callback.php')
+  	
   	var token = getURLParameter('access_token');
     // When user name and password were correct, the user gets assigned a token.
     // We store the token and the login service name in a session at our server.
@@ -43,7 +35,19 @@ function signinCallback(result) {
     // the client has to send the data (e.g. email, name) to our server.
     ajax.post("../php/create_user_session.php", {access_token:token, service_type:'LearningLayers',
       sub:oidc_userinfo.sub, email:oidc_userinfo.email, given_name:oidc_userinfo.given_name,
-      family_name:oidc_userinfo.family_name}, sessioncreatedCallback);
+      family_name:oidc_userinfo.family_name}, function (result) {
+      	try{
+      	if(JSON.parse(result).canEnterLecturerMode) {
+      			viewerToolbar.lecturerModeViewModel.canEnter(true)
+                // So far it is the same:
+                viewerToolbar.lecturerModeViewModel.isLecturer(true)
+      		}
+      	}	catch (e) {console.log(e)}
+      	 if(bRedirect) {
+				 // the LL-login page redirects to 'login_callback.php', so redirect to the last page
+				 window.location.replace("../php/login_redirect.php") // redirection
+			}
+      } );
   } else {
     // if sign in was not successful, log the cause of the error on the console
     console.log(result);

@@ -67,3 +67,8 @@
       // TODO: update in database: user-email, name, first name, etc.
     }
   }
+  
+  // TODO: this is not good solution to know in the frontend about user-privileges
+  	require '../php/access_control.php';
+   $accessControl = new AccessControl();
+	echo '{"canEnterLecturerMode":'.$accessControl->canEnterLecturerMode().'}';

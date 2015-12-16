@@ -130,6 +130,6 @@ function getURLParameter(name) {
  * Used in toolbar.js
  * @return true, if the page is a widget in ROLE. false, otherwise
  */
-function isInRole() {
+tools.isInRole = function () {
   return getURLParameter("widget") === "true";
 }

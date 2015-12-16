@@ -23,64 +23,18 @@
 
 var viewerToolbar = {};
 
-viewerToolbar.showInfo = false;
-viewerToolbar.showHelp = false;
+viewerToolbar.showInfo = false
+viewerToolbar.showHelp = false
 // True, if a user is in the 'set an annotation position marker' mode (which is 
 // started by pressing the 'Annotate' button once)
-viewerToolbar.annotate = false;
+viewerToolbar.annotate = false
+viewerToolbar.isSynchronized = ko.observable(false)
+viewerToolbar.lecturerModeViewModel = {
+        isLecturer : ko.observable(false),
+        canEnter : ko.observable(false),
+        modeEnabled : ko.observable(false)
+    }
 
-viewerToolbar.toggleAnnotationMode = function(toOff) {
-  var btnAnnotate = $('#btnAnnotate');
-          
-  if (toOff) {
-    btnAnnotate.removeClass('active');
-    viewerToolbar.annotate = false;
-    $('.x3dom-canvas').css('cursor','auto');
-  }
-  else {
-    btnAnnotate.addClass('active');
-    viewerToolbar.annotate = true;
-    $('.x3dom-canvas').css('cursor','crosshair');
-  }
-};
-
-/**
- * Button handler for the 'Annotate' button. Will switch viewer control to 
- * annotation mode. The button indicates the current mode to the user with 
- * bootstraps 'active' class.
- */
-viewerToolbar.onAnnotateClick = function() {
-  viewerToolbar.toggleAnnotationMode(viewerToolbar.annotate);
-};
-
-/**
- * Click handler. Fired when the user clicks inside the x3dom viewer. The handler
- * will be attached to the Inline element.
- * @param {type} event Information about where the user clicked in the 3D scene
- * @returns {undefined}
- */
-viewerToolbar.onModelClick = function(event) {
-  // The handler will set an annotation position marker if and only if the user 
-  // activated the annotation mode by clicking the 'Annotate' button
-  if (viewerToolbar.annotate) {
-    var pos = new x3dom.fields.SFVec3f(event.worldX, event.worldY, event.worldZ);
-    var norm = new x3dom.fields.SFVec3f(event.normalX, event.normalY, event.normalZ);
-    
-    modelViewer.createAnnotation(pos, norm);
-
-    viewerToolbar.toggleAnnotationMode(true); 
-  }
-};
-
-/**
- * Handler for when the scene is loaded. Will move the camera to show the full 
- * model. Requires x3d-extensions.js
- * @returns {undefined}
- */
-viewerToolbar.onModelLoaded = function() {
-  // Normalize scene camera to view all content.
-  x3dExtensions.normalizeCamera($('#viewer_object')[0].runtime);
-};
 
 /**
  * Add click handler when DOM loaded. Note: Due to the implementation of x3dom, 
@@ -88,55 +42,111 @@ viewerToolbar.onModelLoaded = function() {
  * DOMContentLoaded event handler.
  * @returns {undefined}
  */
-document.onload = function() {
-	$('#btnAnnotate').on('click', viewerToolbar.onAnnotateClick);
-	$('#btnHighlight').bootstrapSwitch('state', false, true).on('switchChange.bootstrapSwitch', function() {
-			modelHighlighter.toggleHighlighting();
-	} )  
-	$('#btnInfo').bootstrapSwitch('state', false, true).on('switchChange.bootstrapSwitch', function () {
-	   viewerToolbar.showInfo = !viewerToolbar.showInfo;
-	   // optionally synchronize	
-		$('#metadata_overlay').css('display', viewerToolbar.showInfo ? 'block' : 'none')
-		$('#viewer_object')[0].runtime.statistics( viewerToolbar.showInfo )	
-	} )   
-	$('#btnHelp').bootstrapSwitch('state', false, true).on('switchChange.bootstrapSwitch', function () {
-		viewerToolbar.showHelp = !viewerToolbar.showHelp
-		$('#mainNav').css('display', viewerToolbar.showHelp ? 'block' : 'none')
-	} )   
-	$('#btnSynchronize').bootstrapSwitch('state', true, true).on('switchChange.bootstrapSwitch', function () {
-		modelViewerSync.toggleSynchronized()
-	} )   
-	
-  // Note: Due to the implementation of x3dom, adding the following click event 
-  // handler to an Inline element does not work in
-  //  document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('x3dInline').addEventListener('click', viewerToolbar.onModelClick);
-  
-  modelViewer.addEventListener('load', viewerToolbar.onModelLoaded);
+document.onload = function () {
+    // One way data-bindings:
+    
+    $('#btnAnnotate').on('click', function () {
+        viewerToolbar.toggleAnnotationMode()
+    })
+    $('#btnHighlight').bootstrapSwitch('state', false, true).on('switchChange.bootstrapSwitch', function () {
+        modelHighlighter.toggleHighlighting();
+    })
+    $('#btnInfo').bootstrapSwitch('state', false, true).on('switchChange.bootstrapSwitch', function () {
+        viewerToolbar.showInfo = !viewerToolbar.showInfo;
+        // optionally synchronize	
+        $('#metadata_overlay').css('display', viewerToolbar.showInfo ? 'block' : 'none')
+        $('#viewer_object')[0].runtime.statistics(viewerToolbar.showInfo)
+    })
+    $('#btnHelp').bootstrapSwitch('state', false, true).on('switchChange.bootstrapSwitch', function () {
+        viewerToolbar.showHelp = !viewerToolbar.showHelp
+        $('#mainNav').css('display', viewerToolbar.showHelp ? 'block' : 'none')
+    })
+    $('#btnSynchronize').bootstrapSwitch('state', viewerToolbar.isSynchronized(), true).on('switchChange.bootstrapSwitch', function () {
+        viewerToolbar.isSynchronized( ! viewerToolbar.isSynchronized() )
+    })
+    $('#btnResetview').on('click', function () {
+        document.getElementById('viewer_object').runtime.showAll()
+    })
+    
+    // Two way data-bindings :
+
+    ko.bindingHandlers.lecturerMode = {
+        init: function(element, valueAccessor) {
+                $(element)
+                    .bootstrapSwitch('state', false, true)
+                    .bootstrapSwitch('readonly', !valueAccessor().canEnter())
+                    .on('switchChange.bootstrapSwitch', function () {
+                        valueAccessor().modeEnabled( ! valueAccessor().modeEnabled() )
+                    })     
+        },
+        update: function(element, valueAccessor) {
+            console.log(valueAccessor().modeEnabled())
+            // make state writable:
+            $(element).bootstrapSwitch('readonly', false)
+    
+            $(element).bootstrapSwitch('state', valueAccessor().modeEnabled(), true)
+            $(element).bootstrapSwitch('readonly', ! valueAccessor().canEnter())
+        }
+    }
+    $('#btnLecturer').attr('data-bind', "lecturerMode: $root")
+    ko.applyBindings(viewerToolbar.lecturerModeViewModel, $('#btnLecturer')[0])
+/*    
+    $('#btnLecturer')
+        .bootstrapSwitch('state', false, true)
+        .bootstrapSwitch('readonly', !viewerToolbar.canEnterLecturerMode)
+        .on('switchChange.bootstrapSwitch', function () {
+            modelViewerSync.toggleLecturerMode()
+        })
+    modelViewerSync.lecturerModeListener = function (lecturerMode) {
+        $('#btnLecturer')
+            .bootstrapSwitch('state', lecturerMode.enabled, true)
+    }
+*/
+
+    // Note: Due to the implementation of x3dom, adding the following click event 
+    // handler to an Inline element does not work in
+    //  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('x3dInline').addEventListener('click', function (event) {
+        if (viewerToolbar.annotate) {
+            var pos = new x3dom.fields.SFVec3f(event.worldX, event.worldY, event.worldZ);
+            var norm = new x3dom.fields.SFVec3f(event.normalX, event.normalY, event.normalZ);
+
+            modelViewer.createAnnotation(pos, norm);
+
+            viewerToolbar.toggleAnnotationMode(true);
+        }
+    });
+
+    modelViewer.addEventListener('load', function () {
+        // Set view to see whole model before rendering it the first time
+        x3dExtensions.normalizeCamera($('#viewer_object')[0].runtime);
+    })
 };
 
-
-/**
- * Button "Show All" functionality
- */
-function showAll() {
-  document.getElementById('viewer_object').runtime.showAll();
+viewerToolbar.toggleAnnotationMode = function (newVal) {
+    viewerToolbar = (newVal != null) ? newVal : !viewerToolbar.annotate
+    if (viewerToolbar.annotate) {
+        $('#btnAnnotate').addClass('active');
+        $('.x3dom-canvas').css('cursor', 'crosshair');
+    } else {
+        $('#btnAnnotate').removeClass('active');
+        $('.x3dom-canvas').css('cursor', 'auto');
+    }
 }
 
 /**
  * Updates navigation mode in X3Dom to match the one selected in combo box in toolbar
  */
 function x3dChangeView() {
-  var select = document.getElementById('viewModeSelect');
-  document.getElementById('navType').setAttribute("type", select.options[select.selectedIndex].value);
+    var select = document.getElementById('viewModeSelect');
+    document.getElementById('navType').setAttribute("type", select.options[select.selectedIndex].value);
 }
 
 function getViewMode() {
-  var select = document.getElementById('viewModeSelect');
-  return select.options[select.selectedIndex].value;
+    var select = document.getElementById('viewModeSelect');
+    return select.options[select.selectedIndex].value;
 }
+
 function setViewMode(mode) {
-  document.getElementById('navType').setAttribute(mode);
+    document.getElementById('navType').setAttribute(mode);
 }
-
-
