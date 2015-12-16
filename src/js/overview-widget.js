@@ -43,7 +43,7 @@ function initOverviewWidget(){
   }
   // Subscribes to model select event to be informed if some other overview selects
   // and highlights a model. The same model should be highlighted here as well.
-  subscribeIWC("ModelSelectByOverview", onRemoteHighlight);
+  //subscribeIWC("ModelSelectByOverview", onRemoteHighlight);
 
   console.log("overview-widget: initialized widget");
 }
@@ -104,4 +104,4 @@ function highlightModel(id) {
 function onRemoteUpdate(extras) {
   highlightModel(extras.modelId);
 }
-subscribeIWC("ViewpointUpdate", onRemoteUpdate);
+//subscribeIWC("ViewpointUpdate", onRemoteUpdate);
