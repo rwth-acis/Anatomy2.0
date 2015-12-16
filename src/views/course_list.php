@@ -129,7 +129,6 @@
     if(isset($_GET["widget"]) && $_GET["widget"] == "true")
     {
         print("<script type='text/javascript' src='../js/overview-widget.js'> </script>");
-        print("<script type='text/javascript' src='../js/init-subsite.js'></script>");
     }
   ?>
   <!-- Library which defines behavior of the <table class="table table-striped table-bordered table-hover"> -->

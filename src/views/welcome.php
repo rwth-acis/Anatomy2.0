@@ -40,15 +40,6 @@
   <script src="assets/js/respond.min.js"></script>
   <![endif]-->
 
-  <!-- Init communication with wrapper -->
-  <?php
-    //Decide if this site is inside a separate widget
-    if(isset($_GET["widget"]) && $_GET["widget"] == "true")
-    {
-      //we have to link to the widget versions:
-      print("<script type='text/javascript' src='../js/init-subsite.js'></script>");
-    }
-  ?>
 </head>
 <body>
   <?php include("menu.php"); ?>

@@ -32,7 +32,6 @@
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/bootstrap.min.css">
   
-  <script type='text/javascript' src='../js/init-subsite.js'></script>
   <script type='text/javascript' src='../js/overview-widget.js'> </script>
 
 </head>
