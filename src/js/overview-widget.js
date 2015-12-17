@@ -21,7 +21,7 @@
 /**
  * change normal overview page to separate widget page
  */
-function initOverviewWidget(){
+$(document).read( function () {
     
     /*
         Two-directional data-binding for selected model
@@ -43,7 +43,7 @@ function initOverviewWidget(){
 	  },
 	  connector: {
 	    name: 'websockets-client',
-	    room: 'Anatomy2.06',
+	    room: 'Anatomy2.07',
 	    types: ['Array', 'Text'],
 	  },
      sourceDir: location.pathname + '/../../external'
@@ -89,8 +89,5 @@ function initOverviewWidget(){
         ko.applyBindings(selectedModelViewModel, $('.img-list')[0])    
     
     })
-}
-
-//execute init when page is loaded
-document.addEventListener('DOMContentLoaded', initOverviewWidget, false);
+})
 
