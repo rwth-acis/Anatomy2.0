@@ -22,19 +22,10 @@ var modelViewerSync = {}
 modelViewerSync.localId = Math.random()
 modelViewerSync.foreignId = 2 // must be != localId
 
-modelViewerSync.initialize = function () {
-    
-    modelViewerSync.x3dRoot = $('#viewer_object')[0]
-    
-    viewerToolbar.isSynchronized.subscribe( function(newValue) {
-        // apply remote state when returning to sync
-        if (viewerToolbar.isSynchronized()) {
-            modelViewerSync.remoteViewChanged();
-        }        
-    })
+$(document).ready( function () {
     
     //// sync
-console.log('Sync, before Y')    
+    
 	// The Y-object creation takes a fair amount of time, blocking the UI
 	Y({
 	  db: {
@@ -42,12 +33,11 @@ console.log('Sync, before Y')
 	  },
 	  connector: {
 	    name: 'websockets-client',
-	    room: 'Anatomy2.06',
+	    room: 'Anatomy2.07',
 	    types: ['Array', 'Text'],
 	  },
      sourceDir: location.pathname + '/../../external'
 	}).then(function (yconfig) {
-console.log('Sync, Y-start')    
 
 	modelViewerSync.yconfig = yconfig
 	modelViewerSync.y = yconfig.root
@@ -57,6 +47,13 @@ console.log('Sync, Y-start')
 	
 	var y = modelViewerSync.y
 
+    viewerToolbar.isSynchronized.subscribe( function(newValue) {
+        // apply remote state when returning to sync
+        if (viewerToolbar.isSynchronized()) {
+            modelViewerSync.remoteViewChanged();
+        }        
+    })
+    
 	// inits are not needed
 	// y.init('view_mode', 'Examine')
 	// y.init('selected_model', window.location.search)
@@ -98,35 +95,12 @@ console.log('Sync, Y-start')
 
         To stay informed about the chairmanship, every modifying function is hooked
     */
-	// viewport: local → remote
-	$('#viewport')[0].addEventListener(
-			'viewpointChanged'
-			, modelViewerSync.intervalBarrier(modelViewerSync.localViewChanged, modelViewerSync.sendInterval)
-	)
-	
-	modelViewerSync.viewarea = modelViewerSync.x3dRoot.runtime.canvas.doc._viewarea
-	var viewarea = modelViewerSync.viewarea
-
-	var setViewareaHook = function (functionName, peerId) {
-		var oldFunc = viewarea[functionName]
-		viewarea[functionName] = function () {
-			modelViewerSync.chairmanId = peerId
-			return oldFunc.apply(viewarea, arguments)
-		}
-	}
-
-	// hooks for observing chairmanship
-	setViewareaHook('animateTo', modelViewerSync.localId)
-	setViewareaHook('onDrag', modelViewerSync.localId)
-	setViewareaHook('onMoveView', modelViewerSync.localId)
-
     
     // viewport: remote → local
 	modelViewerSync.y.observePath(
 			['view_matrix']
 			, modelViewerSync.intervalBarrier(modelViewerSync.remoteViewChanged, modelViewerSync.receiveInterval)
 	)
-    
     
     
     
@@ -177,13 +151,41 @@ console.log('Sync, Y-start')
             }
         }
 	})
-console.log('Sync, after Y')    
 
 	})
-}
+} )
 
 //if(tools.isInRole())
-	modelViewer.addEventListener('load', modelViewerSync.initialize);
+
+// x3d-object loaded
+modelViewer.addEventListener('load', function () {
+    modelViewerSync.x3dRoot = $('#viewer_object')[0]
+    
+	// viewport: local → remote
+	$('#viewport')[0].addEventListener(
+			'viewpointChanged'
+			, modelViewerSync.intervalBarrier(modelViewerSync.localViewChanged, modelViewerSync.sendInterval)
+	)
+	
+	modelViewerSync.viewarea = modelViewerSync.x3dRoot.runtime.canvas.doc._viewarea
+	var viewarea = modelViewerSync.viewarea
+
+	var setViewareaHook = function (functionName, peerId) {
+		var oldFunc = viewarea[functionName]
+		viewarea[functionName] = function () {
+			modelViewerSync.chairmanId = peerId
+			return oldFunc.apply(viewarea, arguments)
+		}
+	}
+
+	// hooks for observing chairmanship
+	setViewareaHook('animateTo', modelViewerSync.localId)
+	setViewareaHook('onDrag', modelViewerSync.localId)
+	setViewareaHook('onMoveView', modelViewerSync.localId)
+    
+    if (modelViewerSync.remoteViewChangeBeforeModelLoad)
+        remoteViewChanged()
+} )
 
 /**
  * Event handler for getting a new iwc message with a new view matrix and
@@ -191,7 +193,14 @@ console.log('Sync, after Y')
  * @param extras parameters from the iwc message with position and rotation
  */
 modelViewerSync.remoteViewChanged = function (events) {
+    console.log('uh, change taken!')
 	if (!viewerToolbar.isSynchronized()) { return }
+    
+    // x3d model not loaded yet
+    if (modelViewerSync.x3dRoot == null) { 
+        modelViewerSync.remoteViewChangeBeforeModelLoad = true
+        return
+    }
 	
 	receivedView = y.get('view_matrix')
 

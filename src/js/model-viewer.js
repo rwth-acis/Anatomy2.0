@@ -492,6 +492,7 @@ modelViewer.addEventListener = function(type, callback) {
  * @returns {undefined}
  */
 modelViewer.onModelLoaded = function(event) {
+    console.log("model Loaded!")
   modelViewer.onLoadHandler.forEach(function(callback) {
     callback(event);
   });
