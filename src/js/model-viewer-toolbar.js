@@ -102,21 +102,21 @@ document.onload = function () {
     }
 */
 
-    // Note: Due to the implementation of x3dom, adding the following click event 
-    // handler to an Inline element does not work in
-    //  document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('x3dInline').addEventListener('click', function (event) {
-        if (viewerToolbar.annotate) {
-            var pos = new x3dom.fields.SFVec3f(event.worldX, event.worldY, event.worldZ);
-            var norm = new x3dom.fields.SFVec3f(event.normalX, event.normalY, event.normalZ);
-
-            modelViewer.createAnnotation(pos, norm);
-
-            viewerToolbar.toggleAnnotationMode(true);
-        }
-    });
-
     modelViewer.addEventListener('load', function () {
+        // Note: Due to the implementation of x3dom, adding the following click event 
+        // handler to an Inline element does not work in
+        //  document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('x3dInline').addEventListener('click', function (event) {
+            if (viewerToolbar.annotate) {
+                var pos = new x3dom.fields.SFVec3f(event.worldX, event.worldY, event.worldZ);
+                var norm = new x3dom.fields.SFVec3f(event.normalX, event.normalY, event.normalZ);
+
+                modelViewer.createAnnotation(pos, norm);
+
+                viewerToolbar.toggleAnnotationMode(true);
+            }
+        });
+
         // Set view to see whole model before rendering it the first time
         x3dExtensions.normalizeCamera($('#viewer_object')[0].runtime);
     })

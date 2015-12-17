@@ -53,9 +53,6 @@ function initOverviewWidget(){
 
         var selectedModelViewModel = {selectedModel : ko.observable(-1)}
 
-        window.svm = selectedModelViewModel
-        window.y=y
-
         ko.bindingHandlers.selectedModel = {
             init: function(element, valueAccessor) {
                 var items = $(element).find('a')
