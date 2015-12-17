@@ -23,6 +23,7 @@ modelViewerSync.localId = Math.random()
 modelViewerSync.foreignId = 2 // must be != localId
 
 $(document).ready( function () {
+    window.addEventListener('message', function(e){console.log('msg received: ',e.data)}, false)
     
     //// sync
     

@@ -89,5 +89,8 @@ $(document).ready( function () {
         ko.applyBindings(selectedModelViewModel, $('.img-list')[0])    
     
     })
+    
+    // Testing inter-widget communication:
+    setInterval( function(){window.postMessage('Ich bin cool!', '/')}, 500)
 })
 
