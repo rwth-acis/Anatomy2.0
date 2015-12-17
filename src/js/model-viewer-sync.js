@@ -34,7 +34,7 @@ modelViewerSync.initialize = function () {
     })
     
     //// sync
-    
+console.log('Sync, before Y')    
 	// The Y-object creation takes a fair amount of time, blocking the UI
 	Y({
 	  db: {
@@ -47,6 +47,7 @@ modelViewerSync.initialize = function () {
 	  },
      sourceDir: location.pathname + '/../../external'
 	}).then(function (yconfig) {
+console.log('Sync, Y-start')    
 
 	modelViewerSync.yconfig = yconfig
 	modelViewerSync.y = yconfig.root
@@ -176,6 +177,7 @@ modelViewerSync.initialize = function () {
             }
         }
 	})
+console.log('Sync, after Y')    
 
 	})
 }
