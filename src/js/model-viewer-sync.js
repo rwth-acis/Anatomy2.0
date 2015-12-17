@@ -18,6 +18,7 @@
  */
 
 var modelViewerSync = {}
+        console.log( 'URI.js', new URI().toString() )
 
 modelViewerSync.localId = Math.random()
 modelViewerSync.foreignId = 2 // must be != localId
@@ -156,7 +157,6 @@ modelViewerSync.initialize = function () {
         }
 	})
 
-        console.log( 'URI.js', new URI().toString() )
 /*	modelViewerSync.y.observePath(['view_mode'], function (events) {
 		setViewMode(y.get('view_mode'))
 	})

@@ -56,7 +56,7 @@
   <!-- Knockout -->
   <script src='../external/knockoutjs/dist/knockout.js'></script>
   <!-- URI.js -->
-  <script src='../external/uri.js/src/URI.js'></script>
+  <script src='../external/uri.js/src/URI.min.js'></script>
 
 
 	<script src="../js/tools.js"></script>
