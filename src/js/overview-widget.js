@@ -91,6 +91,6 @@ $(document).ready( function () {
     })
     
     // Testing inter-widget communication:
-    setInterval( function(){window.postMessage('Ich bin cool!', '*')}, 500)
+    setInterval( function(){postMessage('Ich bin cool!', '*')}, 500)
 })
 
