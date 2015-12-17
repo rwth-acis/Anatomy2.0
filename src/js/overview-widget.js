@@ -21,7 +21,7 @@
 /**
  * change normal overview page to separate widget page
  */
-$(document).read( function () {
+$(document).ready( function () {
     
     /*
         Two-directional data-binding for selected model
