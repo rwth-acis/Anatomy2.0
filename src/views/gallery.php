@@ -32,8 +32,6 @@
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/bootstrap.min.css">
   
-  <script type='text/javascript' src='../js/overview-widget.js'> </script>
-
 </head>
 <body>
   
@@ -77,6 +75,7 @@
   <!-- Knockout -->
   <script src='../external/knockoutjs/dist/knockout.js'></script>
   <!--<script type="text/javascript" src="../js/gallery-widget.js"></script>-->
+  <script type='text/javascript' src='../js/overview-widget.js'> </script>
 
 </body>
 </html>

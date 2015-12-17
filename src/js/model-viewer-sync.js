@@ -193,7 +193,6 @@ modelViewer.addEventListener('load', function () {
  * @param extras parameters from the iwc message with position and rotation
  */
 modelViewerSync.remoteViewChanged = function (events) {
-    console.log('uh, change taken!')
 	if (!viewerToolbar.isSynchronized()) { return }
     
     // x3d model not loaded yet
