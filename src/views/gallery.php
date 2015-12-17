@@ -70,6 +70,8 @@
   <script src="../js/custom.js"></script>
   <script type='text/javascript' src='../js/search.js'></script>
   <script type='text/javascript' src='../js/ajax.js'></script>
+  <!-- Knockout -->
+  <script src='../external/knockoutjs/dist/knockout.js'></script>
   <!--<script type="text/javascript" src="../js/gallery-widget.js"></script>-->
 
 </body>

@@ -156,12 +156,13 @@ modelViewerSync.initialize = function () {
         }
 	})
 
-        
+        console.log( 'URI.js', new URI().toString() )
 /*	modelViewerSync.y.observePath(['view_mode'], function (events) {
 		setViewMode(y.get('view_mode'))
 	})
 */
 /*	modelViewerSync.y.observePath(['selected_model'], function (events) {
+        var currentModel = new URI().query(true).id
 		window.location.assign(y.get('selected_model'));
 	})
 */

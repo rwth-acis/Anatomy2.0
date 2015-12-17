@@ -38,7 +38,6 @@
     <?php require ("menu.php"); ?>
       
     	<script src='../external/yjs/y.js'></script>
-    	<script src='../external/knockoutjs/dist/knockout.js'></script>
       <script src='../external/x3dom/x3dom.js'> </script>
       
       <script type='text/javascript' src='../js/x3d-extensions.js'> </script>

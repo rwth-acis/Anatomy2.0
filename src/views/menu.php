@@ -53,6 +53,10 @@
   <script src="../js/jsrsasign/rsapem-1.1.js"></script>
   <script src="../js/jsrsasign/rsasign-1.2.min.js"></script>
   <script src="../js/jsrsasign/x509-1.1.js"></script>
+  <!-- Knockout -->
+  <script src='../external/knockoutjs/dist/knockout.js'></script>
+  <!-- URI.js -->
+  <script src='../external/uri.js/src/URI.js'></script>
 
 
 	<script src="../js/tools.js"></script>
@@ -61,7 +65,7 @@
 
 <?php
   //Decide if this site is inside a separate widget
-  if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
+  if(filter_input(INPUT_GET, "widget") == "true") {
       // Hide Menu in ROLE
   }
   else {
