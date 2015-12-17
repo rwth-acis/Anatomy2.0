@@ -32,15 +32,10 @@
     <link type='text/css' rel='stylesheet' href='http://www.x3dom.org/download/x3dom.css'/>
 
     <!-- Additional styles -->
-    <link rel='stylesheet' type='text/css' href='../css/bootstrap.min.css'>
-    <link rel='stylesheet' type='text/css' href='../css/style.css'>
     <link rel="stylesheet" href="../css/editcourse.css">
-    <script type="text/javascript" src="../js/tools.js"></script>
     
-    <script src="../js/ajax.js"></script>
     <script src="../js/editcourse.js"></script>
     <script src="../js/search.js"></script>
-    <script src="../js/tools.js"></script>
 
   </head>
 

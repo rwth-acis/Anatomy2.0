@@ -25,10 +25,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Collaborative 3D Model Viewer</title>
     
-    <link rel='stylesheet' type='text/css' href='../css/bootstrap.min.css'>
     <link type='text/css' rel='stylesheet' href='../css/external/x3dom.css'/>
     <link rel='stylesheet' type='text/css' href='../css/model_viewer.css'/>
-    <link rel='stylesheet' type='text/css' href='../css/style.css'>
   </head>
 
   <body>
@@ -36,13 +34,9 @@
     <!-- This div is a helper to allow our x3d viewer to be full height -->
     <div style="position: fixed; height:100%"></div>
     <!-- Load all Javascript dependencies. Care: menu.php also loads dependencies -->
-    <?php
-      // Hide the menu in ROLE environment. Outside ROLE the menu must be displayed.
-      if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
-      {
-        include("menu.php");
-      }
-    ?>
+
+    <?php require ("menu.php"); ?>
+      
     	<script src='../external/yjs/y.js'></script>
     	<script src='../external/knockoutjs/dist/knockout.js'></script>
       <script src='../external/x3dom/x3dom.js'> </script>

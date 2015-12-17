@@ -17,47 +17,10 @@
  * @file toolbar.php
  * Toolbar with controls for the viewer navigation and other viewer functionality
  * 
- * REQUIRES JQuery and Bootstrap.js to be included before, if not in ROLE environment.
- * Is included in menu.php
+ * REQUIRES menu.php to be included before
  */
 ?>
-<?php
-  // If outside ROLE environment, menu.php will start a session.
-  // So start session only if inside ROLE.
-  if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
-    session_start();
-  }
-  // Include some configuration information
-  require_once '../config/config.php'; 
-?>
 
-<!-- JS includes of menu toolbar functionality -->
-<?php 
-  // If widget parameter is set, the this is a widget in ROLE environment. 
-  // Therefore menu.php is not included. Then, bootstrap.js is also 
-  // missing. Include here. Make sure not to include twice, because this will 
-  // break the menu.
-  if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
-?>
-  <script src="../js/bootstrap.min.js"></script>
-  
-  <!-- import JWS and JSRSASIGN (must) -->
-  <script type="text/javascript" src="../js/jsjws/jws-2.0.js"></script>
-  <script type="text/javascript" src="../js/jsrsasign/ext/base64.js"></script>
-  <script type="text/javascript" src="../js/jsrsasign/ext/jsbn.js"></script>
-  <script type="text/javascript" src="../js/jsrsasign/ext/jsbn2.js"></script>
-  <script type="text/javascript" src="../js/jsrsasign/ext/rsa.js"></script>
-  <script type="text/javascript" src="../js/jsrsasign/ext/rsa2.js"></script>
-  <script type="text/javascript" src="../js/jsrsasign/asn1hex-1.1.js"></script>
-  <script type="text/javascript" src="../js/jsrsasign/base64x-1.1.js"></script>
-  <script type="text/javascript" src="../js/jsrsasign/crypto-1.1.js"></script>
-  <script type="text/javascript" src="../js/jsrsasign/rsapem-1.1.js"></script>
-  <script type="text/javascript" src="../js/jsrsasign/rsasign-1.2.min.js"></script>
-  <script type="text/javascript" src="../js/jsrsasign/x509-1.1.js"></script>
-  <script src="../js/signin_callbacks.js"></script>
-<?php
-  }
-?>
 <script type="text/javascript" src="../js/model-viewer-toolbar.js"></script>
 
 
