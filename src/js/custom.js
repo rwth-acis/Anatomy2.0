@@ -1,3 +1,5 @@
+/* what is this file for? I dont know
+
 jQuery(document).ready(function ($) {
 
     //isotope
@@ -18,9 +20,9 @@ jQuery(document).ready(function ($) {
             }, "slow");
             return false;
         });
-        /*$('.navbar-inverse').on('click', 'li a', function () {
-            $('.navbar-inverse .in').addClass('collapse').removeClass('in').css('height', '1px');
-        });*/
+        //$('.navbar-inverse').on('click', 'li a', function () {
+        //    $('.navbar-inverse .in').addClass('collapse').removeClass('in').css('height', '1px');
+        //});
         $('#filter a').click(function () {
             $('#filter a').removeClass('current');
             $(this).addClass('current');
@@ -45,3 +47,4 @@ jQuery(document).ready(function ($) {
         });
     }
 });
+*/
