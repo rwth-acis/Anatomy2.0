@@ -22,86 +22,78 @@
  * change normal overview page to separate widget page
  */
 function initOverviewWidget(){
-  /*var container = document.getElementById('table-container');
-  for (var i = 0; i < container.childNodes.length; ++i) {
-    var div = container.childNodes[i];
-    div.addEventListener("click", clickOnLink);
-  }*/
-  var aElememts = document.getElementsByTagName('a');
-  for(var i = 0; i < aElememts.length; ++i) {
-    //get old hrefs (that would change the widget)
-    var href = aElememts[i].href;
-    //check if link goes to model_viewer:
-    if(href.indexOf("model_viewer") > -1){
-        //disable href
-        aElememts[i].href = "javascript:void(0)";
-        //send iwc message instead
-        aElememts[i].linkedModel= href;
-        aElememts[i].addEventListener("click", clickOnLink);
-      console.log("ID: "+aElememts[i].id);
-    }
-  }
-  // Subscribes to model select event to be informed if some other overview selects
-  // and highlights a model. The same model should be highlighted here as well.
-  //subscribeIWC("ModelSelectByOverview", onRemoteHighlight);
+    
+    /*
+        Two-directional data-binding for selected model
+        It is like:
+        |                                  _______________________     
+        |  _____________    click          |    ____________     |    ____________              
+        | |             |  ------------------> |            |    --> |            |                                               
+        | | Model-items |                      | View-Model |        | Yjs-object |                                          
+        | |             |  update → highlight  |            |        |            | 
+        | |_____________|  <-----------------  |____________| <----- |____________|
+        |                                                                        
+        |                                                                        
+    */
+    
+    // The Y-object creation takes a fair amount of time, blocking the UI
+	Y({
+	  db: {
+	    name: 'memory'
+	  },
+	  connector: {
+	    name: 'websockets-client',
+	    room: 'Anatomy2.06',
+	    types: ['Array', 'Text'],
+	  },
+     sourceDir: location.pathname + '/../../external'
+	}).then(function (yconfig) {
+        
+        var y = yconfig.root
 
-  console.log("overview-widget: initialized widget");
+        var selectedModelViewModel = {selectedModel : ko.observable(-1)}
+
+        window.svm = selectedModelViewModel
+        window.y=y
+
+        ko.bindingHandlers.selectedModel = {
+            init: function(element, valueAccessor) {
+                var items = $(element).find('a')
+
+                // remove links
+                items.attr('href', 'javascript:void(0)')
+
+                // add modelId property
+                items.map( function () {
+                        $(this).prop( 'modelId', parseInt($(this).attr('id').substr(5)) )
+                    })
+
+                // add click-handler
+                items.on('click', function () {
+                        var selectedId = $(this).prop('modelId')
+                        valueAccessor().selectedModel( selectedId )
+                        y.set('selected_model', selectedId)
+                    })
+
+                y.observePath(['selected_model'], function (events) {
+                    selectedModelViewModel.selectedModel( y.get('selected_model') )
+                })
+            },
+            update: function(element, valueAccessor) {
+                // highlight selected model
+                $(element).find('img').removeClass('highlight-model')
+                $(element).find('a').filter(function(){
+                        return $(this).prop('modelId') == valueAccessor().selectedModel() 
+                    })
+                    .find('img').addClass('highlight-model')
+            }
+        }
+        $('.img-list').attr('data-bind', "selectedModel: $root")
+        ko.applyBindings(selectedModelViewModel, $('.img-list')[0])    
+    
+    })
 }
+
 //execute init when page is loaded
 document.addEventListener('DOMContentLoaded', initOverviewWidget, false);
 
-/**
- * Receiver function for IWC synchronization of model highlighting
- * @param msg Message which contains the id of the selected model
- */
-function onRemoteHighlight(msg) {
-  highlightModel(msg.id);
-}
-
-/**
- * event handler for clicking on a link
- * sends iwc message to select the model in some other widget
- * @param evt the click event
- */
-function clickOnLink(evt){
-  //get original href
-  var id = evt.currentTarget.id;
-  var href = evt.currentTarget.linkedModel;
-
-  console.info("overviewwidget: ", id);
-  if(href === undefined){
-    //user clicked on element in <a> instead of a text in <a>
-    href = evt.currentTarget.parentNode.linkedModel;
-    id = evt.currentTarget.parentNode.id;
-  }
-  // The link has an id of the form a_img<db_id>. This will extract the database id.
-  id = id.substr(5);
-  // Send link to and if of selected model to other widgets
-  var msgContent = {'href': href, 'id': id};
-  publishIWC("ModelSelectByOverview", msgContent);
-  // Highlight the model in this overview widget
-  highlightModel(id);
-}
-
-/**
- * Highlight a model in the overview page.
- * @param id The id (from the database) of the model to be highlighted.
- */
-function highlightModel(id) {
-  // Remove the highlighting from currently selected model (by removing it from all divs)
-  var divs = document.getElementsByName('image-over');
-  console.log(divs);
-  for (var i = 0; i < divs.length; ++i) {
-    divs[i].className = divs[i].className.replace( /(?:^|\s)highlight-model(?!\S)/ , '' )
-  }
-  // Get the div element on the overview page for the given model id
-  var div = document.getElementById('image-over' + id);
-  // Highlight the div element by changing the css style
-  div.className = div.className + ' highlight-model';
-}
-
-
-function onRemoteUpdate(extras) {
-  highlightModel(extras.modelId);
-}
-//subscribeIWC("ViewpointUpdate", onRemoteUpdate);

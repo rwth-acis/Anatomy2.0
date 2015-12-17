@@ -18,7 +18,6 @@
  */
 
 var modelViewerSync = {}
-        console.log( 'URI.js', new URI().toString() )
 
 modelViewerSync.localId = Math.random()
 modelViewerSync.foreignId = 2 // must be != localId
@@ -161,17 +160,23 @@ modelViewerSync.initialize = function () {
 		setViewMode(y.get('view_mode'))
 	})
 */
-/*	modelViewerSync.y.observePath(['selected_model'], function (events) {
-        var currentModel = new URI().query(true).id
-		window.location.assign(y.get('selected_model'));
+//  data.viewMode = getViewMode();
+    
+    // selected model: remote → local
+	modelViewerSync.y.observePath(['selected_model'], function (events) {
+        if (!viewerToolbar.isSynchronized()) { return }
+        var remoteModel = y.get('selected_model')
+        if (remoteModel) {
+            var url = new URI()
+            var params = new URI().query(true)
+            if (params.id != remoteModel) {
+                params.id = remoteModel
+                url.query(params)
+                window.location.assign(url.href())
+            }
+        }
 	})
-*/
-                                                              
-/*  data["model"] = window.location.search;
-  data.modelId = getParameterByName('id');
 
-  data.viewMode = getViewMode();
-*/
 	})
 }
 
