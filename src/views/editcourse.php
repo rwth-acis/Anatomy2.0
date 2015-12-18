@@ -26,7 +26,7 @@
     <title>Edit Your Course</title>
 
     <!-- X3Dom includes -->
-    <script type='text/javascript' src='../js/x3dom.js'> </script>
+      <script src='../external/x3dom/x3dom.js'> </script>
 
     <script type='text/javascript' src='../js/x3d-extensions.js'> </script>
     <link type='text/css' rel='stylesheet' href='http://www.x3dom.org/download/x3dom.css'/>
