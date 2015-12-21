@@ -34,7 +34,7 @@ viewerToolbar.lecturerModeViewModel = {
         canEnter : ko.observable(false),
         modeEnabled : ko.observable(false)
     }
-
+viewerToolbar.modelId = ko.observable(URI().query(true).id)
 
 /**
  * Add click handler when DOM loaded. Note: Due to the implementation of x3dom, 
@@ -42,7 +42,8 @@ viewerToolbar.lecturerModeViewModel = {
  * DOMContentLoaded event handler.
  * @returns {undefined}
  */
-document.onload = function () {
+$(document).ready(function () {
+
     // One way data-bindings:
     
     $('#btnAnnotate').on('click', function () {
@@ -67,9 +68,13 @@ document.onload = function () {
     $('#btnResetview').on('click', function () {
         document.getElementById('viewer_object').runtime.showAll()
     })
+    viewerToolbar.modelId.subscribe( function(newValue) {
+        
+    })
     
     // Two way data-bindings :
 
+    // lecturer-mode
     ko.bindingHandlers.lecturerMode = {
         init: function(element, valueAccessor) {
                 $(element)
@@ -89,23 +94,28 @@ document.onload = function () {
     }
     $('#btnLecturer').attr('data-bind', "lecturerMode: $root")
     ko.applyBindings(viewerToolbar.lecturerModeViewModel, $('#btnLecturer')[0])
-/*    
-    $('#btnLecturer')
-        .bootstrapSwitch('state', false, true)
-        .bootstrapSwitch('readonly', !viewerToolbar.canEnterLecturerMode)
-        .on('switchChange.bootstrapSwitch', function () {
-            modelViewerSync.toggleLecturerMode()
-        })
-    modelViewerSync.lecturerModeListener = function (lecturerMode) {
-        $('#btnLecturer')
-            .bootstrapSwitch('state', lecturerMode.enabled, true)
+    
+    // model-selection
+    viewerToolbar.modelId.subscribe( function(newValue) {
+        modelViewer.setNewModel(newValue)
+        if (tools.isInRole()) {
+            // update gallery-widget
+            window.parent.postMessage({command: 'selectModel', modelId: newValue}, '*')
+        }
+    })
+    if (tools.isInRole()) {
+        // gallery-widget selected new model
+        window.addEventListener('message', function (msg) {
+            if (msg.data.command == 'selectModel') {
+                viewerToolbar.modelId(msg.data.modelId)
+            }
+        }, false)
     }
-*/
-
+    
+    console.log('mytag adding listener')
     modelViewer.addEventListener('load', function () {
-        // Note: Due to the implementation of x3dom, adding the following click event 
-        // handler to an Inline element does not work in
-        //  document.addEventListener('DOMContentLoaded', function() {
+        
+        // init annotations, should go to other file
         document.getElementById('x3dInline').addEventListener('click', function (event) {
             if (viewerToolbar.annotate) {
                 var pos = new x3dom.fields.SFVec3f(event.worldX, event.worldY, event.worldZ);
@@ -120,7 +130,7 @@ document.onload = function () {
         // Set view to see whole model before rendering it the first time
         x3dExtensions.normalizeCamera($('#viewer_object')[0].runtime);
     })
-};
+})
 
 viewerToolbar.toggleAnnotationMode = function (newVal) {
     viewerToolbar = (newVal != null) ? newVal : !viewerToolbar.annotate

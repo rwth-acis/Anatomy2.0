@@ -23,8 +23,6 @@ modelViewerSync.localId = Math.random()
 modelViewerSync.foreignId = 2 // must be != localId
 
 $(document).ready( function () {
-    window.addEventListener('message', function(e){console.log('msg received: ',e.data)}, false)
-    
     //// sync
     
 	// The Y-object creation takes a fair amount of time, blocking the UI
@@ -47,13 +45,6 @@ $(document).ready( function () {
 	window.y = modelViewerSync.y
 	
 	var y = modelViewerSync.y
-
-    viewerToolbar.isSynchronized.subscribe( function(newValue) {
-        // apply remote state when returning to sync
-        if (viewerToolbar.isSynchronized()) {
-            modelViewerSync.remoteViewChanged();
-        }        
-    })
     
 	// inits are not needed
 	// y.init('view_mode', 'Examine')
@@ -107,28 +98,43 @@ $(document).ready( function () {
     
     //// other options sync
     
-    // lecturer-mode: local → remote
-    var func = function (newValue) {
-        var yObj = {
-            peerId : modelViewerSync.localId,
-            modeEnabled : viewerToolbar.lecturerModeViewModel.modeEnabled()
+    // helper-function to prevent subscription from echoing
+    // case is given when subscription changes hte ViewModel's value
+    switchableSubscription = function (observable, func) {
+        return {
+            observable: observable,
+            subscription: observable.subscribe(func),
+            turnOff: function () {
+                // "subscription.isDisposed = true/false" is easier, but "isDisposed" is obfuscated (called "R" when I tested)
+                this.subscription.dispose()
+            },
+            turnOn: function () {
+                // reassign subscription
+                this.subscription = this.observable.subscribe( func )
+            }
         }
-        y.set('lecturer_mode', yObj)
     }
-    var subscription = viewerToolbar.lecturerModeViewModel.modeEnabled.subscribe( func )
+    
+    // lecturer-mode: local → remote
+    var subscription = switchableSubscription( 
+        viewerToolbar.lecturerModeViewModel.modeEnabled, 
+        function (newValue) {
+            var yObj = {
+                peerId : modelViewerSync.localId,
+                modeEnabled : viewerToolbar.lecturerModeViewModel.modeEnabled()
+            }
+            y.set('lecturer_mode', yObj)
+        } )
+    
     // lecturer-mode: remote → local
 	modelViewerSync.y.observePath(['lecturer_mode'], function (events) {
         var yObj = y.get('lecturer_mode')
         if (yObj) {
             // avoid echo
-            // "subscription.isDisposed = true/false" is easier, but "isDisposed" is obfuscated (called "R" when I tested)
-            subscription.dispose()
-
+            subscription.turnOff()
             // change value
             viewerToolbar.lecturerModeViewModel.modeEnabled( yObj.modeEnabled )
-            
-            // reassign subscription
-            subscription = viewerToolbar.lecturerModeViewModel.modeEnabled.subscribe( func )
+            subscription.turnOn()
         }
 	})
 
@@ -138,20 +144,44 @@ $(document).ready( function () {
 */
 //  data.viewMode = getViewMode();
     
+    // selected model: local → remote
+    subscription = switchableSubscription( 
+        viewerToolbar.modelId, 
+        function (newValue) {
+            if (!viewerToolbar.isSynchronized()) { return }
+            if (viewerToolbar.lecturerModeViewModel.modeEnabled() && !viewerToolbar.lecturerModeViewModel.isLecturer()) { return }
+            y.set('selected_model', newValue) 
+        })
+    
     // selected model: remote → local
-	modelViewerSync.y.observePath(['selected_model'], function (events) {
-        if (!viewerToolbar.isSynchronized()) { return }
-        var remoteModel = y.get('selected_model')
-        if (remoteModel) {
-            var url = new URI()
+    var remoteSelectedModelChange = function (events) {
+            if (!viewerToolbar.isSynchronized()) { return }
+        
+            var remoteModel = y.get('selected_model')
+            // undefined value
+            if (!remoteModel) { return }
+            // model already selected
+            if (viewerToolbar.modelId() == remoteModel) { return }
+
+            subscription.turnOff()
+            viewerToolbar.modelId(remoteModel)
+            subscription.turnOn()
+            /* changing fragment?
             var params = new URI().query(true)
-            if (params.id != remoteModel) {
-                params.id = remoteModel
-                url.query(params)
-                window.location.assign(url.href())
-            }
+            params.id = remoteModel
+            url.query(params)
+            window.location.assign(url.href())
+            */
         }
-	})
+	modelViewerSync.y.observePath(['selected_model'], remoteSelectedModelChange)
+
+    viewerToolbar.isSynchronized.subscribe( function(newValue) {
+            // apply remote state when returning to sync
+            if (viewerToolbar.isSynchronized()) {
+                remoteSelectedModelChange()
+                modelViewerSync.remoteViewChanged()
+            }        
+        })
 
 	})
 } )
@@ -185,8 +215,8 @@ modelViewer.addEventListener('load', function () {
 	setViewareaHook('onMoveView', modelViewerSync.localId)
     
     if (modelViewerSync.remoteViewChangeBeforeModelLoad)
-        remoteViewChanged()
-} )
+        modelViewerSync.remoteViewChanged()
+})
 
 /**
  * Event handler for getting a new iwc message with a new view matrix and

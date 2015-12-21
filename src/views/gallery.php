@@ -34,7 +34,6 @@
   
 </head>
 <body>
-  
   <?php
     include("../php/tools.php");
   ?>
@@ -69,7 +68,7 @@
   <script type='text/javascript' src='../js/search.js'></script>
   <script type='text/javascript' src='../js/ajax.js'></script>
   <!-- jQuery -->
-  <script src="../js/external/jquery.min.js"></script>
+  <script src="../external/jquery/dist/jquery.min.js"></script>
   <!-- Y-js -->
   <script src='../external/yjs/y.js'></script>
   <!-- Knockout -->

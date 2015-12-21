@@ -17,80 +17,69 @@
  *  Additional js functions if the overview is loaded as separate widget
  */
 
-
-/**
- * change normal overview page to separate widget page
- */
+/*
+    Two-directional data-binding for selected model
+    It is like:
+    |                                                             
+    |  _____________    click               ____________          ____________              
+    | |             |  ------------------> |            |  ----> |            |                                               
+    | | Model-items |                      | View-Model |        | Yjs-object |                                          
+    | |             |  update → highlight  | (in mo-vi) |        |            | 
+    | |_____________|  <-----------------  |____________| <----- |____________|
+    |                                        |                               
+    |                                        |                               
+    |                                        | update 3D-View                                
+    |                                       _↓_____                                
+    |                                      |       |                      
+    |                                      | x3d   |                               
+    |                                      |_______|                                  
+    |                                                                        
+*/
+    
 $(document).ready( function () {
     
-    /*
-        Two-directional data-binding for selected model
-        It is like:
-        |                                  _______________________     
-        |  _____________    click          |    ____________     |    ____________              
-        | |             |  ------------------> |            |    --> |            |                                               
-        | | Model-items |                      | View-Model |        | Yjs-object |                                          
-        | |             |  update → highlight  |            |        |            | 
-        | |_____________|  <-----------------  |____________| <----- |____________|
-        |                                                                        
-        |                                                                        
-    */
-    
-    // The Y-object creation takes a fair amount of time, blocking the UI
-	Y({
-	  db: {
-	    name: 'memory'
-	  },
-	  connector: {
-	    name: 'websockets-client',
-	    room: 'Anatomy2.07',
-	    types: ['Array', 'Text'],
-	  },
-     sourceDir: location.pathname + '/../../external'
-	}).then(function (yconfig) {
-        
-        var y = yconfig.root
+    var items = $('.img-list').find('a')
 
-        var selectedModelViewModel = {selectedModel : ko.observable(-1)}
+    // remove links
+    items.attr('href', 'javascript:void(0)')
 
-        ko.bindingHandlers.selectedModel = {
-            init: function(element, valueAccessor) {
-                var items = $(element).find('a')
+    // add modelId property
+    items.map( function () {
+            $(this).prop( 'modelId', parseInt($(this).attr('id').substr(5)) )
+        })
 
-                // remove links
-                items.attr('href', 'javascript:void(0)')
-
-                // add modelId property
-                items.map( function () {
-                        $(this).prop( 'modelId', parseInt($(this).attr('id').substr(5)) )
-                    })
-
-                // add click-handler
-                items.on('click', function () {
-                        var selectedId = $(this).prop('modelId')
-                        valueAccessor().selectedModel( selectedId )
-                        y.set('selected_model', selectedId)
-                    })
-
-                y.observePath(['selected_model'], function (events) {
-                    selectedModelViewModel.selectedModel( y.get('selected_model') )
+    // modelViewer → gallery
+    window.addEventListener('message', function (msg) {
+        if (msg.data.command == 'selectModel') {
+            // highlight selected model
+            $('.img-list').find('img').removeClass('highlight-model')
+            $('.img-list').find('a').filter(function(){
+                    return $(this).prop('modelId') == msg.data.modelId
                 })
-            },
-            update: function(element, valueAccessor) {
-                // highlight selected model
-                $(element).find('img').removeClass('highlight-model')
-                $(element).find('a').filter(function(){
-                        return $(this).prop('modelId') == valueAccessor().selectedModel() 
-                    })
-                    .find('img').addClass('highlight-model')
-            }
+                .find('img').addClass('highlight-model')            
         }
-        $('.img-list').attr('data-bind', "selectedModel: $root")
-        ko.applyBindings(selectedModelViewModel, $('.img-list')[0])    
-    
-    })
-    
-    // Testing inter-widget communication:
-    setInterval( function(){postMessage('Ich bin cool!', '*')}, 500)
-})
+    }, false)
 
+    // gallery → modelViewer
+    // add click-handler
+    items.on('click', function () {
+            window.parent.postMessage( {
+                command: 'selectModel', 
+                modelId: $(this).prop('modelId')
+            }, '*' )
+        })  
+})
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    

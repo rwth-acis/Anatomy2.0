@@ -133,9 +133,6 @@ $(document).ready(function(){
     if(key === " ") {
       btnShowInfo();
     }
-    else if (key === "a" || key === "A") {
-      showAll();
-    }
   });
 });
 
