@@ -47,7 +47,7 @@ function showModels(str) {
         if(element) { element.className += 'highlight-model' };
     } else {
         // Highlight previously selected models
-        for(var item in selectedModels) {
+        for(var item in editCourse.selectedModels) {
             element = $("#result-container #image-over"+item)[0];
             if(element) {element.className += 'highlight-model';};
         }

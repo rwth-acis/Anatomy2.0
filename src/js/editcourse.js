@@ -17,8 +17,9 @@
  * Showing models to add to course in a overlay window
  */
 
-var selectedModels = {};
-var course = QueryString.id;            // the edited course's id
+var editCourse = {}
+editCourse.selectedModels = {}
+editCourse.courseId = new URI().query(true).id   // the edited course's id
 
 /**
  * Closes the pop-up
@@ -28,7 +29,7 @@ function endBlackout() {
   for(var i=0;i<list.length;i++) {
     list[i].removeEventListener("click", toggleSelectModel);
   }
-  selectedModels = {};
+  editCourse.selectedModels = {};
   
   document.getElementById("blackout").style.display = "none";
   document.getElementById("modelbox").style.display = "none";
@@ -54,7 +55,7 @@ function startBlackout() {
  */
 function getModels(callback) {
   // Send request with data to run the script on the server 
-  ajax.post("../php/getcoursemodels.php", {"course": course}, 
+  ajax.post("../php/getcoursemodels.php", {"course": editCourse.courseId}, 
     function getModelsCallback(response) {
         var modelbox = document.getElementById("modelbox");
         modelbox.style.display = "block";
@@ -72,7 +73,7 @@ function getModels(callback) {
  * Sends an AJAX request to the server to save the models which were selected
  */
 function addModels() {
-  ajax.post("../php/addmodels.php", {"course": course, "models": JSON.stringify(selectedModels)},
+  ajax.post("../php/addmodels.php", {"course": editCourse.courseId, "models": JSON.stringify(editCourse.selectedModels)},
     function(response) {
         // Display all models associated with the course
         document.getElementById("model_table").innerHTML = response;
@@ -88,7 +89,7 @@ function addModels() {
  * from the course
  */
 function deleteModel(event) {
-  ajax.post("../php/deletemodel.php", {"course": course, "model": event.target.id},
+  ajax.post("../php/deletemodel.php", {"course": editCourse.courseId, "model": event.target.id},
     function(response) {
         // Display all models associated with the course
         document.getElementById("model_table").innerHTML = response;
@@ -166,14 +167,14 @@ function toggleSelectModel(event) {
   var id = element.id.substr(10);
 
   // Look if the clicked element is already selected
-  if(selectedModels[id]) {
-    delete selectedModels[id];
+  if(editCourse.selectedModels[id]) {
+    delete editCourse.selectedModels[id];
 
     // Remove highlight
     var index = (' ' + element.className + ' ').indexOf('highlight-model ');
     element.className = element.className.substr(0,index-1);
   } else { 
-    selectedModels[id] = id; 
+    editCourse.selectedModels[id] = id; 
 
     // Highlight model
     element.className += 'highlight-model'; 
