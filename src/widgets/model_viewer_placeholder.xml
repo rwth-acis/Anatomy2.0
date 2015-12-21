@@ -16,7 +16,6 @@
  -->
 <Module>
     <ModulePrefs title="Anatomy 2.0 Viewer" description="HENM Viewer" author="Group2" author_email="henm1415@dbis.rwth-aachen.de" height="600" width="1200">
-        <Require feature="opensocial-0.8"/>
     </ModulePrefs>
     <Content type="xml">
         <![CDATA[
@@ -25,19 +24,29 @@
     <title>Colaborative 3D Model Viewing</title>
     <meta charset='utf-8'/>
     <meta name='description' content='TODO'/>
-
-    <!-- Interwidget communication includes -->
-    <script src ="http://open-app.googlecode.com/files/openapp.js" > </script>
-    <script src ="http://dbis.rwth-aachen.de/gadgets/iwc/lib/iwc.js" > </script>
-    <script src ="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-
-    <!-- provide Role objects for subsites -->
-    <script type='text/javascript' src='../js/init-wrapper.js'></script>
 </head>
 <body>
 
+<script> 
+    var trySetup = function () {
+        var widget = Array.prototype.slice.call( window.parent.document.querySelectorAll('iframe') )
+                .map(function(iframe){return iframe.contentDocument.querySelector('#galleryRoleWidget')})
+                .filter(function(iframe){return iframe != null})
+                [0]
+        if (widget == null) { 
+            setTimeout(trySetup, 500)
+        } else {
+            // message propagation
+            window.addEventListener('message', function(ev){
+                widget.contentWindow.postMessage(ev.data, '*')
+            }, false)
+        }
+    }
+    trySetup()
+</script>
+
   <!-- container for the actual site: -->
-  <iframe id="content-frame" src="http://dbis.rwth-aachen.de/3dnrt/Anatomy2.0/src/views/model_viewer.php?widget=true" width="100%" height="100%" frameborder="no">
+  <iframe id="modelviewerRoleWidget" src="http://localhost:105/src/views/model_viewer.php?widget=true" width="100%" height="100%" frameborder="no">
   </iframe>
 
 </body>

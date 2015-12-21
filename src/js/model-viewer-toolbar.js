@@ -112,7 +112,6 @@ $(document).ready(function () {
         }, false)
     }
     
-    console.log('mytag adding listener')
     modelViewer.addEventListener('load', function () {
         
         // init annotations, should go to other file

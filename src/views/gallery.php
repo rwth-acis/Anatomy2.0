@@ -41,14 +41,15 @@
   <!-- container -->
   <div id="result-container">
     <?php
-    $course_id = filter_input(INPUT_GET, "id");
+    $role_space = filter_input(INPUT_GET, "rolespace");
 
     include '../php/db_connect.php';
 
-    if (isset($course_id)) {
-      $sql_select_models = "SELECT * FROM models "
+    if (isset($role_space)) {
+      $sql_select_models = "SELECT course_models.*, models.* FROM models "
               . "JOIN course_models ON models.id=model_id "
-              . "WHERE course_id=$course_id";
+              . "JOIN courses ON courses.id=course_id "
+              . "WHERE role_url='$role_space'";
     }
     else {
       $sql_select_models = "SELECT * FROM models";

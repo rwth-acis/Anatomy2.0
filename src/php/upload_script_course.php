@@ -53,38 +53,6 @@ $conn->query($sql);
 
 $last_id = $conn->lastInsertId();
 
-// CREATING A XML FILE FOR THE GALLERY WIDGET
-$xml_file_name_path = __DIR__ . "/../widgets/gallery$last_id.xml";
-$content = 
-'<?xml version="1.0" encoding="UTF-8" ?>
-  <Module>
-    <ModulePrefs title="Anatomy 2.0 Gallery" description="" author="Dominik Studer" author_email="studer@dbis.rwth-aachen.de" height="250" width="1200">
-        <Require feature="opensocial-0.8"/>
-    </ModulePrefs>
-    <Content type="html">
-<![CDATA[
-
-  <!-- The following seems to be the minimum required includes and html for iwc to work -->
-
-  <!-- Interwidget communication includes -->
-  <script src ="http://open-app.googlecode.com/files/openapp.js" > </script>
-  <script src ="http://dbis.rwth-aachen.de/gadgets/iwc/lib/iwc.js" > </script>
-  <script src ="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-  <!-- provide Role objects for subsites -->
-  <script type="text/javascript" src="../js/init-wrapper.js"></script>
-
-  <!-- container for the actual site: -->
-  <iframe id="content-frame" src="' . $baseUrl . '/src/views/gallery.php?widget=true&id=' . $last_id . '" width="100%" height="100%" frameborder="no" padding=0 margin=0>
-  </iframe>
-
-]]>
-    </Content>
-</Module>
-';
-$fp = fopen($xml_file_name_path, "wb");
-fwrite($fp, $content);
-fclose($fp);
-
 $html = "";
 if (isset($_GET['widget']) && $_GET['widget'] == 'true') {
   $html = "&widget=true";

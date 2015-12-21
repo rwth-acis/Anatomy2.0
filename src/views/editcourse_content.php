@@ -60,7 +60,7 @@
             </a>
             <div class="featured-box">
               <p><?php echo $baseUrl . "/src/widgets/model_viewer.xml"; ?></p>
-              <p><?php echo $baseUrl . "/src/widgets/gallery" . $entry['id'] . ".xml"; ?></p>
+              <p><?php echo $baseUrl . "/src/widgets/gallery.xml"; ?></p>
             </div>
           </div>
           <div class="form-group">
