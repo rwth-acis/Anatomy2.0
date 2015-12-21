@@ -9,7 +9,6 @@ modelSpecialFeatures = {}
 modelSpecialFeatures.inlinespace = 'inlinespace__'
 
 modelSpecialFeatures.onLoaded = function () {
-	console.log("x3d loaded");
 	var skin_shape = $('x3d Shape#'+modelSpecialFeatures.inlinespace+'headskin_1');
 	if(skin_shape.length) {
 			$('#tool-list').append($('<li class="navbar-li"/>').append($('<input id="skin-fade-slider"/>')).append($('<b>Fade skin</b>').css('margin', '15px')))
