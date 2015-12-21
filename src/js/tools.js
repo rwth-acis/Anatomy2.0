@@ -113,9 +113,6 @@ function getQueryString() {
     return query_string;
 }
 
-///initialized QueryString by default
-var QueryString = getQueryString();
-
 /**
  * Gets the URL parameter value for a given name
  *@param name Name of a URL parameter
