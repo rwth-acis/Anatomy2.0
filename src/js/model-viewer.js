@@ -492,7 +492,6 @@ modelViewer.addEventListener = function(type, callback) {
  * @returns {undefined}
  */
 modelViewer.onModelLoaded = function(event) {
-    console.log("model Loaded!")
   modelViewer.onLoadHandler.forEach(function(callback) {
     callback(event);
   });
@@ -693,8 +692,7 @@ annotationContentBox.hide = function() {
   $('#textarea-annotation-content').val('');
 };
 
-// Initializing model viewer
-$(document).ready(function() {
+modelViewer.addEventListener('load', function () {
   // Reading the Sevianno object id of the current model from our database (our php 
   // server will store it in a hidden input field called model-sevianno-id)
   modelViewer.seviannoObjectId = $('#model-sevianno-id').val();
@@ -713,6 +711,10 @@ $(document).ready(function() {
       modelViewer.storeAnnotationLocally(annotation);
     });
   });
+})
+
+// Initializing model viewer
+$(document).ready(function() {
   
   // Deactivate x3d-hotkeys while editing annotation
   $('#textarea-annotation-content').on('keypress keydown keyup', function (e) { e.stopPropagation(); });
@@ -745,3 +747,15 @@ $(document).ready(function() {
   // Handler for clicking the delete button in div-annotation-content-read
   $('#btn-annotation-delete').on('click', modelViewer.deleteAnnotation);
 });
+
+modelViewer.firstModel = true
+modelViewer.setNewModel = function (modelId) {
+    $.get(URI().filename('x3d_element.php').query({id:modelId}).href(), null, function (data) {
+        $('#x3d-container').html(data)
+        if(modelViewer.firstModel) {
+            modelViewer.firstModel = false
+        } else {
+            x3dom.reload()
+        }
+    } )
+}

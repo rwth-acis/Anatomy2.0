@@ -31,8 +31,6 @@
 
   <body>
     
-    <!-- This div is a helper to allow our x3d viewer to be full height -->
-    <div style="position: fixed; height:100%"></div>
     <!-- Load all Javascript dependencies. Care: menu.php also loads dependencies -->
 
     <?php require ("menu.php"); ?>
@@ -47,6 +45,8 @@
       <script type="text/javascript" src="../js/model-part-highlighting.js"></script>
       <script type="text/javascript" src="../js/model-special-features.js"></script>
     <?php
+
+      include("toolbar.php");
       
       include '../php/db_connect.php';
       $model_id = filter_input(INPUT_GET, "id");
@@ -54,8 +54,6 @@
         $query  = "SELECT * FROM models WHERE id = $model_id";
         $model = $db->query($query)->fetchObject();
       }
-
-      include("toolbar.php");
       
       if (isset($_GET["widget"]) && $_GET["widget"] == "true") { 
         $viewer_class = "viewer_object_role"; 
@@ -65,42 +63,13 @@
         $initModelViewer = "onload=\"modelViewer.onModelLoaded()\"";
       }
     ?>
-    
-    <x3d id='viewer_object' swfpath="../swf/x3dom.swf" class="<?php echo $viewer_class; ?>" showStat="false">
-      <scene id="scene">
-        <navigationInfo headlight="true" type="examine" id="navType"></navigationInfo>
-        <background skyColor='1.0 1.0 1.0'> </background>
-        <Group id="model-nodes">
-          <?php
-          if(is_object($model)) {
-            // nameSpaceName='inlinespace' required for highlighting parts of a model
-            echo "<inline nameSpaceName='inlinespace' id=\"x3dInline\" url=\"../../$model->data_url\" $initModelViewer> </inline>";
-          }
-          ?>
-        </Group>
-        <viewpoint id="viewport" DEF="viewport" centerOfRotation="0 0 0" position="0.00 0.00 5.00" orientation="-0.92 0.35 0.17 0.00" fieldOfView="0.858"> </viewpoint>
-        <Group id="annotation-markers" onclick="modelViewer.handleAnnotationMarkerClick(event)" onmouseover="modelViewer.handleAnnotationMarkerMouseOver(event)" onmouseout="modelViewer.handleAnnotationMarkerMouseOut(event)"></Group>
-      </scene>
-      <?php
-          if(is_object($model)) {
-            echo "<div id='metadata_overlay'>
-              <div class='x3dom-states-head'> </div>
-              <div class='x3dom-states-item-title'>Name:</div>
-              <div class='x3dom-states-item-value'>$model->name</div> <br>
-              <div class='x3dom-states-item-title'>Classification:</div>
-              <div class='x3dom-states-item-value'>$model->classification</div> <br>
-              <div class='x3dom-states-item-title'>Description:</div>
-              <div class='x3dom-states-item-value'>$model->description</div> <br>
-              <div class='x3dom-states-item-title'>Upload Date:</div>
-              <div class='x3dom-states-item-value'>$model->upload_date</div> <br>
-              <div class='x3dom-states-item-title'><a href=\"../../$model->data_url\">Download</a></div>
-              </div>";
-          }
-      ?>
-    </x3d>
-  
-    <!-- Hidden input field to provide the Sevianno object id from our database to model-viewer.js -->
-    <input id="model-sevianno-id" class="hidden" value="<?php echo $model->seviannoId; ?>"/>
+   
+    <div id="x3d-container"></div>
+      <!-- loading first model -->
+    <script>
+        modelViewer.setNewModel(<?php echo $model_id;?>)  
+    </script>
+      
     <!-- Creates a panel with information about mouse usage and hotkeys for navigation -->
     <?php include("nav_info.html"); ?>
     <!-- A box for showing annotation content. There will always be just one box at a time. This div will be moved to the correct position. -->
