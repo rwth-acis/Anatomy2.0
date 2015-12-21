@@ -34,9 +34,6 @@
     <!-- Additional styles -->
     <link rel="stylesheet" href="../css/editcourse.css">
     
-    <script src="../js/editcourse.js"></script>
-    <script src="../js/search.js"></script>
-
   </head>
 
   <body>
@@ -64,5 +61,9 @@
 
       include("footer.php");
     ?>
+
+    <script src="../js/editcourse.js"></script>
+    <script src="../js/search.js"></script>
+
   </body>
 </html>
