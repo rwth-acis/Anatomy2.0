@@ -20,25 +20,31 @@
 html, body {
   height: 100%;
   margin: 0px;
+  display: flex;
+  flex-direction: column;
 }
  
 body {
     background-color: white;
+    overflow: auto;
+}
+
+#x3d-container {
+    flex: 1;
+    display: flex;
 }
 
 #viewer_object {
-  width: 100%;
+  display: flex;
+  flex: 1;
   min-height: 350px;
-  display: block;
   border: none;
 }
 
-.viewer_object {
-  height: calc(100% - 120px);
-}
-
-.viewer_object_role {
-  height: calc(100% - 50px);
+#x3dom-viewer_object-canvas {
+    max-width: 100%;
+    flex: 1;
+    height: auto;
 }
 
 #metadata_overlay {
