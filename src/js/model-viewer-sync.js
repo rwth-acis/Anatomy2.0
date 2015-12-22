@@ -36,7 +36,7 @@ modelViewerSync.init = function () {
     $(document).ready( function () {
         modelViewerSync.onDocLoad.forEach(function(callback){callback()}) 
     })
-
+    
     // Y-creation
     modelViewerSync.onDocLoad.push(function () {
         // The Y-object creation takes a fair amount of time, blocking the UI
@@ -46,7 +46,7 @@ modelViewerSync.init = function () {
           },
           connector: {
             name: 'websockets-client',
-            room: 'Anatomy2.07',
+            room: 'Anatomy2.0-role-v1.0-'+URI().query(true).rolespace,
             types: ['Array', 'Text'],
           },
          sourceDir: location.pathname + '/../../external'
@@ -271,10 +271,11 @@ modelViewerSync.init = function () {
         modelViewerSync.y.observePath(['selected_model'], modelViewerSync.remoteSelectedModelChange)
     })
 }
-modelViewerSync.init()
 
+if(true || tools.isInRole()) {
+    modelViewerSync.init()
+}
 
-//if(tools.isInRole())
 
 
 
