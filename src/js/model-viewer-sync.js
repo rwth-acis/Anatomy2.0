@@ -22,45 +22,80 @@ var modelViewerSync = {}
 modelViewerSync.localId = Math.random()
 modelViewerSync.foreignId = 2 // must be != localId
 
-$(document).ready( function () {
-    //// sync
+modelViewerSync.init = function () {
     
-	// The Y-object creation takes a fair amount of time, blocking the UI
-	Y({
-	  db: {
-	    name: 'memory'
-	  },
-	  connector: {
-	    name: 'websockets-client',
-	    room: 'Anatomy2.07',
-	    types: ['Array', 'Text'],
-	  },
-     sourceDir: location.pathname + '/../../external'
-	}).then(function (yconfig) {
-
-	modelViewerSync.yconfig = yconfig
-	modelViewerSync.y = yconfig.root
-	
-	// for debugging
-	window.y = modelViewerSync.y
-	
-	var y = modelViewerSync.y
+    /*
+        inits handled in arrays to group their code more intuitively
+    */
     
-	// inits are not needed
-	// y.init('view_mode', 'Examine')
-	// y.init('selected_model', window.location.search)
-	// y.set('show_info', false)
+    modelViewerSync.onDocLoad = []
+    modelViewerSync.onYLoad = []
+    modelViewerSync.onModelLoad = []
+    
+    // Doc-load
+    $(document).ready( function () {
+        modelViewerSync.onDocLoad.forEach(function(callback){callback()}) 
+    })
+
+    // Y-creation
+    modelViewerSync.onDocLoad.push(function () {
+        // The Y-object creation takes a fair amount of time, blocking the UI
+        Y({
+          db: {
+            name: 'memory'
+          },
+          connector: {
+            name: 'websockets-client',
+            room: 'Anatomy2.07',
+            types: ['Array', 'Text'],
+          },
+         sourceDir: location.pathname + '/../../external'
+        }).then(function (yconfig) {
+            modelViewerSync.yconfig = yconfig
+            modelViewerSync.y = yconfig.root
+
+            // for debugging
+            window.y = modelViewerSync.y
+            
+            // catching errors because else Y-js would eat them
+            try { modelViewerSync.onYLoad.forEach(function(callback){callback()}) }
+            catch(err) { console.log('Error in Y-load callbacks: ', err)}
+        })
+    })
+    
+    // x3d-object loaded
+    modelViewer.addEventListener('load', function () {
+        modelViewerSync.x3dRoot = $('#viewer_object')[0]
+        
+        modelViewerSync.onModelLoad.forEach(function(callback){callback()})
+    })
 
     
-    //// viewport sync
+    
+    //////// resync all
+    
+    modelViewerSync.onDocLoad.push(function () {
+        viewerToolbar.isSynchronized.subscribe( function(newValue) {
+                // apply remote state when returning to sync
+                if (viewerToolbar.isSynchronized()) {
+                    modelViewerSync.remoteSelectedModelChange()
+                    modelViewerSync.remoteViewChanged()
+                }        
+            })
+    })
+    
 
-    // limiting the amount of messages sent by Y-js
-    // numbers in ms
-    modelViewerSync.sendInterval = 200
-    modelViewerSync.receiveInterval = 200
-
-    modelViewerSync.animDuration = 350
-    modelViewerSync.chairmanId = modelViewerSync.localId
+    //////// delayed viewport-update
+    
+    modelViewerSync.onModelLoad.push(function () {  
+        if (modelViewerSync.remoteViewChangeBeforeModelLoad) {
+            modelViewerSync.remoteViewChanged()
+        }
+    })
+    
+    
+    //////// viewport sync
+    
     /* 	
         How to decide on whether to apply received remote state and whether to send local state:
 
@@ -88,189 +123,177 @@ $(document).ready( function () {
         To stay informed about the chairmanship, every modifying function is hooked
     */
     
-    // viewport: remote → local
-	modelViewerSync.y.observePath(
-			['view_matrix']
-			, modelViewerSync.intervalBarrier(modelViewerSync.remoteViewChanged, modelViewerSync.receiveInterval)
-	)
-    
-    
-    
-    //// other options sync
-    
-    // helper-function to prevent subscription from echoing
-    // case is given when subscription changes hte ViewModel's value
-    switchableSubscription = function (observable, func) {
-        return {
-            observable: observable,
-            subscription: observable.subscribe(func),
-            turnOff: function () {
-                // "subscription.isDisposed = true/false" is easier, but "isDisposed" is obfuscated (called "R" when I tested)
-                this.subscription.dispose()
-            },
-            turnOn: function () {
-                // reassign subscription
-                this.subscription = this.observable.subscribe( func )
-            }
-        }
-    }
-    
-    // lecturer-mode: local → remote
-    var subscription = switchableSubscription( 
-        viewerToolbar.lecturerModeViewModel.modeEnabled, 
-        function (newValue) {
-            var yObj = {
-                peerId : modelViewerSync.localId,
-                modeEnabled : viewerToolbar.lecturerModeViewModel.modeEnabled()
-            }
-            y.set('lecturer_mode', yObj)
-        } )
-    
-    // lecturer-mode: remote → local
-	modelViewerSync.y.observePath(['lecturer_mode'], function (events) {
-        var yObj = y.get('lecturer_mode')
-        if (yObj) {
-            // avoid echo
-            subscription.turnOff()
-            // change value
-            viewerToolbar.lecturerModeViewModel.modeEnabled( yObj.modeEnabled )
-            subscription.turnOn()
-        }
-	})
+    // limiting the amount of messages sent by Y-js
+    // numbers in ms
+    modelViewerSync.sendInterval = 200
+    modelViewerSync.receiveInterval = 200
 
-/*	modelViewerSync.y.observePath(['view_mode'], function (events) {
-		setViewMode(y.get('view_mode'))
-	})
-*/
-//  data.viewMode = getViewMode();
+    modelViewerSync.animDuration = 350
+    modelViewerSync.chairmanId = modelViewerSync.localId
     
-    // selected model: local → remote
-    subscription = switchableSubscription( 
-        viewerToolbar.modelId, 
-        function (newValue) {
+    // viewport: remote → local
+    modelViewerSync.onYLoad.push(function () {
+        modelViewerSync.remoteViewChanged = function (events) {
+            if (!viewerToolbar.isSynchronized()) { return }
+
+            // x3d model not loaded yet
+            if (modelViewerSync.x3dRoot == null) { 
+                modelViewerSync.remoteViewChangeBeforeModelLoad = true
+                return
+            }
+
+            receivedView = modelViewerSync.y.get('view_matrix')
+
+            if (receivedView == null) { return }
+
+            // only set new view if not created from yourself
+            if (receivedView.peerId == modelViewerSync.localId) { return }
+
+            x3dExtensions.setView( modelViewerSync.x3dRoot.runtime, receivedView, modelViewerSync.animDuration )
+            modelViewerSync.chairmanId = receivedView.peerId
+        }
+        
+        modelViewerSync.y.observePath(
+                ['view_matrix']
+                , modelViewerSync.intervalBarrier(modelViewerSync.remoteViewChanged, modelViewerSync.receiveInterval)
+        )
+    })
+        
+    // viewport: local → remote
+    modelViewerSync.onModelLoad.push(function () {
+        modelViewerSync.localViewChanged = function (evt) {
             if (!viewerToolbar.isSynchronized()) { return }
             if (viewerToolbar.lecturerModeViewModel.modeEnabled() && !viewerToolbar.lecturerModeViewModel.isLecturer()) { return }
-            y.set('selected_model', newValue) 
-        })
-    
-    // selected model: remote → local
-    var remoteSelectedModelChange = function (events) {
-            if (!viewerToolbar.isSynchronized()) { return }
-        
-            var remoteModel = y.get('selected_model')
-            // undefined value
-            if (!remoteModel) { return }
-            // model already selected
-            if (viewerToolbar.modelId() == remoteModel) { return }
 
-            subscription.turnOff()
-            viewerToolbar.modelId(remoteModel)
-            subscription.turnOn()
-            /* changing fragment?
-            var params = new URI().query(true)
-            params.id = remoteModel
-            url.query(params)
-            window.location.assign(url.href())
-            */
+            // block if event was triggered by mixing-animation caused from remote state
+            if (modelViewerSync.chairmanId != modelViewerSync.localId) { return }
+
+            var currentView = x3dExtensions.getView(modelViewerSync.x3dRoot.runtime)
+            currentView.peerId = modelViewerSync.localId
+            modelViewerSync.y.set('view_matrix', currentView)
         }
-	modelViewerSync.y.observePath(['selected_model'], remoteSelectedModelChange)
+        
+        $('#viewport')[0].addEventListener(
+                'viewpointChanged'
+                , modelViewerSync.intervalBarrier(modelViewerSync.localViewChanged, modelViewerSync.sendInterval)
+        )
 
-    viewerToolbar.isSynchronized.subscribe( function(newValue) {
-            // apply remote state when returning to sync
-            if (viewerToolbar.isSynchronized()) {
-                remoteSelectedModelChange()
-                modelViewerSync.remoteViewChanged()
-            }        
+        modelViewerSync.viewarea = modelViewerSync.x3dRoot.runtime.canvas.doc._viewarea
+        var viewarea = modelViewerSync.viewarea
+
+        var setViewareaHook = function (functionName, peerId) {
+            var oldFunc = viewarea[functionName]
+            viewarea[functionName] = function () {
+                modelViewerSync.chairmanId = peerId
+                return oldFunc.apply(viewarea, arguments)
+            }
+        }
+
+        // hooks for observing chairmanship
+        setViewareaHook('animateTo', modelViewerSync.localId)
+        setViewareaHook('onDrag', modelViewerSync.localId)
+        setViewareaHook('onMoveView', modelViewerSync.localId)
+    })
+    
+    
+    
+    //////// lecturer-mode sync
+    
+    modelViewerSync.onYLoad.push(function () {
+        // lecturer-mode: local → remote
+        var subscription = modelViewerSync.switchableSubscription( 
+            viewerToolbar.lecturerModeViewModel.modeEnabled, 
+            function (newValue) {
+                var yObj = {
+                    peerId : modelViewerSync.localId,
+                    modeEnabled : viewerToolbar.lecturerModeViewModel.modeEnabled()
+                }
+                modelViewerSync.y.set('lecturer_mode', yObj)
+            } )
+
+        // lecturer-mode: remote → local
+        modelViewerSync.y.observePath(['lecturer_mode'], function (events) {
+            var yObj = modelViewerSync.y.get('lecturer_mode')
+            if (yObj) {
+                // avoid echo
+                subscription.turnOff()
+                // change value
+                viewerToolbar.lecturerModeViewModel.modeEnabled( yObj.modeEnabled )
+                subscription.turnOn()
+            }
         })
+    })
+    
+    
+    
+    //////// viewMode sync
+    
+    /*	modelViewerSync.y.observePath(['view_mode'], function (events) {
+            setViewMode(y.get('view_mode'))
+        })
+    */
+    //  data.viewMode = getViewMode();
+    
+    
+    
+    //////// selected model sync
+    
+    modelViewerSync.onYLoad.push(function () {
+        // selected model: local → remote
+        var subscription = modelViewerSync.switchableSubscription( 
+            viewerToolbar.modelId, 
+            function (newValue) {
+                if (!viewerToolbar.isSynchronized()) { return }
+                if (viewerToolbar.lecturerModeViewModel.modeEnabled() && !viewerToolbar.lecturerModeViewModel.isLecturer()) { return }
+                modelViewerSync.y.set('selected_model', newValue) 
+            })
 
-	})
-} )
+        // selected model: remote → local
+        modelViewerSync.remoteSelectedModelChange = function (events) {
+                if (!viewerToolbar.isSynchronized()) { return }
+
+                var remoteModel = modelViewerSync.y.get('selected_model')
+                // undefined value
+                if (!remoteModel) { return }
+                // model already selected
+                if (viewerToolbar.modelId() == remoteModel) { return }
+
+                subscription.turnOff()
+                viewerToolbar.modelId(remoteModel)
+                subscription.turnOn()
+                /* changing fragment?
+                var params = new URI().query(true)
+                params.id = remoteModel
+                url.query(params)
+                window.location.assign(url.href())
+                */
+            }
+        modelViewerSync.y.observePath(['selected_model'], modelViewerSync.remoteSelectedModelChange)
+    })
+}
+modelViewerSync.init()
+
 
 //if(tools.isInRole())
 
-// x3d-object loaded
-modelViewer.addEventListener('load', function () {
-    modelViewerSync.x3dRoot = $('#viewer_object')[0]
-    
-	// viewport: local → remote
-	$('#viewport')[0].addEventListener(
-			'viewpointChanged'
-			, modelViewerSync.intervalBarrier(modelViewerSync.localViewChanged, modelViewerSync.sendInterval)
-	)
-	
-	modelViewerSync.viewarea = modelViewerSync.x3dRoot.runtime.canvas.doc._viewarea
-	var viewarea = modelViewerSync.viewarea
-
-	var setViewareaHook = function (functionName, peerId) {
-		var oldFunc = viewarea[functionName]
-		viewarea[functionName] = function () {
-			modelViewerSync.chairmanId = peerId
-			return oldFunc.apply(viewarea, arguments)
-		}
-	}
-
-	// hooks for observing chairmanship
-	setViewareaHook('animateTo', modelViewerSync.localId)
-	setViewareaHook('onDrag', modelViewerSync.localId)
-	setViewareaHook('onMoveView', modelViewerSync.localId)
-    
-    if (modelViewerSync.remoteViewChangeBeforeModelLoad)
-        modelViewerSync.remoteViewChanged()
-})
-
-/**
- * Event handler for getting a new iwc message with a new view matrix and
- * updating the local viewer with remote data.
- * @param extras parameters from the iwc message with position and rotation
- */
-modelViewerSync.remoteViewChanged = function (events) {
-	if (!viewerToolbar.isSynchronized()) { return }
-    
-    // x3d model not loaded yet
-    if (modelViewerSync.x3dRoot == null) { 
-        modelViewerSync.remoteViewChangeBeforeModelLoad = true
-        return
-    }
-	
-	receivedView = y.get('view_matrix')
-
-	if (receivedView == null) { return }
-
-	// only set new view if not created from yourself
-	if (receivedView.peerId == modelViewerSync.localId) { return }
-
-	x3dExtensions.setView( modelViewerSync.x3dRoot.runtime, receivedView, modelViewerSync.animDuration )
-	modelViewerSync.chairmanId = receivedView.peerId
-}
-
-/**
- * Propagates local changes via viewport events to all remote clients
- * when synchronization is enabled.
- * @param evt viewpoint changed event
- */
-modelViewerSync.localViewChanged = function (evt) {
-	if (!viewerToolbar.isSynchronized()) { return }
-    if (viewerToolbar.lecturerModeViewModel.modeEnabled() && !viewerToolbar.lecturerModeViewModel.isLecturer()) { return }
-	
-	// block if event was triggered by mixing-animation caused from remote state
-	if (modelViewerSync.chairmanId != modelViewerSync.localId) { return }
-
-	var currentView = x3dExtensions.getView(modelViewerSync.x3dRoot.runtime)
-	currentView.peerId = modelViewerSync.localId
-	modelViewerSync.y.set('view_matrix', currentView)
-}
 
 
 /**
  * Makes sure lecturer mode is released before leaving room.
- */
+ *
 window.onbeforeunload = function(){
-  // Release lecturer mode when leaving.
-/*  if(modelViewerSync.lecturerMode) {
+   Release lecturer mode when leaving.
+  if(modelViewerSync.lecturerMode) {
     toggleLecturerMode();
     sleep(2000);
-  }*/
+  }
 }
+*/
+
+
+
+//////////////// utility functions
+
 
 
 /*
@@ -302,4 +325,23 @@ modelViewerSync.intervalBarrier = function (passFunction, interval) {
 			, timeToWait
 		)
 	}
+}
+
+/*
+    utility-function to prevent subscription from echoing
+    case is given when subscription changes the ViewModel's value
+*/
+modelViewerSync.switchableSubscription = function (observable, func) {
+    return {
+        observable: observable,
+        subscription: observable.subscribe(func),
+        turnOff: function () {
+            // "subscription.isDisposed = true/false" is easier, but "isDisposed" is obfuscated (called "R" when I tested)
+            this.subscription.dispose()
+        },
+        turnOn: function () {
+            // reassign subscription
+            this.subscription = this.observable.subscribe( func )
+        }
+    }
 }
