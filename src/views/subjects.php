@@ -77,13 +77,6 @@
 
   <?php include("footer.php");?>
 
-
-  <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
-
-
-  <script src="../js/modernizr-latest.js"></script>
-  <script src="../js/custom.js"></script>
-
   <?php
      //Decide if this site is inside a separate widget
      if(isset($_GET["widget"]) && $_GET["widget"] == "true")

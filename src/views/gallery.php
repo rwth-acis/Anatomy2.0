@@ -64,9 +64,7 @@
   </div>
 
   <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
-  <script src="../js/modernizr-latest.js"></script>
-  <script src="../js/custom.js"></script>
-  <script type='text/javascript' src='../js/search.js'></script>
+  <script src='../js/search.js'></script>
   <!-- jQuery -->
   <script src="../external/jquery/dist/jquery.min.js"></script>
   <!-- Y-js -->
@@ -74,7 +72,7 @@
   <!-- Knockout -->
   <script src='../external/knockoutjs/dist/knockout.js'></script>
   <!--<script type="text/javascript" src="../js/gallery-widget.js"></script>-->
-  <script type='text/javascript' src='../js/overview-widget.js'> </script>
+  <script src='../js/overview-widget.js'> </script>
 
 </body>
 </html>

@@ -40,7 +40,5 @@
   <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
   <!-- Sending the confirmation request on load -->
   <script src="../js/confirm_registration.js" type="text/javascript"></script>
-  <script src="../js/modernizr-latest.js" type="text/javascript"></script>
-  <script src="../js/custom.js" type="text/javascript"></script>
 </body>
 </html>

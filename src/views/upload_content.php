@@ -61,7 +61,7 @@
 </div>
 
 <!-- Javascript -->
-<script src="../js/jquery.form.min.js"></script>
+<script src="../external/jquery-form/jquery.form.js"></script>
 <!-- Form Validation - Parsley -->
 <script src="../js/parsley.min.js"></script>
 

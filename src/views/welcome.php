@@ -158,9 +158,5 @@
 <div style="padding-bottom:15%"></div>
   <!-- container -->
   <?php include("footer.php"); ?>
-
-  <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
-  <script src="../js/modernizr-latest.js"></script>
-  <script src="../js/custom.js"></script>
 </body>
 </html>
