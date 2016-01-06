@@ -67,7 +67,6 @@
   <script src="../js/modernizr-latest.js"></script>
   <script src="../js/custom.js"></script>
   <script type='text/javascript' src='../js/search.js'></script>
-  <script type='text/javascript' src='../js/ajax.js'></script>
   <!-- jQuery -->
   <script src="../external/jquery/dist/jquery.min.js"></script>
   <!-- Y-js -->

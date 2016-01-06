@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function(){
   
   // Send a post request to server to confirm a user/account in database
   var email = getURLParameter("mail");
-  ajax.post("../php/confirm_registration.php", {mail:email}, function(msg) {
+  $.post("../php/confirm_registration.php", {mail:email}, function(msg) {
     msg = JSON.parse(msg);
     // Redirect to "success" page if account creation was successfull
     if (msg.result === "ok") {

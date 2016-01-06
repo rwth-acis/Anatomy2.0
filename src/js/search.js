@@ -34,7 +34,7 @@ function showModels(str) {
   var element = document.getElementsByClassName("highlight-model")[0];
   selectedModel = element ? element.id : selectedModel;
 
-  ajax.post("../php/getmodels.php", {q: str, type: type}, function(response) {
+  $.post("../php/getmodels.php", {q: str, type: type}, function(response) {
     document.getElementById("result-container").innerHTML = response;
     if(type === "modelselection") { addSelectListener(); }
 

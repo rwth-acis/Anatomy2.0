@@ -55,7 +55,7 @@ function startBlackout() {
  */
 function getModels(callback) {
   // Send request with data to run the script on the server 
-  ajax.post("../php/getcoursemodels.php", {"course": editCourse.courseId}, 
+  $.post("../php/getcoursemodels.php", {"course": editCourse.courseId}, 
     function getModelsCallback(response) {
         var modelbox = document.getElementById("modelbox");
         modelbox.style.display = "block";
@@ -73,7 +73,7 @@ function getModels(callback) {
  * Sends an AJAX request to the server to save the models which were selected
  */
 function addModels() {
-  ajax.post("../php/addmodels.php", {"course": editCourse.courseId, "models": JSON.stringify(editCourse.selectedModels)},
+  $.post("../php/addmodels.php", {"course": editCourse.courseId, "models": JSON.stringify(editCourse.selectedModels)},
     function(response) {
         // Display all models associated with the course
         document.getElementById("model_table").innerHTML = response;
@@ -89,7 +89,7 @@ function addModels() {
  * from the course
  */
 function deleteModel(event) {
-  ajax.post("../php/deletemodel.php", {"course": editCourse.courseId, "model": event.target.id},
+  $.post("../php/deletemodel.php", {"course": editCourse.courseId, "model": event.target.id},
     function(response) {
         // Display all models associated with the course
         document.getElementById("model_table").innerHTML = response;

@@ -26,8 +26,6 @@
   require_once '../config/config.php'; 
 ?>
 
-  <!-- Ajax -->
-  <script src="../js/ajax.js" type="text/javascript"></script>
   <!-- jQuery -->
   <script src="../js/external/jquery.min.js"></script>
   <!-- Bootstrap -->

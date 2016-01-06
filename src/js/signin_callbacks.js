@@ -33,7 +33,7 @@ function signinCallback(result) {
     // Also, the user will be stored / updated in our database.
     // fake login: As our server cannot connect to the Learning Layers server,
     // the client has to send the data (e.g. email, name) to our server.
-    ajax.post("../php/create_user_session.php", {access_token:token, service_type:'LearningLayers',
+    $.post("../php/create_user_session.php", {access_token:token, service_type:'LearningLayers',
       sub:oidc_userinfo.sub, email:oidc_userinfo.email, given_name:oidc_userinfo.given_name,
       family_name:oidc_userinfo.family_name}, function (result) {
       	try{
