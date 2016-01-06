@@ -25,7 +25,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Collaborative 3D Model Viewer</title>
     
-    <link type='text/css' rel='stylesheet' href='../css/external/x3dom.css'/>
+    <link type='text/css' rel='stylesheet' href='../external/x3dom/x3dom.css'/>
     <link rel='stylesheet' type='text/css' href='../css/model_viewer.css'/>
   </head>
 

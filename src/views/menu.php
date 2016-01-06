@@ -30,17 +30,17 @@
   <script src="../external/jquery/dist/jquery.min.js"></script>
   <!-- Bootstrap -->
   <script src="../external/bootstrap/dist/js/bootstrap.min.js"></script>
-  <link rel='stylesheet' type='text/css' href='../css/bootstrap.min.css'>
-  <link rel="stylesheet" href="../css/bootstrap-theme.css" media="screen">
+  <link rel='stylesheet' type='text/css' href='../external/bootstrap/dist/css/bootstrap.min.css'>
+  <link rel="stylesheet" href="../external/bootstrap/dist/css/bootstrap-theme.min.css" media="screen">
   <!-- Bootstrap switch -->
   <script src="../external/bootstrap-switch/dist/js/bootstrap-switch.min.js"></script>
-  <link rel='stylesheet' type='text/css' href='../css/external/bootstrap-switch.min.css'>
+  <link rel='stylesheet' type='text/css' href='../external/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css'>
   <!-- Bootstrap slider -->
   <script src="../external/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
   <link rel='stylesheet' type='text/css' href='../external/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css'>    
   <!-- import JWS and JSRSASIGN -->
   <script src="../external/jsrsasign/jws-3.3.min.js"></script>
-  <script src="../external/jsrsasign/jsrsasign-4.5.0-all-min.js"></script>
+  <script src="../external/jsrsasign/jsrsasign-latest-all-min.js"></script>
   <!-- Knockout -->
   <script src='../external/knockoutjs/dist/knockout.js'></script>
   <!-- URI.js -->

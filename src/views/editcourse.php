@@ -29,7 +29,7 @@
       <script src='../external/x3dom/x3dom.js'> </script>
 
     <script type='text/javascript' src='../js/x3d-extensions.js'> </script>
-    <link type='text/css' rel='stylesheet' href='http://www.x3dom.org/download/x3dom.css'/>
+    <link type='text/css' rel='stylesheet' href='../external/x3dom/x3dom.css'/>
 
     <!-- Additional styles -->
     <link rel="stylesheet" href="../css/editcourse.css">
