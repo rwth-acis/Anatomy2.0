@@ -129,7 +129,7 @@
     }
   ?>
   <!-- Library which defines behavior of the <table class="table table-striped table-bordered table-hover"> -->
-  <script type="text/javascript" src="../external/jasny-bootstrap/dist/js/jasny-bootstrap.min.js"></script>
-  <script type="text/javascript" src="../js/course-list.js"></script>
+  <script src="../external/jasny-bootstrap/dist/js/jasny-bootstrap.min.js"></script>
+  <script src="../js/course-list.js"></script>
 </body>
 </html>

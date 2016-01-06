@@ -31,7 +31,7 @@
   <!-- jQuery -->
   <script src="../js/external/jquery.min.js"></script>
   <!-- Bootstrap -->
-  <script src="../js/bootstrap.min.js"></script>
+  <script src="../external/bootstrap/dist/js/bootstrap.min.js"></script>
   <link rel='stylesheet' type='text/css' href='../css/bootstrap.min.css'>
   <link rel="stylesheet" href="../css/bootstrap-theme.css" media="screen">
   <!-- Bootstrap switch -->
