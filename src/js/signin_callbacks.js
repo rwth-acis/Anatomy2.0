@@ -38,9 +38,13 @@ function signinCallback(result) {
       family_name:oidc_userinfo.family_name}, function (result) {
       	try{
       	if(JSON.parse(result).canEnterLecturerMode) {
-      			viewerToolbar.lecturerModeViewModel.canEnter(true)
-                // So far it is the same:
-                viewerToolbar.lecturerModeViewModel.isLecturer(true)
+                $(document).ready(function() {
+                    if(window.viewerToolbar != null) {
+                        viewerToolbar.lecturerModeViewModel.canEnter(true)
+                        // So far it is the same:
+                        viewerToolbar.lecturerModeViewModel.isLecturer(true)
+                    }
+                })
       		}
       	}	catch (e) {console.log(e)}
       	 if(bRedirect) {
