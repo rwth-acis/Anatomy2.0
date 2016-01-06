@@ -27,12 +27,6 @@
   <link rel="stylesheet" media="screen" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
   <link rel="stylesheet" href="../css/font-awesome.min.css">
 
-  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!--[if lt IE 9]>
-  <script src="assets/js/html5shiv.js"></script>
-  <script src="assets/js/respond.min.js"></script>
-  <![endif]-->
-
   <?php
     //Decide if this site is inside a separate widget
     if(isset($_GET["widget"]) && $_GET["widget"] == "true")
