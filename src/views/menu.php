@@ -39,18 +39,8 @@
   <script src="../external/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
   <link rel='stylesheet' type='text/css' href='../external/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css'>    
   <!-- import JWS and JSRSASIGN -->
-  <script src="../js/jsjws/jws-2.0.js"></script>
-  <script src="../js/jsrsasign/ext/base64.js"></script>
-  <script src="../js/jsrsasign/ext/jsbn.js"></script>
-  <script src="../js/jsrsasign/ext/jsbn2.js"></script>
-  <script src="../js/jsrsasign/ext/rsa.js"></script>
-  <script src="../js/jsrsasign/ext/rsa2.js"></script>
-  <script src="../js/jsrsasign/asn1hex-1.1.js"></script>
-  <script src="../js/jsrsasign/base64x-1.1.js"></script>
-  <script src="../js/jsrsasign/crypto-1.1.js"></script>
-  <script src="../js/jsrsasign/rsapem-1.1.js"></script>
-  <script src="../js/jsrsasign/rsasign-1.2.min.js"></script>
-  <script src="../js/jsrsasign/x509-1.1.js"></script>
+  <script src="../external/jsrsasign/jws-3.3.min.js"></script>
+  <script src="../external/jsrsasign/jsrsasign-4.5.0-all-min.js"></script>
   <!-- Knockout -->
   <script src='../external/knockoutjs/dist/knockout.js'></script>
   <!-- URI.js -->
