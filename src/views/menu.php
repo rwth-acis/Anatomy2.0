@@ -27,13 +27,13 @@
 ?>
 
   <!-- jQuery -->
-  <script src="../js/external/jquery.min.js"></script>
+  <script src="../external/jquery/dist/jquery.min.js"></script>
   <!-- Bootstrap -->
   <script src="../external/bootstrap/dist/js/bootstrap.min.js"></script>
   <link rel='stylesheet' type='text/css' href='../css/bootstrap.min.css'>
   <link rel="stylesheet" href="../css/bootstrap-theme.css" media="screen">
   <!-- Bootstrap switch -->
-  <script src="../js/external/bootstrap-switch.min.js"></script>
+  <script src="../external/bootstrap-switch/dist/js/bootstrap-switch.min.js"></script>
   <link rel='stylesheet' type='text/css' href='../css/external/bootstrap-switch.min.css'>
   <!-- Bootstrap slider -->
   <script src="../external/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
