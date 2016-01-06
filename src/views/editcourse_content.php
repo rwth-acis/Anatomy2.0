@@ -89,7 +89,7 @@
       <div class='col-md-6'>
         <div><h3>Models</h3></div>
         <!-- Buttons to create add and upload models -->
-        <button class='btn btn-success col-xs-6' type='button' id="openbox" onclick="startBlackout()">Add</button>
+        <button class='btn btn-success col-xs-6' type='button' id="openbox" onclick="editCourse.startBlackout()">Add</button>
 
         <div id="model_table" class="col-xs-12 model_div">
         <?php
@@ -113,12 +113,12 @@
 <!-- container -->
 
 <!-- Darken background when model select window appears -->
-<div id="blackout" onclick="endBlackout()"></div>
+<div id="blackout" onclick="editCourse.endBlackout()"></div>
 
 <!-- Show models in a pop-up -->
 <div id="modelbox">
-  <div id="closebox" onclick="endBlackout()">close</div>
-  <button class='btn btn-success' type='button' id="addmodels" onclick="addModels()">Add models to course</button>
+  <div id="closebox" onclick="editCourse.endBlackout()">close</div>
+  <button class='btn btn-success' type='button' id="addmodels" onclick="editCourse.addModels()">Add models to course</button>
   <?php include("search.php"); ?>
   <div id="result-container">
   <!-- Models will be inserted here -->

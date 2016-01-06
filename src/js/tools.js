@@ -22,22 +22,6 @@ var tools = {};
 // URL to ROLE sandbox spaces
 tools.ROLE_SANDBOX_SPACES = "http://role-sandbox.eu/spaces/";
 
-/**
- * Generates a ROLE space URL for a given course name
- * @param {String} courseName The name of the course
- * @returns {String} The ROLE space URL
- */
-tools.getCourseRoomName = function(courseName) {
-      
-  // Keep only letters [a-z] of the course name and convert all upper case 
-  // letters to lower case
-  // Taken from http://stackoverflow.com/a/1983774
-  var courseRoom = courseName.toLowerCase().replace(/[^a-z0-9]+/g, "");
-
-  // Add the role space URL prefix to the course name
-  return courseRoom;
-};
-
 // Adds a click listener to create-room-btn
 tools.addCreateCourseRoomListener = function() {
   
@@ -74,59 +58,9 @@ tools.addCourseNameInputListener = function() {
 };
 
 /**
- * Wrapper for getting the location url (necessary to test with given input data, see spyon in Jasmine)
- */
-get_location = {
-    /**
-     * Get the url string
-     * @return url as string
-     */
-    search: function(){
-	return window.location.search;
-    }
-}
-
-/**
- * Get the query string to access url parameters
- * @return object containing all query variables
- */
-function getQueryString() {
-  // This function is anonymous, is executed immediately and 
-  // the return value is assigned to QueryString!
-  var query_string = {};
-  var query = get_location.search().substring(1);
-  var vars = query.split("&");
-  for (var i=0;i<vars.length;i++) {
-    var pair = vars[i].split("=");
-    	// If first entry with this name
-    if (typeof query_string[pair[0]] === "undefined") {
-      query_string[pair[0]] = pair[1];
-    	// If second entry with this name
-    } else if (typeof query_string[pair[0]] === "string") {
-      var arr = [ query_string[pair[0]], pair[1] ];
-      query_string[pair[0]] = arr;
-    	// If third or later entry with this name
-    } else {
-      query_string[pair[0]].push(pair[1]);
-    }
-  } 
-    return query_string;
-}
-
-/**
- * Gets the URL parameter value for a given name
- *@param name Name of a URL parameter
- */
-function getURLParameter(name) {
-  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))
-    || decodeURIComponent((new RegExp('#' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.hash)||[,""])[1].replace(/\+/g, '%20'))
-    || null;
-}
-
-/**
  * Used in toolbar.js
  * @return true, if the page is a widget in ROLE. false, otherwise
  */
 tools.isInRole = function () {
-  return getURLParameter("widget") === "true";
+  return URI().query(true).widget === "true";
 }

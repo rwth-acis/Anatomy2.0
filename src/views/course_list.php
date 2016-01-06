@@ -103,14 +103,12 @@
 
   <?php include("footer.php"); ?>
 
-  <!-- TODO: Check whether x3d extensions is really needed here -->
-  <script type='text/javascript' src='../js/x3d-extensions.js'> </script>
   <script type="text/javascript" src="../js/tools.js"></script>
   <?php
     //Decide if this site is inside a separate widget
     if(isset($_GET["widget"]) && $_GET["widget"] == "true")
     {
-        print("<script type='text/javascript' src='../js/overview-widget.js'> </script>");
+        print("<script src='../js/overview-widget.js'> </script>");
     }
   ?>
   <!-- Library which defines behavior of the <table class="table table-striped table-bordered table-hover"> -->

@@ -30,7 +30,7 @@
        //Decide if this site is inside a separate widget
        if(isset($_GET["widget"]) && $_GET["widget"] == "true")
        {
-           print("<script type='text/javascript' src='../js/overview-widget.js'> </script>");
+           print("<script src='../js/overview-widget.js'> </script>");
        }
     ?>
 
@@ -79,7 +79,7 @@
      //Decide if this site is inside a separate widget
      if(isset($_GET["widget"]) && $_GET["widget"] == "true")
      {
-         print("<script type='text/javascript' src='../js/courses-widget.js'> </script>");
+         print("<script src='../js/courses-widget.js'> </script>");
      }
  ?>
 

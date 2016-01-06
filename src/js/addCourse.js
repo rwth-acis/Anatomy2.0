@@ -19,7 +19,7 @@
 
 // Fill in the subject id in views/addcourse.php by reading the id from the URL
 document.addEventListener("DOMContentLoaded", function(){
-  document.getElementById("subject_input").value = getURLParameter("id");
+  document.getElementById("subject_input").value = URI().query(true).id;
     
   tools.addCourseNameInputListener();
   tools.addCreateCourseRoomListener();

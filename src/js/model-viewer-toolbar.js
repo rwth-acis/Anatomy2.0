@@ -145,16 +145,13 @@ viewerToolbar.toggleAnnotationMode = function (newVal) {
 /**
  * Updates navigation mode in X3Dom to match the one selected in combo box in toolbar
  */
-function x3dChangeView() {
-    var select = document.getElementById('viewModeSelect');
-    document.getElementById('navType').setAttribute("type", select.options[select.selectedIndex].value);
+viewerToolbar.x3dChangeView = function () {
+    $('#navType').val("type", $('#viewModeSelect option:selected').val())
 }
 
-function getViewMode() {
-    var select = document.getElementById('viewModeSelect');
-    return select.options[select.selectedIndex].value;
-}
+viewerToolbar.getViewMode = function () { return $('#viewModeSelect option:selected').val() }
 
-function setViewMode(mode) {
-    document.getElementById('navType').setAttribute(mode);
+viewerToolbar.setViewMode = function(mode) {
+    $('#viewModeSelect').val(mode)
+    $('#navType').val(mode)
 }

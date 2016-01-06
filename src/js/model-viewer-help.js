@@ -1,6 +1,9 @@
 
 // Script controlling the navigation info 
-var modes = [
+
+var modelHelp = {}
+
+modelHelp.modes = [
            {
              "name":"[E]xamine",
              "option":"examine",
@@ -66,7 +69,7 @@ var modes = [
            }
            ];
 
-function showModeDetails(mode)
+modelHelp.showModeDetails = function (mode)
 {      
   //Show mouse operations
   $.each(["mouse", "mouseLeft", "mouseRight", "mouseWheelScroll", "mouseWheelPress"], function(index, mouse) {
@@ -91,13 +94,13 @@ function showModeDetails(mode)
 
 $(document).ready(function(){   
   //Add all modes to dropdown field
-  $.each(modes, function(index, value) {   
+  $.each(modelHelp.modes, function(index, value) {   
        $('#viewModeSelect')
             .append($('<option>', { value : value.option })
             .text(value.name));
        
        if(index==0)
-         showModeDetails(value);
+         modelHelp.showModeDetails(value);
   }); 
 
   //Listen for changed modes...
@@ -107,9 +110,9 @@ $(document).ready(function(){
     document.getElementById('navType').setAttribute("type", currentMode);
 
     //...and refresh hints
-    $.each(modes, function(index, value) {  
+    $.each(modelHelp.modes, function(index, value) {  
       if(value.option == currentMode)
-        showModeDetails(value);
+        modelHelp.showModeDetails(value);
     });
   });
 
@@ -118,14 +121,14 @@ $(document).ready(function(){
     var key = String.fromCharCode(event.which);
     
     //...and refresh hints
-    $.each(modes, function(index, value) {  
+    $.each(modelHelp.modes, function(index, value) {  
       for (var i = 0; i < value.shortcut.length; i++) {
         if(value.shortcut[i] === key)
         {
-          var num = getIndex(value.option);
+          var num = modelHelp.getIndex(value.option);
           document.getElementById('viewModeSelect').selectedIndex = num;
           document.getElementById('navType').setAttribute("type", value.option);
-          showModeDetails(value);
+          modelHelp.showModeDetails(value);
         }
       }
     });
@@ -136,10 +139,10 @@ $(document).ready(function(){
   });
 });
 
-function getIndex(option) {
+modelHelp.getIndex = function (option) {
   
-  for (i = 0; i < modes.length; i++) {
-    if (modes[i].option == option) {
+  for (i = 0; i < modelHelp.modes.length; i++) {
+    if (modelHelp.modes[i].option == option) {
       return i;
     }
   }

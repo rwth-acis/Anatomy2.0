@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function() {
   
   // When clicking yes, remove course from database
   document.getElementById("btn-yes").addEventListener("click", function() {
-    var courseId = getURLParameter("id");
+    var courseId = URI().query(true).id;
     $.post("../php/delete_course.php", {"course_id": courseId}, function(data){
       if (data !== "FALSE") {
         window.location = "course_list.php?id="+data;

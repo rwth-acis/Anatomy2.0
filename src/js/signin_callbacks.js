@@ -27,7 +27,7 @@ function signinCallback(result) {
   if(result === "success"){
   	var bRedirect = window.location.pathname.endsWith('login_callback.php')
   	
-  	var token = getURLParameter('access_token');
+  	var token = URI().query(true).access_token;
     // When user name and password were correct, the user gets assigned a token.
     // We store the token and the login service name in a session at our server.
     // Also, the user will be stored / updated in our database.

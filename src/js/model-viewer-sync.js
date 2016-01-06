@@ -229,10 +229,10 @@ modelViewerSync.init = function () {
     //////// viewMode sync
     
     /*	modelViewerSync.y.observePath(['view_mode'], function (events) {
-            setViewMode(y.get('view_mode'))
+            viewerToolbar.setViewMode(y.get('view_mode'))
         })
     */
-    //  data.viewMode = getViewMode();
+    //  data.viewMode = viewerToolbar.getViewMode();
     
     
     

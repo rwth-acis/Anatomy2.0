@@ -36,10 +36,9 @@ function showModels(str) {
 
   $.post("../php/getmodels.php", {q: str, type: type}, function(response) {
     document.getElementById("result-container").innerHTML = response;
-    if(type === "modelselection") { addSelectListener(); }
+    if(type === "modelselection") { editCourse.addSelectListener(); }
 
     // If we are inside ROLE, change the list items to open in separate widget
-    // getQueryString doesn't work here somehow, chop off "&"
     if(window.location.search.substring(1) === "widget=true") {
         initOverviewWidget();
         // Apply highlighting

@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function() {
   
   document.getElementById("btn-delete").addEventListener("click", function() {
     
-    var id = getURLParameter("id");  
+    var id = URI().query(true).id;  
     
     window.location = "course_delete.php?id="+id;
     

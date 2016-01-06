@@ -25,12 +25,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Edit Your Course</title>
 
-    <!-- X3Dom includes -->
-      <script src='../external/x3dom/x3dom.js'> </script>
-
-    <script type='text/javascript' src='../js/x3d-extensions.js'> </script>
-    <link type='text/css' rel='stylesheet' href='../external/x3dom/x3dom.css'/>
-
     <!-- Additional styles -->
     <link rel="stylesheet" href="../css/editcourse.css">
     
