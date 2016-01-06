@@ -31,7 +31,7 @@
   <!-- Bootstrap -->
   <script src="../external/bootstrap/dist/js/bootstrap.min.js"></script>
   <link rel='stylesheet' type='text/css' href='../external/bootstrap/dist/css/bootstrap.min.css'>
-  <link rel="stylesheet" href="../external/bootstrap/dist/css/bootstrap-theme.min.css" media="screen">
+  <link rel="stylesheet" type='text/css' href="../external/bootstrap/dist/css/bootstrap-theme.min.css">
   <!-- Bootstrap switch -->
   <script src="../external/bootstrap-switch/dist/js/bootstrap-switch.min.js"></script>
   <link rel='stylesheet' type='text/css' href='../external/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css'>
