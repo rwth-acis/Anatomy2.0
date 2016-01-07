@@ -1,6 +1,6 @@
 {
   "name": "yjs",
-  "version": "0.6.42",
+  "version": "0.7.2",
   "homepage": "y-js.org",
   "authors": [
     "Kevin Jahns <kevin.jahns@rwth-aachen.de>"
@@ -16,13 +16,14 @@
     "concurrency"
   ],
   "license": "MIT",
-  "_release": "0.6.42",
+  "_release": "0.7.2",
   "_resolution": {
     "type": "version",
-    "tag": "v0.6.42",
-    "commit": "ae109bfb0f879aab604bf6a43015594c4af0c6fc"
+    "tag": "v0.7.2",
+    "commit": "d16c9f21e795b2a19de389721a15c6df71454f01"
   },
   "_source": "git://github.com/y-js/yjs.git",
-  "_target": "~0.6.40",
-  "_originalSource": "y-js/yjs"
+  "_target": "~0.7.2",
+  "_originalSource": "yjs",
+  "_direct": true
 }

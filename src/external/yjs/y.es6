@@ -1,770 +1,4 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-// shim for using process in browser
-
-var process = module.exports = {};
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = setTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    clearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        setTimeout(drainQueue, 0);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
-},{}],2:[function(require,module,exports){
-(function (process,global){
-/**
- * Copyright (c) 2014, Facebook, Inc.
- * All rights reserved.
- *
- * This source code is licensed under the BSD-style license found in the
- * https://raw.github.com/facebook/regenerator/master/LICENSE file. An
- * additional grant of patent rights can be found in the PATENTS file in
- * the same directory.
- */
-
-!(function(global) {
-  "use strict";
-
-  var hasOwn = Object.prototype.hasOwnProperty;
-  var undefined; // More compressible than void 0.
-  var $Symbol = typeof Symbol === "function" ? Symbol : {};
-  var iteratorSymbol = $Symbol.iterator || "@@iterator";
-  var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
-
-  var inModule = typeof module === "object";
-  var runtime = global.regeneratorRuntime;
-  if (runtime) {
-    if (inModule) {
-      // If regeneratorRuntime is defined globally and we're in a module,
-      // make the exports object identical to regeneratorRuntime.
-      module.exports = runtime;
-    }
-    // Don't bother evaluating the rest of this file if the runtime was
-    // already defined globally.
-    return;
-  }
-
-  // Define the runtime globally (as expected by generated code) as either
-  // module.exports (if we're in a module) or a new, empty object.
-  runtime = global.regeneratorRuntime = inModule ? module.exports : {};
-
-  function wrap(innerFn, outerFn, self, tryLocsList) {
-    // If outerFn provided, then outerFn.prototype instanceof Generator.
-    var generator = Object.create((outerFn || Generator).prototype);
-    var context = new Context(tryLocsList || []);
-
-    // The ._invoke method unifies the implementations of the .next,
-    // .throw, and .return methods.
-    generator._invoke = makeInvokeMethod(innerFn, self, context);
-
-    return generator;
-  }
-  runtime.wrap = wrap;
-
-  // Try/catch helper to minimize deoptimizations. Returns a completion
-  // record like context.tryEntries[i].completion. This interface could
-  // have been (and was previously) designed to take a closure to be
-  // invoked without arguments, but in all the cases we care about we
-  // already have an existing method we want to call, so there's no need
-  // to create a new function object. We can even get away with assuming
-  // the method takes exactly one argument, since that happens to be true
-  // in every case, so we don't have to touch the arguments object. The
-  // only additional allocation required is the completion record, which
-  // has a stable shape and so hopefully should be cheap to allocate.
-  function tryCatch(fn, obj, arg) {
-    try {
-      return { type: "normal", arg: fn.call(obj, arg) };
-    } catch (err) {
-      return { type: "throw", arg: err };
-    }
-  }
-
-  var GenStateSuspendedStart = "suspendedStart";
-  var GenStateSuspendedYield = "suspendedYield";
-  var GenStateExecuting = "executing";
-  var GenStateCompleted = "completed";
-
-  // Returning this object from the innerFn has the same effect as
-  // breaking out of the dispatch switch statement.
-  var ContinueSentinel = {};
-
-  // Dummy constructor functions that we use as the .constructor and
-  // .constructor.prototype properties for functions that return Generator
-  // objects. For full spec compliance, you may wish to configure your
-  // minifier not to mangle the names of these two functions.
-  function Generator() {}
-  function GeneratorFunction() {}
-  function GeneratorFunctionPrototype() {}
-
-  var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype;
-  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
-  GeneratorFunctionPrototype.constructor = GeneratorFunction;
-  GeneratorFunctionPrototype[toStringTagSymbol] = GeneratorFunction.displayName = "GeneratorFunction";
-
-  // Helper for defining the .next, .throw, and .return methods of the
-  // Iterator interface in terms of a single ._invoke method.
-  function defineIteratorMethods(prototype) {
-    ["next", "throw", "return"].forEach(function(method) {
-      prototype[method] = function(arg) {
-        return this._invoke(method, arg);
-      };
-    });
-  }
-
-  runtime.isGeneratorFunction = function(genFun) {
-    var ctor = typeof genFun === "function" && genFun.constructor;
-    return ctor
-      ? ctor === GeneratorFunction ||
-        // For the native GeneratorFunction constructor, the best we can
-        // do is to check its .name property.
-        (ctor.displayName || ctor.name) === "GeneratorFunction"
-      : false;
-  };
-
-  runtime.mark = function(genFun) {
-    if (Object.setPrototypeOf) {
-      Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
-    } else {
-      genFun.__proto__ = GeneratorFunctionPrototype;
-      if (!(toStringTagSymbol in genFun)) {
-        genFun[toStringTagSymbol] = "GeneratorFunction";
-      }
-    }
-    genFun.prototype = Object.create(Gp);
-    return genFun;
-  };
-
-  // Within the body of any async function, `await x` is transformed to
-  // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
-  // `value instanceof AwaitArgument` to determine if the yielded value is
-  // meant to be awaited. Some may consider the name of this method too
-  // cutesy, but they are curmudgeons.
-  runtime.awrap = function(arg) {
-    return new AwaitArgument(arg);
-  };
-
-  function AwaitArgument(arg) {
-    this.arg = arg;
-  }
-
-  function AsyncIterator(generator) {
-    function invoke(method, arg, resolve, reject) {
-      var record = tryCatch(generator[method], generator, arg);
-      if (record.type === "throw") {
-        reject(record.arg);
-      } else {
-        var result = record.arg;
-        var value = result.value;
-        if (value instanceof AwaitArgument) {
-          return Promise.resolve(value.arg).then(function(value) {
-            invoke("next", value, resolve, reject);
-          }, function(err) {
-            invoke("throw", err, resolve, reject);
-          });
-        }
-
-        return Promise.resolve(value).then(function(unwrapped) {
-          // When a yielded Promise is resolved, its final value becomes
-          // the .value of the Promise<{value,done}> result for the
-          // current iteration. If the Promise is rejected, however, the
-          // result for this iteration will be rejected with the same
-          // reason. Note that rejections of yielded Promises are not
-          // thrown back into the generator function, as is the case
-          // when an awaited Promise is rejected. This difference in
-          // behavior between yield and await is important, because it
-          // allows the consumer to decide what to do with the yielded
-          // rejection (swallow it and continue, manually .throw it back
-          // into the generator, abandon iteration, whatever). With
-          // await, by contrast, there is no opportunity to examine the
-          // rejection reason outside the generator function, so the
-          // only option is to throw it from the await expression, and
-          // let the generator function handle the exception.
-          result.value = unwrapped;
-          resolve(result);
-        }, reject);
-      }
-    }
-
-    if (typeof process === "object" && process.domain) {
-      invoke = process.domain.bind(invoke);
-    }
-
-    var previousPromise;
-
-    function enqueue(method, arg) {
-      function callInvokeWithMethodAndArg() {
-        return new Promise(function(resolve, reject) {
-          invoke(method, arg, resolve, reject);
-        });
-      }
-
-      return previousPromise =
-        // If enqueue has been called before, then we want to wait until
-        // all previous Promises have been resolved before calling invoke,
-        // so that results are always delivered in the correct order. If
-        // enqueue has not been called before, then it is important to
-        // call invoke immediately, without waiting on a callback to fire,
-        // so that the async generator function has the opportunity to do
-        // any necessary setup in a predictable way. This predictability
-        // is why the Promise constructor synchronously invokes its
-        // executor callback, and why async functions synchronously
-        // execute code before the first await. Since we implement simple
-        // async functions in terms of async generators, it is especially
-        // important to get this right, even though it requires care.
-        previousPromise ? previousPromise.then(
-          callInvokeWithMethodAndArg,
-          // Avoid propagating failures to Promises returned by later
-          // invocations of the iterator.
-          callInvokeWithMethodAndArg
-        ) : callInvokeWithMethodAndArg();
-    }
-
-    // Define the unified helper method that is used to implement .next,
-    // .throw, and .return (see defineIteratorMethods).
-    this._invoke = enqueue;
-  }
-
-  defineIteratorMethods(AsyncIterator.prototype);
-
-  // Note that simple async functions are implemented on top of
-  // AsyncIterator objects; they just return a Promise for the value of
-  // the final result produced by the iterator.
-  runtime.async = function(innerFn, outerFn, self, tryLocsList) {
-    var iter = new AsyncIterator(
-      wrap(innerFn, outerFn, self, tryLocsList)
-    );
-
-    return runtime.isGeneratorFunction(outerFn)
-      ? iter // If outerFn is a generator, return the full iterator.
-      : iter.next().then(function(result) {
-          return result.done ? result.value : iter.next();
-        });
-  };
-
-  function makeInvokeMethod(innerFn, self, context) {
-    var state = GenStateSuspendedStart;
-
-    return function invoke(method, arg) {
-      if (state === GenStateExecuting) {
-        throw new Error("Generator is already running");
-      }
-
-      if (state === GenStateCompleted) {
-        if (method === "throw") {
-          throw arg;
-        }
-
-        // Be forgiving, per 25.3.3.3.3 of the spec:
-        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
-        return doneResult();
-      }
-
-      while (true) {
-        var delegate = context.delegate;
-        if (delegate) {
-          if (method === "return" ||
-              (method === "throw" && delegate.iterator[method] === undefined)) {
-            // A return or throw (when the delegate iterator has no throw
-            // method) always terminates the yield* loop.
-            context.delegate = null;
-
-            // If the delegate iterator has a return method, give it a
-            // chance to clean up.
-            var returnMethod = delegate.iterator["return"];
-            if (returnMethod) {
-              var record = tryCatch(returnMethod, delegate.iterator, arg);
-              if (record.type === "throw") {
-                // If the return method threw an exception, let that
-                // exception prevail over the original return or throw.
-                method = "throw";
-                arg = record.arg;
-                continue;
-              }
-            }
-
-            if (method === "return") {
-              // Continue with the outer return, now that the delegate
-              // iterator has been terminated.
-              continue;
-            }
-          }
-
-          var record = tryCatch(
-            delegate.iterator[method],
-            delegate.iterator,
-            arg
-          );
-
-          if (record.type === "throw") {
-            context.delegate = null;
-
-            // Like returning generator.throw(uncaught), but without the
-            // overhead of an extra function call.
-            method = "throw";
-            arg = record.arg;
-            continue;
-          }
-
-          // Delegate generator ran and handled its own exceptions so
-          // regardless of what the method was, we continue as if it is
-          // "next" with an undefined arg.
-          method = "next";
-          arg = undefined;
-
-          var info = record.arg;
-          if (info.done) {
-            context[delegate.resultName] = info.value;
-            context.next = delegate.nextLoc;
-          } else {
-            state = GenStateSuspendedYield;
-            return info;
-          }
-
-          context.delegate = null;
-        }
-
-        if (method === "next") {
-          if (state === GenStateSuspendedYield) {
-            context.sent = arg;
-          } else {
-            context.sent = undefined;
-          }
-
-        } else if (method === "throw") {
-          if (state === GenStateSuspendedStart) {
-            state = GenStateCompleted;
-            throw arg;
-          }
-
-          if (context.dispatchException(arg)) {
-            // If the dispatched exception was caught by a catch block,
-            // then let that catch block handle the exception normally.
-            method = "next";
-            arg = undefined;
-          }
-
-        } else if (method === "return") {
-          context.abrupt("return", arg);
-        }
-
-        state = GenStateExecuting;
-
-        var record = tryCatch(innerFn, self, context);
-        if (record.type === "normal") {
-          // If an exception is thrown from innerFn, we leave state ===
-          // GenStateExecuting and loop back for another invocation.
-          state = context.done
-            ? GenStateCompleted
-            : GenStateSuspendedYield;
-
-          var info = {
-            value: record.arg,
-            done: context.done
-          };
-
-          if (record.arg === ContinueSentinel) {
-            if (context.delegate && method === "next") {
-              // Deliberately forget the last sent value so that we don't
-              // accidentally pass it on to the delegate.
-              arg = undefined;
-            }
-          } else {
-            return info;
-          }
-
-        } else if (record.type === "throw") {
-          state = GenStateCompleted;
-          // Dispatch the exception by looping back around to the
-          // context.dispatchException(arg) call above.
-          method = "throw";
-          arg = record.arg;
-        }
-      }
-    };
-  }
-
-  // Define Generator.prototype.{next,throw,return} in terms of the
-  // unified ._invoke helper method.
-  defineIteratorMethods(Gp);
-
-  Gp[iteratorSymbol] = function() {
-    return this;
-  };
-
-  Gp[toStringTagSymbol] = "Generator";
-
-  Gp.toString = function() {
-    return "[object Generator]";
-  };
-
-  function pushTryEntry(locs) {
-    var entry = { tryLoc: locs[0] };
-
-    if (1 in locs) {
-      entry.catchLoc = locs[1];
-    }
-
-    if (2 in locs) {
-      entry.finallyLoc = locs[2];
-      entry.afterLoc = locs[3];
-    }
-
-    this.tryEntries.push(entry);
-  }
-
-  function resetTryEntry(entry) {
-    var record = entry.completion || {};
-    record.type = "normal";
-    delete record.arg;
-    entry.completion = record;
-  }
-
-  function Context(tryLocsList) {
-    // The root entry object (effectively a try statement without a catch
-    // or a finally block) gives us a place to store values thrown from
-    // locations where there is no enclosing try statement.
-    this.tryEntries = [{ tryLoc: "root" }];
-    tryLocsList.forEach(pushTryEntry, this);
-    this.reset(true);
-  }
-
-  runtime.keys = function(object) {
-    var keys = [];
-    for (var key in object) {
-      keys.push(key);
-    }
-    keys.reverse();
-
-    // Rather than returning an object with a next method, we keep
-    // things simple and return the next function itself.
-    return function next() {
-      while (keys.length) {
-        var key = keys.pop();
-        if (key in object) {
-          next.value = key;
-          next.done = false;
-          return next;
-        }
-      }
-
-      // To avoid creating an additional object, we just hang the .value
-      // and .done properties off the next function object itself. This
-      // also ensures that the minifier will not anonymize the function.
-      next.done = true;
-      return next;
-    };
-  };
-
-  function values(iterable) {
-    if (iterable) {
-      var iteratorMethod = iterable[iteratorSymbol];
-      if (iteratorMethod) {
-        return iteratorMethod.call(iterable);
-      }
-
-      if (typeof iterable.next === "function") {
-        return iterable;
-      }
-
-      if (!isNaN(iterable.length)) {
-        var i = -1, next = function next() {
-          while (++i < iterable.length) {
-            if (hasOwn.call(iterable, i)) {
-              next.value = iterable[i];
-              next.done = false;
-              return next;
-            }
-          }
-
-          next.value = undefined;
-          next.done = true;
-
-          return next;
-        };
-
-        return next.next = next;
-      }
-    }
-
-    // Return an iterator with no values.
-    return { next: doneResult };
-  }
-  runtime.values = values;
-
-  function doneResult() {
-    return { value: undefined, done: true };
-  }
-
-  Context.prototype = {
-    constructor: Context,
-
-    reset: function(skipTempReset) {
-      this.prev = 0;
-      this.next = 0;
-      this.sent = undefined;
-      this.done = false;
-      this.delegate = null;
-
-      this.tryEntries.forEach(resetTryEntry);
-
-      if (!skipTempReset) {
-        for (var name in this) {
-          // Not sure about the optimal order of these conditions:
-          if (name.charAt(0) === "t" &&
-              hasOwn.call(this, name) &&
-              !isNaN(+name.slice(1))) {
-            this[name] = undefined;
-          }
-        }
-      }
-    },
-
-    stop: function() {
-      this.done = true;
-
-      var rootEntry = this.tryEntries[0];
-      var rootRecord = rootEntry.completion;
-      if (rootRecord.type === "throw") {
-        throw rootRecord.arg;
-      }
-
-      return this.rval;
-    },
-
-    dispatchException: function(exception) {
-      if (this.done) {
-        throw exception;
-      }
-
-      var context = this;
-      function handle(loc, caught) {
-        record.type = "throw";
-        record.arg = exception;
-        context.next = loc;
-        return !!caught;
-      }
-
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        var record = entry.completion;
-
-        if (entry.tryLoc === "root") {
-          // Exception thrown outside of any try block that could handle
-          // it, so set the completion value of the entire function to
-          // throw the exception.
-          return handle("end");
-        }
-
-        if (entry.tryLoc <= this.prev) {
-          var hasCatch = hasOwn.call(entry, "catchLoc");
-          var hasFinally = hasOwn.call(entry, "finallyLoc");
-
-          if (hasCatch && hasFinally) {
-            if (this.prev < entry.catchLoc) {
-              return handle(entry.catchLoc, true);
-            } else if (this.prev < entry.finallyLoc) {
-              return handle(entry.finallyLoc);
-            }
-
-          } else if (hasCatch) {
-            if (this.prev < entry.catchLoc) {
-              return handle(entry.catchLoc, true);
-            }
-
-          } else if (hasFinally) {
-            if (this.prev < entry.finallyLoc) {
-              return handle(entry.finallyLoc);
-            }
-
-          } else {
-            throw new Error("try statement without catch or finally");
-          }
-        }
-      }
-    },
-
-    abrupt: function(type, arg) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.tryLoc <= this.prev &&
-            hasOwn.call(entry, "finallyLoc") &&
-            this.prev < entry.finallyLoc) {
-          var finallyEntry = entry;
-          break;
-        }
-      }
-
-      if (finallyEntry &&
-          (type === "break" ||
-           type === "continue") &&
-          finallyEntry.tryLoc <= arg &&
-          arg <= finallyEntry.finallyLoc) {
-        // Ignore the finally entry if control is not jumping to a
-        // location outside the try/catch block.
-        finallyEntry = null;
-      }
-
-      var record = finallyEntry ? finallyEntry.completion : {};
-      record.type = type;
-      record.arg = arg;
-
-      if (finallyEntry) {
-        this.next = finallyEntry.finallyLoc;
-      } else {
-        this.complete(record);
-      }
-
-      return ContinueSentinel;
-    },
-
-    complete: function(record, afterLoc) {
-      if (record.type === "throw") {
-        throw record.arg;
-      }
-
-      if (record.type === "break" ||
-          record.type === "continue") {
-        this.next = record.arg;
-      } else if (record.type === "return") {
-        this.rval = record.arg;
-        this.next = "end";
-      } else if (record.type === "normal" && afterLoc) {
-        this.next = afterLoc;
-      }
-    },
-
-    finish: function(finallyLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.finallyLoc === finallyLoc) {
-          this.complete(entry.completion, entry.afterLoc);
-          resetTryEntry(entry);
-          return ContinueSentinel;
-        }
-      }
-    },
-
-    "catch": function(tryLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.tryLoc === tryLoc) {
-          var record = entry.completion;
-          if (record.type === "throw") {
-            var thrown = record.arg;
-            resetTryEntry(entry);
-          }
-          return thrown;
-        }
-      }
-
-      // The context.catch method must only be called with a location
-      // argument that corresponds to a known catch block.
-      throw new Error("illegal catch attempt");
-    },
-
-    delegateYield: function(iterable, resultName, nextLoc) {
-      this.delegate = {
-        iterator: values(iterable),
-        resultName: resultName,
-        nextLoc: nextLoc
-      };
-
-      return ContinueSentinel;
-    }
-  };
-})(
-  // Among the various tricks for obtaining a reference to the global
-  // object, this seems to be the most reliable technique that does not
-  // use indirect eval (which violates Content Security Policy).
-  typeof global === "object" ? global :
-  typeof window === "object" ? window :
-  typeof self === "object" ? self : this
-);
-
-}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-
-},{"_process":1}],3:[function(require,module,exports){
 /* @flow */
 'use strict'
 
@@ -830,8 +64,12 @@ module.exports = function (Y/* :any */) {
       return this.y.db.stopGarbageCollector()
     }
     setUserId (userId) {
-      this.userId = userId
-      return this.y.db.setUserId(userId)
+      if (this.userId == null) {
+        this.userId = userId
+        return this.y.db.setUserId(userId)
+      } else {
+        return null
+      }
     }
     onUserEvent (f) {
       this.userEventListeners.push(f)
@@ -1132,7 +370,7 @@ module.exports = function (Y/* :any */) {
   Y.AbstractConnector = AbstractConnector
 }
 
-},{}],4:[function(require,module,exports){
+},{}],2:[function(require,module,exports){
 /* global getRandom, async */
 'use strict'
 
@@ -1274,7 +512,7 @@ module.exports = function (Y) {
   Y.Test = Test
 }
 
-},{}],5:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 /* @flow */
 'use strict'
 
@@ -1463,10 +701,13 @@ module.exports = function (Y /* :any */) {
       }
     }
     getNextOpId () {
-      if (this.userId == null) {
+      if (this._nextUserId != null) {
+        return this._nextUserId
+      } else if (this.userId == null) {
         throw new Error('OperationStore not yet initialized!')
+      } else {
+        return [this.userId, this.opClock++]
       }
-      return [this.userId, this.opClock++]
     }
     /*
       Apply a list of operations.
@@ -1664,7 +905,7 @@ module.exports = function (Y /* :any */) {
       }
     }
     requestTransaction (makeGen/* :any */, callImmediately) {
-      if (callImmediately) {
+      if (true || callImmediately) { // TODO: decide whether this is ok or not..
         this.waitingTransactions.push(makeGen)
         if (!this.transactionInProgress) {
           this.transactionInProgress = true
@@ -1685,7 +926,7 @@ module.exports = function (Y /* :any */) {
   Y.AbstractDatabase = AbstractDatabase
 }
 
-},{}],6:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 /* @flow */
 'use strict'
 
@@ -1925,6 +1166,14 @@ module.exports = function (Y/* :any */) {
         id: this.os.getNextOpId()
       }
       */
+      create: function (id) {
+        return {
+          start: null,
+          end: null,
+          struct: 'List',
+          id: id
+        }
+      },
       encode: function (op) {
         return {
           struct: 'List',
@@ -1991,6 +1240,13 @@ module.exports = function (Y/* :any */) {
           id: this.os.getNextOpId()
         }
       */
+      create: function (id) {
+        return {
+          id: id,
+          map: {},
+          struct: 'Map'
+        }
+      },
       encode: function (op) {
         return {
           struct: 'Map',
@@ -2024,7 +1280,7 @@ module.exports = function (Y/* :any */) {
   Y.Struct = Struct
 }
 
-},{}],7:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 /* @flow */
 'use strict'
 
@@ -2118,13 +1374,21 @@ module.exports = function (Y/* :any */) {
       var sid = JSON.stringify(id)
       var t = this.store.initializedTypes[sid]
       if (t == null) {
-        var op = yield* this.getOperation(id)
+        var op/* :MapStruct | ListStruct */ = yield* this.getOperation(id)
         if (op != null) {
           t = yield* Y[op.type].initType.call(this, this.store, op)
           this.store.initializedTypes[sid] = t
         }
       }
       return t
+    }
+    * createType (typedefinition) {
+      var structname = typedefinition.struct
+      var id = this.store.getNextOpId()
+      var op = Y.Struct[structname].create(id)
+      op.type = typedefinition.name
+      yield* this.applyCreatedOperations([op])
+      return yield* this.getType(id)
     }
     /*
       Apply operations that this user created (no remote ones!)
@@ -2136,9 +1400,11 @@ module.exports = function (Y/* :any */) {
       for (var i = 0; i < ops.length; i++) {
         var op = ops[i]
         yield* this.store.tryExecute.call(this, op)
-        send.push(Y.Struct[op.struct].encode(op))
+        if (op.id == null || op.id[0] !== '_') {
+          send.push(Y.Struct[op.struct].encode(op))
+        }
       }
-      if (!this.store.y.connector.isDisconnected()) { // TODO: && !this.store.forwardAppliedOperations (but then i don't send delete ops)
+      if (!this.store.y.connector.isDisconnected() && send.length > 0) { // TODO: && !this.store.forwardAppliedOperations (but then i don't send delete ops)
         // is connected, and this is not going to be send in addOperation
         this.store.y.connector.broadcast({
           type: 'update',
@@ -2425,7 +1691,7 @@ module.exports = function (Y/* :any */) {
 
         if (o.parent != null) {
           // remove gc'd op from parent, if it exists
-          var parent = yield* this.getOperation(o.parent)
+          var parent /* MapOperation */ = yield* this.getOperation(o.parent)
           var setParent = false // whether to save parent to the os
           if (o.parentSub != null) {
             if (Y.utils.compareIds(parent.map[o.parentSub], o.id)) {
@@ -2577,7 +1843,7 @@ module.exports = function (Y/* :any */) {
     }
     * addOperation (op) {
       yield* this.os.put(op)
-      if (!this.store.y.connector.isDisconnected() && this.store.forwardAppliedOperations) {
+      if (!this.store.y.connector.isDisconnected() && this.store.forwardAppliedOperations && op.id[0] !== '_') {
         // is connected, and this is not going to be send in addOperation
         this.store.y.connector.broadcast({
           type: 'update',
@@ -2585,8 +1851,24 @@ module.exports = function (Y/* :any */) {
         })
       }
     }
-    * getOperation (id) {
-      return yield* this.os.find(id)
+    * getOperation (id/* :any */)/* :Transaction<any> */ {
+      var o = yield* this.os.find(id)
+      if (o != null || id[0] !== '_') {
+        return o
+      } else {
+        // need to generate this operation
+        if (this.store._nextUserId == null) {
+          var struct = id[1].split('_')[0]
+          // this.store._nextUserId = id
+          var op = Y.Struct[struct].create(id)
+          yield* this.setOperation(op)
+          // delete this.store._nextUserId
+          return op
+        } else {
+          // Can only generate one operation at a time
+          return null
+        }
+      }
     }
     * removeOperation (id) {
       yield* this.os.delete(id)
@@ -2716,323 +1998,7 @@ module.exports = function (Y/* :any */) {
   Y.Transaction = TransactionInterface
 }
 
-},{}],8:[function(require,module,exports){
-/* @flow */
-'use strict'
-
-module.exports = function (Y /* :any */) {
-  class YMap {
-    /* ::
-    _model: Id;
-    os: Y.AbstractDatabase;
-    map: Object;
-    contents: any;
-    opContents: Object;
-    eventHandler: Function;
-    */
-    constructor (os, model, contents, opContents) {
-      this._model = model.id
-      this.os = os
-      this.map = Y.utils.copyObject(model.map)
-      this.contents = contents
-      this.opContents = opContents
-      this.eventHandler = new Y.utils.EventHandler(ops => {
-        var userEvents = []
-        for (var i in ops) {
-          var op = ops[i]
-          var oldValue
-          // key is the name to use to access (op)content
-          var key = op.struct === 'Delete' ? op.key : op.parentSub
-
-          // compute oldValue
-          if (this.opContents[key] != null) {
-            let prevType = this.opContents[key]
-            oldValue = () => {// eslint-disable-line
-              return new Promise((resolve) => {
-                this.os.requestTransaction(function *() {// eslint-disable-line
-                  var type = yield* this.getType(prevType)
-                  resolve(type)
-                })
-              })
-            }
-          } else {
-            oldValue = this.contents[key]
-          }
-          // compute op event
-          if (op.struct === 'Insert') {
-            if (op.left === null) {
-              if (op.opContent != null) {
-                delete this.contents[key]
-                if (op.deleted) {
-                  delete this.opContents[key]
-                } else {
-                  this.opContents[key] = op.opContent
-                }
-              } else {
-                delete this.opContents[key]
-                if (op.deleted) {
-                  delete this.contents[key]
-                } else {
-                  this.contents[key] = op.content
-                }
-              }
-              this.map[key] = op.id
-              var insertEvent
-              if (oldValue === undefined) {
-                insertEvent = {
-                  name: key,
-                  object: this,
-                  type: 'add'
-                }
-              } else {
-                insertEvent = {
-                  name: key,
-                  object: this,
-                  oldValue: oldValue,
-                  type: 'update'
-                }
-              }
-              userEvents.push(insertEvent)
-            }
-          } else if (op.struct === 'Delete') {
-            if (Y.utils.compareIds(this.map[key], op.target)) {
-              delete this.opContents[key]
-              delete this.contents[key]
-              var deleteEvent = {
-                name: key,
-                object: this,
-                oldValue: oldValue,
-                type: 'delete'
-              }
-              userEvents.push(deleteEvent)
-            }
-          } else {
-            throw new Error('Unexpected Operation!')
-          }
-        }
-        this.eventHandler.callEventListeners(userEvents)
-      })
-    }
-    get (key) {
-      // return property.
-      // if property does not exist, return null
-      // if property is a type, return a promise
-      if (key == null) {
-        throw new Error('You must specify key!')
-      }
-      if (this.opContents[key] == null) {
-        return this.contents[key]
-      } else {
-        return new Promise((resolve) => {
-          var oid = this.opContents[key]
-          this.os.requestTransaction(function *() {
-            var type = yield* this.getType(oid)
-            resolve(type)
-          })
-        })
-      }
-    }
-    /*
-      If there is a primitive (not a custom type), then return it.
-      Returns all primitive values, if propertyName is specified!
-      Note: modifying the return value could result in inconsistencies!
-        -- so make sure to copy it first!
-    */
-    getPrimitive (key) {
-      if (key == null) {
-        return Y.utils.copyObject(this.contents)
-      } else {
-        return this.contents[key]
-      }
-    }
-    delete (key) {
-      var right = this.map[key]
-      if (right != null) {
-        var del = {
-          target: right,
-          struct: 'Delete'
-        }
-        var eventHandler = this.eventHandler
-        var modDel = Y.utils.copyObject(del)
-        modDel.key = key
-        eventHandler.awaitAndPrematurelyCall([modDel])
-        this.os.requestTransaction(function *() {
-          yield* this.applyCreatedOperations([del])
-          eventHandler.awaitedDeletes(1)
-        })
-      }
-    }
-    set (key, value) {
-      // set property.
-      // if property is a type, return a promise
-      // if not, apply immediately on this type an call event
-
-      var right = this.map[key] || null
-      var insert /* :any */ = {
-        left: null,
-        right: right,
-        origin: null,
-        parent: this._model,
-        parentSub: key,
-        struct: 'Insert'
-      }
-      return new Promise((resolve) => {
-        if (value instanceof Y.utils.CustomType) {
-          // construct a new type
-          this.os.requestTransaction(function *() {
-            var typeid = yield* value.createType.call(this)
-            var type = yield* this.getType(typeid)
-            insert.opContent = typeid
-            insert.id = this.store.getNextOpId()
-            yield* this.applyCreatedOperations([insert])
-            resolve(type)
-          })
-        } else {
-          insert.content = value
-          insert.id = this.os.getNextOpId()
-          var eventHandler = this.eventHandler
-          eventHandler.awaitAndPrematurelyCall([insert])
-          this.os.requestTransaction(function *() {
-            yield* this.applyCreatedOperations([insert])
-            eventHandler.awaitedInserts(1)
-          })
-          resolve(value)
-        }
-      })
-    }
-    observe (f) {
-      this.eventHandler.addEventListener(f)
-    }
-    unobserve (f) {
-      this.eventHandler.removeEventListener(f)
-    }
-    /*
-      Observe a path.
-
-      E.g.
-      ```
-      o.set('textarea', Y.TextBind)
-      o.observePath(['textarea'], function(t){
-        // is called whenever textarea is replaced
-        t.bind(textarea)
-      })
-
-      returns a Promise that contains a function that removes the observer from the path.
-    */
-    observePath (path, f) {
-      var self = this
-      function observeProperty (events) {
-        // call f whenever path changes
-        for (var i = 0; i < events.length; i++) {
-          var event = events[i]
-          if (event.name === propertyName) {
-            // call this also for delete events!
-            var property = self.get(propertyName)
-            if (property instanceof Promise) {
-              property.then(f)
-            } else {
-              f(property)
-            }
-          }
-        }
-      }
-
-      if (path.length < 1) {
-        throw new Error('Path must contain at least one element!')
-      } else if (path.length === 1) {
-        var propertyName = path[0]
-        var property = self.get(propertyName)
-        if (property instanceof Promise) {
-          property.then(f)
-        } else {
-          f(property)
-        }
-        this.observe(observeProperty)
-        return Promise.resolve(function () {
-          self.unobserve(f)
-        })
-      } else {
-        var deleteChildObservers
-        var resetObserverPath = function () {
-          var promise = self.get(path[0])
-          if (!promise instanceof Promise) {
-            // its either not defined or a primitive value
-            promise = self.set(path[0], Y.Map)
-          }
-          return promise.then(function (map) {
-            return map.observePath(path.slice(1), f)
-          }).then(function (_deleteChildObservers) {
-            // update deleteChildObservers
-            deleteChildObservers = _deleteChildObservers
-            return Promise.resolve() // Promise does not return anything
-          })
-        }
-        var observer = function (events) {
-          for (var e in events) {
-            var event = events[e]
-            if (event.name === path[0]) {
-              if (deleteChildObservers != null) {
-                deleteChildObservers()
-              }
-              if (event.type === 'add' || event.type === 'update') {
-                resetObserverPath()
-              }
-              // TODO: what about the delete events?
-            }
-          }
-        }
-        self.observe(observer)
-        return resetObserverPath().then(
-          // this promise contains a function that deletes all the child observers
-          // and how to unobserve the observe from this object
-          new Promise.resolve(function () { // eslint-disable-line
-            if (deleteChildObservers != null) {
-              deleteChildObservers()
-            }
-            self.unobserve(observer)
-          })
-        )
-      }
-    }
-    * _changed (transaction, op) {
-      if (op.struct === 'Delete') {
-        var target = yield* transaction.getOperation(op.target)
-        op.key = target.parentSub
-      }
-      this.eventHandler.receivedOp(op)
-    }
-  }
-  Y.Map = new Y.utils.CustomType({
-    class: YMap,
-    createType: function * YMapCreator () {
-      var modelid = this.store.getNextOpId()
-      var model = {
-        map: {},
-        struct: 'Map',
-        type: 'Map',
-        id: modelid
-      }
-      yield* this.applyCreatedOperations([model])
-      return modelid
-    },
-    initType: function * YMapInitializer (os, model) {
-      var contents = {}
-      var opContents = {}
-      var map = model.map
-      for (var name in map) {
-        var op = yield* this.getOperation(map[name])
-        if (op.opContent != null) {
-          opContents[name] = op.opContent
-        } else {
-          contents[name] = op.content
-        }
-      }
-      return new YMap(os, model, contents, opContents)
-    }
-  })
-}
-
-},{}],9:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 /* @flow */
 'use strict'
 
@@ -3195,8 +2161,8 @@ module.exports = function (Y /* : any*/) {
     A wrapper for the definition of a custom type.
     Every custom type must have three properties:
 
-    * createType
-      - Defines the model of a newly created custom type and returns the type
+    * struct
+      - Structname of this type
     * initType
       - Given a model, creates a custom type
     * class
@@ -3204,20 +2170,23 @@ module.exports = function (Y /* : any*/) {
   */
   class CustomType { // eslint-disable-line
     /* ::
-    createType: any;
+    struct: any;
     initType: any;
     class: Function;
+    name: String;
     */
     constructor (def) {
-      if (def.createType == null ||
+      if (def.struct == null ||
         def.initType == null ||
-        def.class == null
+        def.class == null ||
+        def.name == null
       ) {
         throw new Error('Custom type was not initialized correctly!')
       }
-      this.createType = def.createType
+      this.struct = def.struct
       this.initType = def.initType
       this.class = def.class
+      this.name = def.name
     }
   }
   Y.utils.CustomType = CustomType
@@ -3259,7 +2228,7 @@ module.exports = function (Y /* : any*/) {
   Y.utils.compareIds = compareIds
 }
 
-},{}],10:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 /* @flow */
 'use strict'
 
@@ -3273,6 +2242,7 @@ require('./Connectors/Test.js')(Y)
 var requiringModules = {}
 
 module.exports = Y
+Y.requiringModules = requiringModules
 
 Y.extend = function (name, value) {
   Y[name] = value
@@ -3284,29 +2254,29 @@ Y.extend = function (name, value) {
 
 Y.requestModules = requestModules
 function requestModules (modules) {
+  // determine if this module was compiled for es5 or es6 (y.js vs. y.es6)
+  // if Insert.execute is a Function, then it isnt a generator..
+  // then load the es5(.js) files..
+  var extention = typeof regeneratorRuntime !== 'undefined' ? '.js' : '.es6'
   var promises = []
   for (var i = 0; i < modules.length; i++) {
     var modulename = 'y-' + modules[i].toLowerCase()
     if (Y[modules[i]] == null) {
       if (requiringModules[modules[i]] == null) {
-        try {
-          require(modulename)(Y)
-        } catch (e) {
-          // module does not exist
-          if (typeof window !== 'undefined') {
-            var imported = document.createElement('script')
-            imported.src = Y.sourceDir + '/' + modulename + '/' + modulename + '.js'
-            document.head.appendChild(imported)
+        // module does not exist
+        if (typeof window !== 'undefined' && window.Y !== 'undefined') {
+          var imported = document.createElement('script')
+          imported.src = Y.sourceDir + '/' + modulename + '/' + modulename + extention
+          document.head.appendChild(imported)
 
-            let requireModule = {}
-            requiringModules[modules[i]] = requireModule
-            requireModule.promise = new Promise(function (resolve) {
-              requireModule.resolve = resolve
-            })
-            promises.push(requireModule.promise)
-          } else {
-            throw e
-          }
+          let requireModule = {}
+          requiringModules[modules[i]] = requireModule
+          requireModule.promise = new Promise(function (resolve) {
+            requireModule.resolve = resolve
+          })
+          promises.push(requireModule.promise)
+        } else {
+          require(modulename)(Y)
         }
       } else {
         promises.push(requiringModules[modules[i]].promise)
@@ -3315,8 +2285,6 @@ function requestModules (modules) {
   }
   return Promise.all(promises)
 }
-
-require('./Types/Map.js')(Y)
 
 /* ::
 type MemoryOptions = {
@@ -3338,19 +2306,21 @@ type WebsocketsClientOptions = {
 }
 type ConnectionOptions = WebRTCOptions | WebsocketsClientOptions
 
-type TypesOptions = Array<'array'|'map'|'text'>
-
 type YOptions = {
   connector: ConnectionOptions,
   db: DbOptions,
-  types: TypesOptions,
-  sourceDir: string
+  types: Array<TypeName>,
+  sourceDir: string,
+  share: {[key: string]: TypeName}
 }
 */
 
 function Y (opts/* :YOptions */) /* :Promise<YConfig> */ {
   opts.types = opts.types != null ? opts.types : []
   var modules = [opts.db.name, opts.connector.name].concat(opts.types)
+  for (var name in opts.share) {
+    modules.push(opts.share[name])
+  }
   Y.sourceDir = opts.sourceDir
   return Y.requestModules(modules).then(function () {
     return new Promise(function (resolve) {
@@ -3367,24 +2337,27 @@ class YConfig {
   /* ::
   db: Y.AbstractDatabase;
   connector: Y.AbstractConnector;
+  share: {[key: string]: any};
   */
   constructor (opts, callback) {
     this.db = new Y[opts.db.name](this, opts.db)
     this.connector = new Y[opts.connector.name](this, opts.connector)
+    var share = {}
+    this.share = share
     this.db.requestTransaction(function * requestTransaction () {
-      // create initial Map type
-      var model = {
-        id: ['_', 0],
-        struct: 'Map',
-        type: 'Map',
-        map: {}
+      // create shared object
+      for (var propertyname in opts.share) {
+        var typename = opts.share[propertyname]
+        var id = ['_', Y[typename].struct + '_' + propertyname]
+        var op = yield* this.getOperation(id)
+        if (op.type !== typename) {
+          // not already in the db
+          op.type = typename
+          yield* this.setOperation(op)
+        }
+        share[propertyname] = yield* this.getType(id)
       }
-      yield* this.store.tryExecute.call(this, model)
-      var root = yield* this.getType(model.id)
-      this.store.y.root = root
-      setTimeout(function () {
-        callback()
-      }, 0)
+      setTimeout(callback, 0)
     })
   }
   isConnected () {
@@ -3408,5 +2381,5 @@ if (typeof window !== 'undefined') {
   window.Y = Y
 }
 
-},{"./Connector.js":3,"./Connectors/Test.js":4,"./Database.js":5,"./Struct.js":6,"./Transaction.js":7,"./Types/Map.js":8,"./Utils.js":9}]},{},[2,10])
+},{"./Connector.js":1,"./Connectors/Test.js":2,"./Database.js":3,"./Struct.js":4,"./Transaction.js":5,"./Utils.js":6}]},{},[7])
 

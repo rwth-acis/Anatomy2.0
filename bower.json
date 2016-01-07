@@ -7,9 +7,9 @@
   "license": "",
   "ignore": [],
   "dependencies": {
-    "yjs": "y-js/yjs#~0.6.40",
-    "y-memory": "y-js/y-memory#~0.6.2",
-    "y-websockets-client": "y-js/y-websockets-client#~0.6.2",
+    "yjs": "~0.7.2",
+    "y-memory": "~0.6.2",
+    "y-websockets-client": "~0.7.2",
     "seiyria-bootstrap-slider": "~5.2.6",
     "x3dom": "~1.7.0",
     "jasny-bootstrap": "~3.1.3",
@@ -18,7 +18,8 @@
     "jquery-form": "~3.46.0",
     "parsleyjs": "~2.1.3",
     "bootstrap-switch": "~3.3.2",
-    "jsrsasign": "~5.0.5"
+    "jsrsasign": "~5.0.5",
+    "y-map": "~0.7.1"
   },
   "description": ""
 }

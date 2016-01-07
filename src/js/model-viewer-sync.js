@@ -46,16 +46,17 @@ modelViewerSync.init = function () {
           },
           connector: {
             name: 'websockets-client',
-            room: 'Anatomy2.0-role-v1.0-'+URI().query(true).rolespace,
-            types: ['Array', 'Text'],
+            room: 'Anatomy2.0-role-v1.1.0-'+URI().query(true).rolespace,
           },
-         sourceDir: location.pathname + '/../../external'
-        }).then(function (yconfig) {
-            modelViewerSync.yconfig = yconfig
-            modelViewerSync.y = yconfig.root
+         sourceDir: location.pathname + '/../../external',
+         share: {
+             modelViewer: 'Map'
+         }
+        }).then(function (y) {
+            modelViewerSync.y = y
 
             // for debugging
-            window.y = modelViewerSync.y
+            window.y = y
             
             // catching errors because else Y-js would eat them
             try { modelViewerSync.onYLoad.forEach(function(callback){callback()}) }
@@ -142,7 +143,7 @@ modelViewerSync.init = function () {
                 return
             }
 
-            receivedView = modelViewerSync.y.get('view_matrix')
+            receivedView = modelViewerSync.y.share.modelViewer.get('view_matrix')
 
             if (receivedView == null) { return }
 
@@ -153,7 +154,7 @@ modelViewerSync.init = function () {
             modelViewerSync.chairmanId = receivedView.peerId
         }
         
-        modelViewerSync.y.observePath(
+        modelViewerSync.y.share.modelViewer.observePath(
                 ['view_matrix']
                 , modelViewerSync.intervalBarrier(modelViewerSync.remoteViewChanged, modelViewerSync.receiveInterval)
         )
@@ -170,7 +171,7 @@ modelViewerSync.init = function () {
 
             var currentView = x3dExtensions.getView(modelViewerSync.x3dRoot.runtime)
             currentView.peerId = modelViewerSync.localId
-            modelViewerSync.y.set('view_matrix', currentView)
+            modelViewerSync.y.share.modelViewer.set('view_matrix', currentView)
         }
         
         $('#viewport')[0].addEventListener(
@@ -208,12 +209,12 @@ modelViewerSync.init = function () {
                     peerId : modelViewerSync.localId,
                     modeEnabled : viewerToolbar.lecturerModeViewModel.modeEnabled()
                 }
-                modelViewerSync.y.set('lecturer_mode', yObj)
+                modelViewerSync.y.share.modelViewer.set('lecturer_mode', yObj)
             } )
 
         // lecturer-mode: remote → local
-        modelViewerSync.y.observePath(['lecturer_mode'], function (events) {
-            var yObj = modelViewerSync.y.get('lecturer_mode')
+        modelViewerSync.y.share.modelViewer.observePath(['lecturer_mode'], function (events) {
+            var yObj = modelViewerSync.y.share.modelViewer.get('lecturer_mode')
             if (yObj) {
                 // avoid echo
                 subscription.turnOff()
@@ -228,7 +229,7 @@ modelViewerSync.init = function () {
     
     //////// viewMode sync
     
-    /*	modelViewerSync.y.observePath(['view_mode'], function (events) {
+    /*	modelViewerSync.y.share.modelViewer.observePath(['view_mode'], function (events) {
             viewerToolbar.setViewMode(y.get('view_mode'))
         })
     */
@@ -245,14 +246,14 @@ modelViewerSync.init = function () {
             function (newValue) {
                 if (!viewerToolbar.isSynchronized()) { return }
                 if (viewerToolbar.lecturerModeViewModel.modeEnabled() && !viewerToolbar.lecturerModeViewModel.isLecturer()) { return }
-                modelViewerSync.y.set('selected_model', newValue) 
+                modelViewerSync.y.share.modelViewer.set('selected_model', newValue) 
             })
 
         // selected model: remote → local
         modelViewerSync.remoteSelectedModelChange = function (events) {
                 if (!viewerToolbar.isSynchronized()) { return }
 
-                var remoteModel = modelViewerSync.y.get('selected_model')
+                var remoteModel = modelViewerSync.y.share.modelViewer.get('selected_model')
                 // undefined value
                 if (!remoteModel) { return }
                 // model already selected
@@ -268,7 +269,7 @@ modelViewerSync.init = function () {
                 window.location.assign(url.href())
                 */
             }
-        modelViewerSync.y.observePath(['selected_model'], modelViewerSync.remoteSelectedModelChange)
+        modelViewerSync.y.share.modelViewer.observePath(['selected_model'], modelViewerSync.remoteSelectedModelChange)
     })
 }
 
