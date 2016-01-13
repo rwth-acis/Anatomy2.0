@@ -544,7 +544,7 @@ annotationContentBox.show = function(pos2d) {
  */
 annotationContentBox.showForWorldPos = function(worldPos) {
   
-  var runtime = document.getElementById("viewer_object").runtime;
+  var runtime = $("#viewer_object")[0].runtime;
   
   // x3dom can calculate the 2D position on the screen based on a 3D point
   var pos2d = runtime.calcPagePos(worldPos[0], worldPos[1], worldPos[2]);

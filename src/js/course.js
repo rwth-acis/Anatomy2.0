@@ -17,20 +17,20 @@
  *  
  */
 
-document.addEventListener("DOMContentLoaded", function() {
+$(document).ready(function() {
   
-  document.getElementById("btn-delete").addEventListener("click", function() {
+  $("#btn-delete").on("click", function() {
     
     var id = URI().query(true).id;  
     
     window.location = "course_delete.php?id="+id;
     
-  }, false);
+  });
   
   
-  document.getElementById("enter-course-a").addEventListener("click", function() {
+  $("#enter-course-a").on("click", function() {
     
-    var rolespace = document.getElementById("enter-course-a").dataset.rolespace;
+    var rolespace = $("#enter-course-a")[0].dataset.rolespace;
     
     if (rolespace !== undefined && rolespace !== "") {
       window.open(tools.ROLE_SANDBOX_SPACES + rolespace);

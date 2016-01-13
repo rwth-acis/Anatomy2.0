@@ -174,7 +174,7 @@ modelViewerSync.init = function () {
             modelViewerSync.y.share.modelViewer.set('view_matrix', currentView)
         }
         
-        $('#viewport')[0].addEventListener(
+        $('#viewport').on(
                 'viewpointChanged'
                 , modelViewerSync.intervalBarrier(modelViewerSync.localViewChanged, modelViewerSync.sendInterval)
         )

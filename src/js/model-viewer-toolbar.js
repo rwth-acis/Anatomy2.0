@@ -66,7 +66,7 @@ $(document).ready(function () {
         viewerToolbar.isSynchronized( ! viewerToolbar.isSynchronized() )
     })
     $('#btnResetview').on('click', function () {
-        document.getElementById('viewer_object').runtime.showAll()
+        $('#viewer_object')[0].runtime.showAll()
     })
     viewerToolbar.modelId.subscribe( function(newValue) {
         
@@ -115,7 +115,7 @@ $(document).ready(function () {
     modelViewer.addEventListener('load', function () {
         
         // init annotations, should go to other file
-        document.getElementById('x3dInline').addEventListener('click', function (event) {
+        $('#x3dInline').on('click', function (event) {
             if (viewerToolbar.annotate) {
                 var pos = new x3dom.fields.SFVec3f(event.worldX, event.worldY, event.worldZ);
                 var norm = new x3dom.fields.SFVec3f(event.normalX, event.normalY, event.normalZ);

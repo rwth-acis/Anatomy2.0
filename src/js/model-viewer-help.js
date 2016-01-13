@@ -107,7 +107,7 @@ $(document).ready(function(){
   $("#viewModeSelect").on("change", function() {
     var currentMode = this.value;
     //...activate new mode...
-    document.getElementById('navType').setAttribute("type", currentMode);
+    $('#navType').attr("type", currentMode);
 
     //...and refresh hints
     $.each(modelHelp.modes, function(index, value) {  
@@ -126,8 +126,8 @@ $(document).ready(function(){
         if(value.shortcut[i] === key)
         {
           var num = modelHelp.getIndex(value.option);
-          document.getElementById('viewModeSelect').selectedIndex = num;
-          document.getElementById('navType').setAttribute("type", value.option);
+          $('#viewModeSelect').val(num);
+          $('#navType').attr("type", value.option);
           modelHelp.showModeDetails(value);
         }
       }

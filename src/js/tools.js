@@ -25,9 +25,9 @@ tools.ROLE_SANDBOX_SPACES = "http://role-sandbox.eu/spaces/";
 // Adds a click listener to create-room-btn
 tools.addCreateCourseRoomListener = function() {
   
-  document.getElementById("create-room-btn").addEventListener("click", function() {
+  $("#create-room-btn").on("click", function() {
   
-    var courseRoom = document.getElementById("targetRole").value;
+    var courseRoom = $("#targetRole").val();
     
     // Open the URL given in the "targetRole" input field in a new tab
     window.open(tools.ROLE_SANDBOX_SPACES + courseRoom, '_blank');
@@ -40,19 +40,16 @@ tools.addCourseNameInputListener = function() {
   
   // When user leaves course name input field, automatically create a suggestion
   // for the course room name / course room URL
-  document.getElementById("targetName").addEventListener("blur", function(event) {
-    
-    var courseRoomInput = document.getElementById("targetRole");
-    
-    var courseRoom = courseRoomInput.value;
+  $("#targetName").on("blur", function(event) {
+    var courseRoom = $("#targetRole").val();
     
     // Update ROLE Space URL in course room input only if it is empty
     if (courseRoom === undefined || courseRoom === "") {
    
-      var courseRoom = tools.getCourseRoomName(document.getElementById("targetName").value);
+      var courseRoom = $("#targetName").val().toLowerCase().replace(/[^a-z0-9]+/g, "")
       
       // Update the course room input field
-      courseRoomInput.value = courseRoom;
+      $("#targetRole").val( courseRoom )
     }
   });
 };

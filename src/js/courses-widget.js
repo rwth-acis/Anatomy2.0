@@ -42,4 +42,4 @@ function initCourseOverviewWidget(){
   console.log("overview-widget: initialized widget");
 }
 //execute init when page is loaded
-document.addEventListener('DOMContentLoaded', initCourseOverviewWidget, false);
+$(document).ready(initCourseOverviewWidget);

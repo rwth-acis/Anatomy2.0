@@ -31,22 +31,22 @@ editCourse.endBlackout = function() {
   }
   editCourse.selectedModels = {};
   
-  document.getElementById("blackout").style.display = "none";
-  document.getElementById("modelbox").style.display = "none";
+  $("#blackout").css('display', 'none');
+  $("#modelbox").css('display', 'none');
 
   // Reset width and put box in the center of the window 
-  document.getElementById("modelbox").style.width = 0;
-  document.getElementById("modelbox").style.left = "50%";
+  $("#modelbox").css('width', 0);
+  $("#modelbox").css('left', "50%");
 
   // Reset content of search field
-  document.getElementById("search").value = "";
+  $("#search").val("");
 }
 
 /**
  * Starts the pop-up
  */
 editCourse.startBlackout = function() {
-  document.getElementById("blackout").style.display = "block";
+  $("#blackout").css('display', "block");
   editCourse.getModels();
 }
 
@@ -57,12 +57,12 @@ editCourse.getModels = function(callback) {
   // Send request with data to run the script on the server 
   $.post("../php/getcoursemodels.php", {"course": editCourse.courseId}, 
     function getModelsCallback(response) {
-        var modelbox = document.getElementById("modelbox");
-        modelbox.style.display = "block";
-        editCourse.expand(modelbox);
+        var modelbox = $("#modelbox");
+        modelbox.css('display', "block");
+        editCourse.expand(modelbox[0]);
 
         // Display all models associated with the course
-        document.getElementById("result-container").innerHTML = response;
+        $("#result-container").html( response )
 
         // Add event listener to each model
         editCourse.addSelectListener();
@@ -76,7 +76,7 @@ editCourse.addModels = function() {
   $.post("../php/addmodels.php", {"course": editCourse.courseId, "models": JSON.stringify(editCourse.selectedModels)},
     function(response) {
         // Display all models associated with the course
-        document.getElementById("model_table").innerHTML = response;
+        $("#model_table").html( response )
         // Add event listener to each model
         editCourse.addDeleteListener();
         editCourse.endBlackout();
@@ -92,14 +92,14 @@ editCourse.deleteModel = function(event) {
   $.post("../php/deletemodel.php", {"course": editCourse.courseId, "model": event.target.id},
     function(response) {
         // Display all models associated with the course
-        document.getElementById("model_table").innerHTML = response;
+        $("#model_table").html( response )
         // Add event listener to each model
         editCourse.addDeleteListener();
       }
   );
 }
 
-document.addEventListener("DOMContentLoaded", function(){
+$(document).ready(function(){
   
   tools.addCourseNameInputListener();
   tools.addCreateCourseRoomListener();
@@ -137,6 +137,7 @@ editCourse.expand = function (element) {
   var width = element.offsetWidth;
   var left = element.offsetLeft;
   var windowWidth = window.innerWidth;
+  element = $(element)
   
   // Trigger every 10 ms
   var loopTimer = setInterval(function() {
@@ -145,13 +146,13 @@ editCourse.expand = function (element) {
         // Expand pop-up to the right and move it to the left at the same time
         width += pxPerStep;
         left -= pxPerStep/2
-        element.style.width = width+"px";
-        element.style.left = left+"px";
+        element.css('width', width)
+        element.css('left', left);
     } else {
         // We reached (almost) the desired width, now add the difference
         var diff = 0.8*windowWidth-width;
-        element.style.width = width+diff+"px";
-        element.style.left = left-diff/2+"px";
+        element.css('width', width+diff);
+        element.css('left', left-diff/2)
         clearInterval(loopTimer);
     }
   },10);

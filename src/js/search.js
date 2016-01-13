@@ -35,7 +35,7 @@ function showModels(str) {
   selectedModel = element ? element.id : selectedModel;
 
   $.post("../php/getmodels.php", {q: str, type: type}, function(response) {
-    document.getElementById("result-container").innerHTML = response;
+    $("#result-container").html( response )
     if(type === "modelselection") { editCourse.addSelectListener(); }
 
     // If we are inside ROLE, change the list items to open in separate widget
