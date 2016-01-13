@@ -105,3 +105,5 @@ src/widgets/*
 
 # ignore bower-managed files
 # src/external/*
+
+.brackets.json
