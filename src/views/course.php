@@ -74,7 +74,7 @@
       <div class='row'>
         <div class='col-md-6 non-overflow-div'>   
           <div class="col-sm-8">            
-            <?php if(!(isset($_GET["widget"]) && $_GET["widget"] == "true")) { ?>
+            <?php if(!(filter_input(INPUT_GET, "widget") == "true")) { ?>
               <a id="enter-course-a" href="#" data-rolespace="<?php echo $entry->role_url; ?>">
                 <button class='btn btn-success btn-lg btn-block' type='button'>Enter course room</button>
               </a>
@@ -145,7 +145,7 @@
   <script type="text/javascript" src="../js/tools.js"></script>
   <?php
     //Decide if this site is inside a separate widget
-    if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+    if(filter_input(INPUT_GET, "widget") == "true")
     {
         print("<script src='../js/overview-widget.js'> </script>");
     }

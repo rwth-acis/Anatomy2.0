@@ -25,22 +25,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Collaborative Viewing of 3D Models </title>
 
-  <!-- Init communication with wrapper -->
-    <?php
-       //Decide if this site is inside a separate widget
-       if(isset($_GET["widget"]) && $_GET["widget"] == "true")
-       {
-           print("<script src='../js/overview-widget.js'> </script>");
-       }
-    ?>
-
 </head>
 <body>
   <?php include("menu.php"); ?>
 
   <?php
     //Decide if this site is inside a separate widget
-    if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
+    if(filter_input(INPUT_GET, "widget") == "true") {
 
     }
     else {
@@ -74,13 +65,6 @@
   <!-- /container -->
 
   <?php include("footer.php");?>
-
-  <?php
-     //Decide if this site is inside a separate widget
-     if(isset($_GET["widget"]) && $_GET["widget"] == "true")
-     {
-         print("<script src='../js/courses-widget.js'> </script>");
-     }
  ?>
 
 </body>

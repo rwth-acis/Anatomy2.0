@@ -36,15 +36,15 @@ $(document).ready(function() {
     .addClass("filled");
   return;
   });	
-	
-//elements
-var progressbox     = $('#progressbox');
-var progressbar     = $('#progressbar');
-var statustxt       = $('#statustxt');
-var submitbutton    = $("#SubmitButton");
-var myform          = $("#UploadForm");
-var output          = $("#output");
-var completed       = '0%';
+
+    //elements
+    var progressbox     = $('#progressbox');
+    var progressbar     = $('#progressbar');
+    var statustxt       = $('#statustxt');
+    var submitbutton    = $("#SubmitButton");
+    var myform          = $("#UploadForm");
+    var output          = $("#output");
+    var completed       = '0%';
 
         $(myform).ajaxForm({
             beforeSend: function() { //brfore sending form
@@ -70,8 +70,4 @@ var completed       = '0%';
                 progressbox.slideUp(); // hide progressbar
             }
     });
-});
-
-$(document).ready(function () {
-
 });

@@ -55,7 +55,7 @@
         $model = $db->query($query)->fetchObject();
       }
       
-      if (isset($_GET["widget"]) && $_GET["widget"] == "true") { 
+      if (filter_input(INPUT_GET, "widget") == "true") { 
         $viewer_class = "viewer_object_role"; 
         $initModelViewer = "onload=\"modelViewer.onModelLoaded()\"";
       } else { 

@@ -51,7 +51,7 @@
           <div class="featured-box">
 	    <?php
 	       //Decide if this site is inside a separate widget
-	       if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+	       if(filter_input(INPUT_GET, "widget") == "true")
 	       {
 	         //we have to link to the widget versions:
 	         print("<a href='subjects.php?widget=true'>");
@@ -74,7 +74,7 @@
           <div class="featured-box">
 	    <?php
 	       //Decide if this site is inside a separate widget
-	       if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+	       if(filter_input(INPUT_GET, "widget") == "true")
 	       {
 	         //we have to link to the widget versions:
 	         print("<a href='overview.php?widget=true'>");
@@ -99,7 +99,7 @@
           <div class="featured-box">
 	    <?php
 	       //Decide if this site is inside a separate widget
-	       if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+	       if(filter_input(INPUT_GET, "widget") == "true")
 	       {
 	         //we have to link to the widget versions:
 	         print("<a href='upload.php?widget=true'>");
@@ -122,7 +122,7 @@
           <div class="featured-box">
 	    <?php
 	       //Decide if this site is inside a separate widget
-	       if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+	       if(filter_input(INPUT_GET, "widget") == "true")
 	       {
 	         //we have to link to the widget versions:
 	         print("<a href='help.php?widget=true'>");

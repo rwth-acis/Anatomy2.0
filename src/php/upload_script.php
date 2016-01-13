@@ -38,7 +38,7 @@
     $widgetParameter = "";
     
     // If this script is initiated from within ROLE, keep the "widget=true" parameter
-    if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
+    if(filter_input(INPUT_GET, "widget") == "true") {
       // will be added in all "header(..)" calls
       $widgetParameter = "&widget=true";
     }

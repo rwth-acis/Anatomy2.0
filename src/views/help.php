@@ -31,7 +31,7 @@
 
     <?php
       //Decide if this site is inside a separate widget
-      if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
+      if(filter_input(INPUT_GET, "widget") == "true") {
 
       }
       else {
@@ -57,7 +57,7 @@
             <section class="col-sm-8 maincontent">
             <?php
               // Explanation and links to ROLE environment are not shown if already inside ROLE environment
-              if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
+              if(!(filter_input(INPUT_GET, "widget") == "true"))
               {
             ?>
                 <h3>Set Up Viewing Environment</h3>
@@ -135,7 +135,7 @@
                     <ul class="list-unstyled list-spaces">
                       <?php
                         //Decide if this site is inside a separate widget
-                        if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+                        if(filter_input(INPUT_GET, "widget") == "true")
                         {
                       ?>
                         <li><a href="subjects.php?widget=true">Courses</a><br>

@@ -57,7 +57,7 @@
           <div class='col-sm-4'>
             <div class='featured-box'>
               <img src="<?php echo "$subject->img_url"?>" >
-              <?php if(!(isset($_GET["widget"]) && $_GET["widget"] == "true")) { ?>
+              <?php if(!(filter_input(INPUT_GET, "widget") == "true")) { ?>
                 <a href="addcourse.php?id=<?php echo $subject->id; ?>">
                   <button class='btn btn-success btn-lg btn-block margin-top' type='button'>Add new course</button>
                 </a>
@@ -106,7 +106,7 @@
   <script type="text/javascript" src="../js/tools.js"></script>
   <?php
     //Decide if this site is inside a separate widget
-    if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+    if(filter_input(INPUT_GET, "widget") == "true")
     {
         print("<script src='../js/overview-widget.js'> </script>");
     }

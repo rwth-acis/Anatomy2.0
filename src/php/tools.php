@@ -98,7 +98,7 @@ function getModelStructure($entry, $type) {
 function getCourseStructure($entry) {
     $html = "";
     // Decide if we are in ROLE space
-    if(isset($_GET['widget']) && $_GET['widget'] == 'true') {$html = "&widget=true";}
+    if(filter_input(INPUT_GET, "widget") == 'true') {$html = "&widget=true";}
 
     // id used to derive course id (from database) connected to clicked link
     return "<li><a href='course.php?id=$entry[id]".$html."' id='a_img$entry[id]'>
@@ -115,7 +115,7 @@ function getCourseStructure($entry) {
 function getSubjectStructure($entry) {
     $html = "";
     // Decide if we are in ROLE space
-    if(isset($_GET['widget']) && $_GET['widget'] == 'true') {$html = "&widget=true";}
+    if(filter_input(INPUT_GET, "widget") == 'true') {$html = "&widget=true";}
 
     // id used to derive course id (from database) connected to clicked link
     return "<li><a href='course_list.php?id=$entry[id]".$html."' id='a_img$entry[id]'>
@@ -131,7 +131,7 @@ function getSubjectStructure($entry) {
  */
 function printLinkBtn($url, $class, $text) {
   $widgetExtension = "";
-  if(isset($_GET["widget"]) && $_GET["widget"] == "true") { 
+  if(filter_input(INPUT_GET, "widget") == "true") { 
     $widgetExtension = "&widget=true"; 
   }
   echo "<a href=$url $widgetExtension>"; 

@@ -54,7 +54,7 @@
         <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" id="btnResetview">Reset view [A]</button></li>
       <?php
         // If and only if inside ROLE environment, show the synchronize / unsynchronize button
-        if(true || isset($_GET["widget"]) && $_GET["widget"] == "true") {
+        if(true || filter_input(INPUT_GET, "widget") == "true") {
       ?>
           <li class="navbar-li"><input type="checkbox" data-on-text="Sync" data-label-width="0" data-off-text="Not Sync" id="btnSynchronize"></input></li>
       <?php
@@ -72,7 +72,7 @@
           $canEnterLecturerMode = $accessControl->canEnterLecturerMode();          
           ob_end_clean(); 
           
-          if (true || $canEnterLecturerMode && (isset($_GET["widget"]) && $_GET["widget"] == "true")) { 
+          if (true || $canEnterLecturerMode && (filter_input(INPUT_GET, "widget") == "true")) { 
         ?>
         <li class="navbar-li"><input type="checkbox" data-on-text="Lecturer on" data-label-width="0" data-off-text="Lecturer off" id="btnLecturer"></input></li>
         <!-- A span which will be filled with a Sign In button or information about which user is currently logged in. Will be filled in oidc-button.js -->
@@ -98,7 +98,7 @@
 
 <?php 
 // If we are in a ROLE space, show the Sign in button / Sign in status
-if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
+if(filter_input(INPUT_GET, "widget") == "true") {
 ?>
 <script type="text/javascript">
   (function() {

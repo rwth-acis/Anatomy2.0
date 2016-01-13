@@ -20,6 +20,6 @@
 ?>
 <div class="search_box">
   <form autocomplete="on" onsubmit="return false;">
-    <input type="text" class="text-box" id="search" name="search" placeholder="Search..." oninput="showModels(this.value)" onsubmit="showModels(this.value)">
+    <input type="text" class="text-box" id="search" name="search" placeholder="Search..." oninput="modelSearch.showModels(this.value)" onsubmit="modelSearch.showModels(this.value)">
   </form>
 </div>

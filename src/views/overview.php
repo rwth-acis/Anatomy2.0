@@ -27,7 +27,7 @@
     
   <?php
     //Decide if this site is inside a separate widget
-    if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+    if(filter_input(INPUT_GET, "widget") == "true")
     {
       print("<script src='../js/overview-widget.js'> </script>");
     }
@@ -41,7 +41,7 @@
   ?>
   <?php
     //Decide if this site is inside a separate widget
-    if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
+    if(filter_input(INPUT_GET, "widget") == "true") {
 
     }
     else {
