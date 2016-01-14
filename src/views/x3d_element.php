@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @file model_viewer.php
+ * @file showcase.php
  * Webpage for viewing a single model. The model can be examined from different positions
  */
 ?>
@@ -28,10 +28,10 @@
 
       if (filter_input(INPUT_GET, "widget") == "true") { 
         $viewer_class = "viewer_object_role"; 
-        $initModelViewer = "onload=\"modelViewer.onModelLoaded()\"";
+        $initModelViewer = "onload=\"showcase.onModelLoaded()\"";
       } else { 
         $viewer_class = "viewer_object"; 
-        $initModelViewer = "onload=\"modelViewer.onModelLoaded()\"";
+        $initModelViewer = "onload=\"showcase.onModelLoaded()\"";
       }
     ?>
 
@@ -48,7 +48,7 @@
       ?>
     </Group>
     <viewpoint id="viewport" DEF="viewport" centerOfRotation="0 0 0" position="0.00 0.00 5.00" orientation="-0.92 0.35 0.17 0.00" fieldOfView="0.858"> </viewpoint>
-    <Group id="annotation-markers" onclick="modelAnnotater.handleAnnotationMarkerClick(event)" onmouseover="modelAnnotater.handleAnnotationMarkerMouseOver(event)" onmouseout="modelAnnotater.handleAnnotationMarkerMouseOut(event)"></Group>
+    <Group id="annotation-markers" onclick="showcase.annotater.handleAnnotationMarkerClick(event)" onmouseover="showcase.annotater.handleAnnotationMarkerMouseOver(event)" onmouseout="showcase.annotater.handleAnnotationMarkerMouseOut(event)"></Group>
   </scene>
   <?php
       if(is_object($model)) {
@@ -68,6 +68,6 @@
   ?>
 </x3d>
 
-<!-- Hidden input field to provide the Sevianno object id from our database to model-viewer-annotations.js -->
+<!-- Hidden input field to provide the Sevianno object id from our database to showcase-annotations.js -->
 <input id="model-sevianno-id" class="hidden" value="<?php echo $model->seviannoId; ?>"/>
 <!-- Creates a panel with information about mouse usage and hotkeys for navigation -->

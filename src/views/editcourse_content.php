@@ -59,7 +59,7 @@
               <input class="col-xs-1 btn btn-default btn-inline" type="button" value="?"/>
             </a>
             <div class="featured-box">
-              <p><?php echo $baseUrl . "/src/widgets/model_viewer.xml"; ?></p>
+              <p><?php echo $baseUrl . "/src/widgets/showcase.xml"; ?></p>
               <p><?php echo $baseUrl . "/src/widgets/gallery.xml"; ?></p>
             </div>
           </div>

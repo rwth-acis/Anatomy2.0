@@ -1,9 +1,9 @@
 
 // Script controlling the navigation info 
 
-var modelHelp = {}
+showcase.help = {}
 
-modelHelp.modes = [
+showcase.help.modes = [
            {
              "name":"[E]xamine",
              "option":"examine",
@@ -69,7 +69,7 @@ modelHelp.modes = [
            }
            ];
 
-modelHelp.showModeDetails = function (mode)
+showcase.help.showModeDetails = function (mode)
 {      
   //Show mouse operations
   $.each(["mouse", "mouseLeft", "mouseRight", "mouseWheelScroll", "mouseWheelPress"], function(index, mouse) {
@@ -94,13 +94,13 @@ modelHelp.showModeDetails = function (mode)
 
 $(document).ready(function(){   
   //Add all modes to dropdown field
-  $.each(modelHelp.modes, function(index, value) {   
+  $.each(showcase.help.modes, function(index, value) {   
        $('#viewModeSelect')
             .append($('<option>', { value : value.option })
             .text(value.name));
        
        if(index==0)
-         modelHelp.showModeDetails(value);
+         showcase.help.showModeDetails(value);
   }); 
 
   //Listen for changed modes...
@@ -110,9 +110,9 @@ $(document).ready(function(){
     $('#navType').attr("type", currentMode);
 
     //...and refresh hints
-    $.each(modelHelp.modes, function(index, value) {  
+    $.each(showcase.help.modes, function(index, value) {  
       if(value.option == currentMode)
-        modelHelp.showModeDetails(value);
+        showcase.help.showModeDetails(value);
     });
   });
 
@@ -121,14 +121,14 @@ $(document).ready(function(){
     var key = String.fromCharCode(event.which);
     
     //...and refresh hints
-    $.each(modelHelp.modes, function(index, value) {  
+    $.each(showcase.help.modes, function(index, value) {  
       for (var i = 0; i < value.shortcut.length; i++) {
         if(value.shortcut[i] === key)
         {
-          var num = modelHelp.getIndex(value.option);
+          var num = showcase.help.getIndex(value.option);
           $('#viewModeSelect').val(num);
           $('#navType').attr("type", value.option);
-          modelHelp.showModeDetails(value);
+          showcase.help.showModeDetails(value);
         }
       }
     });
@@ -139,10 +139,10 @@ $(document).ready(function(){
   });
 });
 
-modelHelp.getIndex = function (option) {
+showcase.help.getIndex = function (option) {
   
-  for (i = 0; i < modelHelp.modes.length; i++) {
-    if (modelHelp.modes[i].option == option) {
+  for (i = 0; i < showcase.help.modes.length; i++) {
+    if (showcase.help.modes[i].option == option) {
       return i;
     }
   }

@@ -64,10 +64,10 @@ personality_signinCallback = function (result) {
       	try{
       	if(JSON.parse(result).canEnterLecturerMode) {
                 $(document).ready(function() {
-                    if(window.viewerToolbar != null) {
-                        viewerToolbar.lecturerModeViewModel.canEnter(true)
+                    if(window.showcase.toolbar != null) {
+                        showcase.toolbar.lecturerModeViewModel.canEnter(true)
                         // So far it is the same:
-                        viewerToolbar.lecturerModeViewModel.isLecturer(true)
+                        showcase.toolbar.lecturerModeViewModel.isLecturer(true)
                     }
                 })
       		}

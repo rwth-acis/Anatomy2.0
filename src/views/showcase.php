@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @file model_viewer.php
+ * @file showcase.php
  * Webpage for viewing a single model. The model can be examined from different positions
  */
 ?>
@@ -26,7 +26,7 @@
     <title>Collaborative 3D Model Viewer</title>
     
     <link type='text/css' rel='stylesheet' href='../external/x3dom/x3dom.css'/>
-    <link rel='stylesheet' type='text/css' href='../css/model_viewer.css'/>
+    <link rel='stylesheet' type='text/css' href='../css/showcase.css'/>
   </head>
 
   <body>
@@ -39,12 +39,12 @@
       <script src='../external/x3dom/x3dom.js'> </script>
       
       <script src='../js/x3d-extensions.js'> </script>
-      <script src='../js/model-viewer-base.js'> </script>
-      <script src='../js/model-viewer-annotations.js'> </script>
-      <script src='../js/model-viewer-annotations-connector.js'> </script>
-      <script src='../js/model-viewer-sync.js'> </script>
-      <script src="../js/model-viewer-highlighting.js"></script>
-      <script src="../js/model-viewer-specials.js"></script>
+      <script src='../js/showcase-base.js'> </script>
+      <script src='../js/showcase-annotations.js'> </script>
+      <script src='../js/showcase-annotations-connector.js'> </script>
+      <script src='../js/showcase-sync.js'> </script>
+      <script src="../js/showcase-highlighting.js"></script>
+      <script src="../js/showcase-specials.js"></script>
     <?php
 
       include("toolbar.php");
@@ -58,17 +58,17 @@
       
       if (filter_input(INPUT_GET, "widget") == "true") { 
         $viewer_class = "viewer_object_role"; 
-        $initModelViewer = "onload=\"modelViewer.onModelLoaded()\"";
+        $initModelViewer = "onload=\"showcase.onModelLoaded()\"";
       } else { 
         $viewer_class = "viewer_object"; 
-        $initModelViewer = "onload=\"modelViewer.onModelLoaded()\"";
+        $initModelViewer = "onload=\"showcase.onModelLoaded()\"";
       }
     ?>
    
     <div id="x3d-container"></div>
       <!-- loading first model -->
     <script>
-        modelViewer.setNewModel(<?php echo $model_id;?>)  
+        showcase.setNewModel(<?php echo $model_id;?>)  
     </script>
       
     <!-- Creates a panel with information about mouse usage and hotkeys for navigation -->

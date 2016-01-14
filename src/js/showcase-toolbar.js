@@ -17,24 +17,24 @@
  * Provides event handler for click events of all toolbar buttons
  * Also initializes toolbar elements if needed
  * 
- * Requires: model-viewer-annotations.js
+ * Requires: showcase-annotations.js
  *   annotations.js
  */
 
-var viewerToolbar = {};
+showcase.toolbar = {};
 
-viewerToolbar.showInfo = false
-viewerToolbar.showHelp = false
+showcase.toolbar.showInfo = false
+showcase.toolbar.showHelp = false
 // True, if a user is in the 'set an annotation position marker' mode (which is 
 // started by pressing the 'Annotate' button once)
-viewerToolbar.annotate = false
-viewerToolbar.isSynchronized = ko.observable(false)
-viewerToolbar.lecturerModeViewModel = {
+showcase.toolbar.annotate = false
+showcase.toolbar.isSynchronized = ko.observable(false)
+showcase.toolbar.lecturerModeViewModel = {
         isLecturer : ko.observable(false),
         canEnter : ko.observable(false),
         modeEnabled : ko.observable(false)
     }
-viewerToolbar.modelId = ko.observable(URI().query(true).id)
+showcase.toolbar.modelId = ko.observable(URI().query(true).id)
 
 /**
  * Add click handler when DOM loaded. Note: Due to the implementation of x3dom, 
@@ -47,28 +47,28 @@ $(document).ready(function () {
     // One way data-bindings:
     
     $('#btnAnnotate').on('click', function () {
-        viewerToolbar.toggleAnnotationMode()
+        showcase.toolbar.toggleAnnotationMode()
     })
     $('#btnHighlight').bootstrapSwitch('state', false, true).on('switchChange.bootstrapSwitch', function () {
-        modelHighlighter.toggleHighlighting();
+        showcase.highlighter.toggleHighlighting();
     })
     $('#btnInfo').bootstrapSwitch('state', false, true).on('switchChange.bootstrapSwitch', function () {
-        viewerToolbar.showInfo = !viewerToolbar.showInfo;
+        showcase.toolbar.showInfo = !showcase.toolbar.showInfo;
         // optionally synchronize	
-        $('#metadata_overlay').css('display', viewerToolbar.showInfo ? 'block' : 'none')
-        $('#viewer_object')[0].runtime.statistics(viewerToolbar.showInfo)
+        $('#metadata_overlay').css('display', showcase.toolbar.showInfo ? 'block' : 'none')
+        $('#viewer_object')[0].runtime.statistics(showcase.toolbar.showInfo)
     })
     $('#btnHelp').bootstrapSwitch('state', false, true).on('switchChange.bootstrapSwitch', function () {
-        viewerToolbar.showHelp = !viewerToolbar.showHelp
-        $('#mainNav').css('display', viewerToolbar.showHelp ? 'block' : 'none')
+        showcase.toolbar.showHelp = !showcase.toolbar.showHelp
+        $('#mainNav').css('display', showcase.toolbar.showHelp ? 'block' : 'none')
     })
-    $('#btnSynchronize').bootstrapSwitch('state', viewerToolbar.isSynchronized(), true).on('switchChange.bootstrapSwitch', function () {
-        viewerToolbar.isSynchronized( ! viewerToolbar.isSynchronized() )
+    $('#btnSynchronize').bootstrapSwitch('state', showcase.toolbar.isSynchronized(), true).on('switchChange.bootstrapSwitch', function () {
+        showcase.toolbar.isSynchronized( ! showcase.toolbar.isSynchronized() )
     })
     $('#btnResetview').on('click', function () {
         $('#viewer_object')[0].runtime.showAll()
     })
-    viewerToolbar.modelId.subscribe( function(newValue) {
+    showcase.toolbar.modelId.subscribe( function(newValue) {
         
     })
     
@@ -93,11 +93,11 @@ $(document).ready(function () {
         }
     }
     $('#btnLecturer').attr('data-bind', "lecturerMode: $root")
-    ko.applyBindings(viewerToolbar.lecturerModeViewModel, $('#btnLecturer')[0])
+    ko.applyBindings(showcase.toolbar.lecturerModeViewModel, $('#btnLecturer')[0])
     
     // model-selection
-    viewerToolbar.modelId.subscribe( function(newValue) {
-        modelViewer.setNewModel(newValue)
+    showcase.toolbar.modelId.subscribe( function(newValue) {
+        showcase.setNewModel(newValue)
         if (tools.isInRole()) {
             // update gallery-widget
             window.parent.postMessage({command: 'selectModel', modelId: newValue}, '*')
@@ -107,22 +107,22 @@ $(document).ready(function () {
         // gallery-widget selected new model
         window.addEventListener('message', function (msg) {
             if (msg.data.command == 'selectModel') {
-                viewerToolbar.modelId(msg.data.modelId)
+                showcase.toolbar.modelId(msg.data.modelId)
             }
         }, false)
     }
     
-    modelViewer.addEventListener('load', function () {
+    showcase.addEventListener('load', function () {
         
         // init annotations, should go to other file
         $('#x3dInline').on('click', function (event) {
-            if (viewerToolbar.annotate) {
+            if (showcase.toolbar.annotate) {
                 var pos = new x3dom.fields.SFVec3f(event.worldX, event.worldY, event.worldZ);
                 var norm = new x3dom.fields.SFVec3f(event.normalX, event.normalY, event.normalZ);
 
-                modelAnnotater.createAnnotation(pos, norm);
+                showcase.annotater.createAnnotation(pos, norm);
 
-                viewerToolbar.toggleAnnotationMode(true);
+                showcase.toolbar.toggleAnnotationMode(true);
             }
         });
 
@@ -131,9 +131,9 @@ $(document).ready(function () {
     })
 })
 
-viewerToolbar.toggleAnnotationMode = function (newVal) {
-    viewerToolbar = (newVal != null) ? newVal : !viewerToolbar.annotate
-    if (viewerToolbar.annotate) {
+showcase.toolbar.toggleAnnotationMode = function (newVal) {
+    showcase.toolbar.annotate = (newVal != null) ? newVal : !showcase.toolbar.annotate
+    if (showcase.toolbar.annotate) {
         $('#btnAnnotate').addClass('active');
         $('.x3dom-canvas').css('cursor', 'crosshair');
     } else {
@@ -145,13 +145,13 @@ viewerToolbar.toggleAnnotationMode = function (newVal) {
 /**
  * Updates navigation mode in X3Dom to match the one selected in combo box in toolbar
  */
-viewerToolbar.x3dChangeView = function () {
+showcase.toolbar.x3dChangeView = function () {
     $('#navType').val("type", $('#viewModeSelect option:selected').val())
 }
 
-viewerToolbar.getViewMode = function () { return $('#viewModeSelect option:selected').val() }
+showcase.toolbar.getViewMode = function () { return $('#viewModeSelect option:selected').val() }
 
-viewerToolbar.setViewMode = function(mode) {
+showcase.toolbar.setViewMode = function(mode) {
     $('#viewModeSelect').val(mode)
     $('#navType').val(mode)
 }

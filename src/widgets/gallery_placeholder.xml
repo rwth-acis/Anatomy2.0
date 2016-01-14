@@ -8,7 +8,7 @@
 <script> 
     var trySetup = function () {
         var widget = Array.prototype.slice.call( window.parent.document.querySelectorAll('iframe') )
-                .map(function(iframe){return iframe.contentDocument.querySelector('#modelviewerRoleWidget')})
+                .map(function(iframe){return iframe.contentDocument.querySelector('#showcaseRoleWidget')})
                 .filter(function(iframe){return iframe != null})
                 [0]
         if (widget == null) { 

@@ -33,7 +33,7 @@ $(document).ready(function() {
     var rolespace = $("#enter-course-a")[0].dataset.rolespace;
     
     if (rolespace !== undefined && rolespace !== "") {
-      window.open(tools.ROLE_SANDBOX_SPACES + rolespace);
+      window.open(tools.urlForSpace(rolespace));
     }
   });
 });

@@ -17,28 +17,28 @@
  * File for X3D viewer functionality
  */
 
-var modelViewerSync = {}
+showcase.sync = {}
 
-modelViewerSync.localId = Math.random()
-modelViewerSync.foreignId = 2 // must be != localId
+showcase.sync.localId = Math.random()
+showcase.sync.foreignId = 2 // must be != localId
 
-modelViewerSync.init = function () {
+showcase.sync.init = function () {
     
     /*
         inits handled in arrays to group their code more intuitively
     */
     
-    modelViewerSync.onDocLoad = []
-    modelViewerSync.onYLoad = []
-    modelViewerSync.onModelLoad = []
+    showcase.sync.onDocLoad = []
+    showcase.sync.onYLoad = []
+    showcase.sync.onModelLoad = []
     
     // Doc-load
     $(document).ready( function () {
-        modelViewerSync.onDocLoad.forEach(function(callback){callback()}) 
+        showcase.sync.onDocLoad.forEach(function(callback){callback()}) 
     })
     
     // Y-creation
-    modelViewerSync.onDocLoad.push(function () {
+    showcase.sync.onDocLoad.push(function () {
         // The Y-object creation takes a fair amount of time, blocking the UI
         Y({
           db: {
@@ -50,37 +50,37 @@ modelViewerSync.init = function () {
           },
          sourceDir: location.pathname + '/../../external',
          share: {
-             modelViewer: 'Map'
+             showcase: 'Map'
          }
         }).then(function (y) {
-            modelViewerSync.y = y
+            showcase.sync.y = y
 
             // for debugging
             window.y = y
             
             // catching errors because else Y-js would eat them
-            try { modelViewerSync.onYLoad.forEach(function(callback){callback()}) }
+            try { showcase.sync.onYLoad.forEach(function(callback){callback()}) }
             catch(err) { console.log('Error in Y-load callbacks: ', err)}
         })
     })
     
     // x3d-object loaded
-    modelViewer.addEventListener('load', function () {
-        modelViewerSync.x3dRoot = $('#viewer_object')[0]
+    showcase.addEventListener('load', function () {
+        showcase.sync.x3dRoot = $('#viewer_object')[0]
         
-        modelViewerSync.onModelLoad.forEach(function(callback){callback()})
+        showcase.sync.onModelLoad.forEach(function(callback){callback()})
     })
 
     
     
     //////// resync all
     
-    modelViewerSync.onDocLoad.push(function () {
-        viewerToolbar.isSynchronized.subscribe( function(newValue) {
+    showcase.sync.onDocLoad.push(function () {
+        showcase.toolbar.isSynchronized.subscribe( function(newValue) {
                 // apply remote state when returning to sync
-                if (viewerToolbar.isSynchronized()) {
-                    modelViewerSync.remoteSelectedModelChange()
-                    modelViewerSync.remoteViewChanged()
+                if (showcase.toolbar.isSynchronized()) {
+                    showcase.sync.remoteSelectedModelChange()
+                    showcase.sync.remoteViewChanged()
                 }        
             })
     })
@@ -88,9 +88,9 @@ modelViewerSync.init = function () {
 
     //////// delayed viewport-update
     
-    modelViewerSync.onModelLoad.push(function () {  
-        if (modelViewerSync.remoteViewChangeBeforeModelLoad) {
-            modelViewerSync.remoteViewChanged()
+    showcase.sync.onModelLoad.push(function () {  
+        if (showcase.sync.remoteViewChangeBeforeModelLoad) {
+            showcase.sync.remoteViewChanged()
         }
     })
     
@@ -126,100 +126,100 @@ modelViewerSync.init = function () {
     
     // limiting the amount of messages sent by Y-js
     // numbers in ms
-    modelViewerSync.sendInterval = 200
-    modelViewerSync.receiveInterval = 200
+    showcase.sync.sendInterval = 200
+    showcase.sync.receiveInterval = 200
 
-    modelViewerSync.animDuration = 350
-    modelViewerSync.chairmanId = modelViewerSync.localId
+    showcase.sync.animDuration = 350
+    showcase.sync.chairmanId = showcase.sync.localId
     
     // viewport: remote → local
-    modelViewerSync.onYLoad.push(function () {
-        modelViewerSync.remoteViewChanged = function (events) {
-            if (!viewerToolbar.isSynchronized()) { return }
+    showcase.sync.onYLoad.push(function () {
+        showcase.sync.remoteViewChanged = function (events) {
+            if (!showcase.toolbar.isSynchronized()) { return }
 
             // x3d model not loaded yet
-            if (modelViewerSync.x3dRoot == null) { 
-                modelViewerSync.remoteViewChangeBeforeModelLoad = true
+            if (showcase.sync.x3dRoot == null) { 
+                showcase.sync.remoteViewChangeBeforeModelLoad = true
                 return
             }
 
-            receivedView = modelViewerSync.y.share.modelViewer.get('view_matrix')
+            receivedView = showcase.sync.y.share.showcase.get('view_matrix')
 
             if (receivedView == null) { return }
 
             // only set new view if not created from yourself
-            if (receivedView.peerId == modelViewerSync.localId) { return }
+            if (receivedView.peerId == showcase.sync.localId) { return }
 
-            x3dExtensions.setView( modelViewerSync.x3dRoot.runtime, receivedView, modelViewerSync.animDuration )
-            modelViewerSync.chairmanId = receivedView.peerId
+            x3dExtensions.setView( showcase.sync.x3dRoot.runtime, receivedView, showcase.sync.animDuration )
+            showcase.sync.chairmanId = receivedView.peerId
         }
         
-        modelViewerSync.y.share.modelViewer.observePath(
+        showcase.sync.y.share.showcase.observePath(
                 ['view_matrix']
-                , modelViewerSync.intervalBarrier(modelViewerSync.remoteViewChanged, modelViewerSync.receiveInterval)
+                , showcase.sync.intervalBarrier(showcase.sync.remoteViewChanged, showcase.sync.receiveInterval)
         )
     })
         
     // viewport: local → remote
-    modelViewerSync.onModelLoad.push(function () {
-        modelViewerSync.localViewChanged = function (evt) {
-            if (!viewerToolbar.isSynchronized()) { return }
-            if (viewerToolbar.lecturerModeViewModel.modeEnabled() && !viewerToolbar.lecturerModeViewModel.isLecturer()) { return }
+    showcase.sync.onModelLoad.push(function () {
+        showcase.sync.localViewChanged = function (evt) {
+            if (!showcase.toolbar.isSynchronized()) { return }
+            if (showcase.toolbar.lecturerModeViewModel.modeEnabled() && !showcase.toolbar.lecturerModeViewModel.isLecturer()) { return }
 
             // block if event was triggered by mixing-animation caused from remote state
-            if (modelViewerSync.chairmanId != modelViewerSync.localId) { return }
+            if (showcase.sync.chairmanId != showcase.sync.localId) { return }
 
-            var currentView = x3dExtensions.getView(modelViewerSync.x3dRoot.runtime)
-            currentView.peerId = modelViewerSync.localId
-            modelViewerSync.y.share.modelViewer.set('view_matrix', currentView)
+            var currentView = x3dExtensions.getView(showcase.sync.x3dRoot.runtime)
+            currentView.peerId = showcase.sync.localId
+            showcase.sync.y.share.showcase.set('view_matrix', currentView)
         }
         
         $('#viewport').on(
                 'viewpointChanged'
-                , modelViewerSync.intervalBarrier(modelViewerSync.localViewChanged, modelViewerSync.sendInterval)
+                , showcase.sync.intervalBarrier(showcase.sync.localViewChanged, showcase.sync.sendInterval)
         )
 
-        modelViewerSync.viewarea = modelViewerSync.x3dRoot.runtime.canvas.doc._viewarea
-        var viewarea = modelViewerSync.viewarea
+        showcase.sync.viewarea = showcase.sync.x3dRoot.runtime.canvas.doc._viewarea
+        var viewarea = showcase.sync.viewarea
 
         var setViewareaHook = function (functionName, peerId) {
             var oldFunc = viewarea[functionName]
             viewarea[functionName] = function () {
-                modelViewerSync.chairmanId = peerId
+                showcase.sync.chairmanId = peerId
                 return oldFunc.apply(viewarea, arguments)
             }
         }
 
         // hooks for observing chairmanship
-        setViewareaHook('animateTo', modelViewerSync.localId)
-        setViewareaHook('onDrag', modelViewerSync.localId)
-        setViewareaHook('onMoveView', modelViewerSync.localId)
+        setViewareaHook('animateTo', showcase.sync.localId)
+        setViewareaHook('onDrag', showcase.sync.localId)
+        setViewareaHook('onMoveView', showcase.sync.localId)
     })
     
     
     
     //////// lecturer-mode sync
     
-    modelViewerSync.onYLoad.push(function () {
+    showcase.sync.onYLoad.push(function () {
         // lecturer-mode: local → remote
-        var subscription = modelViewerSync.switchableSubscription( 
-            viewerToolbar.lecturerModeViewModel.modeEnabled, 
+        var subscription = showcase.sync.switchableSubscription( 
+            showcase.toolbar.lecturerModeViewModel.modeEnabled, 
             function (newValue) {
                 var yObj = {
-                    peerId : modelViewerSync.localId,
-                    modeEnabled : viewerToolbar.lecturerModeViewModel.modeEnabled()
+                    peerId : showcase.sync.localId,
+                    modeEnabled : showcase.toolbar.lecturerModeViewModel.modeEnabled()
                 }
-                modelViewerSync.y.share.modelViewer.set('lecturer_mode', yObj)
+                showcase.sync.y.share.showcase.set('lecturer_mode', yObj)
             } )
 
         // lecturer-mode: remote → local
-        modelViewerSync.y.share.modelViewer.observePath(['lecturer_mode'], function (events) {
-            var yObj = modelViewerSync.y.share.modelViewer.get('lecturer_mode')
+        showcase.sync.y.share.showcase.observePath(['lecturer_mode'], function (events) {
+            var yObj = showcase.sync.y.share.showcase.get('lecturer_mode')
             if (yObj) {
                 // avoid echo
                 subscription.turnOff()
                 // change value
-                viewerToolbar.lecturerModeViewModel.modeEnabled( yObj.modeEnabled )
+                showcase.toolbar.lecturerModeViewModel.modeEnabled( yObj.modeEnabled )
                 subscription.turnOn()
             }
         })
@@ -229,38 +229,38 @@ modelViewerSync.init = function () {
     
     //////// viewMode sync
     
-    /*	modelViewerSync.y.share.modelViewer.observePath(['view_mode'], function (events) {
-            viewerToolbar.setViewMode(y.get('view_mode'))
+    /*	showcase.sync.y.share.showcase.observePath(['view_mode'], function (events) {
+            showcase.toolbar.setViewMode(y.get('view_mode'))
         })
     */
-    //  data.viewMode = viewerToolbar.getViewMode();
+    //  data.viewMode = showcase.toolbar.getViewMode();
     
     
     
     //////// selected model sync
     
-    modelViewerSync.onYLoad.push(function () {
+    showcase.sync.onYLoad.push(function () {
         // selected model: local → remote
-        var subscription = modelViewerSync.switchableSubscription( 
-            viewerToolbar.modelId, 
+        var subscription = showcase.sync.switchableSubscription( 
+            showcase.toolbar.modelId, 
             function (newValue) {
-                if (!viewerToolbar.isSynchronized()) { return }
-                if (viewerToolbar.lecturerModeViewModel.modeEnabled() && !viewerToolbar.lecturerModeViewModel.isLecturer()) { return }
-                modelViewerSync.y.share.modelViewer.set('selected_model', newValue) 
+                if (!showcase.toolbar.isSynchronized()) { return }
+                if (showcase.toolbar.lecturerModeViewModel.modeEnabled() && !showcase.toolbar.lecturerModeViewModel.isLecturer()) { return }
+                showcase.sync.y.share.showcase.set('selected_model', newValue) 
             })
 
         // selected model: remote → local
-        modelViewerSync.remoteSelectedModelChange = function (events) {
-                if (!viewerToolbar.isSynchronized()) { return }
+        showcase.sync.remoteSelectedModelChange = function (events) {
+                if (!showcase.toolbar.isSynchronized()) { return }
 
-                var remoteModel = modelViewerSync.y.share.modelViewer.get('selected_model')
+                var remoteModel = showcase.sync.y.share.showcase.get('selected_model')
                 // undefined value
                 if (!remoteModel) { return }
                 // model already selected
-                if (viewerToolbar.modelId() == remoteModel) { return }
+                if (showcase.toolbar.modelId() == remoteModel) { return }
 
                 subscription.turnOff()
-                viewerToolbar.modelId(remoteModel)
+                showcase.toolbar.modelId(remoteModel)
                 subscription.turnOn()
                 /* changing fragment?
                 var params = new URI().query(true)
@@ -269,12 +269,12 @@ modelViewerSync.init = function () {
                 window.location.assign(url.href())
                 */
             }
-        modelViewerSync.y.share.modelViewer.observePath(['selected_model'], modelViewerSync.remoteSelectedModelChange)
+        showcase.sync.y.share.showcase.observePath(['selected_model'], showcase.sync.remoteSelectedModelChange)
     })
 }
 
 if(true || tools.isInRole()) {
-    modelViewerSync.init()
+    showcase.sync.init()
 }
 
 
@@ -285,7 +285,7 @@ if(true || tools.isInRole()) {
  *
 window.onbeforeunload = function(){
    Release lecturer mode when leaving.
-  if(modelViewerSync.lecturerMode) {
+  if(showcase.sync.lecturerMode) {
     toggleLecturerMode();
     sleep(2000);
   }
@@ -306,7 +306,7 @@ window.onbeforeunload = function(){
     [                ]←interval      [                ][                 ][                ]      [               ]
     ✓←passfunction()                 ✓  ✗      ✗-----✓  ✗     ✗  ✗-----✓                        ✓
 */
-modelViewerSync.intervalBarrier = function (passFunction, interval) {
+showcase.sync.intervalBarrier = function (passFunction, interval) {
 	var state = {}
 	state.interval = interval || 1000
 	state.lastPassed = 0
@@ -333,7 +333,7 @@ modelViewerSync.intervalBarrier = function (passFunction, interval) {
     utility-function to prevent subscription from echoing
     case is given when subscription changes the ViewModel's value
 */
-modelViewerSync.switchableSubscription = function (observable, func) {
+showcase.sync.switchableSubscription = function (observable, func) {
     return {
         observable: observable,
         subscription: observable.subscribe(func),

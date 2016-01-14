@@ -86,7 +86,7 @@ x3dExtensions.debug = function() {
 	runtime = $('x3d')[0].runtime
 	va = runtime.canvas.doc._viewarea
 	logViewport = function () { 
-		modelViewerSync.x3dViewport.addEventListener('viewpointChanged'
+		showcase.sync.x3dViewport.addEventListener('viewpointChanged'
 											, function (e) { console.log(e) }
 											) }
 	mixer = va._mixer

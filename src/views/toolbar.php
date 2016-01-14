@@ -21,7 +21,7 @@
  */
 ?>
 
-<script type="text/javascript" src="../js/model-viewer-toolbar.js"></script>
+<script type="text/javascript" src="../js/showcase-toolbar.js"></script>
 
 
 <!-- Toolbar -->
@@ -41,7 +41,7 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul id="tool-list" class="nav navbar-nav">
         <li role="presentation" class="dropdown navbar-li">
-          <select id="viewModeSelect" onChange="viewerToolbar.x3dChangeView()" class="form-control navbar-select">
+          <select id="viewModeSelect" onChange="showcase.toolbar.x3dChangeView()" class="form-control navbar-select">
             <!-- option>[W]alk</option>
             <option id="optionExamine">[E]xamine</option>
             <option>[F]ly</option>

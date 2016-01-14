@@ -19,45 +19,45 @@
  *  other parts transparent.
  */
 
-var modelHighlighter = {};
-modelHighlighter.matNorm = $('');
-modelHighlighter.matOver = $('<Material emissiveColor="1 0.8 0.1" transparency=0.0 />');
-modelHighlighter.matOut = $('<Material emissiveColor="0 0 0" transparency=1.0 />');
+showcase.highlighter = {};
+showcase.highlighter.matNorm = $('');
+showcase.highlighter.matOver = $('<Material emissiveColor="1 0.8 0.1" transparency=0.0 />');
+showcase.highlighter.matOut = $('<Material emissiveColor="0 0 0" transparency=1.0 />');
 
 
 // Highlighting turned off
-modelHighlighter.STATE_OFF = 0;
+showcase.highlighter.STATE_OFF = 0;
 // Everything yellow
-modelHighlighter.STATE_INIT = 1;
+showcase.highlighter.STATE_INIT = 1;
 // Normal selection
-modelHighlighter.STATE_WORK = 2;
+showcase.highlighter.STATE_WORK = 2;
 // highlighting state-variable
-modelHighlighter.state = modelHighlighter.STATE_OFF;
+showcase.highlighter.state = showcase.highlighter.STATE_OFF;
 
 /**
  * Enables highlighting by adding event listener to model shapes
  * 
  * @return {undefined} 
  */
-modelHighlighter.startHighlighting = function() {
+showcase.highlighter.startHighlighting = function() {
   
-  modelHighlighter.state = modelHighlighter.STATE_INIT;
+  showcase.highlighter.state = showcase.highlighter.STATE_INIT;
   var allSh = $ ('#model-nodes Shape');
   allSh.each( function () {
     this.isSelected = false;
-    this.onclick = modelHighlighter.funcClick (this, allSh);
-    this.onmouseover = modelHighlighter.funcOver (this);
-    this.onmouseout = modelHighlighter.funcOut (this);
-    modelHighlighter.setMaterial(this, modelHighlighter.matOver);
+    this.onclick = showcase.highlighter.funcClick (this, allSh);
+    this.onmouseover = showcase.highlighter.funcOver (this);
+    this.onmouseout = showcase.highlighter.funcOut (this);
+    showcase.highlighter.setMaterial(this, showcase.highlighter.matOver);
   });
 }
 
-modelHighlighter.toggleHighlighting = function() {
-  if (modelHighlighter.state !== modelHighlighter.STATE_OFF) {
-    modelHighlighter.stopHighlighting();
+showcase.highlighter.toggleHighlighting = function() {
+  if (showcase.highlighter.state !== showcase.highlighter.STATE_OFF) {
+    showcase.highlighter.stopHighlighting();
   }
   else {
-    modelHighlighter.startHighlighting();
+    showcase.highlighter.startHighlighting();
   }
 }
 
@@ -65,17 +65,17 @@ modelHighlighter.toggleHighlighting = function() {
  * Disables highlighting by detaching all event listeners. Also removes all
  * changes made to shapes appearance
  */
-modelHighlighter.stopHighlighting = function() {
+showcase.highlighter.stopHighlighting = function() {
   
   var allSh = $ ('#model-nodes Shape');
   allSh.each( function () {
     this.onclick = undefined;
     this.onmouseover = undefined;
     this.onmouseout = undefined;
-	 modelHighlighter.setMaterial(this, modelHighlighter.matNorm);
+	 showcase.highlighter.setMaterial(this, showcase.highlighter.matNorm);
   });
   
-  modelHighlighter.state = modelHighlighter.STATE_OFF;
+  showcase.highlighter.state = showcase.highlighter.STATE_OFF;
 };
 
 /* add transparency-effect: */
@@ -84,7 +84,7 @@ modelHighlighter.stopHighlighting = function() {
    example is at http://x3dom.org/x3dom/example/x3dom_inlineReflection.xhtml */
 /* pressing 'D' for x3dom-debug in every viewer */
 
-modelHighlighter.setMaterial = function (sh, mat) {
+showcase.highlighter.setMaterial = function (sh, mat) {
 		// clone material as it will be removed from previous context
     	if( $(sh).find('Material').length ) {
     		$(sh).find('Material').replaceWith(mat.clone());
@@ -98,10 +98,10 @@ modelHighlighter.setMaterial = function (sh, mat) {
  * 
  * @return {function} Callback function for mouse over
  */
-modelHighlighter.funcOver = function (sh) { 
+showcase.highlighter.funcOver = function (sh) { 
   return function() { 
-    if( !sh.isSelected && modelHighlighter.state === modelHighlighter.STATE_WORK) {
-    	modelHighlighter.setMaterial(sh, modelHighlighter.matOver);
+    if( !sh.isSelected && showcase.highlighter.state === showcase.highlighter.STATE_WORK) {
+    	showcase.highlighter.setMaterial(sh, showcase.highlighter.matOver);
 	 }
   } 
 }
@@ -111,13 +111,13 @@ modelHighlighter.funcOver = function (sh) {
  * 
  * @return {function} Callback function for mouse out
  */
-modelHighlighter.funcOut = function (sh) { 
+showcase.highlighter.funcOut = function (sh) { 
 	return function () {
-		 if( modelHighlighter.state === modelHighlighter.STATE_WORK ) {
+		 if( showcase.highlighter.state === showcase.highlighter.STATE_WORK ) {
 		    if( !sh.isSelected ) {
-		    	modelHighlighter.setMaterial(sh, modelHighlighter.matOut);
+		    	showcase.highlighter.setMaterial(sh, showcase.highlighter.matOut);
 			 } else {
-		    	modelHighlighter.setMaterial(sh, modelHighlighter.matNorm);
+		    	showcase.highlighter.setMaterial(sh, showcase.highlighter.matNorm);
 			 }
 		 }
 	}
@@ -129,7 +129,7 @@ modelHighlighter.funcOut = function (sh) {
  * 
  * @return {function} Callback function for mouse click
  */
-modelHighlighter.funcClick = function (sh, allSh) {
+showcase.highlighter.funcClick = function (sh, allSh) {
 	 return function() {
 	 	 // only doubleclick
 	 	 if (!sh.lastClicked) {
@@ -139,16 +139,16 @@ modelHighlighter.funcClick = function (sh, allSh) {
 	 	 if (now - sh.lastClicked < 320) {
 		      sh.isSelected = !sh.isSelected;
 		      if( sh.isSelected ) {
-		      	modelHighlighter.setMaterial(sh, modelHighlighter.matNorm);
+		      	showcase.highlighter.setMaterial(sh, showcase.highlighter.matNorm);
 		      } else {
-		      	modelHighlighter.setMaterial(sh, modelHighlighter.matOver);
+		      	showcase.highlighter.setMaterial(sh, showcase.highlighter.matOver);
 		      }
 		      
-		      if( modelHighlighter.state === modelHighlighter.STATE_INIT ) {
+		      if( showcase.highlighter.state === showcase.highlighter.STATE_INIT ) {
 		      	allSh.not($(sh)).each( function () {
-		      		modelHighlighter.setMaterial(this, modelHighlighter.matOut);
+		      		showcase.highlighter.setMaterial(this, showcase.highlighter.matOut);
 		      	});
-		      	modelHighlighter.state = modelHighlighter.STATE_WORK;
+		      	showcase.highlighter.state = showcase.highlighter.STATE_WORK;
 		      }
   		}
   		sh.lastClicked = now;
@@ -159,11 +159,11 @@ modelHighlighter.funcClick = function (sh, allSh) {
  * Initializes model by adding a material to all nodes. Material is required for
  * highlighting effects. Will also enable x3dom lighting calculation.
  */
-modelHighlighter.initialize = function() {
+showcase.highlighter.initialize = function() {
   $ ('#model-nodes Shape').each(
 	  function () {
-	    modelHighlighter.setMaterial(this, modelHighlighter.matNorm);
+	    showcase.highlighter.setMaterial(this, showcase.highlighter.matNorm);
   });
 };
 
-modelViewer.addEventListener('load', modelHighlighter.initialize);
+showcase.addEventListener('load', showcase.highlighter.initialize);

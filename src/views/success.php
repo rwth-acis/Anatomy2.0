@@ -33,7 +33,7 @@
     if(!(filter_input(INPUT_GET, "widget") == "true"))
     {
   ?>
-      <a  href="model_viewer.php?id=<?php echo $_GET['id']?>" >See your Model</a>
+      <a  href="showcase.php?id=<?php echo $_GET['id']?>" >See your Model</a>
   <?php 
     }
   ?>

@@ -48,7 +48,7 @@ $(document).ready( function () {
             $(this).prop( 'modelId', parseInt($(this).attr('id').substr(5)) )
         })
 
-    // modelViewer → gallery
+    // showcase → gallery
     window.addEventListener('message', function (msg) {
         if (msg.data.command == 'selectModel') {
             // highlight selected model
@@ -60,7 +60,7 @@ $(document).ready( function () {
         }
     }, false)
 
-    // gallery → modelViewer
+    // gallery → showcase
     // add click-handler
     items.on('click', function () {
             window.parent.postMessage( {

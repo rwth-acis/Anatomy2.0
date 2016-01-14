@@ -47,7 +47,7 @@
 
   <script>
     var space = window.parent.location.pathname.match(/\/spaces\/([^?]*)/)[1]
-    document.write('<iframe id="modelviewerRoleWidget" src="http://localhost:105/src/views/model_viewer.php?widget=true&rolespace='+space+'" width="100%" height="100%" frameborder="no" padding=0 margin=0>')
+    document.write('<iframe id="showcaseRoleWidget" src="http://localhost:105/src/views/showcase.php?widget=true&rolespace='+space+'" width="100%" height="100%" frameborder="no" padding=0 margin=0>')
   </script>
 
 </body>

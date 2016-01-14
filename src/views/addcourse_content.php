@@ -82,4 +82,4 @@
 </div> 
 
 <script type="text/javascript" src="../js/tools.js"></script>
-<script type="text/javascript" src="../js/addCourse.js"></script>
+<script type="text/javascript" src="../js/addcourse.js"></script>

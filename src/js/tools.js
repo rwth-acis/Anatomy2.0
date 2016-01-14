@@ -21,6 +21,9 @@ var tools = {};
 
 // URL to ROLE sandbox spaces
 tools.ROLE_SANDBOX_SPACES = "http://role-sandbox.eu/spaces/";
+tools.urlForSpace = function (spaceName) {
+    return tools.ROLE_SANDBOX_SPACES + spaceName
+}
 
 // Adds a click listener to create-room-btn
 tools.addCreateCourseRoomListener = function() {

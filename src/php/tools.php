@@ -79,7 +79,7 @@ function getModelStructure($entry, $type) {
 
         // model, "normal" list
         default:
-            $html .= "<li><a href='model_viewer.php?id=$entry[id]' id='a_img$entry[id]'><img id='image-over$entry[id]' name='image-over' src='../../$entry[preview_url]' alt=$entry[name] width='160' height='160' />
+            $html .= "<li><a href='showcase.php?id=$entry[id]' id='a_img$entry[id]'><img id='image-over$entry[id]' name='image-over' src='../../$entry[preview_url]' alt=$entry[name] width='160' height='160' />
               <span class='text-content'><span>Name: $entry[name]<br>Size: ".$formatBytes($entry["size"])."<br> Category: $entry[classification]</span></span></a>
               <p id='text-over'>$entry[name]</p>
               </li>";
