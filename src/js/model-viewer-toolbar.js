@@ -17,7 +17,7 @@
  * Provides event handler for click events of all toolbar buttons
  * Also initializes toolbar elements if needed
  * 
- * Requires: model-viewer.js
+ * Requires: model-viewer-annotations.js
  *   annotations.js
  */
 
@@ -120,7 +120,7 @@ $(document).ready(function () {
                 var pos = new x3dom.fields.SFVec3f(event.worldX, event.worldY, event.worldZ);
                 var norm = new x3dom.fields.SFVec3f(event.normalX, event.normalY, event.normalZ);
 
-                modelViewer.createAnnotation(pos, norm);
+                modelAnnotater.createAnnotation(pos, norm);
 
                 viewerToolbar.toggleAnnotationMode(true);
             }

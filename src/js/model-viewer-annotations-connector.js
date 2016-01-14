@@ -13,22 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @file annotations.js
- * Handles communication with Sevianno service to store and retrieve annotations
+ * @file modelAnnotater.connector.js
+ * Handles communication with Sevianno service to store and retrieve modelAnnotater.connector
  */
 
-var annotations = {};
+modelAnnotater.connector = {}
 
 // Sevianno stores a tool id with each annotation. Set the tool id here
-annotations.TOOL_ID = "Anatomy";
-// The name of the collection which stores annotations in the ArangoDB of Sevianno
-annotations.ANNOTATIONS_COLLECTION = "TextTypeAnnotations";
+modelAnnotater.connector.TOOL_ID = "Anatomy";
+// The name of the collection which stores modelAnnotater.connector in the ArangoDB of Sevianno
+modelAnnotater.connector.ANNOTATIONS_COLLECTION = "TextTypeAnnotations";
 // The URL to the Sevianno service
-annotations.BASE_SERVICE_URL = 'http://eiche.informatik.rwth-aachen.de:7075/';
-// The URL for request regarding Sevianno annotations
-annotations.ANNOTATION_SERVICE_URL = annotations.BASE_SERVICE_URL + 'annotations/annotations/';
+modelAnnotater.connector.BASE_SERVICE_URL = 'http://eiche.informatik.rwth-aachen.de:7075/';
+// The URL for request regarding Sevianno modelAnnotater.connector
+modelAnnotater.connector.ANNOTATION_SERVICE_URL = modelAnnotater.connector.BASE_SERVICE_URL + 'modelAnnotater.connector/modelAnnotater.connector/';
 // The URL for requests regarding Sevianno objects
-annotations.OBJECT_SERVICE_URL = annotations.BASE_SERVICE_URL + 'annotations/objects/';
+modelAnnotater.connector.OBJECT_SERVICE_URL = modelAnnotater.connector.BASE_SERVICE_URL + 'modelAnnotater.connector/objects/';
 
 /**
  * Helper function
@@ -40,7 +40,7 @@ annotations.OBJECT_SERVICE_URL = annotations.BASE_SERVICE_URL + 'annotations/obj
  * @param {function} func Callback function upon success
  * @returns {undefined}
  */
-annotations.sendRequest = function(method, url, json_payload, retries, func) {
+modelAnnotater.connector.sendRequest = function(method, url, json_payload, retries, func) {
   var xmlhttp = new XMLHttpRequest();
   xmlhttp.open(method, url, true);
   xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -70,20 +70,20 @@ annotations.sendRequest = function(method, url, json_payload, retries, func) {
  * @param {function} func Callback function for the asynchronous request to Sevianno service
  * @returns {undefined}
  */
-annotations.createAnnotation = function(objectId, pos, norm, localId, username, func) {
+modelAnnotater.connector.createAnnotation = function(objectId, pos, norm, localId, username, func) {
   if (objectId !== undefined) {
     var data = new Object();
-    data.collection = annotations.ANNOTATIONS_COLLECTION;
+    data.collection = modelAnnotater.connector.ANNOTATIONS_COLLECTION;
     data.pos = pos;
     data.norm = norm;
     data.objectId = objectId;
     data.timestamp = Date.now();
-    data.toolId = annotations.TOOL_ID;
+    data.toolId = modelAnnotater.connector.TOOL_ID;
     data.localId = localId;
     data.username = username;
     var json_payload = JSON.stringify(data);
 
-    annotations.sendRequest("POST", annotations.ANNOTATION_SERVICE_URL, json_payload, 0, func);
+    modelAnnotater.connector.sendRequest("POST", modelAnnotater.connector.ANNOTATION_SERVICE_URL, json_payload, 0, func);
   }
 };
 
@@ -97,7 +97,7 @@ annotations.createAnnotation = function(objectId, pos, norm, localId, username, 
  * processed by Sevianno. The first parameter will have JSON payload data.
  * @returns {undefined}
  */
-annotations.updateAnnotation = function(annotationId, title, content, username, func) {
+modelAnnotater.connector.updateAnnotation = function(annotationId, title, content, username, func) {
   var data = new Object();
   data.title = title;
   data.text = content;
@@ -107,18 +107,18 @@ annotations.updateAnnotation = function(annotationId, title, content, username, 
   var annotationId = annotationId;
   var json_payload = JSON.stringify(data);
 
-  annotations.sendRequest("PUT", annotations.OBJECT_SERVICE_URL + annotationId, json_payload, 2, func);
+  modelAnnotater.connector.sendRequest("PUT", modelAnnotater.connector.OBJECT_SERVICE_URL + annotationId, json_payload, 2, func);
 };
 
 /**
- * Reads all Sevianno annotations for given Sevianno object ID
- * @param {String} objectId The ID of the Sevianno object, whose annotations are to be read
- * @param {function(object)} func Callback function which provides the annotations 
+ * Reads all Sevianno modelAnnotater.connector for given Sevianno object ID
+ * @param {String} objectId The ID of the Sevianno object, whose modelAnnotater.connector are to be read
+ * @param {function(object)} func Callback function which provides the modelAnnotater.connector 
  * read from Sevianno service as first parameter
  * @returns {undefined}
  */
-annotations.readAnnotations = function(objectId, func) { 
-  annotations.sendRequest("GET", annotations.OBJECT_SERVICE_URL + objectId + '/annotations', null, 0, function(answer) {
+modelAnnotater.connector.readAnnotations = function(objectId, func) { 
+  modelAnnotater.connector.sendRequest("GET", modelAnnotater.connector.OBJECT_SERVICE_URL + objectId + '/modelAnnotater.connector', null, 0, function(answer) {
     
     var annos = JSON.parse(answer);
     
@@ -133,9 +133,9 @@ annotations.readAnnotations = function(objectId, func) {
  * @param {function} func Callback (called when deletion completed)
  * @returns {undefined}
  */
-annotations.deleteAnnotation = function(objectId, func) { 
+modelAnnotater.connector.deleteAnnotation = function(objectId, func) { 
   
-    annotations.sendRequest("DELETE", annotations.OBJECT_SERVICE_URL + objectId, null, 0, function(answer) {
+    modelAnnotater.connector.sendRequest("DELETE", modelAnnotater.connector.OBJECT_SERVICE_URL + objectId, null, 0, function(answer) {
     
     func(answer);
   });

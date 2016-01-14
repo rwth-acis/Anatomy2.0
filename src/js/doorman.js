@@ -18,12 +18,38 @@
  * See https://github.com/learning-layers/openid-connect-button for more infos
  */
 
+var doorman = {}
+
+// Placeholder text when there is no user name
+doorman.ANONYMOUS_USERNAME = 'Anonymous'
+
 /**
- * This is the callback function for any LL login button (oidc-button)
+ * Get the username of the currently logged in user (or an anonymous label).
+ * 
+ * Requires oidc-button to be able to retrieve a user name (uses the oidc_userinfo variable)
+ * 
+ * @returns {String} the username
+ */
+doorman.getCurrentUsername = function() {
+  
+  var username = doorman.ANONYMOUS_USERNAME;
+  
+  if (oidc_userinfo !== undefined) {
+    if(oidc_userinfo.given_name !== undefined && oidc_userinfo.given_name !== ''
+            && oidc_userinfo.family_name !== undefined && oidc_userinfo.family_name !== '') {
+      username = oidc_userinfo.given_name + ' ' + oidc_userinfo.family_name;
+    }
+  }
+  
+  return username;
+}
+
+/**
+ * This is the callback function for any LL login button (oidc-button). It must be global to be used with `oidc-button.js`
  * @param {String} result message returned from LL login server
  * @returns {undefined}
  */
-function signinCallback(result) {
+doorman_signinCallback = function (result) {
   if(result === "success"){
   	var bRedirect = window.location.pathname.endsWith('login_callback.php')
 

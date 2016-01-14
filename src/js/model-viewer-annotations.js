@@ -25,20 +25,29 @@
  * 
  * @type Object
  * ****************************************************************************/
-var modelViewer = {};
+var modelAnnotater = {};
 
 // The id of the model object as stored in Sevianno service (can be retrieved from our database)
-modelViewer.seviannoObjectId = '';
+modelAnnotater.seviannoObjectId = '';
 
 // The Sevianno object id of the annotation whose content box is currently visible (the last annotation that has been clicked)
-modelViewer.selectedAnnotationId = undefined;
+modelAnnotater.selectedAnnotationId = undefined;
 
 // A list of all annotations which are related to the current model
-modelViewer.annotations = {};
+modelAnnotater.annotations = {};
 
 // Model viewer uses local ids for annotations which do not yet have a Sevianno id
 // Stores the next free local id
-modelViewer.nextLocalId = 0;
+modelAnnotater.nextLocalId = 0;
+
+// must be overwritten!
+// is currently done in model-viewer-annotations-connector.js
+modelAnnotater.connector = {
+    createAnnotation : function () {console.error('createAnnotation not implemented!')},
+    readAnnotations : function () {console.error('readAnnotations not implemented!')},
+    updateAnnotation : function () {console.error('updateAnnotation not implemented!')},
+    deleteAnnotation : function () {console.error('deleteAnnotation not implemented!')}
+}
 
 /**
  * Shows an annotation marker and stores a new annotation in Sevianno service
@@ -47,41 +56,41 @@ modelViewer.nextLocalId = 0;
  * @param {x3dom.fields.SFVec3f} norm 3D direction where the annotation marker should point to
  * @returns {undefined}
  */
-modelViewer.createAnnotation = function(pos, norm) {
+modelAnnotater.createAnnotation = function(pos, norm) {
   
-  var username = modelViewer.getCurrentUsername();
+  var username = doorman.getCurrentUsername();
   // Generate a local ID to be able to reference the object until a Sevianno ID 
   // has been received
-  var localId = modelViewer.getNextLocalId();
+  var localId = modelAnnotater.getNextLocalId();
   // Show the new annotation to the user
-  annotationMarkers.showAnnotationMarker(pos, norm, localId, username);
+  modelAnnotater.markers.showAnnotationMarker(pos, norm, localId, username);
   
   // Store the annotation persistently with Sevianno
-  annotations.createAnnotation(modelViewer.seviannoObjectId, pos, norm, localId, username, function(answer) {
+  modelAnnotater.connector.createAnnotation(modelAnnotater.seviannoObjectId, pos, norm, localId, username, function(answer) {
     var annotation = JSON.parse(answer);
     var localId = annotation.annotationData.localId;
     // If "Loading" div of content box is shown, move to the edit div. The edit div
     // is chosen, because the user just created an annotation (when this function is called)
     // and therefore there is no content to read, but the user most likely wants to edit
     if (!$('#div-annotation-content-loading').hasClass('hidden')) {
-      annotationContentBox.switchMode('edit');      
+      modelAnnotater.contentBox.switchMode('edit');      
     }
     // The currently selected annotation id is the local id of the created annotation,
     // update the selected annotation id to the Sevianno annotation id
-    if (localId === modelViewer.selectedAnnotationId) {
-      modelViewer.selectedAnnotationId = annotation.id;
+    if (localId === modelAnnotater.selectedAnnotationId) {
+      modelAnnotater.selectedAnnotationId = annotation.id;
     }
     // Each shape (annotation marker) stores its annotation id with it. We have 
     // to update this id from local id to the Sevianno id. Also update the references 
     // in annotation markers list and annotation list
-    var transform = annotationMarkers.elements[localId];
+    var transform = modelAnnotater.markers.elements[localId];
     if (transform !== undefined) {
       transform.children[0].dataset.id = annotation.id;
-      annotationMarkers.elements[annotation.id] = transform;
-      annotationMarkers.elements[localId] = undefined;
+      modelAnnotater.markers.elements[annotation.id] = transform;
+      modelAnnotater.markers.elements[localId] = undefined;
       
-      modelViewer.storeAnnotationLocally(annotation);
-      modelViewer.annotations[localId] = undefined;
+      modelAnnotater.storeAnnotationLocally(annotation);
+      modelAnnotater.annotations[localId] = undefined;
     }
   });
 };
@@ -90,24 +99,24 @@ modelViewer.createAnnotation = function(pos, norm) {
  * Handler for the "Save" button in the annotation content box
  * @returns {undefined}
  */
-modelViewer.updateAnnotation = function() {
+modelAnnotater.updateAnnotation = function() {
   // Read user input
   var title = $('#input-annotation-title').val();
   var content = $('#textarea-annotation-content').val();
   // Indicate that the data is being processed by showing a loading indicator
   $('#ajax-loader-edit').removeClass('hidden');
 
-  var username = modelViewer.getCurrentUsername();
+  var username = doorman.getCurrentUsername();
   // Save the annotations with Sevianno
-  annotations.updateAnnotation(modelViewer.selectedAnnotationId, title, content, username, function(data) {
-    // Update the local annotation stored in modelViewer
+  modelAnnotater.connector.updateAnnotation(modelAnnotater.selectedAnnotationId, title, content, username, function(data) {
+    // Update the local annotation stored in modelAnnotater
     var annotation = JSON.parse(data);
-    modelViewer.storeAnnotationLocally(annotation);
+    modelAnnotater.storeAnnotationLocally(annotation);
     // Hide the loading indicator
     $('#ajax-loader-edit').addClass('hidden');  
     // Switch to div-annotation-content-read and update its content
-    annotationContentBox.switchMode('read');
-    annotationContentBox.showContent(); 
+    modelAnnotater.contentBox.switchMode('read');
+    modelAnnotater.contentBox.showContent(); 
   });
 };
 
@@ -115,36 +124,36 @@ modelViewer.updateAnnotation = function() {
  * Handler for the delete button in the annotation content box
  * @returns {undefined}
  */
-modelViewer.deleteAnnotation = function() {
+modelAnnotater.deleteAnnotation = function() {
   // Get the id of the currently selected annotation (which should be deleted)
-  var annotationId = modelViewer.annotations[modelViewer.selectedAnnotationId].id;
+  var annotationId = modelAnnotater.annotations[modelAnnotater.selectedAnnotationId].id;
 
   // Indicate that deletion is in progress (by showing a loading indicator)
   $('#ajax-loader-read').removeClass('hidden');
   // Remove the annotation from Sevianno service storage
-  annotations.deleteAnnotation(annotationId, function() {
+  modelAnnotater.connector.deleteAnnotation(annotationId, function() {
 
     // When successful, remove annotation marker (cone shape) from viewer
     // The cone shape is included in a transformation node
     var markers = document.getElementById('annotation-markers');
-    var transformNode = annotationMarkers.elements[annotationId];
+    var transformNode = modelAnnotater.markers.elements[annotationId];
     markers.removeChild(transformNode);
     // Hide annotation content box
-    annotationContentBox.hide();
+    modelAnnotater.contentBox.hide();
     // Hide the loading indicator
     $('#ajax-loader-read').addClass('hidden');  
   });
 };
 
 /**
- * Stores an annotation in the modelViewer.annotations object. It can be accessed
- * as an attribute via its annotation id. E.g. as modelViewer.annotations['12365']
+ * Stores an annotation in the modelAnnotater.annotations object. It can be accessed
+ * as an attribute via its annotation id. E.g. as modelAnnotater.annotations['12365']
  * @param {Object} annotation The annotation to be stored (one should typically 
  * store them in the format received from Sevianno)
  * @returns {undefined}
  */
-modelViewer.storeAnnotationLocally = function(annotation) {
-  modelViewer.annotations[annotation.id] = annotation;
+modelAnnotater.storeAnnotationLocally = function(annotation) {
+  modelAnnotater.annotations[annotation.id] = annotation;
 };
 
 /**
@@ -157,9 +166,9 @@ modelViewer.storeAnnotationLocally = function(annotation) {
  * 
  * @returns {String} The local annotation id 
  */
-modelViewer.getNextLocalId = function() {
-  var id = 'MODEL_VIEWER' + modelViewer.nextLocalId;
-  modelViewer.nextLocalId += 1;
+modelAnnotater.getNextLocalId = function() {
+  var id = 'MODEL_VIEWER' + modelAnnotater.nextLocalId;
+  modelAnnotater.nextLocalId += 1;
   return id;
 };
 
@@ -170,36 +179,15 @@ modelViewer.getNextLocalId = function() {
  * @param {Object} shape The shape object of the annotation marker which should be selected
  * @returns {undefined}
  */
-modelViewer.selectAnnotation = function(shape) {
+modelAnnotater.selectAnnotation = function(shape) {
   
   // Remove hightlighting from previously selected annotation
-  annotationMarkers.clearSelection(modelViewer.selectedAnnotationId);
+  modelAnnotater.markers.clearSelection(modelAnnotater.selectedAnnotationId);
   
-  modelViewer.selectedAnnotationId = shape.dataset.id;
+  modelAnnotater.selectedAnnotationId = shape.dataset.id;
   
   // Highlight the selected annotion marker with a different color
-  annotationMarkers.highlightShape(shape);
-};
-
-/**
- * Get the username of the currently logged in user (or an anonymous label).
- * 
- * Requires oidc-button to be able to retrieve a user name (uses the oidc_userinfo variable)
- * 
- * @returns {String} the username
- */
-modelViewer.getCurrentUsername = function() {
-  
-  var username = annotationContentBox.ANONYMOUS_USERNAME;
-  
-  if (oidc_userinfo !== undefined) {
-    if(oidc_userinfo.given_name !== undefined && oidc_userinfo.given_name !== ''
-            && oidc_userinfo.family_name !== undefined && oidc_userinfo.family_name !== '') {
-      username = oidc_userinfo.given_name + ' ' + oidc_userinfo.family_name;
-    }
-  }
-  
-  return username;
+  modelAnnotater.markers.highlightShape(shape);
 };
 
 /**
@@ -207,7 +195,7 @@ modelViewer.getCurrentUsername = function() {
  * @param {type} event
  * @returns {undefined}
  */
-modelViewer.handleAnnotationMarkerClick = function(event) {
+modelAnnotater.handleAnnotationMarkerClick = function(event) {
   
   // 3D point where the user clicked
   var worldPos = event.hitPnt;
@@ -215,8 +203,8 @@ modelViewer.handleAnnotationMarkerClick = function(event) {
   // Get the id of the clicked annotation
   var shape = event.hitObject;
   
-  modelViewer.selectAnnotation(shape);
-  annotationContentBox.showForWorldPos(worldPos);
+  modelAnnotater.selectAnnotation(shape);
+  modelAnnotater.contentBox.showForWorldPos(worldPos);
 };
 
 /**
@@ -228,44 +216,44 @@ modelViewer.handleAnnotationMarkerClick = function(event) {
  * @param {Event} event 
  * @returns {undefined}
  */
-modelViewer.handleAnnotationMarkerMouseOver = function(event) {
+modelAnnotater.handleAnnotationMarkerMouseOver = function(event) {
   // Get the owner of the annotation marker
   var shape = event.hitObject;
   var annotationId = shape.dataset.id;
-  var username = modelViewer.annotations[annotationId].annotationData.username;
+  var username = modelAnnotater.annotations[annotationId].annotationData.username;
   
   // For each annotation of the same owner ..
-  for (var id in modelViewer.annotations) {
-    if (modelViewer.annotations[id].annotationData.username === username) {
+  for (var id in modelAnnotater.annotations) {
+    if (modelAnnotater.annotations[id].annotationData.username === username) {
       // .. get the annotation marker shape ..
-      var transformNode = annotationMarkers.elements[id];
+      var transformNode = modelAnnotater.markers.elements[id];
       // .. and emphsize it
-      annotationMarkers.emphasizeShape(transformNode.children[0]);
+      modelAnnotater.markers.emphasizeShape(transformNode.children[0]);
     }
   }
 };
 
 /**
  * Mouse out listener for annotation markers. Undo for the emphasizing created by
- * modelViewer.handleAnnotationMarkerMouseOver.
+ * modelAnnotater.handleAnnotationMarkerMouseOver.
  * 
  * @param {Event} event
  * @returns {undefined}
  */
-modelViewer.handleAnnotationMarkerMouseOut = function(event) {
+modelAnnotater.handleAnnotationMarkerMouseOut = function(event) {
   // Get the owner of the annotation marker
   var shape = event.hitObject;
   var annotationId = shape.dataset.id;
-  var username = modelViewer.annotations[annotationId].annotationData.username;
+  var username = modelAnnotater.annotations[annotationId].annotationData.username;
     
   // For each annotation of the same owner ..
-  for (var id in modelViewer.annotations) {
-    if (modelViewer.annotations[id].annotationData.username === username) {
+  for (var id in modelAnnotater.annotations) {
+    if (modelAnnotater.annotations[id].annotationData.username === username) {
       // .. check that it is not the currently selected annotation 
       // (we do not want to change the selected annotations appearance) ..
-      if (modelViewer.selectedAnnotationId !== id) {
+      if (modelAnnotater.selectedAnnotationId !== id) {
         // .. and undo the emphasizing (by resetting all changes made to the markers appearance)
-        annotationMarkers.clearSelection(id);
+        modelAnnotater.markers.clearSelection(id);
       }
     }
   }
@@ -277,28 +265,28 @@ modelViewer.handleAnnotationMarkerMouseOut = function(event) {
  * 
  * @type Object
  * ****************************************************************************/
-var annotationMarkers = {};
+modelAnnotater.markers = {};
 
 // Color used for a selected annotation marker
-annotationMarkers.SELECTION_COLOR = '1 1 0';
+modelAnnotater.markers.SELECTION_COLOR = '1 1 0';
 // Transparency of a selected annotation marker
-annotationMarkers.SELECTION_OPACITY = '0.0';
+modelAnnotater.markers.SELECTION_OPACITY = '0.0';
 // An array of colors used for non-selected annotation markers
 // Different colors indicate ownership by different users 
 // (one user will get first color, next user gets second color, ..)
-annotationMarkers.DEFAULT_COLORS = ['1 0 0', '0 1 0', '0 0 1', '1 0 1', '0 1 1', '1 1 1', '0 0 0'];
+modelAnnotater.markers.DEFAULT_COLORS = ['1 0 0', '0 1 0', '0 0 1', '1 0 1', '0 1 1', '1 1 1', '0 0 0'];
 // Transparency of non-selected + non-mouseover annotation markers
-annotationMarkers.DEFAULT_OPACITY = '0.3';
-// The index of the next unused color in the annotationMarkers.DEFAULT_COLORS array
-annotationMarkers.nextColor = 0;
+modelAnnotater.markers.DEFAULT_OPACITY = '0.3';
+// The index of the next unused color in the modelAnnotater.markers.DEFAULT_COLORS array
+modelAnnotater.markers.nextColor = 0;
 // A list of all annotation markers (the cone shapes). Note, that not the
 // cone shape is stored directly in the list, but a transform node. The cone shape
 // is the direct child of the transform node.
-annotationMarkers.elements = {};
+modelAnnotater.markers.elements = {};
 // Object storing all materials assigned to annotation markers BY USER NAME. When 
 // displaying an annotation marker of a user this can be used to look up how it 
 // should look like.
-annotationMarkers.materials = {};
+modelAnnotater.markers.materials = {};
 
 /**
  * x3dom scene graph does not allow adding the same material to different shapes.
@@ -308,7 +296,7 @@ annotationMarkers.materials = {};
  * @param {Material} material The material to be copied
  * @returns {Material} A new material with same diffuse color and transparency
  */
-annotationMarkers.copyMaterial = function(material) {
+modelAnnotater.markers.copyMaterial = function(material) {
   
   var result = undefined;
   
@@ -327,13 +315,13 @@ annotationMarkers.copyMaterial = function(material) {
  * @param {String} username The name of the user to derive the material for
  * @returns {Material} x3dom node for material
  */
-annotationMarkers.getMaterial = function(username) {
+modelAnnotater.markers.getMaterial = function(username) {
   
-  var material = annotationMarkers.copyMaterial(annotationMarkers.materials[username]);
+  var material = modelAnnotater.markers.copyMaterial(modelAnnotater.markers.materials[username]);
   
   if (material === undefined) {
-    material = annotationMarkers.getNewMaterial();
-    annotationMarkers.materials[username] = material;
+    material = modelAnnotater.markers.getNewMaterial();
+    modelAnnotater.markers.materials[username] = material;
   }
   
   return material;
@@ -350,7 +338,7 @@ annotationMarkers.getMaterial = function(username) {
  * required to decide upon the annotation markers appearance
  * @returns {undefined}
  */
-annotationMarkers.showAnnotationMarker = function(pos, norm, id, username) {  
+modelAnnotater.markers.showAnnotationMarker = function(pos, norm, id, username) {  
   // Code taken from http://examples.x3dom.org/v-must/ (Download the zip file and check main.js)
   // Will show a cone marking the position where a user clicked on the model
   // show 3d marker at pick position
@@ -365,7 +353,7 @@ annotationMarkers.showAnnotationMarker = function(pos, norm, id, username) {
   t.setAttribute('rotation', rot[0].x+' '+rot[0].y+' '+rot[0].z+' '+rot[1]);
   t.setAttribute('translation', pos.x+' '+pos.y+' '+pos.z);
   
-  var material = annotationMarkers.getMaterial(username);
+  var material = modelAnnotater.markers.getMaterial(username);
 
   var s = document.createElement('Shape');
   s.setAttribute('class', 'shape');
@@ -383,8 +371,8 @@ annotationMarkers.showAnnotationMarker = function(pos, norm, id, username) {
   ot.appendChild(t);
   // End code taken from http://examples.x3dom.org/v-must/ 
   
-  // Store the annotation marker globally in modelViewer (The full transform node is stored)
-  annotationMarkers.elements[id] = t;
+  // Store the annotation marker globally in modelAnnotater (The full transform node is stored)
+  modelAnnotater.markers.elements[id] = t;
 };
 
 /**
@@ -393,11 +381,11 @@ annotationMarkers.showAnnotationMarker = function(pos, norm, id, username) {
  * @param {String} annotationId Id of the annotation where annotation marker should no longer appear selected
  * @returns {undefined}
  */
-annotationMarkers.clearSelection = function(annotationId) {
+modelAnnotater.markers.clearSelection = function(annotationId) {
   if (annotationId !== undefined) {
-    var shape = annotationMarkers.elements[annotationId].children[0];
-    var username = modelViewer.annotations[annotationId].annotationData.username;
-    var material = annotationMarkers.getMaterial(username);
+    var shape = modelAnnotater.markers.elements[annotationId].children[0];
+    var username = modelAnnotater.annotations[annotationId].annotationData.username;
+    var material = modelAnnotater.markers.getMaterial(username);
     shape.children[1].removeChild(shape.children[1].children[0]);
     shape.children[1].appendChild(material);
   }
@@ -409,13 +397,13 @@ annotationMarkers.clearSelection = function(annotationId) {
  * @param {Shape} shape The shape node of the annotation marker to be emphasized
  * @returns {undefined}
  */
-annotationMarkers.emphasizeShape = function(shape) {
+modelAnnotater.markers.emphasizeShape = function(shape) {
   
   // Create a new material with the original color, but set the transparency like 
   // for a selected annotation marker
   var material = document.createElement('Material');
   material.setAttribute('diffuseColor', shape.children[1].children[0].getAttribute('diffuseColor'));
-  material.setAttribute('transparency', annotationMarkers.SELECTION_OPACITY);
+  material.setAttribute('transparency', modelAnnotater.markers.SELECTION_OPACITY);
   shape.children[1].removeChild(shape.children[1].children[0]);
   shape.children[1].appendChild(material);
 };
@@ -426,12 +414,12 @@ annotationMarkers.emphasizeShape = function(shape) {
  * @param {Shape} shape The annotation marker to be displayed as selected
  * @returns {undefined}
  */
-annotationMarkers.highlightShape = function (shape) {
+modelAnnotater.markers.highlightShape = function (shape) {
   
   // Highlight the selected annotion marker with a different color
   var material = document.createElement('Material');
-  material.setAttribute('diffuseColor', annotationMarkers.SELECTION_COLOR);
-  material.setAttribute('transparency', annotationMarkers.SELECTION_OPACITY);
+  material.setAttribute('diffuseColor', modelAnnotater.markers.SELECTION_COLOR);
+  material.setAttribute('transparency', modelAnnotater.markers.SELECTION_OPACITY);
   shape.children[1].removeChild(shape.children[1].children[0]);
   shape.children[1].appendChild(material);
 };
@@ -443,63 +431,24 @@ annotationMarkers.highlightShape = function (shape) {
  *  
  * @returns {Material} The new material
  */
-annotationMarkers.getNewMaterial = function () {
+modelAnnotater.markers.getNewMaterial = function () {
   
-  // Create a new material with the next color from annotationMarkers.DEFAULT_COLORS
+  // Create a new material with the next color from modelAnnotater.markers.DEFAULT_COLORS
   var material = document.createElement('Material');
-  material.setAttribute('diffuseColor', annotationMarkers.DEFAULT_COLORS[annotationMarkers.nextColor]);
-  material.setAttribute('transparency', annotationMarkers.DEFAULT_OPACITY);
+  material.setAttribute('diffuseColor', modelAnnotater.markers.DEFAULT_COLORS[modelAnnotater.markers.nextColor]);
+  material.setAttribute('transparency', modelAnnotater.markers.DEFAULT_OPACITY);
   
-  // Update annotationMarkers.nextColor. If all colors are already used, just 
+  // Update modelAnnotater.markers.nextColor. If all colors are already used, just 
   // use the first color again.
-  if (annotationMarkers.nextColor + 1 > annotationMarkers.DEFAULT_COLORS.length) {
-    annotationMarkers.nextColor = 0;
+  if (modelAnnotater.markers.nextColor + 1 > modelAnnotater.markers.DEFAULT_COLORS.length) {
+    modelAnnotater.markers.nextColor = 0;
   }
   else {
-    annotationMarkers.nextColor++;
+    modelAnnotater.markers.nextColor++;
   }
   
   return material;
 };
-
-// Array storing event listener for the onload function of the x3dInline element 
-// in model_viewer.php
-modelViewer.onLoadHandler = [];
-
-/**
- * Registers an event listener for the x3dInline element in model_viewer.php.
- * The x3dom inline element seems not to support the 'addEventListener()' function
- * by itself, so this is a workaround to be able to attach multiple event listener
- * 
- * @param {String} type Currently only 'load' supported
- * @param {function} callback Will be called when event fires
- * @returns {undefined}
- */
-modelViewer.addEventListener = function(type, callback) {
-  // Store the event listener in modelViewer.onLoadHandler
-  if (type === 'load') {
-    modelViewer.onLoadHandler.push(callback);
-  }
-  else {
-    console.log('modelViewer.addEventHandler(): Unsupported type '+ type);
-  }
-};
-
-/**
- * Callback function for onLoad event of x3dInline element in model_viewer.php
- * 
- * @param {Event} event
- * @returns {undefined}
- */
-modelViewer.onModelLoaded = function(event) {
-    try {
-        modelViewer.onLoadHandler.forEach(function(callback) {
-            callback(event);
-        })
-    } catch(e) {
-        console.log('Error in onModelLoaded: ', e)
-    }
-}
 
 /** ****************************************************************************
  * This object provides functionality for all features related to the annotation 
@@ -507,14 +456,12 @@ modelViewer.onModelLoaded = function(event) {
  * 
  * @type Object
  * ****************************************************************************/
-var annotationContentBox = {};
+modelAnnotater.contentBox = {}
 
 // Placeholder text for annotation content box in read mode when there is no title
-annotationContentBox.NO_TITLE_PLACEHOLDER = 'No Title';
+modelAnnotater.contentBox.NO_TITLE_PLACEHOLDER = 'No Title';
 // Placeholder text for annotation content box in read mode when there is no content
-annotationContentBox.NO_CONTENT_PLACEHOLDER = 'No content';
-// Placeholder text for annotation content box when there is no user name
-annotationContentBox.ANONYMOUS_USERNAME = 'Anonymous';
+modelAnnotater.contentBox.NO_CONTENT_PLACEHOLDER = 'No content';
 
 /**
  * Show the annotation content box for a user click. Positions the annotation content 
@@ -524,15 +471,15 @@ annotationContentBox.ANONYMOUS_USERNAME = 'Anonymous';
  * @param {Array} pos2d 2D point where the user clicked (relative to page)
  * @returns {undefined}
  */
-annotationContentBox.show = function(pos2d) {
+modelAnnotater.contentBox.show = function(pos2d) {
   
   var anno2D = $('#annotation-content');
   anno2D.removeClass('hidden');
-  pos2d = annotationContentBox.calcPosition(pos2d);
+  pos2d = modelAnnotater.contentBox.calcPosition(pos2d);
   anno2D.css('left', pos2d[0] + 'px');
   anno2D.css('top', pos2d[1] + 'px');  
   
-  annotationContentBox.showContent();
+  modelAnnotater.contentBox.showContent();
 };
 
 /**
@@ -542,48 +489,48 @@ annotationContentBox.show = function(pos2d) {
  * @param {x3dom.fields.SFVec3f} worldPos 3D position
  * @returns {undefined}
  */
-annotationContentBox.showForWorldPos = function(worldPos) {
+modelAnnotater.contentBox.showForWorldPos = function(worldPos) {
   
   var runtime = $("#viewer_object")[0].runtime;
   
   // x3dom can calculate the 2D position on the screen based on a 3D point
   var pos2d = runtime.calcPagePos(worldPos[0], worldPos[1], worldPos[2]);
   
-  annotationContentBox.show(pos2d);
+  modelAnnotater.contentBox.show(pos2d);
 };
 
 /**
  * Shows the textual content of the currently selected annotation in the annotation 
- * context box. Note, that the content is taken from modelViewer.annotations object.
- * You might need to update the object first by calling modelViewer.storeAnnotationLocally(annotation)
+ * context box. Note, that the content is taken from modelAnnotater.annotations object.
+ * You might need to update the object first by calling modelAnnotater.storeAnnotationLocally(annotation)
  * 
  * @returns {undefined}
  */
-annotationContentBox.showContent = function() {
+modelAnnotater.contentBox.showContent = function() {
   
-  var annotation = modelViewer.annotations[modelViewer.selectedAnnotationId];
+  var annotation = modelAnnotater.annotations[modelAnnotater.selectedAnnotationId];
   
   // If there is no annotation stored with the given id (or the id is undefined), 
   // then the user has created a new annotation and the request to Sevianno is still in progress
   if (annotation === undefined) {
-    annotationContentBox.switchMode('loading');
+    modelAnnotater.contentBox.switchMode('loading');
   }
   else {
     // Updating the content in the "readonly" div
     if (annotation.title === undefined || annotation.title == '') {
-      $('#header-annotation-content').html(annotationContentBox.NO_TITLE_PLACEHOLDER);
+      $('#header-annotation-content').html(modelAnnotater.contentBox.NO_TITLE_PLACEHOLDER);
     } else {
       $('#header-annotation-content').html(annotation.title);
     }
     if (annotation.text === undefined || annotation.text == '') {
-      $('#p-annotation-content').html(annotationContentBox.NO_CONTENT_PLACEHOLDER);
+      $('#p-annotation-content').html(modelAnnotater.contentBox.NO_CONTENT_PLACEHOLDER);
     }
     else {
       $('#p-annotation-content').html(annotation.text);
     }
     var username = annotation.annotationData.username;
     if (username === undefined && username === '') {
-      $('#username-read').html(annotationContentBox.ANONYMOUS_USERNAME);
+      $('#username-read').html(doorman.ANONYMOUS_USERNAME);
     }
     else {
       $('#username-read').html(username);
@@ -601,7 +548,7 @@ annotationContentBox.showContent = function() {
  * @param {Object} pos2d The 2D position where the user clicked (relative to webpage)
  * @returns {Object} The 2D position where to place the annotation (relative to webpage)
  */
-annotationContentBox.calcPosition = function(pos2d) {
+modelAnnotater.contentBox.calcPosition = function(pos2d) {
   // The amount of pixels the annotation content is moved to the border (at most)
   var DELTA = 50;
   
@@ -660,7 +607,7 @@ annotationContentBox.calcPosition = function(pos2d) {
  * @param {type} mode
  * @returns {undefined}
  */
-annotationContentBox.switchMode = function(mode) {
+modelAnnotater.contentBox.switchMode = function(mode) {
   if (mode === 'edit') {
     $('#div-annotation-content-loading').addClass('hidden');
     $('#div-annotation-content-read').addClass('hidden');
@@ -683,14 +630,14 @@ annotationContentBox.switchMode = function(mode) {
  * 
  * @returns {undefined}
  */
-annotationContentBox.hide = function() {
+modelAnnotater.contentBox.hide = function() {
   // Hide the whole content box
   $('#annotation-content').addClass('hidden');
   
   // Clear all input / output fields
   // Updating the content in the "readonly" div
-  $('#header-annotation-content').html(annotationContentBox.NO_TITLE_PLACEHOLDER);
-  $('#p-annotation-content').html(annotationContentBox.NO_CONTENT_PLACEHOLDER);
+  $('#header-annotation-content').html(modelAnnotater.contentBox.NO_TITLE_PLACEHOLDER);
+  $('#p-annotation-content').html(modelAnnotater.contentBox.NO_CONTENT_PLACEHOLDER);
   // Updating the content in the "edit" div
   $('#input-annotation-title').val('');
   $('#textarea-annotation-content').val('');
@@ -699,10 +646,10 @@ annotationContentBox.hide = function() {
 modelViewer.addEventListener('load', function () {
   // Reading the Sevianno object id of the current model from our database (our php 
   // server will store it in a hidden input field called model-sevianno-id)
-  modelViewer.seviannoObjectId = $('#model-sevianno-id').val();
+  modelAnnotater.seviannoObjectId = $('#model-sevianno-id').val();
   
   // Then reading all annotations from Sevianno which belong to this object id and display them
-  annotations.readAnnotations(modelViewer.seviannoObjectId, function(annos) {
+  modelAnnotater.connector.readAnnotations(modelAnnotater.seviannoObjectId, function(annos) {
     $.each(annos.annotations, function(i,n) {
       var annotation = n.annotation;
       var dbPos = annotation.annotationData.pos;
@@ -710,9 +657,9 @@ modelViewer.addEventListener('load', function () {
       // Converting the position and normal vector received to x3dom vectors
       var pos = new x3dom.fields.SFVec3f(dbPos.x, dbPos.y, dbPos.z);
       var norm = new x3dom.fields.SFVec3f(dbNorm.x, dbNorm.y, dbNorm.z);
-      annotationMarkers.showAnnotationMarker(pos, norm, annotation.id, annotation.annotationData.username);
+      modelAnnotater.markers.showAnnotationMarker(pos, norm, annotation.id, annotation.annotationData.username);
       
-      modelViewer.storeAnnotationLocally(annotation);
+      modelAnnotater.storeAnnotationLocally(annotation);
     });
   });
 })
@@ -726,45 +673,28 @@ $(document).ready(function() {
   
   // Register handler for close button in annotation content window
   $('#btn-annotation-content-close').on('click', function() {
-    annotationContentBox.hide();
+    modelAnnotater.contentBox.hide();
     // There is no more annotation selected
-    annotationMarkers.clearSelection(modelViewer.selectedAnnotationId);
+    modelAnnotater.markers.clearSelection(modelAnnotater.selectedAnnotationId);
   
-    modelViewer.selectedAnnotationId = undefined;
+    modelAnnotater.selectedAnnotationId = undefined;
   });
   
   // Handler for the edit button in div-annotation-content-read. Switches to div-annotation-content-edit
   $('#btn-annotation-edit').on('click', function() {
-    annotationContentBox.switchMode('edit');
+    modelAnnotater.contentBox.switchMode('edit');
   });
   
   // Handler for the edit button in div-annotation-content-edit. Switches to 
   // div-annotation-content-read without saving user input.
   $('#btn-annotation-cancel').on('click', function() {
-    annotationContentBox.switchMode('read');
+    modelAnnotater.contentBox.switchMode('read');
   });
   
   // Handler for the edit button in div-annotation-content-edit. Switches to 
   // div-annotation-content-read while saving all user input at the Sevianno service
-  $('#btn-annotation-save').on('click', modelViewer.updateAnnotation);
+  $('#btn-annotation-save').on('click', modelAnnotater.updateAnnotation);
   
   // Handler for clicking the delete button in div-annotation-content-read
-  $('#btn-annotation-delete').on('click', modelViewer.deleteAnnotation);
+  $('#btn-annotation-delete').on('click', modelAnnotater.deleteAnnotation);
 });
-
-modelViewer.firstModel = true
-modelViewer.setNewModel = function (modelId) {
-    if(modelId == null) { return }
-    $.get(URI().filename('x3d_element.php').query({id:modelId}).href(), null, function (data) {
-            if(!modelViewer.firstModel) {
-                // free x3dom-context (needed to prevent errormessage)
-                // code copied from unload-event: https://github.com/x3dom/x3dom/blob/7d104d9717d12e1670b1ef40f5b83beeb590df83/src/Main.js#L318
-                for (var i=0; i<x3dom.canvases.length; i++) {x3dom.canvases[i].doc.shutdown(x3dom.canvases[i].gl)}
-                x3dom.canvases = []
-            } else {
-                modelViewer.firstModel = false
-            }
-            $('#x3d-container').html(data)
-            x3dom.reload()
-        })
-}

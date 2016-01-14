@@ -39,10 +39,11 @@
       <script src='../external/x3dom/x3dom.js'> </script>
       
       <script src='../js/x3d-extensions.js'> </script>
-      <script src='../js/annotations.js'> </script>
-      <script src='../js/model-viewer.js'> </script>
+      <script src='../js/model-viewer-base.js'> </script>
+      <script src='../js/model-viewer-annotations.js'> </script>
+      <script src='../js/model-viewer-annotations-connector.js'> </script>
       <script src='../js/model-viewer-sync.js'> </script>
-      <script src="../js/model-part-highlighting.js"></script>
+      <script src="../js/model-viewer-highlighting.js"></script>
       <script src="../js/model-viewer-specials.js"></script>
     <?php
 

@@ -89,10 +89,10 @@ switch($status) {
 	case USER_STATUS::OIDC_UNAUTHORIZED:
 		// render oidc-button
 		?>
-		<script src="../js/signin_callbacks.js"></script>
+		<script src="../js/doorman.js"></script>
 		<span id="signinButton">
 			<span class="oidc-signin"
-				data-callback="signinCallback"
+				data-callback="doorman_signinCallback"
 				data-name="Learning Layers"
 				data-logo="https://raw.githubusercontent.com/learning-layers/LayersToolTemplate/master/extras/logo.png"
 				data-server="https://api.learning-layers.eu/o/oauth2"

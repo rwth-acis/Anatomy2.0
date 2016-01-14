@@ -5,11 +5,11 @@
 * Requires:
 **/
 
-modelSpecialFeatures = {}
-modelSpecialFeatures.inlinespace = 'inlinespace__'
+modelSpecials = {}
+modelSpecials.inlinespace = 'inlinespace__'
 
-modelSpecialFeatures.onLoaded = function () {
-	var skin_shape = $('x3d Shape#'+modelSpecialFeatures.inlinespace+'headskin_1');
+modelSpecials.onLoaded = function () {
+	var skin_shape = $('x3d Shape#'+modelSpecials.inlinespace+'headskin_1');
 	if(skin_shape.length) {
 			$('#tool-list').append($('<li class="navbar-li"/>').append($('<input id="skin-fade-slider"/>')).append($('<b>Fade skin</b>').css('margin', '15px')))
 			$('#skin-fade-slider').slider({
@@ -29,7 +29,7 @@ modelSpecialFeatures.onLoaded = function () {
 	}
 };
 
-modelViewer.addEventListener('load', modelSpecialFeatures.onLoaded);
+modelViewer.addEventListener('load', modelSpecials.onLoaded);
 
 $(document).ready( function () {
 });
