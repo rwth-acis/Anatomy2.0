@@ -58,7 +58,7 @@ modelAnnotater.connector = {
  */
 modelAnnotater.createAnnotation = function(pos, norm) {
   
-  var username = doorman.getCurrentUsername();
+  var username = personality.getCurrentUsername();
   // Generate a local ID to be able to reference the object until a Sevianno ID 
   // has been received
   var localId = modelAnnotater.getNextLocalId();
@@ -106,7 +106,7 @@ modelAnnotater.updateAnnotation = function() {
   // Indicate that the data is being processed by showing a loading indicator
   $('#ajax-loader-edit').removeClass('hidden');
 
-  var username = doorman.getCurrentUsername();
+  var username = personality.getCurrentUsername();
   // Save the annotations with Sevianno
   modelAnnotater.connector.updateAnnotation(modelAnnotater.selectedAnnotationId, title, content, username, function(data) {
     // Update the local annotation stored in modelAnnotater
@@ -530,7 +530,7 @@ modelAnnotater.contentBox.showContent = function() {
     }
     var username = annotation.annotationData.username;
     if (username === undefined && username === '') {
-      $('#username-read').html(doorman.ANONYMOUS_USERNAME);
+      $('#username-read').html(personality.ANONYMOUS_USERNAME);
     }
     else {
       $('#username-read').html(username);
@@ -647,21 +647,25 @@ modelViewer.addEventListener('load', function () {
   // Reading the Sevianno object id of the current model from our database (our php 
   // server will store it in a hidden input field called model-sevianno-id)
   modelAnnotater.seviannoObjectId = $('#model-sevianno-id').val();
-  
-  // Then reading all annotations from Sevianno which belong to this object id and display them
-  modelAnnotater.connector.readAnnotations(modelAnnotater.seviannoObjectId, function(annos) {
-    $.each(annos.annotations, function(i,n) {
-      var annotation = n.annotation;
-      var dbPos = annotation.annotationData.pos;
-      var dbNorm = annotation.annotationData.norm;
-      // Converting the position and normal vector received to x3dom vectors
-      var pos = new x3dom.fields.SFVec3f(dbPos.x, dbPos.y, dbPos.z);
-      var norm = new x3dom.fields.SFVec3f(dbNorm.x, dbNorm.y, dbNorm.z);
-      modelAnnotater.markers.showAnnotationMarker(pos, norm, annotation.id, annotation.annotationData.username);
-      
-      modelAnnotater.storeAnnotationLocally(annotation);
-    });
-  });
+    
+  if (modelAnnotater.seviannoObjectId == null || modelAnnotater.seviannoObjectId == '') {
+      console.error('This object has no sevianno-id!')
+  } else {
+      // Then reading all annotations from Sevianno which belong to this object id and display them
+      modelAnnotater.connector.readAnnotations(modelAnnotater.seviannoObjectId, function(annos) {
+        $.each(annos.annotations, function(i,n) {
+          var annotation = n.annotation;
+          var dbPos = annotation.annotationData.pos;
+          var dbNorm = annotation.annotationData.norm;
+          // Converting the position and normal vector received to x3dom vectors
+          var pos = new x3dom.fields.SFVec3f(dbPos.x, dbPos.y, dbPos.z);
+          var norm = new x3dom.fields.SFVec3f(dbNorm.x, dbNorm.y, dbNorm.z);
+          modelAnnotater.markers.showAnnotationMarker(pos, norm, annotation.id, annotation.annotationData.username);
+
+          modelAnnotater.storeAnnotationLocally(annotation);
+        });
+      });
+  }  
 })
 
 // Initializing model viewer

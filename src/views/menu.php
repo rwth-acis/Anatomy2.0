@@ -48,7 +48,7 @@
 
 
 	<script src="../js/tools.js"></script>
-	<script src="../js/doorman.js"></script>
+	<script src="../js/personality.js"></script>
     <link rel='stylesheet' type='text/css' href='../css/style.css'>
 
 <?php
@@ -80,7 +80,7 @@
           <li>
 						<span id="signinButton">
 							<span class="oidc-signin"
-								data-callback="doorman_signinCallback"
+								data-callback="personality_signinCallback"
 								data-name="Learning Layers"
 								data-logo="https://raw.githubusercontent.com/learning-layers/LayersToolTemplate/master/extras/logo.png"
 								data-server="https://api.learning-layers.eu/o/oauth2"
