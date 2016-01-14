@@ -48,7 +48,7 @@
       ?>
     </Group>
     <viewpoint id="viewport" DEF="viewport" centerOfRotation="0 0 0" position="0.00 0.00 5.00" orientation="-0.92 0.35 0.17 0.00" fieldOfView="0.858"> </viewpoint>
-    <Group id="annotation-markers" onclick="modelViewer.handleAnnotationMarkerClick(event)" onmouseover="modelViewer.handleAnnotationMarkerMouseOver(event)" onmouseout="modelViewer.handleAnnotationMarkerMouseOut(event)"></Group>
+    <Group id="annotation-markers" onclick="modelAnnotater.handleAnnotationMarkerClick(event)" onmouseover="modelAnnotater.handleAnnotationMarkerMouseOver(event)" onmouseout="modelAnnotater.handleAnnotationMarkerMouseOut(event)"></Group>
   </scene>
   <?php
       if(is_object($model)) {
