@@ -26,9 +26,9 @@ modelAnnotater.connector.ANNOTATIONS_COLLECTION = "TextTypeAnnotations";
 // The URL to the Sevianno service
 modelAnnotater.connector.BASE_SERVICE_URL = 'http://eiche.informatik.rwth-aachen.de:7075/';
 // The URL for request regarding Sevianno modelAnnotater.connector
-modelAnnotater.connector.ANNOTATION_SERVICE_URL = modelAnnotater.connector.BASE_SERVICE_URL + 'modelAnnotater.connector/modelAnnotater.connector/';
+modelAnnotater.connector.ANNOTATION_SERVICE_URL = modelAnnotater.connector.BASE_SERVICE_URL + 'annotations/annotations/';
 // The URL for requests regarding Sevianno objects
-modelAnnotater.connector.OBJECT_SERVICE_URL = modelAnnotater.connector.BASE_SERVICE_URL + 'modelAnnotater.connector/objects/';
+modelAnnotater.connector.OBJECT_SERVICE_URL = modelAnnotater.connector.BASE_SERVICE_URL + 'annotations/objects/';
 
 /**
  * Helper function
@@ -118,7 +118,7 @@ modelAnnotater.connector.updateAnnotation = function(annotationId, title, conten
  * @returns {undefined}
  */
 modelAnnotater.connector.readAnnotations = function(objectId, func) { 
-  modelAnnotater.connector.sendRequest("GET", modelAnnotater.connector.OBJECT_SERVICE_URL + objectId + '/modelAnnotater.connector', null, 0, function(answer) {
+  modelAnnotater.connector.sendRequest("GET", modelAnnotater.connector.OBJECT_SERVICE_URL + objectId + '/annotations', null, 0, function(answer) {
     
     var annos = JSON.parse(answer);
     
