@@ -18,7 +18,7 @@ showcase.specials.onLoaded = function () {
 									 ,step: 1
 									 ,value: 100
 									 })
-									 .on('slide', function () { 
+									 .on('slide', function () {
 									 	var val = $('#skin-fade-slider').slider('getValue')
 										if(val == 100) {
 											showcase.highlighter.setMaterial(skin_shape, $(''));
@@ -27,10 +27,12 @@ showcase.specials.onLoaded = function () {
 										}
 									})
 	}
+
+	// reverse material-deletion from highlighting
+	var no_texture_shape = $('x3d Shape#'+showcase.specials.inlinespace+'no_texture')
+	if(no_texture_shape.length) {
+		no_texture_shape.first().prepend('<Appearance><Material></Material></Appearance>')
+	}
 };
 
 showcase.addEventListener('load', showcase.specials.onLoaded);
-
-$(document).ready( function () {
-});
-
