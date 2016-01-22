@@ -10,8 +10,9 @@ showcase.specials.inlinespace = 'inlinespace__'
 
 showcase.specials.onLoaded = function () {
 	var skin_shape = $('x3d Shape#'+showcase.specials.inlinespace+'headskin_1');
-	if(skin_shape.length) {
-			$('#tool-list').append($('<li class="navbar-li"/>').append($('<input id="skin-fade-slider"/>')).append($('<b>Fade skin</b>').css('margin', '15px')))
+	var existing_slider = $('#skin-fade-slider-wrapper')
+	if(skin_shape.length && !existing_slider.length) {
+			$('#tool-list').append($('<li id="skin-fade-slider-wrapper" class="navbar-li"/>').append($('<input id="skin-fade-slider"/>')).append($('<b>Fade skin</b>').css('margin', '15px')))
 			$('#skin-fade-slider').slider({
 									  min: 0
 									 ,max: 100
@@ -26,6 +27,8 @@ showcase.specials.onLoaded = function () {
 											showcase.highlighter.setMaterial(skin_shape, $('<Material/>').attr('transparency', (100-val)/100));
 										}
 									})
+	} else if (!skin_shape.length && existing_slider.length) {
+		existing_slider.remove()
 	}
 
 	// reverse material-deletion from highlighting
