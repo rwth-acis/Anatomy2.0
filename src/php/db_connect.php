@@ -22,7 +22,7 @@
 	if( (include '../config/config.php') === false) {
 		throw new Exception("The config/config.php is missing! No information about database available.");
 	}
-var_dump($admins);
+
 	// mysql_connect - call for compatibility-reasons. The API is deprecated (http://php.net/manual/de/function.mysql-connect.php)
     $connection = mysql_connect($host, $user, $password);
     if(!$connection) {
