@@ -24,7 +24,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Collaborative Viewing of 3D Models </title>
-    
+
   <?php
     //Decide if this site is inside a separate widget
     if(filter_input(INPUT_GET, "widget") == "true")
@@ -54,10 +54,10 @@
               <h1>Gallery</h1>
             </div>
             <div class="col-sm-4">
-              <?php 
+              <?php
                 $btn_edit_class = "btn btn-success btn-block btn-lg";
                 printLinkBtn("upload.php", $btn_edit_class." headline-btn", "Upload");
-              ?>    
+              ?>
             </div>
           </div>
         </div>
@@ -67,11 +67,11 @@
   ?>
   <div class='container'>
     <div class='row'>
-      <div class='col-md-6'>   
+      <div class='col-md-6'>
         <div class="col-sm-12">
-          <?php 
+          <?php
             printLinkBtn("upload.php", $btn_edit_class." headline-btn-smartphone", "Upload");
-          ?> 
+          ?>
         </div>
       </div>
     </div>

@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @file db_connect.php 
+ * @file db_connect.php
  * Connects to the database using predefined settings.
  */
 
   // Sets the variables $host, $database, $user, $password
-	if( (include '../config/database.php') === false) {
-		throw new Exception("The config/database.php is missing! No information about database available.");
+	if( (include '../config/config.php') === false) {
+		throw new Exception("The config/config.php is missing! No information about database available.");
 	}
-
+var_dump($admins);
 	// mysql_connect - call for compatibility-reasons. The API is deprecated (http://php.net/manual/de/function.mysql-connect.php)
     $connection = mysql_connect($host, $user, $password);
     if(!$connection) {

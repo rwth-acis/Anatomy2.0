@@ -83,7 +83,6 @@ model-data/*
 !model-data/knight
 
 #ignore config files
-src/config/database.php
 src/config/config.php
 
 #ignore Eclipse project files
