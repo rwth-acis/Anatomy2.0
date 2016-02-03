@@ -23,10 +23,14 @@ html, body {
   display: flex;
   flex-direction: column;
 }
- 
+
 body {
     background-color: white;
     overflow: auto;
+}
+
+nav.toolbar {
+  z-index: 1;
 }
 
 #x3d-container {
