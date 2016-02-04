@@ -1,20 +1,17 @@
 {
   "name": "x3dom",
-  "version": "1.7.0",
-  "authors": [
-    "https://github.com/x3dom/x3dom/blob/master/AUTHORS"
+  "description": "A framework for integrating and manipulating X3D scenes as HTML5/DOM elements",
+  "main": "x3dom.js",
+  "license": "MIT",
+  "keywords": [
+    "3d",
+    "x3d",
+    "x3dom"
   ],
-  "description": "A framework for integrating and manipulating X3D scenes as HTML5/DOM elements.",
-  "main": [
-    "./x3dom.js",
-    "./x3dom.css",
-    "./x3dom.swf"
-  ],
+  "homepage": "http://x3dom.org",
   "moduleType": [
     "globals"
   ],
-  "license": "MIT",
-  "homepage": "http://www.x3dom.org/",
   "ignore": [
     "**/.*",
     "node_modules",
@@ -22,14 +19,14 @@
     "test",
     "tests"
   ],
-  "_release": "1.7.0",
+  "version": "1.7.1",
+  "_release": "1.7.1",
   "_resolution": {
     "type": "version",
-    "tag": "v1.7.0",
-    "commit": "72aeb77829da05eccf61ac7c04d27bcfa7b29f1b"
+    "tag": "v1.7.1",
+    "commit": "b3c422e537b2681d71b79b77e8ffff7559333a16"
   },
-  "_source": "git://github.com/despairblue/bower-x3dom.git",
+  "_source": "git://github.com/x3dom/dist.git",
   "_target": "~1.7.0",
-  "_originalSource": "x3dom",
-  "_direct": true
+  "_originalSource": "x3dom"
 }

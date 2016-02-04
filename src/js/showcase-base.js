@@ -2,15 +2,17 @@
 
 var showcase = {}
 
-// Array storing event listener for the onload function of the x3dInline element 
+// Array storing event listener for the onload function of the x3dInline element
 // in showcase.php
 showcase.onLoadHandler = [];
+
+showcase.inlinespace = 'inlinespace__'
 
 /**
  * Registers an event listener for the x3dInline element in showcase.php.
  * The x3dom inline element seems not to support the 'addEventListener()' function
  * by itself, so this is a workaround to be able to attach multiple event listener
- * 
+ *
  * @param {String} type Currently only 'load' supported
  * @param {function} callback Will be called when event fires
  * @returns {undefined}
@@ -27,7 +29,7 @@ showcase.addEventListener = function(type, callback) {
 
 /**
  * Callback function for onLoad event of x3dInline element in showcase.php
- * 
+ *
  * @param {Event} event
  * @returns {undefined}
  */

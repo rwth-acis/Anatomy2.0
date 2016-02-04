@@ -16,7 +16,7 @@
  * @file toolbar.js
  * Provides event handler for click events of all toolbar buttons
  * Also initializes toolbar elements if needed
- * 
+ *
  * Requires: showcase-annotations.js
  *   annotations.js
  */
@@ -25,7 +25,7 @@ showcase.toolbar = {};
 
 showcase.toolbar.showInfo = false
 showcase.toolbar.showHelp = false
-// True, if a user is in the 'set an annotation position marker' mode (which is 
+// True, if a user is in the 'set an annotation position marker' mode (which is
 // started by pressing the 'Annotate' button once)
 showcase.toolbar.annotate = false
 showcase.toolbar.isSynchronized = ko.observable(false)
@@ -37,15 +37,15 @@ showcase.toolbar.lecturerModeViewModel = {
 showcase.toolbar.modelId = ko.observable(URI().query(true).id)
 
 /**
- * Add click handler when DOM loaded. Note: Due to the implementation of x3dom, 
- * adding a click event handler to an Inline element does not work in a 
+ * Add click handler when DOM loaded. Note: Due to the implementation of x3dom,
+ * adding a click event handler to an Inline element does not work in a
  * DOMContentLoaded event handler.
  * @returns {undefined}
  */
 $(document).ready(function () {
 
     // One way data-bindings:
-    
+
     $('#btnAnnotate').on('click', function () {
         showcase.toolbar.toggleAnnotationMode()
     })
@@ -54,7 +54,7 @@ $(document).ready(function () {
     })
     $('#btnInfo').bootstrapSwitch('state', false, true).on('switchChange.bootstrapSwitch', function () {
         showcase.toolbar.showInfo = !showcase.toolbar.showInfo;
-        // optionally synchronize	
+        // optionally synchronize
         $('#metadata_overlay').css('display', showcase.toolbar.showInfo ? 'block' : 'none')
         $('#viewer_object')[0].runtime.statistics(showcase.toolbar.showInfo)
     })
@@ -69,9 +69,9 @@ $(document).ready(function () {
         $('#viewer_object')[0].runtime.showAll()
     })
     showcase.toolbar.modelId.subscribe( function(newValue) {
-        
+
     })
-    
+
     // Two way data-bindings :
 
     // lecturer-mode
@@ -82,19 +82,19 @@ $(document).ready(function () {
                     .bootstrapSwitch('readonly', !valueAccessor().canEnter())
                     .on('switchChange.bootstrapSwitch', function () {
                         valueAccessor().modeEnabled( ! valueAccessor().modeEnabled() )
-                    })     
+                    })
         },
         update: function(element, valueAccessor) {
             // make state writable:
             $(element).bootstrapSwitch('readonly', false)
-    
+
             $(element).bootstrapSwitch('state', valueAccessor().modeEnabled(), true)
             $(element).bootstrapSwitch('readonly', ! valueAccessor().canEnter())
         }
     }
     $('#btnLecturer').attr('data-bind', "lecturerMode: $root")
     ko.applyBindings(showcase.toolbar.lecturerModeViewModel, $('#btnLecturer')[0])
-    
+
     // model-selection
     showcase.toolbar.modelId.subscribe( function(newValue) {
         showcase.setNewModel(newValue)
@@ -111,21 +111,8 @@ $(document).ready(function () {
             }
         }, false)
     }
-    
+
     showcase.addEventListener('load', function () {
-        
-        // init annotations, should go to other file
-        $('#x3dInline').on('click', function (event) {
-            if (showcase.toolbar.annotate) {
-                var pos = new x3dom.fields.SFVec3f(event.worldX, event.worldY, event.worldZ);
-                var norm = new x3dom.fields.SFVec3f(event.normalX, event.normalY, event.normalZ);
-
-                showcase.annotater.createAnnotation(pos, norm);
-
-                showcase.toolbar.toggleAnnotationMode(true);
-            }
-        });
-
         // Set view to see whole model before rendering it the first time
         x3dExtensions.normalizeCamera($('#viewer_object')[0].runtime);
     })

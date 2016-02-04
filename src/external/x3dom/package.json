@@ -1,0 +1,24 @@
+{
+  "name": "x3dom",
+  "version": "1.7.1",
+  "description": "A framework for integrating and manipulating X3D scenes as HTML5/DOM elements",
+  "main": "x3dom.js",
+  "style": "x3dom.css",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/x3dom/dist.git"
+  },
+  "keywords": [
+    "3d",
+    "x3d",
+    "x3dom"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/x3dom/x3dom/issues"
+  },
+  "homepage": "http://x3dom.org"
+}
