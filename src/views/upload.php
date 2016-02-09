@@ -25,14 +25,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" charset="utf8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Additional styles -->
-    <link rel='stylesheet' type='text/css' href='../css/bootstrap.min.css'>
-    <link rel='stylesheet' type='text/css' href='../css/style.css'>
     <link rel='stylesheet' type='text/css' href='../css/upload.css'>
   </head>
   <body>
-    <?php
-      include("menu.php");
-    ?>
+    <?php require("menu.php"); ?>
     
     <header id="head" class="secondary">
       <div class="container">

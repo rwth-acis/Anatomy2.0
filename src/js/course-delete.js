@@ -17,12 +17,12 @@
  *  Functionality for views/course_delete.php
  */
 
-document.addEventListener("DOMContentLoaded", function() {
+$(document).ready(function() {
   
   // When clicking yes, remove course from database
-  document.getElementById("btn-yes").addEventListener("click", function() {
-    var courseId = getURLParameter("id");
-    ajax.post("../php/delete_course.php", {"course_id": courseId}, function(data){
+  $("#btn-yes").on("click", function() {
+    var courseId = URI().query(true).id;
+    $.post("../php/delete_course.php", {"course_id": courseId}, function(data){
       if (data !== "FALSE") {
         window.location = "course_list.php?id="+data;
       }
@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function() {
   });
   
   // When clicking no, go back to page where user came from
-  document.getElementById("btn-no").addEventListener("click", function() {
+  $("#btn-no").on("click", function() {
     window.location = document.referrer;
   });
   

@@ -22,37 +22,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Collaborative Viewing of 3D Models </title>
 
-  <link rel="stylesheet" media="screen" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
   <link rel="stylesheet" href="../css/style.css">
-  <link rel="stylesheet" href="../css/bootstrap.min.css">
-  
-  <script type='text/javascript' src='../js/init-subsite.js'></script>
-  <script type='text/javascript' src='../js/overview-widget.js'> </script>
+  <link rel="stylesheet" href="../external/bootstrap/dist/css/bootstrap.min.css">
 
 </head>
 <body>
-  
   <?php
     include("../php/tools.php");
   ?>
-  
+
   <!-- container -->
   <div id="result-container">
     <?php
-    $course_id = filter_input(INPUT_GET, "id");
+    $role_space = filter_input(INPUT_GET, "rolespace");
 
     include '../php/db_connect.php';
 
-    if (isset($course_id)) {
-      $sql_select_models = "SELECT * FROM models "
+    if (isset($role_space)) {
+      $sql_select_models = "SELECT course_models.*, models.* FROM models "
               . "JOIN course_models ON models.id=model_id "
-              . "WHERE course_id=$course_id";
+              . "JOIN courses ON courses.id=course_id "
+              . "WHERE role_url='$role_space'";
     }
     else {
       $sql_select_models = "SELECT * FROM models";
@@ -67,11 +63,15 @@
   </div>
 
   <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
-  <script src="../js/modernizr-latest.js"></script>
-  <script src="../js/custom.js"></script>
-  <script type='text/javascript' src='../js/search.js'></script>
-  <script type='text/javascript' src='../js/ajax.js'></script>
+  <script src='../js/search.js'></script>
+  <!-- jQuery -->
+  <script src="../external/jquery/dist/jquery.min.js"></script>
+  <!-- Y-js -->
+  <script src='../external/yjs/y.js'></script>
+  <!-- Knockout -->
+  <script src='../external/knockoutjs/dist/knockout.js'></script>
   <!--<script type="text/javascript" src="../js/gallery-widget.js"></script>-->
+  <script src='../js/overview-widget.js'> </script>
 
 </body>
 </html>

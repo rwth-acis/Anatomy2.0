@@ -50,7 +50,7 @@
           </div>
           <div class="form-group">
             <label for="targetText">Course room:</label>
-            <input type="text" class="col-xs-10 form-control" rows="1" name="roleLink" id="targetRole" placeholder="Enter full link to your ROLE space" value="<?php echo $entry['role_url']; ?>">
+            <input type="text" class="col-xs-10 form-control" rows="1" name="roleLink" id="targetRole" placeholder="Enter ROLE space name" value="<?php echo $entry['role_url']; ?>">
             <a href="#">
               <input id="create-room-btn" class="col-xs-1 btn btn-default btn-inline" type="button" value="+"/>
             </a>
@@ -59,8 +59,8 @@
               <input class="col-xs-1 btn btn-default btn-inline" type="button" value="?"/>
             </a>
             <div class="featured-box">
-              <p><?php echo $baseUrl . "/src/widgets/model_viewer.xml"; ?></p>
-              <p><?php echo $baseUrl . "/src/widgets/gallery" . $entry['id'] . ".xml"; ?></p>
+              <p><?php echo $baseUrl . "/src/widgets/showcase.xml"; ?></p>
+              <p><?php echo $baseUrl . "/src/widgets/gallery.xml"; ?></p>
             </div>
           </div>
           <div class="form-group">
@@ -89,7 +89,7 @@
       <div class='col-md-6'>
         <div><h3>Models</h3></div>
         <!-- Buttons to create add and upload models -->
-        <button class='btn btn-success col-xs-6' type='button' id="openbox" onclick="startBlackout()">Add</button>
+        <button class='btn btn-success col-xs-6' type='button' id="openbox" onclick="editCourse.startBlackout()">Add</button>
 
         <div id="model_table" class="col-xs-12 model_div">
         <?php
@@ -113,12 +113,12 @@
 <!-- container -->
 
 <!-- Darken background when model select window appears -->
-<div id="blackout" onclick="endBlackout()"></div>
+<div id="blackout" onclick="editCourse.endBlackout()"></div>
 
 <!-- Show models in a pop-up -->
 <div id="modelbox">
-  <div id="closebox" onclick="endBlackout()">close</div>
-  <button class='btn btn-success' type='button' id="addmodels" onclick="addModels()">Add models to course</button>
+  <div id="closebox" onclick="editCourse.endBlackout()">close</div>
+  <button class='btn btn-success' type='button' id="addmodels" onclick="editCourse.addModels()">Add models to course</button>
   <?php include("search.php"); ?>
   <div id="result-container">
   <!-- Models will be inserted here -->

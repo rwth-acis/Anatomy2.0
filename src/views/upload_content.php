@@ -61,9 +61,8 @@
 </div>
 
 <!-- Javascript -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="../js/jquery.form.min.js"></script>
-<script src="../js/script.js"></script>
+<script src="../external/jquery-form/jquery.form.js"></script>
 <!-- Form Validation - Parsley -->
-<script src="../js/parsley.min.js"></script>
-<script src="../js/upload-validation.js"></script>
+<script src="../external/parsleyjs/dist/parsley.min.js"></script>
+
+<script src="../js/upload.js"></script>

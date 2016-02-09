@@ -26,7 +26,8 @@ $RECYCLE.BIN/
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -75,16 +76,9 @@ Temporary Items
 
 #ignore models exept for the four example models
 models/*
-model-data/*
-!model-data/deer
-!model-data/raptor
-!model-data/helmet-5
-!model-data/knight
-
-models/*
+!models/.gitkeep
 
 #ignore config files
-src/config/database.php
 src/config/config.php
 
 #ignore Eclipse project files
@@ -99,3 +93,12 @@ info.php
 # ignore FirePHP-files
 src/php/FirePHP.class.php
 src/php/fb.php
+
+# ignore role-widgets as they are course-specific and courses are stored in database
+src/widgets/*
+!src/widgets/*_placeholder.xml
+
+# ignore bower-managed files
+# src/external/*
+
+.brackets.json

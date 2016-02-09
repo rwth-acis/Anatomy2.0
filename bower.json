@@ -1,0 +1,25 @@
+{
+  "name": "Anatomy2.0",
+  "version": "0.0.0",
+  "authors": [
+    "adabru <adam.brunnmeier@rwth-aachen.de>"
+  ],
+  "license": "",
+  "ignore": [],
+  "dependencies": {
+    "yjs": "~0.7.2",
+    "y-memory": "~0.6.2",
+    "y-websockets-client": "~0.7.2",
+    "seiyria-bootstrap-slider": "~5.2.6",
+    "x3dom": "~1.7.0",
+    "jasny-bootstrap": "~3.1.3",
+    "knockoutjs": "~3.4.0",
+    "uri.js": "~1.17.0",
+    "jquery-form": "~3.46.0",
+    "parsleyjs": "~2.1.3",
+    "bootstrap-switch": "~3.3.2",
+    "jsrsasign": "~5.0.5",
+    "y-map": "~0.7.1"
+  },
+  "description": ""
+}

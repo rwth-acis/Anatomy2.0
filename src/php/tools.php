@@ -79,7 +79,7 @@ function getModelStructure($entry, $type) {
 
         // model, "normal" list
         default:
-            $html .= "<li><a href='model_viewer.php?id=$entry[id]' id='a_img$entry[id]'><img id='image-over$entry[id]' name='image-over' src='../../$entry[preview_url]' alt=$entry[name] width='160' height='160' />
+            $html .= "<li><a href='showcase.php?id=$entry[id]' id='a_img$entry[id]'><img id='image-over$entry[id]' name='image-over' src='../../$entry[preview_url]' alt=$entry[name] width='160' height='160' />
               <span class='text-content'><span>Name: $entry[name]<br>Size: ".$formatBytes($entry["size"])."<br> Category: $entry[classification]</span></span></a>
               <p id='text-over'>$entry[name]</p>
               </li>";
@@ -98,7 +98,7 @@ function getModelStructure($entry, $type) {
 function getCourseStructure($entry) {
     $html = "";
     // Decide if we are in ROLE space
-    if(isset($_GET['widget']) && $_GET['widget'] == 'true') {$html = "&widget=true";}
+    if(filter_input(INPUT_GET, "widget") == 'true') {$html = "&widget=true";}
 
     // id used to derive course id (from database) connected to clicked link
     return "<li><a href='course.php?id=$entry[id]".$html."' id='a_img$entry[id]'>
@@ -115,7 +115,7 @@ function getCourseStructure($entry) {
 function getSubjectStructure($entry) {
     $html = "";
     // Decide if we are in ROLE space
-    if(isset($_GET['widget']) && $_GET['widget'] == 'true') {$html = "&widget=true";}
+    if(filter_input(INPUT_GET, "widget") == 'true') {$html = "&widget=true";}
 
     // id used to derive course id (from database) connected to clicked link
     return "<li><a href='course_list.php?id=$entry[id]".$html."' id='a_img$entry[id]'>
@@ -131,7 +131,7 @@ function getSubjectStructure($entry) {
  */
 function printLinkBtn($url, $class, $text) {
   $widgetExtension = "";
-  if(isset($_GET["widget"]) && $_GET["widget"] == "true") { 
+  if(filter_input(INPUT_GET, "widget") == "true") { 
     $widgetExtension = "&widget=true"; 
   }
   echo "<a href=$url $widgetExtension>"; 

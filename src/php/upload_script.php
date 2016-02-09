@@ -38,7 +38,7 @@
     $widgetParameter = "";
     
     // If this script is initiated from within ROLE, keep the "widget=true" parameter
-    if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
+    if(filter_input(INPUT_GET, "widget") == "true") {
       // will be added in all "header(..)" calls
       $widgetParameter = "&widget=true";
     }
@@ -49,6 +49,11 @@
 					
 					// Create database-entry
 					$conn = require '../php/db_connect.php';
+          
+          // TODO:
+          // Insert a Sevianno object id as value for the "seviannoId" field
+          // As a hint on how to recieve the Sevianno object id, have a look at
+          // http://dbis.rwth-aachen.de/3dnrt/3Drepository/getNewId.php
 				
 					$sql = "INSERT INTO models (name, description, classification, size) VALUES ('$name','$text', '$cat', '$file_size')";
 				

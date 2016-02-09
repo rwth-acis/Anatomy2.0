@@ -24,24 +24,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Collaborative Viewing of 3D Models </title>
-  <link rel="stylesheet" href="../css/style.css">
-  <link rel="stylesheet" media="screen" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
-  <link rel="stylesheet" href="../css/bootstrap.min.css">
-  <link rel="stylesheet" href="../css/font-awesome.min.css">
-
-  <!-- Custom styles-->
-
-  <link rel="stylesheet" href="../css/bootstrap-theme.css" media="screen">
-  <link rel="stylesheet" type="text/css" href="../css/da-slider.css" />
-  
-  <link rel="stylesheet" type="text/css" href="../css/style.css" />
-
-  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!--[if lt IE 9]>
-  <script src="assets/js/html5shiv.js"></script>
-  <script src="assets/js/respond.min.js"></script>
-  <![endif]-->
-
 </head>
 
 <body>
@@ -92,7 +74,7 @@
       <div class='row'>
         <div class='col-md-6 non-overflow-div'>   
           <div class="col-sm-8">            
-            <?php if(!(isset($_GET["widget"]) && $_GET["widget"] == "true")) { ?>
+            <?php if(!(filter_input(INPUT_GET, "widget") == "true")) { ?>
               <a id="enter-course-a" href="#" data-rolespace="<?php echo $entry->role_url; ?>">
                 <button class='btn btn-success btn-lg btn-block' type='button'>Enter course room</button>
               </a>
@@ -159,21 +141,13 @@
 
 
   <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
-
-
-  <script src="../js/modernizr-latest.js"></script>
-  <script src="../js/custom.js"></script>
-
-  <script type='text/javascript' src='../js/x3d-extensions.js'> </script>
-
-  <!-- General functionality (used in menuToolbar.js) -->
+    
   <script type="text/javascript" src="../js/tools.js"></script>
   <?php
     //Decide if this site is inside a separate widget
-    if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+    if(filter_input(INPUT_GET, "widget") == "true")
     {
-        print("<script type='text/javascript' src='../js/overview-widget.js'> </script>");
-        print("<script type='text/javascript' src='../js/init-subsite.js'></script>");
+        print("<script src='../js/overview-widget.js'> </script>");
     }
   ?>
   <script type="text/javascript" src="../js/course.js"></script>

@@ -60,7 +60,7 @@ label {
 
 
 #head {
-  background: #181015 url( ../images/bg_header.jpg) no-repeat;
+  background: #3753c8;
   background-size: cover;
   min-height: 400px;
   text-align: center;
@@ -698,18 +698,7 @@ footer ul li {
   padding: 0px;
 }
 
-
-#head.secondary {
-  height: 100px;
-  min-height: 100px;
-  padding-top: 0px;
-  background: #181015 url(../images/bg_header.jpg) 0px -232px no-repeat;
-  background: #0b9ff3;
-  background-size: cover;
-  text-align: left;
-}
-
-/* ==========================================================================
+=======================================
    OLD STYLES
    ========================================================================== */
 

@@ -1,0 +1,37 @@
+{
+  "name": "y-websockets-client",
+  "main": "./src/Websockets-client.js",
+  "version": "0.7.2",
+  "homepage": "http://y-js.org",
+  "authors": [
+    "Kevin Jahns <kevin.jahns@rwth-aachen.de>"
+  ],
+  "description": "Websockets connector for Yjs (browser/node client)",
+  "moduleType": [
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "Yjs",
+    "connector",
+    "websockets"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "_release": "0.7.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.7.2",
+    "commit": "4405f5942561f58f13e3ce3541b4aacf509b4da1"
+  },
+  "_source": "git://github.com/y-js/y-websockets-client.git",
+  "_target": "~0.7.2",
+  "_originalSource": "y-websockets-client",
+  "_direct": true
+}

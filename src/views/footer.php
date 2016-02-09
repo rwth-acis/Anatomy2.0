@@ -31,7 +31,7 @@
               <p class="simplenav">
               <?php
                 //Decide if this site is inside a separate widget
-                if(isset($_GET["widget"]) && $_GET["widget"] == "true")
+                if(filter_input(INPUT_GET, "widget") == "true")
                 {
               ?>
                 <a href="welcome.php?widget=true">Home</a> | 

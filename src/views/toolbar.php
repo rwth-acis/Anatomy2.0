@@ -17,49 +17,11 @@
  * @file toolbar.php
  * Toolbar with controls for the viewer navigation and other viewer functionality
  * 
- * REQUIRES JQuery and Bootstrap.js to be included before, if not in ROLE environment.
- * Is included in menu.php
+ * REQUIRES menu.php to be included before
  */
 ?>
-<?php
-  // If outside ROLE environment, menu.php will start a session.
-  // So start session only if inside ROLE.
-  if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
-    session_start();
-  }
-  // Include some configuration information
-  require_once '../config/config.php'; 
-?>
 
-<!-- JS includes of menu toolbar functionality -->
-<?php 
-  // If widget parameter is set, the this is a widget in ROLE environment. 
-  // Therefore menu.php is not included. Then, JQuery and bootstrap.js are also 
-  // missing. Include here. Make sure not to include twice, because this will 
-  // break the menu.
-  if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
-?>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-  
-  <!-- import JWS and JSRSASIGN (must) -->
-  <script type="text/javascript" src="../js/jsjws/jws-2.0.js"></script>
-  <script type="text/javascript" src="../js/jsrsasign/ext/base64.js"></script>
-  <script type="text/javascript" src="../js/jsrsasign/ext/jsbn.js"></script>
-  <script type="text/javascript" src="../js/jsrsasign/ext/jsbn2.js"></script>
-  <script type="text/javascript" src="../js/jsrsasign/ext/rsa.js"></script>
-  <script type="text/javascript" src="../js/jsrsasign/ext/rsa2.js"></script>
-  <script type="text/javascript" src="../js/jsrsasign/asn1hex-1.1.js"></script>
-  <script type="text/javascript" src="../js/jsrsasign/base64x-1.1.js"></script>
-  <script type="text/javascript" src="../js/jsrsasign/crypto-1.1.js"></script>
-  <script type="text/javascript" src="../js/jsrsasign/rsapem-1.1.js"></script>
-  <script type="text/javascript" src="../js/jsrsasign/rsasign-1.2.min.js"></script>
-  <script type="text/javascript" src="../js/jsrsasign/x509-1.1.js"></script>
-  <script src="../js/signin_callbacks.js"></script>
-<?php
-  }
-?>
-<script type="text/javascript" src="../js/menuToolbar.js"></script>
+<script type="text/javascript" src="../js/showcase-toolbar.js"></script>
 
 
 <!-- Toolbar -->
@@ -77,9 +39,9 @@
     </div>
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
+      <ul id="tool-list" class="nav navbar-nav">
         <li role="presentation" class="dropdown navbar-li">
-          <select id="viewModeSelect" onChange="x3dChangeView()" class="form-control navbar-select">
+          <select id="viewModeSelect" onChange="showcase.toolbar.x3dChangeView()" class="form-control navbar-select">
             <!-- option>[W]alk</option>
             <option id="optionExamine">[E]xamine</option>
             <option>[F]ly</option>
@@ -89,19 +51,19 @@
             <option>[G]ame</option -->
           </select>
         </li>
-        <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="showAll()">Reset view [A]</button></li>
+        <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" id="btnResetview">Reset view [A]</button></li>
       <?php
         // If and only if inside ROLE environment, show the synchronize / unsynchronize button
-        if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
+        if(true || filter_input(INPUT_GET, "widget") == "true") {
       ?>
-          <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="x3dSynchronize()" id="btnSynchronize">Unsynchronize</button></li>
+          <li class="navbar-li"><input type="checkbox" data-on-text="Sync" data-label-width="0" data-off-text="Not Sync" id="btnSynchronize"></input></li>
       <?php
           }
       ?>
-        <!-- Took out the copy link button, because it is not natively supported by browsers. Requires Flash Player. And has little use. -->
-        <!--<li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" id="btnCopy">Copy Link</button></li>-->
-        <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="btnShowInfo()" id="btnInfo">Show info</button></li>
-        <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="showHelp()" id="btnHelp">Show help</button></li>
+        <li class="navbar-li"><input type="checkbox" data-on-text="Info" data-label-width="0" data-off-text="No Info" id="btnInfo"></input></li>
+        <li class="navbar-li"><input type="checkbox" data-on-text="Help" data-label-width="0" data-off-text="No Help" id="btnHelp"></input></li>
+        <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" id="btnAnnotate">Annotate</button></li>
+        <li class="navbar-li"><input type="checkbox" data-on-text="Double click parts" data-label-width="0" data-off-text="Highlight is off" id="btnHighlight"></input></li>
         <!-- Show lecturer mode button only if user logged in (as lecturer) and in ROLE environment -->
         <?php
           ob_start();
@@ -110,14 +72,14 @@
           $canEnterLecturerMode = $accessControl->canEnterLecturerMode();          
           ob_end_clean(); 
           
-          if ($canEnterLecturerMode && (isset($_GET["widget"]) && $_GET["widget"] == "true")) { 
+          if (true || $canEnterLecturerMode && (filter_input(INPUT_GET, "widget") == "true")) { 
         ?>
-        <li class="navbar-li"><button type="submit" class="btn btn-default navbar-btn form-control" onclick="toggleLecturerMode()" id="btnLecturerMode">Enable Lecturer Mode</button></li>
+        <li class="navbar-li"><input type="checkbox" data-on-text="Lecturer on" data-label-width="0" data-off-text="Lecturer off" id="btnLecturer"></input></li>
         <!-- A span which will be filled with a Sign In button or information about which user is currently logged in. Will be filled in oidc-button.js -->
         <li class="navbar-li">
           <span id="signinButton">
             <span class="oidc-signin"
-              data-callback="signinCallback"
+              data-callback="personality_signinCallback"
               data-name="Learning Layers"
               data-logo="https://raw.githubusercontent.com/learning-layers/LayersToolTemplate/master/extras/logo.png"
               data-server="https://api.learning-layers.eu/o/oauth2"
@@ -136,7 +98,7 @@
 
 <?php 
 // If we are in a ROLE space, show the Sign in button / Sign in status
-if(isset($_GET["widget"]) && $_GET["widget"] == "true") {
+if(filter_input(INPUT_GET, "widget") == "true") {
 ?>
 <script type="text/javascript">
   (function() {

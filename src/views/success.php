@@ -30,10 +30,10 @@
   		<div class="alert alert-success" role="alert">Your Model has been uploaded successfully</div>
   <?php
     //If this site is viewed in ROLE, do not provide "See your model" (can be provided if opened in the other widget)
-    if(!(isset($_GET["widget"]) && $_GET["widget"] == "true"))
+    if(!(filter_input(INPUT_GET, "widget") == "true"))
     {
   ?>
-      <a  href="model_viewer.php?id=<?php echo $_GET['id']?>" >See your Model</a>
+      <a  href="showcase.php?id=<?php echo $_GET['id']?>" >See your Model</a>
   <?php 
     }
   ?>

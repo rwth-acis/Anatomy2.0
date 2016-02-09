@@ -18,7 +18,7 @@
  */
 
 /// Initialize course_list.php
-document.addEventListener("DOMContentLoaded", function(){
+$(document).ready(function(){
   var editBtns = document.getElementsByClassName("btn-edit");
   var deleteBtns = document.getElementsByClassName("btn-delete");
   

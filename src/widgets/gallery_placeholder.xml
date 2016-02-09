@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+  <Module>
+    <ModulePrefs title="Anatomy 2.0 Gallery" description="" author="Dominik Studer" author_email="studer@dbis.rwth-aachen.de" height="250" width="1200">
+    </ModulePrefs>
+    <Content type="html">
+<![CDATA[
+
+<script> 
+    var trySetup = function () {
+        var widget = Array.prototype.slice.call( window.parent.document.querySelectorAll('iframe') )
+                .map(function(iframe){return iframe.contentDocument.querySelector('#showcaseRoleWidget')})
+                .filter(function(iframe){return iframe != null})
+                [0]
+        if (widget == null) { 
+            setTimeout(trySetup, 500)
+        } else {
+            // message propagation
+            window.addEventListener('message', function(ev){
+                widget.contentWindow.postMessage(ev.data, '*')
+            }, false)
+        }
+    }
+    trySetup()
+</script>
+
+  <!-- container for the actual site: -->
+
+  <script>
+    var space = window.parent.location.pathname.match(/\/spaces\/([^?]*)/)[1]
+    document.write('<iframe id="galleryRoleWidget" src="http://localhost:105/src/views/gallery.php?widget=true&rolespace='+space+'" width="100%" height="100%" frameborder="no" padding=0 margin=0>')
+  </script>
+]]>
+    </Content>
+</Module>
+

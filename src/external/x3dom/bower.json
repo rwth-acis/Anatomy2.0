@@ -1,0 +1,22 @@
+{
+  "name": "x3dom",
+  "description": "A framework for integrating and manipulating X3D scenes as HTML5/DOM elements",
+  "main": "x3dom.js",
+  "license": "MIT",
+  "keywords": [
+    "3d",
+    "x3d",
+    "x3dom"
+  ],
+  "homepage": "http://x3dom.org",
+  "moduleType": [
+    "globals"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

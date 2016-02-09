@@ -1,0 +1,89 @@
+/**
+ * Copyright 2015 Adam Brunnmeier, Dominik Studer, Alexandra Wörner, Frederik Zwilling, Ali Demiralp, Dev Sharma, Luca Liehner, Marco Dung, Georgios Toubekis
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @file showcase.css
+ * CSS styles for showcase.php
+ */
+
+html, body {
+  height: 100%;
+  margin: 0px;
+  display: flex;
+  flex-direction: column;
+}
+
+body {
+    background-color: white;
+    overflow: auto;
+}
+
+nav.toolbar {
+  z-index: 1;
+}
+
+#x3d-container {
+    flex: 1;
+    display: flex;
+}
+
+#viewer_object {
+  display: flex;
+  flex: 1;
+  min-height: 350px;
+  border: none;
+}
+
+#x3dom-viewer_object-canvas {
+    max-width: 100%;
+    flex: 1;
+    height: auto;
+}
+
+#metadata_overlay {
+  font-family 	: Arial, sans-serif;
+  font-weight 	: bold;
+  text-transform: uppercase;
+  font-size 	: 10px;
+  color 		: #C8C8C8;
+
+  position 		: absolute;
+  top 	 		: 8px;
+  left 	 		: 32px;
+
+  padding		: 5px;
+
+  width 		: 320px;
+
+  opacity 			: 0.9;
+  background-color	: #323232;
+  z-index 			: 1000;
+
+  cursor 		: help;
+  display: none;
+}
+
+.annotation-content {
+  padding: 10px;
+  border: solid 1px #ddd;
+  background: rgb(240, 240, 240);
+  opacity: 0.9;
+  width: 400px;
+  max-height: 300px;
+  overflow: auto;
+  position: absolute;
+}
+.annotation-header {
+  display: inline;
+}

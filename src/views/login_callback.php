@@ -27,20 +27,10 @@
     <title>Redirecting</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" charset="utf8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <link rel='stylesheet' type='text/css' href='../css/bootstrap.min.css'>
-    <link rel='stylesheet' type='text/css' href='../css/style.css'>
-		<script src="../js/signin_callbacks.js"></script>
   </head>
   
   <body>
-    <?php 
-    // By setting $menuForLoginCallback = true; 'menu.php' will call 
-    // 'redirectCallback' in 'signin_callbacks.js'. Then the user will be 
-    // redirected to the page he came from before using the Learning Layers login.
-    $menuForLoginCallback = true;
-    include("menu.php"); 
-    ?>
+    <?php require("menu.php") ?>
     
     <header id='head' class='secondary'>
     <div class='container'>

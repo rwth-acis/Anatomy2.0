@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>QUnit for 'base64x.js'</title>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="qunit.js"></script>
+<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
+<!-- crypto-js, yahoo -->
+<!-- tom wo's -->
+<script src="../ext/base64.js"></script>
+<!-- jsrsasign -->
+<script src="../base64x-1.1.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+test("hextorstr", function() {
+  expect(2);
+  equal(hextorstr("616161"), "aaa", "aaa");
+  equal(hextorstr("00010203"), "\x00\x01\x02\x03", "\\x00\\x01\\x02\\x03");
+});
+
+test("rstrtohex", function() {
+  expect(2);
+  equal(rstrtohex("aaa"), "616161", "aaa");
+  equal(rstrtohex("\x00\x01\x02\x03"), "00010203", "00010203");
+});
+
+test("hextob64u", function() {
+  equal(hextob64u("10001"), "AQAB", "10001");
+  equal(hextob64u("010001"), "AQAB", "010001");
+});
+
+test("intarystrtohex", function() {
+  equal(intarystrtohex('  [123, 34, 101, 34, 58, 34, 65] '), 
+        '7b2265223a2241', 'rfc7638 sample {"e":"A');
+  equal(intarystrtohex('  [55, 54, 203, 177, 120, 124 ]  '),
+        '3736cbb1787c', 'rfc7638 sample hash');
+});
+
+});
+</script>
+  
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
+</body>
+</html>

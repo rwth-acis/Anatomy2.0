@@ -1,0 +1,14 @@
+{
+  "name": "y-memory",
+  "homepage": "https://github.com/y-js/y-memory",
+  "version": "0.6.2",
+  "_release": "0.6.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.6.2",
+    "commit": "5ffe5d56ad42ddd0611515520060c6c44f98242d"
+  },
+  "_source": "git://github.com/y-js/y-memory.git",
+  "_target": "~0.6.2",
+  "_originalSource": "y-memory"
+}
