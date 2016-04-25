@@ -6994,10 +6994,19 @@ function ws(uri, protocols, opts) {
 if (WebSocket) ws.prototype = WebSocket.prototype;
 
 },{}],48:[function(require,module,exports){
-/* global Y */
+(function (global){
+/* global Y, global */
 'use strict'
 
+// socket.io requires utf8. This package checks if it is required by requirejs.
+// If window.require is set, then it will define itself as a module. This is erratic behavior and
+// results in socket.io having a "bad request".
+// This is why we undefine global.define (it is set by requirejs) before we require socket.io-client.
+var define = global.define
+global.define = null
 var io = require('socket.io-client')
+// redefine global.define
+global.define = define
 
 function extend (Y) {
   class Connector extends Y.AbstractConnector {
@@ -7011,44 +7020,55 @@ function extend (Y) {
       options.role = 'slave'
       super(y, options)
       this.options = options
-
-      options.url = options.url || 'http://yatta.ninja:2345'
+      options.url = options.url || 'https://yjs.dbis.rwth-aachen.de:5074'
       var socket = io(options.url)
       this.socket = socket
       var self = this
-      if (socket.connected) {
-        joinRoom()
-      } else {
-        socket.on('connect', joinRoom)
-      }
-      function joinRoom () {
+
+      this._onConnect = function joinRoom () {
         socket.emit('joinRoom', options.room)
         self.userJoined('server', 'master')
-
-        socket.on('yjsEvent', function (message) {
-          if (message.type != null) {
-            if (message.type === 'sync done') {
-              self.setUserId(socket.id)        
-            }
-            if (message.room === options.room) {
-              self.receiveMessage('server', message)
-            }
-          }
-        })
-
-        socket.on('disconnect', function (peer) {
-          self.userLeft('server')
-        })
       }
+
+      socket.on('connect', this._onConnect)
+      if (socket.connected) {
+        this._onConnect()
+      } else {
+        socket.connect()
+      }
+
+      this._onYjsEvent = function (message) {
+        if (message.type != null) {
+          if (message.type === 'sync done') {
+            self.setUserId(socket.id)
+          }
+          if (message.room === options.room) {
+            self.receiveMessage('server', message)
+          }
+        }
+      }
+      socket.on('yjsEvent', this._onYjsEvent)
+
+      this._onDisconnect = function (peer) {
+        self.userLeft('server')
+      }
+      socket.on('disconnect', this._onDisconnect)
     }
     disconnect () {
+      this.socket.emit('leaveRoom', this.options.room)
       this.socket.disconnect()
       super.disconnect()
     }
+    destroy () {
+      this.disconnect()
+      this.socket.off('disconnect', this._onDisconnect)
+      this.socket.off('yjsEvent', this._onYjsEvent)
+      this.socket.off('connect', this._onConnect)
+      this.socket.destroy()
+      this.socket = null
+    }
     reconnect () {
       this.socket.connect()
-      this.socket.emit('joinRoom', this.options.room)
-      this.userJoined('server', 'master')
       super.reconnect()
     }
     send (uid, message) {
@@ -7070,6 +7090,8 @@ module.exports = extend
 if (typeof Y !== 'undefined') {
   extend(Y)
 }
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
 },{"socket.io-client":36}]},{},[48])
 

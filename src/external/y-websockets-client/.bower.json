@@ -1,7 +1,7 @@
 {
   "name": "y-websockets-client",
-  "main": "./src/Websockets-client.js",
-  "version": "0.7.2",
+  "main": "y-websockets-client.js",
+  "version": "0.7.13",
   "homepage": "http://y-js.org",
   "authors": [
     "Kevin Jahns <kevin.jahns@rwth-aachen.de>"
@@ -24,14 +24,13 @@
     "test",
     "tests"
   ],
-  "_release": "0.7.2",
+  "_release": "0.7.13",
   "_resolution": {
     "type": "version",
-    "tag": "v0.7.2",
-    "commit": "4405f5942561f58f13e3ce3541b4aacf509b4da1"
+    "tag": "v0.7.13",
+    "commit": "56ca352d0e5be3c0bb8bf1aab26ee370a130bf26"
   },
-  "_source": "git://github.com/y-js/y-websockets-client.git",
+  "_source": "https://github.com/y-js/y-websockets-client.git",
   "_target": "~0.7.2",
-  "_originalSource": "y-websockets-client",
-  "_direct": true
+  "_originalSource": "y-websockets-client"
 }
